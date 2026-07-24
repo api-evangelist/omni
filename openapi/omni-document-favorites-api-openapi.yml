@@ -1,0 +1,432 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Document favorites API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Document favorites
+  description: Favorite and unfavorite documents
+paths:
+  /v1/documents/{documentId}/favorite:
+    put:
+      tags:
+      - Document favorites
+      summary: Favorite document
+      description: 'Add a document to a user''s favorites. Only published documents can be favorited.
+
+
+        **Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user''s favorites.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: favoriteDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The document identifier
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
+      responses:
+        '204':
+          description: 'Document favorited successfully. No response body.
+
+
+            This response is returned whether the document was newly favorited or already in favorites.
+
+            '
+        '403':
+          description: 'Forbidden. Possible causes:
+
+
+            - Personal Access Token attempted to act on behalf of another user. PATs cannot use the `userId` parameter.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Document does not exist
+
+            - Document is not published
+
+            - Specified `userId` not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Document favorites
+      summary: Unfavorite document
+      description: 'Remove a document from a user''s favorites. Only published documents can be unfavorited.
+
+
+        **Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: unfavoriteDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The document identifier
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.
+
+
+          Personal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.
+
+          '
+      responses:
+        '204':
+          description: 'Document unfavorited successfully. No response body.
+
+
+            This response is returned whether the document was previously favorited or not.
+
+            '
+        '400':
+          description: Invalid HTTP method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden. Possible causes:
+
+
+            - Personal Access Token attempted to act on behalf of another user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Document does not exist
+
+            - Document is not published
+
+            - Specified `userId` not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{identifier}/favorites:
+    get:
+      tags:
+      - Document favorites
+      summary: List document favoriters
+      description: "<Note>\n  This endpoint requires **Manager** or **Owner** permissions on the requested document.\n</Note>\n\nLists users who have favorited a published document, paginated and sorted by `favoritedAt`.\n\nUse this endpoint when you need to know \"who favorited document X\" — for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization.\n"
+      security:
+      - orgApiKey: []
+      operationId: listDocumentFavoriters
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Document identifier (either document ID or slug).
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          nullable: true
+        description: Page cursor from a previous response's `nextCursor`. Omit for the first page.
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of items per page (min 1, max 100).
+      - name: sortDirection
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.
+      responses:
+        '200':
+          description: Successfully retrieved list of users who favorited the document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: string
+                          description: Membership ID of the favoriting user.
+                        name:
+                          type: string
+                          description: User's display name.
+                        email:
+                          type: string
+                          description: User's email address.
+                        favoritedAt:
+                          type: string
+                          format: date-time
+                          description: ISO 8601 timestamp recording when the user favorited the document.
+                      required:
+                      - userId
+                      - name
+                      - email
+                      - favoritedAt
+                required:
+                - pageInfo
+                - records
+              examples:
+                basicResponse:
+                  summary: Basic request with 2 favoriters
+                  value:
+                    pageInfo:
+                      hasNextPage: false
+                      nextCursor: null
+                      pageSize: 20
+                      totalRecords: 2
+                    records:
+                    - userId: f1c2a3e4-1111-1111-1111-111111111111
+                      name: Blob Ross
+                      email: blob.ross@eblobsrus.com
+                      favoritedAt: '2026-04-12T10:14:02.000Z'
+                    - userId: f1c2a3e4-2222-2222-2222-222222222222
+                      name: Blob the Builder
+                      email: blob.the.builder@blobsrus.com
+                      favoritedAt: '2026-05-01T17:33:21.000Z'
+                emptyResponse:
+                  summary: Document with no favoriters
+                  value:
+                    pageInfo:
+                      hasNextPage: false
+                      nextCursor: null
+                      pageSize: 20
+                      totalRecords: 0
+                    records: []
+        '400':
+          description: 'Bad Request. Invalid query parameters.
+
+
+            Possible causes:
+
+            - Unparseable cursor
+
+            - Out-of-range `pageSize` (must be 1-100)
+
+            - Invalid `sortDirection` (must be `asc` or `desc`)
+
+            - Unknown query parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                  status:
+                    type: integer
+              examples:
+                invalidCursor:
+                  summary: Invalid cursor
+                  value:
+                    detail: 'Invalid cursor: not-a-number'
+                    status: 400
+                invalidPageSize:
+                  summary: Page size out of range
+                  value:
+                    detail: pageSize must be between 1 and 100
+                    status: 400
+                unknownParam:
+                  summary: Unknown query parameter
+                  value:
+                    detail: 'Unrecognized key: random_bogus_param'
+                    status: 400
+        '401':
+          description: Missing authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden. Possible causes:
+
+            - Caller lacks `MANAGER` permission on the document
+
+            - Used a user-scoped (personal access token) API key
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                  status:
+                    type: integer
+              examples:
+                insufficientPermission:
+                  summary: Insufficient permission on document
+                  value:
+                    detail: You do not have permission to manage document access.
+                    status: 403
+                userScopedKey:
+                  summary: User-scoped API key not allowed
+                  value:
+                    detail: User-scoped API keys are not allowed to list document favoriters
+                    status: 403
+        '404':
+          description: Document not found (or unpublished)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                  status:
+                    type: integer
+              examples:
+                notFound:
+                  summary: Document not found
+                  value:
+                    detail: Document with identifier "does-not-exist" not found
+                    status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

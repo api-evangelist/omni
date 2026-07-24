@@ -1,0 +1,236 @@
+openapi: 3.1.0
+info:
+  title: Omni AI User attributes API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: User attributes
+  description: Manage user attribute definitions
+paths:
+  /v1/user-attributes:
+    get:
+      tags:
+      - User attributes
+      summary: List user attributes
+      x-mint:
+        content: "<Note>\n  This endpoint requires Organization Admin permissions.\n</Note>\n\nRetrieves all [user attribute](/administration/users/attributes) definitions in your organization, including both custom-defined and system-defined attributes.\n\nUser attributes enable row-level security filtering, personalize dashboard content, and configure per-user database credentials. This endpoint is useful for embed integrations to discover available attributes for setting values in SSO sessions.\n"
+      security:
+      - bearerAuth: []
+      operationId: listUserAttributes
+      responses:
+        '200':
+          description: List of user attribute definitions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier of the user attribute. This will be an empty string for system attributes.
+
+                            '
+                          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                        name:
+                          type: string
+                          description: The attribute reference name used in modeling and API calls
+                          example: region
+                        label:
+                          type: string
+                          description: The human-readable display name for the attribute
+                          example: Region
+                        type:
+                          type: string
+                          enum:
+                          - String
+                          - Number
+                          description: The data type of the attribute
+                          example: String
+                        multiple_values:
+                          type: boolean
+                          description: Whether the attribute accepts multiple values
+                          example: false
+                        default_value:
+                          type: string
+                          nullable: true
+                          description: The default value for the attribute if not specified for a user
+                          example: us-east
+                        description:
+                          type: string
+                          nullable: true
+                          description: Optional description of the attribute's purpose
+                          example: User region for RLS
+                        system:
+                          type: boolean
+                          description: Whether this is a system-defined attribute (`true`) or custom attribute (`false`)
+                          example: false
+              examples:
+                success:
+                  summary: Success response
+                  value:
+                    records:
+                    - id: ''
+                      name: omni_user_id
+                      label: Omni User ID
+                      type: String
+                      multiple_values: false
+                      default_value: null
+                      description: null
+                      system: true
+                    - id: ''
+                      name: omni_user_email
+                      label: Omni User Email
+                      type: String
+                      multiple_values: false
+                      default_value: null
+                      description: null
+                      system: true
+                    - id: ''
+                      name: omni_user_name
+                      label: Omni User Name
+                      type: String
+                      multiple_values: false
+                      default_value: null
+                      description: null
+                      system: true
+                    - id: ''
+                      name: omni_user_timezone
+                      label: Omni User Timezone
+                      type: String
+                      multiple_values: false
+                      default_value: null
+                      description: null
+                      system: true
+                    - id: ''
+                      name: omni_is_org_admin
+                      label: Omni Is Org Admin
+                      type: String
+                      multiple_values: false
+                      default_value: null
+                      description: null
+                      system: true
+                    - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                      name: region
+                      label: Region
+                      type: String
+                      multiple_values: false
+                      default_value: us-east
+                      description: User region for RLS
+                      system: false
+                    - id: b2c3d4e5-f6a7-8901-bcde-f23456789012
+                      name: access_level
+                      label: Access Level
+                      type: Number
+                      multiple_values: false
+                      default_value: '1'
+                      description: Numeric access level for user permissions
+                      system: false
+                    - id: c3d4e5f6-a7b8-9012-cdef-234567890123
+                      name: departments
+                      label: Departments
+                      type: String
+                      multiple_values: true
+                      default_value: null
+                      description: User departments for data filtering
+                      system: false
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Unauthorized
+                message: Invalid or missing API key
+        '403':
+          description: Forbidden - User does not have required admin permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Forbidden
+                message: User does not have permission to manage user attributes
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

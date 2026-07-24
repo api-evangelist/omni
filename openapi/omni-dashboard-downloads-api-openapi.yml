@@ -1,0 +1,502 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Dashboard downloads API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Dashboard downloads
+  description: Download dashboards and tiles as PDF, PNG, XLSX, CSV, or JSON files
+paths:
+  /v1/dashboards/{dashboardId}/download:
+    post:
+      tags:
+      - Dashboard downloads
+      summary: Initiate download
+      x-mint:
+        content: "Starts an asynchronous download job for a dashboard or single tile.\n\nThis API supports multiple output formats and provides an asynchronous workflow: initiate a download, poll for completion, then retrieve the file.\n\n<Note>\n  Only one download per dashboard per user is allowed at a time. If a download is already in progress for the specified dashboard, the request will return a `409 Conflict` response with the existing job ID.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: initiateDashboardDownload
+      parameters:
+      - name: dashboardId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The dashboard identifier (ID or document UUID)
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - format
+              properties:
+                format:
+                  type: string
+                  enum:
+                  - pdf
+                  - png
+                  - csv
+                  - xlsx
+                  - json
+                  description: 'Output format:
+
+
+                    | Format | Full dashboard | Single tile | Notes |
+
+                    |--------|----------------|-------------|-------|
+
+                    | PDF    | Yes            | Yes         |       |
+
+                    | PNG    | Yes            | Yes         |       |
+
+                    | XLSX   | Yes            | Yes         |       |
+
+                    | CSV    | Yes (as ZIP)   | Yes         | For full dashboards, delivery will be a zip file containing one CSV per tile |
+
+                    | JSON   | No             | Yes         | Only single tile is supported. Requires `queryIdentifierMapKey` to be specified. |
+
+                    '
+                filename:
+                  type: string
+                  maxLength: 255
+                  description: Custom filename for the downloaded file. Defaults to the dashboard name.
+                queryIdentifierMapKey:
+                  type: string
+                  description: 'Tile identifier to download a single tile instead of the full dashboard. Required for XLSX and JSON formats if `overrideRowLimit=true`.
+
+                    '
+                filterConfig:
+                  type: object
+                  description: Dashboard filter values to apply before rendering
+                paperFormat:
+                  type: string
+                  enum:
+                  - fit_page
+                  - letter
+                  - legal
+                  - tabloid
+                  - a3
+                  - a4
+                  default: fit_page
+                  description: '**Applicable to PDF and PNG formats**. Page size.
+
+                    '
+                paperOrientation:
+                  type: string
+                  enum:
+                  - portrait
+                  - landscape
+                  description: '**Applicable to PDF and PNG formats**. Page orientation.
+
+                    '
+                hideTitle:
+                  type: boolean
+                  default: false
+                  description: '**Applicable to PDF and PNG formats**. If `true`, hide the dashboard title in the output.
+
+                    '
+                showFilters:
+                  type: boolean
+                  default: true
+                  description: '**Applicable to PDF and PNG formats**. If `true`, display applied filter values in the output.
+
+                    '
+                expandTablesToShowAllRows:
+                  type: boolean
+                  description: '**Applicable to PDF and PNG formats**. If `true`, expand table tiles to display all rows.
+
+                    '
+                singleColumnLayout:
+                  type: boolean
+                  description: '**Applicable to PDF and PNG formats**. If `true`, render tiles in a single column layout.
+
+                    '
+                enableFormatting:
+                  type: boolean
+                  default: false
+                  description: '**Applicable to CSV, XLSX, and JSON formats**. If `true`, preserve number and date formatting.
+
+                    '
+                hideHiddenFields:
+                  type: boolean
+                  default: false
+                  description: '**Applicable to CSV and XLSX formats**. If `true`, exclude hidden fields from the output.
+
+                    '
+                overrideRowLimit:
+                  type: boolean
+                  default: false
+                  description: '**Applicable to CSV, XLSX, and JSON formats**. Used with `maxRowLimit`. If `true`, remove the default row limit.
+
+
+                    If `true` for XLSX and JSON formats, a `queryIdentifierMapKey` is required.
+
+                    '
+                maxRowLimit:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000000
+                  description: '**Applicable to CSV, XLSX, and JSON formats**. Maximum number of rows to export. Can be used with `overrideRowLimit` to export more rows than the default row limit.
+
+                    '
+            examples:
+              fullDashboardPdf:
+                summary: Download full dashboard as PDF
+                value:
+                  format: pdf
+                  paperFormat: letter
+                  paperOrientation: landscape
+              singleTileJson:
+                summary: Download single tile as JSON
+                value:
+                  format: json
+                  queryIdentifierMapKey: '1'
+              csvWithOptions:
+                summary: Download as CSV with formatting
+                value:
+                  format: csv
+                  enableFormatting: true
+                  overrideRowLimit: true
+                  maxRowLimit: 50000
+      responses:
+        '200':
+          description: Download initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+                    description: The job ID to use for checking status and downloading the file
+                  message:
+                    type: string
+                    description: Success message
+              example:
+                job_id: 550e8400-e29b-41d4-a716-446655440000
+                message: Download initiated successfully
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing required `format` field
+
+            - Invalid format value
+
+            - Invalid options for the specified format
+
+            - Malformed JSON body
+
+            - Invalid UUID format
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to download the specified dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Dashboard not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: A download is already in progress for the specified dashboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    description: Error message
+                  existing_job_id:
+                    type: string
+                    format: uuid
+                    description: The ID of the existing in-progress job
+                  status:
+                    type: string
+                    description: The status of the existing job
+              example:
+                detail: A download is already in progress for this dashboard. Please wait for it to complete or check its status.
+                existing_job_id: 550e8400-e29b-41d4-a716-446655440000
+                status: EXECUTING
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/dashboards/{dashboardId}/download/{jobId}/status:
+    get:
+      tags:
+      - Dashboard downloads
+      summary: Check download status
+      x-mint:
+        content: "Retrieves the current status of a dashboard download job. Poll this endpoint to determine when the file is ready.\n\nThe response will contain one of the following statuses:\n\n| Status        | Description                                    | Next Step                        |\n|---------------|------------------------------------------------|----------------------------------|\n| `in_progress` | Job is still processing                    | Continue polling                 |\n| `complete`    | File is ready                              | Call the [Download endpoint](/api/dashboard-downloads/download-file)       |\n| `error`       | Job failed - see `error` field for details | Review error and retry if needed |\n\n<Tip>\n  We recommend the following when polling:\n\n  - Use a reasonable polling interval (2-5 seconds)\n  - Avoid polling more frequently than once per second\n</Tip>\n"
+      security:
+      - bearerAuth: []
+      operationId: getDashboardDownloadStatus
+      parameters:
+      - name: dashboardId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The dashboard identifier. This must match the ID of the original download request.
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)
+      responses:
+        '200':
+          description: Job status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+                    description: The job ID
+                  status:
+                    type: string
+                    enum:
+                    - in_progress
+                    - complete
+                    - error
+                    description: Current status of the download job
+                  format:
+                    type: string
+                    enum:
+                    - pdf
+                    - png
+                    - csv
+                    - xlsx
+                    - json
+                    description: The requested output format
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: When the job was created
+                  error:
+                    type: string
+                    description: Error message. Only present when status is `error`.
+              examples:
+                inProgress:
+                  summary: Job in progress
+                  value:
+                    job_id: 550e8400-e29b-41d4-a716-446655440000
+                    status: in_progress
+                    format: pdf
+                    created_at: '2024-01-15T10:30:00Z'
+                complete:
+                  summary: Job complete
+                  value:
+                    job_id: 550e8400-e29b-41d4-a716-446655440000
+                    status: complete
+                    format: pdf
+                    created_at: '2024-01-15T10:30:00Z'
+                error:
+                  summary: Job failed
+                  value:
+                    job_id: 550e8400-e29b-41d4-a716-446655440000
+                    status: error
+                    format: pdf
+                    created_at: '2024-01-15T10:30:00Z'
+                    error: All queries failed.
+        '400':
+          description: Invalid job ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job not found or does not belong to the specified dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/dashboards/{dashboardId}/download/{jobId}:
+    get:
+      tags:
+      - Dashboard downloads
+      summary: Download file
+      x-mint:
+        content: "<Note>\n  Only call this endpoint when the [Check download status endpoint](/api/dashboard-downloads/check-download-status) returns a `complete` status.\n</Note>\n\nRetrieves the completed dashboard download file.\n\nThe response will include appropriate headers for the file type:\n\n- `Content-Type` -  MIME type based on format (e.g., `application/pdf`)\n- `Content-Disposition` - Attachment with filename (e.g., `attachment; filename=\"Dashboard Name.pdf\"`)\n- `Content-Length` - File size in bytes (when available)\n"
+      security:
+      - bearerAuth: []
+      operationId: downloadDashboardFile
+      parameters:
+      - name: dashboardId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The dashboard identifier. This must match the ID of the original download request.
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)
+      responses:
+        '200':
+          description: File download successful
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: object
+                description: Query result data
+            application/zip:
+              schema:
+                type: string
+                format: binary
+                description: "**Applicable to full dashboard downloads in CSV format.** ZIP file containing CSV files. \n"
+        '202':
+          description: Job still in progress. Poll the [Check download status endpoint](/api/dashboard-downloads/check-download-status) first.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid job ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job not found or does not belong to the specified dashboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '410':
+          description: Job failed. Call the [Check download status endpoint](/api/dashboard-downloads/check-download-status) for error details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

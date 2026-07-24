@@ -1,0 +1,504 @@
+openapi: 3.1.0
+info:
+  title: Omni AI User groups API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: User groups
+  description: Manage user groups
+paths:
+  /scim/v2/groups:
+    post:
+      tags:
+      - User groups
+      summary: Create user group
+      description: 'Creates a [user group](/administration/users/groups). To manage model and connection role assignments for user groups, see the [User group model role APIs](/api/user-group-model-roles).
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: createUserGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - displayName
+              properties:
+                displayName:
+                  type: string
+                  description: The name of the group. Names must be 64 characters or less.
+                  example: Blob Sales
+                members:
+                  type: array
+                  description: A list of users to add as group members. Each member should be specified as an object containing a user ID.
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        description: The user's unique identifier
+                  example:
+                  - value: 9e8719d9-276a-4964-9395-a493189a247c
+      responses:
+        '201':
+          description: Group created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimGroup'
+              example:
+                displayName: Blob Sales
+                id: mEhXj6ZI
+                meta:
+                  created: '2024-12-04T00:08:03.250Z'
+                  lastModified: '2024-12-04T00:08:03.250Z'
+                  resourceType: Group
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:Group
+                members:
+                - display: blob.ross@blobsrus.co
+                  value: 9e8719d9-276a-4964-9395-a493189a247c
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - User groups
+      summary: List user groups
+      description: Returns a list of user groups, sorted by creation time.
+      security:
+      - orgApiKey: []
+      operationId: listUserGroups
+      parameters:
+      - name: count
+        in: query
+        schema:
+          type: integer
+          default: 100
+        description: The number of groups to return
+        example: 50
+      - name: startIndex
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: An integer index that determines the starting point of the sorted result list
+        example: 1
+      responses:
+        '200':
+          description: List of user groups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Resources:
+                    type: array
+                    description: The list of user groups
+                    items:
+                      $ref: '#/components/schemas/ScimGroup'
+                  schemas:
+                    type: array
+                    description: SCIM schema information for the response
+                    items:
+                      type: string
+                  itemsPerPage:
+                    type: integer
+                    description: The number of groups returned in the current page
+                  startIndex:
+                    type: integer
+                    description: The starting index of the current page in the result set
+                  totalResults:
+                    type: integer
+                    description: The total number of groups matching the query
+              example:
+                Resources:
+                - displayName: Blob Sales
+                  id: mEhXj6ZI
+                  meta:
+                    created: '2024-08-29T20:33:36.626Z'
+                    lastModified: '2024-08-29T20:33:36.626Z'
+                    resourceType: Group
+                  schemas:
+                  - urn:ietf:params:scim:schemas:core:2.0:Group
+                  members:
+                  - display: blob.ross@blobsrus.co
+                    value: 9e8719d9-276a-4964-9395-a493189a247c
+                itemsPerPage: 1
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:ListResponse
+                startIndex: 1
+                totalResults: 1
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /scim/v2/groups/{userGroupId}:
+    get:
+      tags:
+      - User groups
+      summary: Retrieve user group
+      description: Retrieves a user group using its unique ID.
+      security:
+      - orgApiKey: []
+      operationId: getUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the group to be retrieved
+        example: mEhXj6ZI
+      responses:
+        '200':
+          description: User group details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimGroup'
+              example:
+                displayName: Blob Sales
+                id: mEhXj6ZI
+                meta:
+                  created: '2024-08-29T20:33:36.626Z'
+                  lastModified: '2024-08-29T20:33:36.626Z'
+                  resourceType: Group
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:Group
+                members:
+                - display: blob.ross@blobsrus.co
+                  value: 9e8719d9-276a-4964-9395-a493189a247c
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - User groups
+      summary: Replace user group
+      description: 'Replaces the specified user group. Per the SCIM 2.0 specification, `PUT` replaces the entire group resource, including its membership.
+
+
+        To add or remove individual members without replacing the full membership list, use the [Update user group](/api/user-groups/update-user-group) endpoint, which performs a partial update via `PATCH`.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: replaceUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the group to be replaced
+        example: mEhXj6ZI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - displayName
+              - members
+              properties:
+                displayName:
+                  type: string
+                  description: The name of the group. Names must be 64 characters or less.
+                  example: Blob SEs
+                members:
+                  type: array
+                  description: 'A list of users that defines the group membership. **Note**: This will overwrite the existing membership. Include existing members to retain their membership.
+
+                    '
+                  items:
+                    type: object
+                    properties:
+                      display:
+                        type: string
+                        description: The user's email address
+                      value:
+                        type: string
+                        description: The user's unique identifier
+                  example:
+                  - display: blob.ross@blobsrus.co
+                    value: 9e8719d9-276a-4964-9395-a493189a247c
+      responses:
+        '200':
+          description: Group replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimGroup'
+              example:
+                displayName: Blob SEs
+                id: mEhXj6ZI
+                meta:
+                  created: '2024-12-04T00:08:03.250Z'
+                  lastModified: '2024-12-04T00:20:47.346Z'
+                  resourceType: Group
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:Group
+                members:
+                - display: blob.ross@blobsrus.co
+                  value: 9e8719d9-276a-4964-9395-a493189a247c
+        '400':
+          description: Invalid request body
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - User groups
+      summary: Update user group
+      description: 'Updates the specified user group by applying a list of [SCIM 2.0 patch operations](https://datatracker.ietf.org/doc/html/rfc7644#section-3.5.2). Use `PATCH` to add or remove individual members, or to rename the group, without affecting other attributes.
+
+
+        To replace the entire group resource (including the full membership list) in a single request, use the [Replace user group](/api/user-groups/replace-user-group) endpoint.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: updateUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the group to be updated
+        example: mEhXj6ZI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - Operations
+              - schemas
+              properties:
+                schemas:
+                  type: array
+                  description: The SCIM schema URIs for the request. Must include `urn:ietf:params:scim:api:messages:2.0:PatchOp`.
+                  items:
+                    type: string
+                    enum:
+                    - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  example:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                Operations:
+                  type: array
+                  minItems: 1
+                  description: 'The list of patch operations to apply to the group. Supported operations:
+
+
+                    | Operation | Description |
+
+                    |-----------|-------------|
+
+                    | `add` with `path: "members"` | Add one or more users to the group |
+
+                    | `remove` with `path: ''members[value eq "{userId}"]''` | Remove a single user from the group |
+
+                    | `replace` with `path: "displayName"` | Rename the group |
+
+                    | `replace` with `path: "members"` | Replace the entire membership list |
+
+                    | `replace` without a `path` | Replace top-level attributes (for example, `displayName`) |
+
+                    '
+                  items:
+                    type: object
+                    required:
+                    - op
+                    properties:
+                      op:
+                        type: string
+                        description: The operation to perform.
+                        enum:
+                        - add
+                        - replace
+                        - remove
+                      path:
+                        type: string
+                        description: 'The attribute path the operation targets. For member removal, use the filter syntax `members[value eq "{userId}"]`. Omit to apply the operation to the resource as a whole.
+
+                          '
+                        example: members
+                      value:
+                        description: The value to apply for the operation. Required for `add` and `replace` operations.
+            examples:
+              addMembers:
+                summary: Add members to the group
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: add
+                    path: members
+                    value:
+                    - display: blob.ross@blobsrus.co
+                      value: 9e8719d9-276a-4964-9395-a493189a247c
+              removeMember:
+                summary: Remove a member from the group
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: remove
+                    path: members[value eq "9e8719d9-276a-4964-9395-a493189a247c"]
+              renameGroup:
+                summary: Rename the group
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: displayName
+                    value: Blob SEs
+      responses:
+        '200':
+          description: Group updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimGroup'
+              example:
+                displayName: Blob SEs
+                id: mEhXj6ZI
+                meta:
+                  created: '2024-12-04T00:08:03.250Z'
+                  lastModified: '2024-12-04T00:20:47.346Z'
+                  resourceType: Group
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:Group
+                members:
+                - display: blob.ross@blobsrus.co
+                  value: 9e8719d9-276a-4964-9395-a493189a247c
+        '400':
+          description: Invalid patch operations
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - User groups
+      summary: Delete user group
+      description: Deletes the specified user group.
+      security:
+      - orgApiKey: []
+      operationId: deleteUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the group to be deleted
+        example: mEhXj6ZI
+      responses:
+        '204':
+          description: Group deleted successfully
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    ScimGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the group
+        displayName:
+          type: string
+          description: The name of the group
+        members:
+          type: array
+          description: The list of users in the group
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+                description: The user's unique identifier
+              display:
+                type: string
+                description: The user's email address
+        meta:
+          type: object
+          description: Metadata about the group resource
+          properties:
+            resourceType:
+              type: string
+              example: Group
+              description: The type of resource. This will be `Group`.
+            created:
+              type: string
+              format: date-time
+              description: The time the group was created
+            lastModified:
+              type: string
+              format: date-time
+              description: The time the group was last updated
+        schemas:
+          type: array
+          description: SCIM schema information for the group
+          items:
+            type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

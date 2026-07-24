@@ -1,0 +1,518 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Folder permissions API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Folder permissions
+  description: Manage folder-level access
+paths:
+  /v1/folders/{folderId}/permissions:
+    post:
+      tags:
+      - Folder permissions
+      summary: Grant folder permissions
+      description: Grant folder permissions to users or groups
+      security:
+      - bearerAuth: []
+      operationId: grantFolderPermissions
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - NO_ACCESS
+                  - VIEWER
+                  - EDITOR
+                  - MANAGER
+                  description: The content role to assign to the specified users or user groups.
+                accessBoost:
+                  type: boolean
+                  default: false
+                  description: If `true`, [AccessBoost](/share#boosting-permissions-with-accessboost) is enabled for the folder.
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to grant permissions to. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to grant permissions to. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+      responses:
+        '200':
+          description: Permissions granted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `userIds.userGroupIds: userIds or userGroupIds must be provided`
+
+            - `userIds.0: Invalid uuid`
+
+            - `userGroupIds.0: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with identifier "<folderId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Folder permissions
+      summary: Update folder permissions
+      description: Update existing folder permissions for users or groups
+      security:
+      - bearerAuth: []
+      operationId: updateFolderPermissions
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - NO_ACCESS
+                  - VIEWER
+                  - EDITOR
+                  - MANAGER
+                  description: The content role to assign to the specified users or user groups.
+                accessBoost:
+                  type: boolean
+                  default: false
+                  description: If `true`, [AccessBoost](/share#boosting-permissions-with-accessboost) is enabled for the folder.
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to update permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to update permissions for. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+      responses:
+        '200':
+          description: Permissions updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `userIds.userGroupIds: userIds or userGroupIds must be provided`
+
+            - `userIds.0: Invalid uuid`
+
+            - `userGroupIds.0: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with identifier "<folderId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Folder permissions
+      summary: Get folder permissions
+      description: Retrieve folder permissions for a user
+      security:
+      - bearerAuth: []
+      operationId: getFolderPermissions
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+      responses:
+        '200':
+          description: Folder permissions object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permits:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FolderPermission'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `userId: userId must be provided`
+
+            - `userId: Invalid userId`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with identifier "<folderId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Folder permissions
+      summary: Revoke folder permissions
+      description: Revoke folder permissions from users or groups
+      security:
+      - bearerAuth: []
+      operationId: revokeFolderPermissions
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to revoke permissions from. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to revoke permissions from. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs.
+
+
+                    Either `userIds` or `userGroupIds` is required.
+
+                    '
+      responses:
+        '200':
+          description: Permissions revoked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `userIds.userGroupIds: userIds or userGroupIds must be provided`
+
+            - `userIds.0: Invalid uuid`
+
+            - `userGroupIds.0: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with identifier "<folderId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    FolderPermission:
+      type: object
+      description: Represents a folder permission in Omni.
+      properties:
+        id:
+          type: string
+          description: The ID of the user or user group.
+        name:
+          type: string
+          description: The name of the user or user group.
+        description:
+          type: string
+          description: Description of the permission source.
+        type:
+          type: string
+          description: The type of the permission holder.
+          enum:
+          - user
+          - userGroup
+        direct:
+          type: object
+          description: Direct permission details for this folder.
+          properties:
+            accessBoost:
+              type: boolean
+              description: If `true`, [AccessBoost](/share#boosting-permissions-with-accessboost) is enabled for the user.
+            isOwner:
+              type: boolean
+              description: If `true`, the user is the owner of the folder.
+            role:
+              type: string
+              description: The content role associated with the user.
+              enum:
+              - NO_ACCESS
+              - VIEWER
+              - EDITOR
+              - MANAGER
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

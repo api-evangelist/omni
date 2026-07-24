@@ -1,0 +1,1637 @@
+openapi: 3.1.0
+info:
+  title: Omni AI API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: AI
+  description: AI-powered query generation
+paths:
+  /v1/ai/branding:
+    get:
+      tags:
+      - AI
+      summary: Get AI Agent branding
+      description: 'Return the organization''s AI Agent''s [branding configuration](/ai/settings/branding), including display name, custom logo URL, and copy for AI Agent landing surfaces. Falls back to Omni''s default values when custom branding hasn''t been configured.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getAiBranding
+      responses:
+        '200':
+          description: Successfully retrieved AI Agent branding
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The display name for the AI Agent. Defaults to `Omni Agent` if branding hasn't been configured.
+                    example: Omni AI
+                  logoUrl:
+                    type: string
+                    nullable: true
+                    description: Absolute URL to the custom logo image for the AI Agent. Returns `null` if no custom logo is configured.
+                    example: https://example.com/custom-logo.png
+                  headline:
+                    type: string
+                    description: Headline text displayed on AI Agent landing surfaces
+                    example: Welcome to Omni AI
+                  body:
+                    type: string
+                    description: Body copy displayed on AI Agent landing surfaces
+                    example: Ask questions about your data in natural language
+                  promptPlaceholder:
+                    type: string
+                    description: Placeholder text for the AI prompt input field
+                    example: Ask a question about your data...
+              examples:
+                customBranding:
+                  summary: Custom branding
+                  value:
+                    displayName: DataBot
+                    logoUrl: https://example.com/custom-logo.png
+                    headline: Welcome to DataBot
+                    body: Your intelligent data assistant
+                    promptPlaceholder: What would you like to know?
+                defaultBranding:
+                  summary: Default branding (fallback)
+                  value:
+                    displayName: Omni AI
+                    logoUrl: null
+                    headline: Welcome to Omni AI
+                    body: Ask questions about your data in natural language
+                    promptPlaceholder: Ask a question about your data...
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `Insufficient permissions` - User does not have AI permissions on any model
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/generate-query:
+    post:
+      tags:
+      - AI
+      summary: Generate a query
+      description: Generate a structured Omni query from natural language using AI
+      security:
+      - bearerAuth: []
+      operationId: generateQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - modelId
+              - prompt
+              properties:
+                modelId:
+                  type: string
+                  format: uuid
+                  description: The ID of the model to run the query against
+                currentTopicName:
+                  type: string
+                  description: Name of the base topic/table. If left empty, AI will automatically choose a topic based on the question.
+                prompt:
+                  type: string
+                  description: Natural language instruction describing the desired query output
+                workbookUrl:
+                  type: boolean
+                  description: When `true`, returns an Omni workbook URL that opens and runs the generated query
+                branchId:
+                  type: string
+                  description: The ID of the model branch to use to generate the query. If not provided, the `main` branch will be used. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`.
+                runQuery:
+                  type: boolean
+                  default: true
+                  description: "When `true` (default), the generated query is executed against the database and results are included in the response. \n\nWhen `false`, only the generated query object is returned without executing it. Set to `false` to preview what query would be generated without incurring a database query.\n"
+                contextQuery:
+                  type: object
+                  description: A query object to provide as context. Use this to reference previous queries or provide additional context for the generation.
+                queryAllViews:
+                  type: boolean
+                  default: false
+                  description: 'When `true` and the model''s [`query_all_views_and_fields`](/modeling/models/parameters/ai-settings/query-all-views-and-fields) setting is enabled, allows the AI to query views that are not included in topics. If the setting is disabled, this parameter has no effect.
+
+
+                    When both the API parameter and model setting are enabled:
+
+
+                    - The AI can select from any view in the model, including views not in topics
+
+                    - The AI will prefer topic-organized views unless the question clearly targets a standalone view
+
+
+                    **Note:** Users with topic-locked permissions cannot use this parameter, even if the model setting is enabled.
+
+                    '
+            example:
+              modelId: 123e4567-e89b-12d3-a456-426614174000
+              currentTopicName: orders
+              prompt: Show me total revenue by product category for the last quarter
+      responses:
+        '200':
+          description: Successfully generated query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    nullable: true
+                    description: The name of the topic used for query generation. This will be populated if the AI used a topic and null if the query was generated using a base view.
+                    example: order_items
+                  baseView:
+                    type: string
+                    nullable: true
+                    description: The name of the base view used for query generation. This will be populated if the AI used a view outside of a topic and null if the query was generated using a topic.
+                    example: users
+                  query:
+                    type: object
+                    properties:
+                      model_job:
+                        type: object
+                        description: A structured Omni query object that can be used with the [Query run API](/api/queries/run-query)
+                        properties:
+                          model_id:
+                            type: string
+                            format: uuid
+                            description: Model identifier
+                          table:
+                            type: string
+                            description: Base table/topic name
+                          fields:
+                            type: array
+                            items:
+                              type: string
+                            description: Array of field names to include in query
+                          calculations:
+                            type: array
+                            items:
+                              type: object
+                            description: Custom calculations
+                          filters:
+                            type: object
+                            description: Filter conditions
+                          sorts:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                column_name:
+                                  type: string
+                                sort_descending:
+                                  type: boolean
+                                is_column_sort:
+                                  type: boolean
+                                null_sort:
+                                  type: string
+                            description: Sort specifications
+                          limit:
+                            oneOf:
+                            - type: integer
+                            - type: 'null'
+                            description: Result row limit
+                          pivots:
+                            type: array
+                            items:
+                              type: object
+                            description: Pivot configurations
+                          fill_fields:
+                            type: array
+                            items:
+                              type: string
+                            description: Fields to fill
+                          column_totals:
+                            type: object
+                            description: Column totals configuration
+                          row_totals:
+                            type: object
+                            description: Row totals configuration
+                          column_limit:
+                            type: integer
+                            description: Column limit for pivots
+                          default_group_by:
+                            type: boolean
+                            description: Enable default grouping
+                          join_via_map:
+                            type: object
+                            description: Join configuration map
+                          join_paths_from_topic_name:
+                            type: string
+                            description: Topic name for join paths
+                          version:
+                            type: integer
+                            description: Query version
+                          period_over_period_computations:
+                            type: array
+                            items:
+                              type: object
+                            description: Period over period calculations
+                          query_references:
+                            type: object
+                            description: Query references
+                          metadata:
+                            type: object
+                            description: Query metadata
+                          custom_summary_types:
+                            type: object
+                            description: Custom summary type definitions
+              example:
+                query:
+                  model_job:
+                    model_id: bcf0cffd-ec1b-44d5-945a-a261ebe407fc
+                    table: order_items
+                    fields:
+                    - products.item_name
+                    - order_items.total_sale_price
+                    calculations: []
+                    filters: {}
+                    sorts:
+                    - column_name: order_items.total_sale_price
+                      sort_descending: true
+                      is_column_sort: false
+                      null_sort: OMNI_DEFAULT
+                    limit: 10
+                    pivots: []
+                    fill_fields: []
+                    column_totals: {}
+                    row_totals: {}
+                    column_limit: 50
+                    default_group_by: true
+                    join_via_map: {}
+                    join_paths_from_topic_name: order_items
+                    version: 5
+                    period_over_period_computations: []
+                    query_references: {}
+                    metadata: {}
+                    custom_summary_types: {}
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid method`
+
+            - `Invalid JSON`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Feature not enabled`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/pick-topic:
+    post:
+      tags:
+      - AI
+      summary: Pick topic
+      description: "Analyze a natural language prompt and determines which topic in the model is the best fit for answering the question. \n\nUseful as a preprocessing step before calling the [Generate AI query](/api/ai/generate-a-query) or [Create AI job](/api/ai/create-ai-job) endpoints, especially when the user's question could relate to multiple topics.\n"
+      security:
+      - bearerAuth: []
+      operationId: aiPickTopic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiPickTopicBody'
+      responses:
+        '200':
+          description: Topic selected successfully. The returned `topicId` can be used as the `topicName` parameter in other AI endpoints.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiPickTopicResponse'
+        '400':
+          description: Invalid request body. The `prompt` or `modelId` may be missing or malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions. Requires the **Querier** role on the specified model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified model was not found, or no accessible topics exist in the model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          description: AI service error.
+  /v1/ai/conversations:
+    get:
+      tags:
+      - AI
+      summary: List AI conversations
+      description: 'List a user''s recent AI conversations, ordered by most-recent activity. Each conversation includes an ID that can be passed as `conversationId` to subsequent [Create AI job](/api/ai/create-ai-job) requests to continue the thread.
+
+
+        Returns a paginated list with conversation metadata including optional names and the most recent user prompt for display purposes.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: listAIConversations
+      parameters:
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: '**Requires an Organization API key.** Filter conversations to a specific user by their membership ID.
+
+
+          User-scoped tokens automatically see only their own conversations and cannot use this parameter. Organization API keys can optionally filter by user or see all conversations in the organization.
+
+          '
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+        description: Number of conversations to return per page.
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Pagination cursor from a previous response's `pageInfo.nextCursor`. Use to fetch the next page of results.
+      responses:
+        '200':
+          description: Successfully retrieved conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pageInfo
+                properties:
+                  data:
+                    type: array
+                    description: List of AI conversations
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - updatedAt
+                      - createdAt
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: Unique identifier for the conversation. Pass this as `conversationId` when creating AI jobs to continue the thread.
+                        name:
+                          type: string
+                          nullable: true
+                          description: Optional name for the conversation. May be `null` if no name has been set.
+                        lastUserPrompt:
+                          type: string
+                          nullable: true
+                          description: The most recent user prompt in the conversation, suitable for display as a one-line summary. May be `null` for empty conversations.
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          description: Timestamp of the most recent activity in the conversation in ISO 8601 format.
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: Timestamp when the conversation was created in ISO 8601 format.
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+              example:
+                data:
+                - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                  name: Q1 Revenue Analysis
+                  lastUserPrompt: Show me revenue trends by region for Q1
+                  updatedAt: '2026-05-15T14:32:10Z'
+                  createdAt: '2026-05-15T09:15:30Z'
+                - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+                  name: null
+                  lastUserPrompt: What were our top selling products last month?
+                  updatedAt: '2026-05-14T16:20:45Z'
+                  createdAt: '2026-05-14T16:20:45Z'
+                pageInfo:
+                  hasNextPage: false
+                  nextCursor: null
+                  pageSize: 50
+                  totalRecords: 2
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid userId format` - `userId` must be a valid UUID
+
+            - `Invalid pageSize` - `pageSize` must be an integer between 1 and 100
+
+            - `Invalid nextCursor` - pagination `cursor` is malformed
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `Insufficient permissions` - User lacks ability to use AI on any model in the organization
+
+            - `User-scoped tokens cannot filter by userId` - Personal Access Tokens cannot use the `userId` parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `User not found` - the specified `userId` does not exist in the organization
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/conversations/{conversationId}:
+    get:
+      tags:
+      - AI
+      summary: Get conversation
+      description: 'Retrieve a conversation with its full message history — alternating user and assistant turns. Each assistant turn carries the originating `jobId` and an `omniChatUrl` deep link.
+
+
+        The conversations returned by this API depend on the type of API key being used:
+
+
+        - Organization API keys can access any conversation in the organization
+
+        - Personal Access Tokens can only access the authenticating user''s conversations
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getConversation
+      parameters:
+      - name: conversationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the conversation
+      responses:
+        '200':
+          description: Conversation retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - id
+                - userId
+                - organizationId
+                - createdAt
+                - updatedAt
+                - messages
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for this conversation.
+                    example: 660e8400-e29b-41d4-a716-446655440001
+                  userId:
+                    type: string
+                    format: uuid
+                    description: The user ID who created this conversation.
+                    example: 990e8400-e29b-41d4-a716-446655440004
+                  organizationId:
+                    type: string
+                    format: uuid
+                    description: The organization that owns this conversation.
+                    example: 880e8400-e29b-41d4-a716-446655440003
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: When the conversation was created.
+                    example: '2025-01-15T10:00:00.000Z'
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: When the conversation was last modified.
+                    example: '2025-01-15T10:01:30.000Z'
+                  messages:
+                    type: array
+                    description: Ordered list of messages in the conversation, alternating between user and assistant turns.
+                    items:
+                      type: object
+                      required:
+                      - role
+                      - content
+                      - timestamp
+                      properties:
+                        role:
+                          type: string
+                          enum:
+                          - user
+                          - assistant
+                          description: The role of the message sender.
+                          example: user
+                        content:
+                          type: string
+                          description: The message content. For user messages, this is the prompt. For assistant messages, this is the AI's response in Markdown format.
+                          example: What are the top 5 products by revenue?
+                        timestamp:
+                          type: string
+                          format: date-time
+                          description: When this message was created.
+                          example: '2025-01-15T10:00:00.000Z'
+                        jobId:
+                          type: string
+                          format: uuid
+                          description: '**Only present for assistant messages.** The ID of the AI job that generated this response. Use this with the [Get AI job status](/api/ai/get-ai-job-status) endpoint to retrieve job details.
+
+                            '
+                          example: 550e8400-e29b-41d4-a716-446655440000
+                        omniChatUrl:
+                          type: string
+                          format: uri
+                          description: '**Only present for assistant messages.** URL to view this conversation in the Omni chat interface. Opens the chat session where the job actions and results are visible.
+
+                            '
+                          example: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+              examples:
+                conversation:
+                  summary: A conversation with multiple turns
+                  value:
+                    id: 660e8400-e29b-41d4-a716-446655440001
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    updatedAt: '2025-01-15T10:05:00.000Z'
+                    messages:
+                    - role: user
+                      content: What are the top 5 products by revenue?
+                      timestamp: '2025-01-15T10:00:00.000Z'
+                    - role: assistant
+                      content: '### Top 5 Products by Revenue
+
+
+                        1. **Sunglasses** - $678,994
+
+                        2. **Jeans** - $475,072
+
+                        3. **T-Shirt** - $320,150
+
+                        4. **Sneakers** - $289,033
+
+                        5. **Hat** - $201,487'
+                      timestamp: '2025-01-15T10:01:30.000Z'
+                      jobId: 550e8400-e29b-41d4-a716-446655440000
+                      omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    - role: user
+                      content: Show me revenue by month for sunglasses
+                      timestamp: '2025-01-15T10:03:00.000Z'
+                    - role: assistant
+                      content: '### Sunglasses Revenue by Month
+
+
+                        - January: $52,430
+
+                        - February: $48,221
+
+                        - March: $61,992'
+                      timestamp: '2025-01-15T10:05:00.000Z'
+                      jobId: 550e8400-e29b-41d4-a716-446655440010
+                      omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid conversation ID format. Must be a valid UUID.`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 'Unauthorized
+
+
+            Possible error messages:
+
+            - `Missing or invalid API key`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `User does not have USE_AI permission`
+
+            - `User-scoped token cannot access another user''s conversation`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: '404'
+                detail: Conversation not found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/jobs:
+    post:
+      tags:
+      - AI
+      summary: Create AI job
+      description: "Submit a new AI job for asynchronous execution. The AI will analyze the prompt, generate and execute queries against the specified model, and produce a summarized answer. \n\nJobs are processed by a background worker and typically complete within 15–60 seconds. Use [Get AI job status](/api/ai/get-ai-job-status) to poll for status, or configure a `webhookUrl` to receive a notification when the job completes. Optionally continue an existing conversation by providing a `conversationId`.\n\n#### Webhook notifications\n\nIf a `webhookUrl` is configured, it will receive a `POST` with the following body when the job reaches a terminal state:\n\n```json\n{\n  \"event_id\": \"evt_550e8400_COMPLETE_1706123456\",\n  \"jobId\": \"550e8400-...\",\n  \"status\": \"COMPLETE\",\n  \"result_summary\": \"Generated revenue report showing $1.2M total revenue\",\n  \"metadata\": { \"slack_channel\": \"C123456\" },\n  \"completed_at\": \"2025-01-24T10:30:00Z\"\n}\n```\n\nThe request will also include the following signature headers:\n\n- `X-Omni-Signature-Timestamp` - `unix`\n- `X-Omni-Signature` - (`sha256=HMAC(timestamp.body, secret)`)\n\n<Note>\n  The webhook payload includes `result_summary` which can contain actual data values from query results. Full result detail (CSV data, query definitions, actions) requires calling the [Stream AI job results endpoint](/api/ai/stream-ai-job-results) with credentials.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: createAIJob
+      parameters:
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: '**Requires an Organization API key.** The ID of the user to run the query as.
+
+
+          Personal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.
+
+          '
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - modelId
+              - prompt
+              properties:
+                modelId:
+                  type: string
+                  format: uuid
+                  description: The ID of the model to run the AI job against
+                prompt:
+                  type: string
+                  description: Natural language instruction describing the desired task
+                conversationId:
+                  type: string
+                  format: uuid
+                  description: Optional conversation ID to continue an existing conversation
+                branchId:
+                  type: string
+                  format: uuid
+                  description: Optional branch ID for the model. Must be a branch of the shared model specified by `modelId`. Use this to query against in-progress model changes.
+                topicName:
+                  type: string
+                  description: 'Topic name to scope query generation.
+
+
+                    If not provided, the AI will automatically select the best topic based on the prompt. For multi-turn conversations, the AI will carry forward the topic from the previous turn.
+
+
+                    The topic must exist in the model and be allowed by any [`ai_chat_topics`](/modeling/models/ai-chat-topics) restrictions or the API will return a `404`. Use the [Pick topic endpoint](/api/ai/pick-topic) to programmatically determine the right topic.
+
+                    '
+                progressWebhookEnabled:
+                  type: boolean
+                  description: "When `true`, real-time progress events are sent using `POST` to the defined `webhookUrl` during execution (e.g., _\"Searching for revenue fields\"_, _\"Query returned 42 rows\"_). **`webhookUrl` is required if enabled.** \n\nProgress events are best-effort: single attempt, no retries, failures do not affect job execution.\n"
+                webhookUrl:
+                  type: string
+                  format: uri
+                  description: 'An optional webhook URL to receive webhook updates. Always receives a terminal event (job.complete or job.failed) when the job finishes.
+
+
+                    When `progressWebhookEnabled: true`, also receives real-time progress events during execution. **Required if `progressWebhookEnabled: true`.**
+
+                    '
+                webhookSigningSecret:
+                  type: string
+                  description: An HMAC-SHA256 secret for signing webhook payloads
+                webhookMetadata:
+                  type: object
+                  description: Opaque metadata passed back unchanged in webhook payloads
+            example:
+              modelId: 123e4567-e89b-12d3-a456-426614174000
+              prompt: Analyze sales trends by region for the past year
+      responses:
+        '201':
+          description: AI job created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for the created job
+                  conversationId:
+                    type: string
+                    format: uuid
+                    description: The conversation ID associated with this job
+                  omniChatUrl:
+                    type: string
+                    description: URL to view this conversation in the Omni chat interface. Opens the chat session where the job actions and results are visible.
+              example:
+                jobId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                conversationId: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                omniChatUrl: https://blobsrus.omni.co/chat/b2c3d4e5-f6a7-8901-bcde-f12345678901
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid modelId/branchId/conversationId`
+
+            - `Missing required field: prompt`
+
+            - `Invalid webhook URL format`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `Feature not enabled`
+
+            - `Insufficient permissions`
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Model not found`
+
+            - `Topic not found or excluded by ai_chat_topics`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: 'Conflict
+
+
+            Possible error messages:
+
+            - `Active job exists for conversation`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/jobs/{jobId}:
+    get:
+      tags:
+      - AI
+      summary: Get AI job status
+      description: 'Retrieve the current status and details of an AI job, including its state, progress information, and result summary.
+
+
+        The response fields vary by `state` — for example, `progress` is only present during `EXECUTING`, and `resultSummary` is only present when `COMPLETE`.
+
+
+        Poll this endpoint every 2–5 seconds until the job reaches a terminal state (`COMPLETE`, `FAILED`, or `CANCELLED`).
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getAIJobStatus
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the AI job
+      responses:
+        '200':
+          description: Job status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for this job.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                  state:
+                    type: string
+                    enum:
+                    - CANCELLED
+                    - COMPLETE
+                    - DELIVERING
+                    - EXECUTING
+                    - FAILED
+                    - QUEUED
+                    description: Current state of the job. Terminal states are `COMPLETE`, `FAILED`, and `CANCELLED`. Poll until the job reaches a terminal state.
+                    example: QUEUED
+                  prompt:
+                    type: string
+                    description: The natural language prompt that was submitted.
+                    example: What are the top 5 products by revenue?
+                  conversationId:
+                    type: string
+                    format: uuid
+                    description: The conversation this job is associated with. Use this to submit follow-up jobs in the same conversation thread.
+                    example: 660e8400-e29b-41d4-a716-446655440001
+                  modelId:
+                    type: string
+                    format: uuid
+                    nullable: true
+                    description: The shared model ID used for query generation.
+                    example: 770e8400-e29b-41d4-a716-446655440002
+                  branchId:
+                    type: string
+                    format: uuid
+                    nullable: true
+                    description: Branch ID used for model context, or null if querying the main shared model.
+                  organizationId:
+                    type: string
+                    format: uuid
+                    description: The organization that owns this job.
+                    example: 880e8400-e29b-41d4-a716-446655440003
+                  userId:
+                    type: string
+                    format: uuid
+                    description: The user ID who created (or is associated with) this job.
+                    example: 990e8400-e29b-41d4-a716-446655440004
+                  topicName:
+                    type: string
+                    nullable: true
+                    description: Topic name used to scope query generation, or null if the AI selected the topic automatically.
+                    example: order_items
+                  omniChatUrl:
+                    type: string
+                    format: uri
+                    description: URL to view this conversation in the Omni chat interface. Opens the chat session where the job actions and results are visible.
+                    example: https://blobsrus.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                  progress:
+                    type: object
+                    nullable: true
+                    description: '**Only present in `EXECUTING` state.** Real-time progress information. Null if no progress has been reported yet. Updated in real-time as the AI works through iterations.
+
+                      '
+                    properties:
+                      iteration:
+                        type: integer
+                        description: Current iteration number. The AI may take multiple iterations to refine queries and generate a complete answer.
+                        example: 2
+                      message:
+                        type: string
+                        description: Human-readable status message describing what the AI is currently doing.
+                        example: 'Running query: Top products by revenue'
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: When this progress update was recorded.
+                        example: '2025-01-15T10:00:08.000Z'
+                    required:
+                    - iteration
+                    - message
+                    - updatedAt
+                  resultSummary:
+                    type: string
+                    description: '**Only present in COMPLETE state.** Markdown-formatted summary of the job result. For the full result with query details and data, use the [Stream AI job results endpoint](/api/ai/stream-ai-job-results).
+
+                      '
+                    example: '### Top 5 Products by Revenue
+
+
+                      1. **Sunglasses** - $678,994
+
+                      2. **Jeans** - $475,072'
+                  error:
+                    type: object
+                    description: '**Only present in `FAILED` state.** Error details explaining why the job failed.
+
+                      '
+                    properties:
+                      code:
+                        type: string
+                        description: Machine-readable error code.
+                        example: QUERY_EXECUTION_ERROR
+                      message:
+                        type: string
+                        description: Human-readable error message.
+                        example: Column 'revenue' not found in table 'orders'
+                      detail:
+                        type: string
+                        description: Additional error detail or context.
+                        example: The query timed out after 300 seconds
+                    required:
+                    - message
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: When the job was submitted.
+                    example: '2025-01-15T10:00:00.000Z'
+                  executionStartedAt:
+                    type: string
+                    format: date-time
+                    description: When execution began. Present once the job transitions from `QUEUED` to `EXECUTING`. May be absent on jobs that failed or were cancelled before execution started.
+                    example: '2025-01-15T10:00:05.000Z'
+                  completedAt:
+                    type: string
+                    format: date-time
+                    description: '**Present in `COMPLETE` and `FAILED` states.** When the job finished (successfully or with error).
+
+                      '
+                    example: '2025-01-15T10:01:30.000Z'
+                  cancelledAt:
+                    type: string
+                    format: date-time
+                    description: 'When the job was cancelled.
+
+                      '
+                    example: '2025-01-15T10:00:12.000Z'
+                  cancelledBy:
+                    type: string
+                    format: uuid
+                    description: '**Only present in `CANCELLED` state.** User ID of who cancelled the job.
+
+                      '
+                    example: 990e8400-e29b-41d4-a716-446655440004
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: When the job record was last modified.
+                    example: '2025-01-15T10:00:05.000Z'
+              examples:
+                queued:
+                  summary: QUEUED — job is waiting to be picked up
+                  value:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    state: QUEUED
+                    prompt: What are the top 5 products by revenue?
+                    conversationId: 660e8400-e29b-41d4-a716-446655440001
+                    modelId: 770e8400-e29b-41d4-a716-446655440002
+                    branchId: null
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    topicName: null
+                    omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    updatedAt: '2025-01-15T10:00:00.000Z'
+                executing:
+                  summary: EXECUTING — AI is working through iterations
+                  value:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    state: EXECUTING
+                    prompt: What are the top 5 products by revenue?
+                    conversationId: 660e8400-e29b-41d4-a716-446655440001
+                    modelId: 770e8400-e29b-41d4-a716-446655440002
+                    branchId: null
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    topicName: order_items
+                    omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    progress:
+                      iteration: 2
+                      message: 'Running query: Top products by revenue'
+                      updatedAt: '2025-01-15T10:00:08.000Z'
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    executionStartedAt: '2025-01-15T10:00:05.000Z'
+                    updatedAt: '2025-01-15T10:00:08.000Z'
+                complete:
+                  summary: COMPLETE — job finished successfully
+                  value:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    state: COMPLETE
+                    prompt: What are the top 5 products by revenue?
+                    conversationId: 660e8400-e29b-41d4-a716-446655440001
+                    modelId: 770e8400-e29b-41d4-a716-446655440002
+                    branchId: null
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    topicName: order_items
+                    omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    resultSummary: '### Top 5 Products by Revenue
+
+
+                      1. **Sunglasses** - $678,994
+
+                      2. **Jeans** - $475,072'
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    executionStartedAt: '2025-01-15T10:00:05.000Z'
+                    completedAt: '2025-01-15T10:01:30.000Z'
+                    updatedAt: '2025-01-15T10:01:30.000Z'
+                failed:
+                  summary: FAILED — job encountered an error
+                  value:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    state: FAILED
+                    prompt: What are the top 5 products by revenue?
+                    conversationId: 660e8400-e29b-41d4-a716-446655440001
+                    modelId: 770e8400-e29b-41d4-a716-446655440002
+                    branchId: null
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    topicName: order_items
+                    omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    error:
+                      code: QUERY_EXECUTION_ERROR
+                      message: Column 'revenue' not found in table 'orders'
+                      detail: The query timed out after 300 seconds
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    executionStartedAt: '2025-01-15T10:00:05.000Z'
+                    completedAt: '2025-01-15T10:01:30.000Z'
+                    updatedAt: '2025-01-15T10:01:30.000Z'
+                cancelled:
+                  summary: CANCELLED — job was cancelled by a user
+                  value:
+                    id: 550e8400-e29b-41d4-a716-446655440000
+                    state: CANCELLED
+                    prompt: What are the top 5 products by revenue?
+                    conversationId: 660e8400-e29b-41d4-a716-446655440001
+                    modelId: 770e8400-e29b-41d4-a716-446655440002
+                    branchId: null
+                    organizationId: 880e8400-e29b-41d4-a716-446655440003
+                    userId: 990e8400-e29b-41d4-a716-446655440004
+                    topicName: null
+                    omniChatUrl: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+                    createdAt: '2025-01-15T10:00:00.000Z'
+                    executionStartedAt: '2025-01-15T10:00:05.000Z'
+                    cancelledAt: '2025-01-15T10:00:12.000Z'
+                    cancelledBy: 990e8400-e29b-41d4-a716-446655440004
+                    updatedAt: '2025-01-15T10:00:12.000Z'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid job ID format. Must be a valid UUID.`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 'Unauthorized
+
+
+            Possible error messages:
+
+            - `Missing or invalid API key`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: '404'
+                detail: Job not found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/jobs/{jobId}/cancel:
+    post:
+      tags:
+      - AI
+      summary: Cancel AI job
+      description: "Request cancellation of an AI job. This endpoint is idempotent — calling it on an already-cancelled or completed job returns success with the current state. \n\n- For `QUEUED` jobs, cancellation is immediate\n- For `EXECUTING` jobs, the worker will stop after completing its current iteration\n- Jobs in a `DELIVERING` state cannot be cancelled as they are already finalizing results. **Only the job owner or organization admins can cancel jobs.**\n"
+      security:
+      - bearerAuth: []
+      operationId: cancelAIJob
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the AI job to cancel
+      responses:
+        '200':
+          description: Job cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for the cancelled job
+                  state:
+                    type: string
+                    enum:
+                    - CANCELLED
+                    description: The new state of the job
+              example:
+                jobId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                state: CANCELLED
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Job is not in a cancellable state`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 'Unauthorized
+
+
+            Possible error messages:
+
+            - `Missing or invalid API key`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `Permission denied. Only the job owner or organization admins can cancel jobs.`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job not found. The job may not exist or may belong to a different organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/jobs/{jobId}/result:
+    get:
+      tags:
+      - AI
+      summary: Stream AI job results
+      description: "Retrieve the full result of a completed AI job, including all actions taken by the AI (queries generated, data retrieved) and the final summarized answer. \n\nResults are only available for jobs in `COMPLETE` state and are retained for 14 days after completion. The response is streamed directly from storage.\n"
+      security:
+      - bearerAuth: []
+      operationId: getAIJobResult
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the AI job
+      responses:
+        '200':
+          description: Job results retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  actions:
+                    type: array
+                    description: Ordered list of actions the AI took during execution. Each action represents a step such as generating a query, executing it, or synthesizing a final answer.
+                    items:
+                      type: object
+                      required:
+                      - message
+                      - timestamp
+                      - type
+                      properties:
+                        type:
+                          type: string
+                          description: The type of action. Common types include `generate_query` (query generation and execution) and `summarize` (final answer synthesis).
+                          example: generate_query
+                        message:
+                          type: string
+                          description: The AI's explanation of what it is doing in this step, written in natural language.
+                          example: I'll generate a query to find the top 5 products by total revenue.
+                        timestamp:
+                          type: string
+                          description: ISO 8601 timestamp when this action occurred.
+                          example: '2025-01-15T10:00:10.000Z'
+                        result:
+                          type: object
+                          description: Query result data. Only present for `generate_query` action types.
+                          required:
+                          - csvResult
+                          - csvResultWasTruncated
+                          - hasResults
+                          - query
+                          - queryName
+                          - status
+                          - totalRowCount
+                          properties:
+                            resultId:
+                              type: string
+                              description: Stable, unique identifier for this query result within the job. Use it to reference a specific result — for example, to correlate or de-duplicate results across responses.
+                              example: 928c5838-000d-4943-b305-f6242c1b4922
+                            queryName:
+                              type: string
+                              description: Human-readable name describing what this query retrieves.
+                              example: Top 5 Products by Revenue
+                            status:
+                              type: string
+                              enum:
+                              - success
+                              - error
+                              description: Whether the query executed successfully.
+                              example: success
+                            query:
+                              type: object
+                              description: The semantic query definition that was executed. This can be used with the [Run query endpoint](/api/queries/run-query) to re-run the query.
+                            csvResult:
+                              type: string
+                              description: Query results formatted as CSV text.
+                              example: 'Name,Total Revenue
+
+                                Ray-Ban Sunglasses,"678,994.41"
+
+                                Levi''s 501 Jeans,"475,072.00"'
+                            csvResultWasTruncated:
+                              type: boolean
+                              description: Whether the CSV data was truncated due to size limits. If `true`, the full result set may contain additional rows not included in `csvResult`.
+                              example: false
+                            hasResults:
+                              type: boolean
+                              description: Whether the query returned any data rows.
+                              example: true
+                            totalRowCount:
+                              type: integer
+                              description: Total number of rows returned by the query.
+                              example: 5
+                  message:
+                    type: string
+                    description: The AI's final response message in Markdown format. This is the complete answer to the original prompt, incorporating data from all executed queries.
+                    example: '### Top 5 Products by Revenue
+
+
+                      1. **Sunglasses** - $678,994
+
+                      2. **Jeans** - $475,072'
+                  resultSummary:
+                    type: string
+                    description: Summary of the job result. Typically matches the final message content.
+                    example: '### Top 5 Products by Revenue
+
+
+                      1. **Sunglasses** - $678,994
+
+                      2. **Jeans** - $475,072'
+                  topic:
+                    type: string
+                    description: The topic name used for query generation.
+                    example: order_items
+                  omniChatUrl:
+                    type: string
+                    format: uri
+                    description: URL to view this conversation in the Omni chat interface. Opens the chat session where the job actions and results are visible.
+                    example: https://my-org.omni.co/chat/660e8400-e29b-41d4-a716-446655440001
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid job ID`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: 'Unauthorized
+
+
+            Possible error messages:
+
+            - `Missing or invalid API key`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Job not found or results not available
+
+
+            Possible error messages:
+
+            - `Job not found`
+
+            - `Job results not yet available`
+
+            - `Result is no longer available`. Results are retained for 14 days.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    AiPickTopicBody:
+      type: object
+      required:
+      - prompt
+      - modelId
+      properties:
+        branchId:
+          type: string
+          format: uuid
+          description: Optional branch ID for the model. Must be a branch of the shared model specified by modelId.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        currentTopicName:
+          type: string
+          description: The name of the current topic to scope query generation. If not provided, AI will automatically select the best topic for the prompt.
+          example: order_items
+        modelId:
+          type: string
+          format: uuid
+          description: 'The UUID of the shared model to query against. Note that:
+
+
+            - Only shared models are supported
+
+            - The user must have **Querier** permissions or higher on the model
+
+            '
+          example: 770e8400-e29b-41d4-a716-446655440002
+        potentialTopicNames:
+          type: array
+          items:
+            type: string
+          description: Optional list of topic names to limit consideration to. If not provided, all topics the user has access to in the model will be evaluated.
+          example:
+          - order_items
+          - customers
+          - products
+        prompt:
+          type: string
+          description: The natural language prompt to analyze. The AI will determine which topic best matches the data described in this prompt.
+          example: How many orders were placed last month?
+        userId:
+          type: string
+          format: uuid
+          description: 'User ID to evaluate topic access as. Their permissions will be used for permission-aware topic selection.
+
+
+            **Only valid with Organization API keys.** PATs always act as the authenticated user.
+
+            '
+          example: 990e8400-e29b-41d4-a716-446655440004
+        queryAllViews:
+          type: boolean
+          default: false
+          description: 'When `true` and the model''s [`query_all_views_and_fields`](/modeling/models/parameters/ai-settings/query-all-views-and-fields) setting is enabled, allows the AI to access views that are not included in topics when selecting a topic. If the setting is disabled, this parameter has no effect.
+
+
+            When both the API parameter and model setting are enabled:
+
+
+            - The AI can select from any view in the model, including views not in topics
+
+            - The AI will prefer topic-organized views unless the question clearly targets a standalone view
+
+
+            **Note:** Users with topic-locked permissions cannot use this parameter, even if the model setting is enabled.
+
+            '
+    AiPickTopicResponse:
+      type: object
+      required:
+      - topicId
+      properties:
+        topicId:
+          type: string
+          description: 'The name of the topic that best matches the prompt.
+
+
+            Use this as the `topicName` parameter when calling the [Generate a query](/api/ai/generate-a-query) or the [Create AI job](/api/ai/create-ai-job) endpoints.
+
+            '
+          example: order_items
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

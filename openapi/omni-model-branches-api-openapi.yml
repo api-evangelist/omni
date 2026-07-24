@@ -1,0 +1,205 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Model branches API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Model branches
+  description: Manage model branches and merge changes
+paths:
+  /v1/models/{modelId}/branch/{branchName}/merge:
+    post:
+      tags:
+      - Model branches
+      summary: Merge a branch
+      description: 'Merges a model branch into the shared model.
+
+        '
+      x-mint:
+        content: "For PR-required and [git follower](/integrations/git/follower-mode) models, direct merges via API are rejected by default as they would bypass the intended git workflow. You can use the `force_override_git_settings` parameter to override this check when necessary, but git will not be synced to avoid force-pushing to `main`.\n\n<Warning>\n  The `force_override_git_settings` parameter requires **Connection Admin** or **Organization Admin** permissions. Users with lesser permissions will receive a `403 Forbidden` error when attempting to use this parameter.\n</Warning>\n\n| Model Configuration | Default Behavior | With `force_override_git_settings: true` |\n|---------------------|------------------|------------------------------------------|\n| No git | Merge succeeds, no git sync | N/A |\n| Git enabled (no PR required) | Merge succeeds, syncs to git | N/A |\n| Git + PR required | Rejected with 400 error | Merge succeeds, no git sync |\n| Git + git follower | Rejected with 400 error | Merge succeeds, no git sync |\n"
+      security:
+      - bearerAuth: []
+      operationId: mergeBranch
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the model
+        example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      - name: branchName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the branch to merge
+        example: feature/add-revenue-metrics
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delete_branch:
+                  type: boolean
+                  default: false
+                  description: Delete the branch after merging
+                publish_drafts:
+                  type: boolean
+                  default: true
+                  description: When enabled, publish branch-attached drafts when merging
+                commit_message:
+                  type: string
+                  description: Custom commit message for git sync. Defaults to `"branch <name> merged via API"`
+                  example: Merged revenue metrics branch via CI/CD pipeline
+                force_override_git_settings:
+                  type: boolean
+                  default: false
+                  description: "**Requires Connection Admin or Organization Admin permissions.** Users with lesser permissions will receive a `403 Forbidden` error when attempting to use this parameter.\n\nAllow merge for PR-required or git-follower models. When enabled, the merge will succeed but git will not be synced to avoid force-pushing to main. \n"
+            example:
+              delete_branch: true
+              publish_drafts: true
+              commit_message: Merged revenue metrics branch via CI/CD pipeline
+              force_override_git_settings: false
+      responses:
+        '200':
+          description: Branch merged successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether the merge was successful
+                    example: true
+                  published_drafts_count:
+                    type: integer
+                    description: Number of drafts that were published during the merge
+                    example: 2
+                  failed_drafts_count:
+                    type: integer
+                    description: Number of drafts that failed to publish
+                    example: 0
+                  git_synced:
+                    type: boolean
+                    description: Whether the changes were synced to git
+                    example: true
+              example:
+                success: true
+                published_drafts_count: 2
+                failed_drafts_count: 0
+                git_synced: true
+        '400':
+          description: Bad Request - Merge not allowed for this model configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                prRequired:
+                  summary: PR-required model without override
+                  value:
+                    error: 'Cannot merge branch directly. This model requires pull requests for changes. Use force_override_git_settings: true to bypass.'
+                gitFollower:
+                  summary: Git-follower model without override
+                  value:
+                    error: 'Cannot merge branch directly. This model follows git as source of truth. Use force_override_git_settings: true to bypass.'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                insufficientPermissions:
+                  summary: Modeler attempting to use force_override_git_settings
+                  value:
+                    error: Insufficient permissions. The force_override_git_settings flag requires Connection Admin or higher permissions.
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          description: Invalid HTTP method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

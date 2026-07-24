@@ -1,0 +1,411 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Document labels API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Document labels
+  description: Apply and manage labels on documents
+paths:
+  /v1/documents/{documentId}/labels:
+    patch:
+      tags:
+      - Document labels
+      summary: Bulk update document labels
+      x-mint:
+        content: "Add and/or remove multiple labels from a document in a single atomic operation.\n\nWhen using this endpoint, keep in mind that:\n\n- **All changes succeed or fail together.** No partial updates occur.\n- **Label matching is case-insensitive**.\n- **Requests must have at least one operation.** Either `add` or `remove` must contain at least one label.\n- **Labels must already exist to be added to or removed from a document.** Create labels via the [Create label API](/api/labels/create-label).\n- **Labels cannot be included in both `add` and `remove` in the same request.**\n- **Organization Admin permissions are required to**:\n   - Add or remove **Verified** labels\n   - Add or remove **Homepage** labels\n"
+      security:
+      - bearerAuth: []
+      operationId: bulkUpdateDocumentLabels
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The document identifier (UUID)
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                add:
+                  type: array
+                  items:
+                    type: string
+                    minLength: 2
+                    maxLength: 25
+                  default: []
+                  description: Label names to add to the document
+                remove:
+                  type: array
+                  items:
+                    type: string
+                    minLength: 2
+                    maxLength: 25
+                  default: []
+                  description: Label names to remove from the document
+            examples:
+              addLabels:
+                summary: Add labels
+                value:
+                  add:
+                  - production
+                  - reviewed
+              removeLabels:
+                summary: Remove labels
+                value:
+                  remove:
+                  - draft
+                  - needs-review
+              addAndRemove:
+                summary: Add and remove labels
+                value:
+                  add:
+                  - approved
+                  remove:
+                  - pending-review
+      responses:
+        '200':
+          description: Labels updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  labels:
+                    type: array
+                    items:
+                      type: string
+                    description: The updated list of labels on the document
+              example:
+                labels:
+                - label-one
+                - label-two
+                - new-label
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Empty request - Neither `add` nor `remove` contains any labels
+
+            - Label appears in both `add` and `remove` arrays
+
+            - Invalid label name (less than 2 or more than 25 characters)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                emptyRequest:
+                  summary: Empty request
+                  value:
+                    detail: 'Bad Request: At least one label must be specified in add or remove'
+                    status: 400
+                    title: Bad Request
+                conflictingLabels:
+                  summary: Label in both arrays
+                  value:
+                    detail: 'Bad Request: Labels cannot appear in both add and remove arrays'
+                    status: 400
+                    title: Bad Request
+        '403':
+          description: 'Forbidden. Possible causes:
+
+
+            - User does not have `canLabel` permission on the document
+
+            - User lacks Organization Admin permissions to modify Verified labels
+
+            - User lacks Organization Admin permissions to modify Homepage labels
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                permissionDenied:
+                  summary: Permission denied
+                  value:
+                    detail: You do not have permission to modify labels on this document.
+                    status: 403
+                    title: Forbidden
+                verifiedLabelDenied:
+                  summary: Verified label permission denied
+                  value:
+                    detail: You do not have permission to modify Verified labels on this document
+                    status: 403
+                    title: Forbidden
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Document does not exist
+
+            - Label does not exist globally. Create the label first with the [Create label API](/api/labels/create-label).
+
+            - Label in `remove` array does not exist on the document
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                documentNotFound:
+                  summary: Document not found
+                  value:
+                    detail: Document with identifier "abc123" not found
+                    status: 404
+                    title: Not Found
+                labelNotFound:
+                  summary: Label not found globally
+                  value:
+                    detail: Label "my-label" not found
+                    status: 404
+                    title: Not Found
+                labelNotOnDocument:
+                  summary: Label not on document
+                  value:
+                    detail: 'Labels not found on this document: "label-one", "label-two"
+
+                      '
+                    status: 404
+                    title: Not Found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/labels/{labelName}:
+    put:
+      tags:
+      - Document labels
+      summary: Apply label to document
+      description: 'Apply an existing label to a document. Labels must be created first via the [Create label](/api/labels/create-label) endpoint.
+
+
+        Documents can have multiple labels. When a new label is applied using this endpoint, the API adds it to the document''s existing labels. Labels are not replaced.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: applyLabelToDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The document identifier
+      - name: labelName
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 2
+          maxLength: 25
+        description: "The label name to apply:\n\n- Must be 2-25 characters\n- Labels are **case insensitive**. For example, adding `BlobSales` when `blobsales` exists will be treated as a duplicate. \n- Special characters must be URL-encoded (e.g., `Q1%202024` for \"Q1 2024\").\n\nAdditionally, adding **Verified** or **Homepage** labels require Organization Admin permissions.\n"
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.
+
+          '
+      responses:
+        '204':
+          description: 'Label applied successfully. No response body.
+
+
+            This response is returned whether the label was newly applied or already existed on the document.
+
+            '
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Label name too short (less than 2 characters)
+
+            - Label name too long (more than 25 characters)
+
+            - Invalid HTTP method
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden. Possible causes:
+
+
+            - User does not have Manager role on the specified document
+
+            - User lacks Organization Admin permissions for Verified labels
+
+            - User lacks Organization Admin permissions for Homepage labels
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Document does not exist
+
+            - Label does not exist. Must be created first via the [Create label](/api/labels/create-label).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Document labels
+      summary: Remove label from document
+      x-mint:
+        content: "Remove a label from a document.\n\n<Note>\n  This endpoint is not idempotent. If the label does not exist on the document, the API returns a `404` error.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: removeLabelFromDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The document identifier
+      - name: labelName
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 2
+          maxLength: 25
+        description: 'The label name to remove:
+
+
+          - Must be 2-25 characters
+
+          - Labels are **case insensitive**. For example, removing `BlobSales` will remove `blobsales` if it exists on the document.
+
+          - Special characters must be URL-encoded (e.g., `Q1%202024` for "Q1 2024").
+
+          '
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: '**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.
+
+          '
+      responses:
+        '204':
+          description: Label removed successfully. No response body.
+        '403':
+          description: 'Forbidden. User does not have permission to modify labels on this document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Document does not exist
+
+            - Label does not exist on this document
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Label "production" not found on this document
+                status: 404
+                title: Not Found
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

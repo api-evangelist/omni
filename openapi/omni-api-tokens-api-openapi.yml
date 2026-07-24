@@ -1,0 +1,672 @@
+openapi: 3.1.0
+info:
+  title: Omni AI API Tokens API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: API Tokens
+  description: Manage API tokens (Organization keys, Personal Access Tokens, MCP OAuth grants)
+paths:
+  /v1/api-keys:
+    get:
+      tags:
+      - API Tokens
+      summary: List API tokens
+      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nList API token in the organization - including Organization API keys, Personal Access Tokens, and MCP OAuth grants - with optional filtering by type. Only metadata - not actual secret values - are returned.\n"
+      security:
+      - bearerAuth: []
+      operationId: listApiKeys
+      parameters:
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - organization
+          - personal
+          - mcp
+        description: 'Filter by token type. Omit to return all types.
+
+
+          - `organization` - Organization-level API key. Not tied to a specific user.
+
+          - `personal` - Personal access token. Acts as a specific user.
+
+          - `mcp` - MCP OAuth grant issued during the OAuth authorization flow
+
+          '
+      - name: cursor
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: Cursor for pagination.
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of items to return per page.
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          enum:
+          - createdAt
+          - name
+          default: createdAt
+        description: Field to sort by.
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort direction.
+      responses:
+        '200':
+          description: API tokens retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: Unique ID for the token.
+                        name:
+                          type: string
+                          description: Token name.
+                        type:
+                          type: string
+                          enum:
+                          - organization
+                          - personal
+                          - mcp
+                          description: Token type.
+                        enabled:
+                          type: boolean
+                          description: Whether the token is enabled. `false` for disabled Organization API keys; PATs and MCP tokens are always `true`.
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: ISO 8601 timestamp of when the token was created.
+                        membershipId:
+                          type: string
+                          format: uuid
+                          nullable: true
+                          description: Membership ID of the user who owns the token. `null` for Organization API keys.
+              example:
+                pageInfo:
+                  hasNextPage: false
+                  nextCursor: null
+                  pageSize: 50
+                  totalRecords: 2
+                records:
+                - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  name: CI deployment key
+                  type: organization
+                  enabled: true
+                  createdAt: '2026-01-15T10:00:00.000Z'
+                  membershipId: null
+                - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                  name: Personal token
+                  type: personal
+                  enabled: true
+                  createdAt: '2026-02-10T14:30:00.000Z'
+                  membershipId: c3d4e5f6-a7b8-9012-cdef-123456789012
+        '400':
+          description: 'Bad Request. Validation errors include:
+
+
+            - `type: Invalid option: expected one of "organization"|"personal"|"mcp"`
+
+            - `cursor: Invalid UUID`
+
+            - `pageSize: Page size must be at least 1`
+
+            - `pageSize: Page size cannot exceed 100`
+
+            - `pageSize: Invalid input: expected number, received NaN`
+
+            - `sortField: Invalid option: expected one of "createdAt"|"name"`
+
+            - `sortDirection: Invalid option: expected one of "asc"|"desc"`
+
+            - `Bad authorization header, must be formatted as Bearer <token>`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+              example:
+                detail: 'Bad Request: type: Invalid option: expected one of "organization"|"personal"|"mcp"'
+                status: 400
+        '403':
+          description: 'Forbidden. Requires Organization Admin permissions.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+              example:
+                detail: 'Forbidden: Requires Organization Admin permissions'
+                status: 403
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/api-keys/{id}:
+    get:
+      tags:
+      - API Tokens
+      summary: Retrieve an API token
+      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\n  description: Token id. Must be a valid UUID — malformed values return `400`.\n"
+      responses:
+        '200':
+          description: Token found successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - id
+                - name
+                - type
+                - enabled
+                - createdAt
+                - membershipId
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The token's unique identifier.
+                  name:
+                    type: string
+                    description: The name given when the token was created. Not unique within an organization.
+                  type:
+                    type: string
+                    enum:
+                    - organization
+                    - personal
+                    - mcp
+                    description: 'Token type:
+
+                      - `organization` - Organization API key
+
+                      - `personal` - Personal Access Token (PAT)
+
+                      - `mcp` - MCP OAuth PAT
+
+                      '
+                  enabled:
+                    type: boolean
+                    description: Whether the token can currently authenticate. Organization Admins can disable any token type; disabled tokens remain visible but cannot authenticate.
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: ISO 8601 timestamp of when the token was created (UTC).
+                  membershipId:
+                    type: string
+                    format: uuid
+                    nullable: true
+                    description: The user membership the token is scoped to. `null` if `type` is `organization`.
+              example:
+                id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                name: CI deployment key
+                type: organization
+                enabled: true
+                createdAt: '2026-04-20T10:00:00.000Z'
+                membershipId: null
+        '400':
+          description: 'Bad Request. The ID parameter is not a valid UUID, or the Authorization header is malformed.
+
+
+            Possible error messages:
+
+            - `Bad Request: id: Invalid UUID`
+
+            - `Bad authorization header, must be formatted as Bearer <token>`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+              example:
+                detail: 'Bad Request: id: Invalid UUID'
+                status: 400
+        '401':
+          description: 'Unauthorized. The Authorization header is missing or malformed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: 'Forbidden. Authentication succeeded but the caller is not an organization admin, or the bearer token is invalid.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+              example:
+                detail: 'Forbidden: Requires Organization Admin permissions'
+                status: 403
+        '404':
+          description: 'Not Found. No token with that ID exists in the caller''s organization.
+
+
+            The same `404` response is returned regardless of whether the token exists in a different organization - no tenant information is leaked.
+
+
+            Example error message:
+
+            - `Api key with id 00000000-0000-0000-0000-000000000000 does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+              example:
+                detail: Api key with id 00000000-0000-0000-0000-000000000000 does not exist
+                status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - API Tokens
+      summary: Delete API token
+      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nPermanently delete an API token. Works for all token types — Organization API keys, Personal Access Tokens (PATs), and MCP OAuth grants. This is the same as revoking a token in the Omni app.\n\nConcurrent deletes are safe — the first caller receives `200` and the second receives `404` consistently. An Organization Admin can delete the token they authenticated with, which is useful for self-service rotation.\n"
+      security:
+      - bearerAuth: []
+      operationId: deleteApiKey
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the token to revoke. The token must belong to the same organization as the authenticating user.
+      responses:
+        '200':
+          description: Token revoked successfully. The row is deleted; subsequent `GET` returns `404`.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Human-readable description of the outcome.
+                  success:
+                    type: boolean
+                    description: Always `true` on a successful revocation.
+              example:
+                message: API token revoked
+                success: true
+        '400':
+          description: 'Bad Request. The `id` is not a UUID, or the `Authorization` header is missing/malformed.
+
+
+            Possible error messages:
+
+            - `Bad Request: id: Invalid UUID`
+
+            - `Bad authorization header, must be formatted as Bearer <token>`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+              example:
+                detail: 'Bad Request: id: Invalid UUID'
+                status: 400
+        '403':
+          description: 'Forbidden. The caller is not an organization admin.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+              example:
+                detail: Requires Organization Admin permissions
+                status: 403
+        '404':
+          description: 'Not Found. No token with that id exists in the caller''s organization, or another admin revoked it first.
+
+
+            Possible error messages:
+
+            - `Api key with id <id> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+              example:
+                detail: Api key with id 00000000-0000-0000-0000-000000000000 does not exist
+                status: 404
+        '405':
+          description: 'Method Not Allowed. HTTP method other than `GET`, `PUT`, or `DELETE`.
+
+
+            Possible error messages:
+
+            - `Method not allowed`
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                  status:
+                    type: integer
+              example:
+                detail: Method not allowed
+                status: 405
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - API Tokens
+      summary: Enable or disable API token
+      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nDisable or re-enable an API token. To permanently revoke a token, use the [Delete API token](/api/api-tokens/delete-api-token) endpoint.\n\nThis operation is **idempotent**: calling it twice with the same body produces the same result.\n"
+      security:
+      - bearerAuth: []
+      operationId: updateApiKey
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the API token. The token must exist in the authenticating user's organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - enabled
+              properties:
+                enabled:
+                  type: boolean
+                  description: 'Determines if the API token is enabled: `false` to disable the token, `true` to re-enable it.
+
+                    '
+              additionalProperties: false
+            examples:
+              disable:
+                summary: Disable a token
+                value:
+                  enabled: false
+              enable:
+                summary: Enable a token
+                value:
+                  enabled: true
+      responses:
+        '200':
+          description: Token updated successfully. Returns the current state of the token, or the same state if already in the requested state.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique ID for the token.
+                  name:
+                    type: string
+                    description: Token name.
+                  type:
+                    type: string
+                    enum:
+                    - organization
+                    - personal
+                    - mcp
+                    description: Token type.
+                  enabled:
+                    type: boolean
+                    description: Whether the token is enabled.
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: ISO 8601 timestamp of when the token was created.
+                  membershipId:
+                    type: string
+                    format: uuid
+                    nullable: true
+                    description: Membership ID of the user who owns the token. `null` for Organization API keys.
+              example:
+                id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                name: CI deployment key
+                type: organization
+                enabled: false
+                createdAt: '2026-04-20T10:00:00.000Z'
+                membershipId: null
+        '400':
+          description: 'Bad Request. Validation errors include:
+
+
+            - `id: Invalid UUID` - The token ID is not a valid UUID format
+
+            - `enabled: Invalid input: expected boolean, received string` - Non-boolean value provided for `enabled`
+
+            - `Unrecognized key: "<field>"` - Unknown field in request body
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+              examples:
+                invalidUuid:
+                  summary: Malformed UUID
+                  value:
+                    detail: 'Bad Request: id: Invalid UUID'
+                    status: 400
+                nonBooleanValue:
+                  summary: Non-boolean enabled value
+                  value:
+                    detail: 'Bad Request: enabled: Invalid input: expected boolean, received string'
+                    status: 400
+                unknownField:
+                  summary: Unknown field in request body
+                  value:
+                    detail: 'Bad Request: Unrecognized key: "name"'
+                    status: 400
+        '403':
+          description: 'Forbidden. Requires Organization Admin permissions, or authentication failed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+              example:
+                detail: Requires Organization Admin permissions
+                status: 403
+        '404':
+          description: 'Not Found. The token does not exist or belongs to a different organization.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+              example:
+                detail: Api key with id 00000000-0000-0000-0000-000000000000 does not exist
+                status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+  responses:
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

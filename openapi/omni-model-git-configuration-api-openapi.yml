@@ -1,0 +1,1031 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Model git configuration API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Model git configuration
+  description: Manage git configuration for shared models
+paths:
+  /v1/models/{modelId}/git:
+    get:
+      tags:
+      - Model git configuration
+      summary: Get git configuration
+      description: 'Retrieves the git configuration for a shared model.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getModelGitConfig
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - webhookSecret
+        description: 'Comma-separated list of additional fields to include in the response.
+
+
+          - `webhookSecret` - Include the webhook secret in the response
+
+          '
+      responses:
+        '200':
+          description: Git configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelGitConfig'
+              example:
+                authMethod: ssh
+                baseBranch: main
+                branchPerPullRequest: false
+                gitFollower: false
+                gitServiceProvider: github
+                modelPath: omni/blobs_r_us
+                publicKey: ssh-ed25519 AAAA...
+                requirePullRequest: users-only
+                cloneUrl: git@github.com:org/repo.git
+                webUrl: https://github.com/org/repo
+                webhookUrl: https://app.omni.co/api/webhooks/model/...
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            - `Not Found: Git configuration not found for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Model git configuration
+      summary: Create git configuration
+      description: 'Creates a new git configuration for a shared model.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: createModelGitConfig
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - cloneUrl
+              properties:
+                authMethod:
+                  type: string
+                  enum:
+                  - ssh
+                  - https_token
+                  description: 'The authentication method to use:
+
+
+                    - `ssh` for deploy key
+
+                    - `https_token` for deploy token/PAT
+
+                    '
+                  example: ssh
+                cloneUrl:
+                  type: string
+                  description: 'Clone URL of the git repository. Varies depending on the `authMethod`:
+
+
+                    - `ssh` - A string starting with `git@...`
+
+                    - `https_token` - A string starting with `https://...`
+
+                    '
+                  example: git@github.com:org/repo.git
+                sshUrl:
+                  type: string
+                  deprecated: true
+                  description: '**Deprecated. Use `cloneUrl` instead**. The SSH URL of the git repository.
+
+                    '
+                  example: git@github.com:org/repo.git
+                token:
+                  type: string
+                  maxLength: 1000
+                  pattern: ^[a-zA-Z0-9_\\-.]+$
+                  description: '**Required when `authMethod: https_token`**. HTTPS token for authentication (deploy token value, PAT, etc.).
+
+                    '
+                baseBranch:
+                  type: string
+                  default: main
+                  description: The target branch for Omni pull requests.
+                  example: main
+                branchPerPullRequest:
+                  type: boolean
+                  default: false
+                  description: If `true`, all pull requests will create a branch in Omni, even those created outside of the tool.
+                  example: false
+                gitFollower:
+                  type: boolean
+                  default: false
+                  description: If `true`, the shared model is read-only and can only be updated by merging pull requests to the `baseBranch`.
+                  example: false
+                gitServiceProvider:
+                  type: string
+                  enum:
+                  - auto
+                  - github
+                  - gitlab
+                  - azure_devops
+                  - bitbucket
+                  - bitbucket_datacenter
+                  default: auto
+                  description: 'The git provider type. Use `auto` for automatic detection based on the SSH URL.
+
+
+                    - `auto` - Automatically detect the provider
+
+                    - `github` - GitHub
+
+                    - `gitlab` - GitLab
+
+                    - `azure_devops` - Azure DevOps
+
+                    - `bitbucket` - Bitbucket Cloud
+
+                    - `bitbucket_datacenter` - Bitbucket Data Center (self-hosted)
+
+                    '
+                  example: github
+                modelPath:
+                  type: string
+                  description: Path to model files within the repository.
+                  example: omni/blobs_r_us
+                requirePullRequest:
+                  type: string
+                  enum:
+                  - always
+                  - users-only
+                  - never
+                  default: never
+                  description: 'Controls when pull requests are required for changes:
+
+
+                    - `always` - Required for all changes
+
+                    - `users-only` - Required only for user-initiated changes
+
+                    - `never` - Never required
+
+                    '
+                  example: users-only
+                webUrl:
+                  type: string
+                  description: Custom web URL for the git repository. Use when the `cloneUrl` goes through a tunnel/VPC and differs from the inferred HTTPS address.
+                  example: https://github.com/org/repo
+            example:
+              authMethod: ssh
+              cloneUrl: git@github.com:org/repo.git
+              baseBranch: main
+              gitServiceProvider: github
+              modelPath: omni/blobs_r_us
+              requirePullRequest: users-only
+      responses:
+        '200':
+          description: Git configuration created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelGitConfig'
+              example:
+                authMethod: ssh
+                baseBranch: main
+                branchPerPullRequest: false
+                gitFollower: false
+                gitServiceProvider: github
+                modelPath: omni/my_model
+                publicKey: ssh-ed25519 AAAA...
+                requirePullRequest: users-only
+                cloneUrl: git@github.com:org/repo.git
+                webUrl: https://github.com/org/repo
+                webhookSecret: whsec_abc123xyz789
+                webhookUrl: https://app.omni.co/api/webhooks/model/...
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            - `Bad Request: sshUrl is required`
+
+            - `Bad Request: Invalid sshUrl format`
+
+            - `Bad Request: Invalid requirePullRequest value`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: 'Conflict
+
+
+            Possible error messages:
+
+
+            - `Conflict: Git configuration already exists for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Model git configuration
+      summary: Update git configuration
+      description: Updates the git configuration for a shared model. Oly provided fields will be updated.
+      security:
+      - bearerAuth: []
+      operationId: updateModelGitConfig
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authMethod:
+                  type: string
+                  enum:
+                  - ssh
+                  - https_token
+                  description: 'The authentication method to change to:
+
+
+                    - `ssh` for deploy key
+
+                    - `https_token` for deploy token/PAT
+
+                    '
+                token:
+                  type: string
+                  maxLength: 1000
+                  pattern: ^[a-zA-Z0-9_\\-.]+$
+                  description: '**Required when `authMethod: https_token`**. HTTPS token for authentication (deploy token value, PAT, etc.).
+
+                    '
+                sshUrl:
+                  type: string
+                  deprecated: true
+                  description: '**Deprecated. Use `cloneUrl` instead.** The SSH URL of the git repository.
+
+                    '
+                  example: git@github.com:org/repo.git
+                baseBranch:
+                  type: string
+                  description: The target branch for Omni pull requests.
+                  example: main
+                branchPerPullRequest:
+                  type: boolean
+                  description: If `true`, all pull requests will create a branch in Omni, even those created outside of the tool.
+                  example: false
+                gitFollower:
+                  type: boolean
+                  description: If `true`, the shared model is read-only and can only be updated by merging pull requests to the `baseBranch`.
+                  example: false
+                gitServiceProvider:
+                  type: string
+                  enum:
+                  - auto
+                  - github
+                  - gitlab
+                  - azure_devops
+                  - bitbucket
+                  - bitbucket_datacenter
+                  description: 'The git provider type. Use `auto` for automatic detection based on the SSH URL.
+
+
+                    - `auto` - Automatically detect the provider
+
+                    - `github` - GitHub
+
+                    - `gitlab` - GitLab
+
+                    - `azure_devops` - Azure DevOps
+
+                    - `bitbucket` - Bitbucket Cloud
+
+                    - `bitbucket_datacenter` - Bitbucket Data Center (self-hosted)
+
+                    '
+                  example: github
+                modelPath:
+                  type: string
+                  description: Path to model files within the repository.
+                  example: omni/blobs_r_us
+                requirePullRequest:
+                  type: string
+                  enum:
+                  - always
+                  - users-only
+                  - never
+                  description: 'Controls when pull requests are required for changes:
+
+
+                    - `always` - Pull requests are required for all changes
+
+                    - `users-only` - Pull requests are required only for user-initiated changes
+
+                    - `never` - Pull requests are never required
+
+                    '
+                  example: users-only
+                webUrl:
+                  type: string
+                  description: Custom web URL for the git repository. Use when the `cloneUrl` goes through a tunnel/VPC and differs from the inferred HTTPS address.
+                  example: https://github.com/org/repo
+            example:
+              baseBranch: develop
+              requirePullRequest: always
+      responses:
+        '200':
+          description: Git configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelGitConfig'
+              example:
+                authMethod: ssh
+                baseBranch: develop
+                branchPerPullRequest: false
+                gitFollower: false
+                gitServiceProvider: github
+                modelPath: omni/my_model
+                publicKey: ssh-ed25519 AAAA...
+                requirePullRequest: always
+                cloneUrl: git@github.com:org/repo.git
+                webUrl: https://github.com/org/repo
+                webhookUrl: https://app.omni.co/api/webhooks/model/...
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            - `Bad Request: Invalid cloneUrl format`
+
+            - `Bad Request: Invalid requirePullRequest value`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            - `Not Found: Git configuration not found for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Model git configuration
+      summary: Delete git configuration
+      description: Removes the git configuration from a shared model.
+      security:
+      - bearerAuth: []
+      operationId: deleteModelGitConfig
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      responses:
+        '200':
+          description: Git configuration deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            - `Not Found: Git configuration not found for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/models/{modelId}/git/sync:
+    post:
+      tags:
+      - Model git configuration
+      summary: Sync model with git repository
+      description: 'Triggers a sync operation between the model and its configured git repository.
+
+
+        This will pull the latest changes from the repository and apply them to the model.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: syncModelWithGit
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commitMessage:
+                  type: string
+                  description: Optional commit message to use when pushing changes to the repository.
+                  example: Updated model configuration
+            example:
+              commitMessage: Updated model configuration
+      responses:
+        '200':
+          description: Sync operation completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  didSync:
+                    type: boolean
+                    description: Whether a sync was performed. `false` if the model was already in sync.
+                    example: true
+                  gitSha:
+                    type: string
+                    nullable: true
+                    description: The git SHA after the sync operation, or null if no sync was performed.
+                    example: abc123def456
+                  inSync:
+                    type: boolean
+                    description: Whether the model is currently in sync with the git repository.
+                    example: true
+                  message:
+                    type: string
+                    description: Human-readable status message describing the sync result.
+                    example: Model synced successfully
+              example:
+                didSync: true
+                gitSha: abc123def456
+                inSync: true
+                message: Model synced successfully
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            - `Not Found: Git configuration not found for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/models/{modelId}/git/commit:
+    post:
+      tags:
+      - Model git configuration
+      summary: Create or update a pull request for a model branch
+      description: "<Note>\n  This endpoint requires **Modeler** or **Connection Admin** permisisons.\n</Note>\n\nPushes a branch's model contents to git and creates or updates a pull request. This mirrors the **Create Pull Request** / **Update Pull Request** buttons in Omni allowing API consumers and AI agents to drive the pull request workflow programmatically.\n\nBy default, the endpoint automatically detects whether the git branch exists. If a branch doesn't exist, a successful request will create a new git branch and open a pull request. If a branch does exist, a commit will be added to the branch.\n\nThe `allow_branch_exists` and `require_branch_exists` parameters constrain this behavior:\n\n- **Create or update mode** (default) - Auto-detects and handles both scenarios\n- **Create-only mode** (`allow_branch_exists: false`) - Fails if the git branch already exists\n- **Update-only mode** (`require_branch_exists: true`) - Fails if the git branch doesn't exist\n"
+      security:
+      - bearerAuth: []
+      operationId: commitModelBranch
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the shared model.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - branch_id
+              - commit_message
+              properties:
+                branch_id:
+                  type: string
+                  format: uuid
+                  description: UUID of the Omni branch to commit.
+                  example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                commit_message:
+                  type: string
+                  description: Commit message for the git commit.
+                  example: Add new customer dimension
+                allow_branch_exists:
+                  type: boolean
+                  default: true
+                  description: 'Set `false` to fail if git branch already exists (**Create-only mode**).
+
+                    '
+                  example: true
+                require_branch_exists:
+                  type: boolean
+                  default: false
+                  description: 'Set `true` to fail if git branch doesn''t exist (**Update-only mode**).
+
+                    '
+                  example: false
+            example:
+              branch_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+              commit_message: Add new customer dimension
+              allow_branch_exists: true
+              require_branch_exists: false
+      responses:
+        '200':
+          description: Commit operation completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pr_url:
+                    type: string
+                    description: URL of the created or updated pull request.
+                    example: https://github.com/myorg/repo/compare/main...feature?expand=1
+                  git_sha:
+                    type: string
+                    description: The git SHA of the commit.
+                    example: abc123def456
+                  in_sync:
+                    type: boolean
+                    description: Whether the shared model is currently in sync with its configured default git branch.
+                    example: true
+                  did_sync:
+                    type: boolean
+                    description: Whether a sync operation was performed between the shared model and its configured default git branch.
+                    example: true
+              example:
+                pr_url: https://github.com/myorg/repo/compare/main...feature?expand=1
+                git_sha: abc123def456
+                in_sync: true
+                did_sync: true
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: modelId: Invalid uuid`
+
+            - `Bad Request: branch_id: Invalid uuid`
+
+            - `Bad Request: commit_message is required`
+
+            - `Bad Request: Cannot set both allow_branch_exists=false and require_branch_exists=true`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Forbidden: Requires MANAGE_MODEL permission` - This endpoint requires **Modeler** or **Connection Admin** permisisons.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Not Found: Model does not exist`
+
+            - `Not Found: Branch does not exist`
+
+            - `Not Found: Git configuration not found for this model`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    ModelGitConfig:
+      type: object
+      properties:
+        authMethod:
+          type: string
+          enum:
+          - ssh
+          - https_token
+          description: Authentication method. `ssh` for deploy key, `https_token` for deploy token/PAT.
+          example: ssh
+        cloneUrl:
+          type: string
+          description: Clone URL of the git repository (SSH or HTTPS)
+          example: git@github.com:org/repo.git
+        baseBranch:
+          type: string
+          description: The target branch for Omni pull requests.
+          example: main
+        branchPerPullRequest:
+          type: boolean
+          description: If `true`, all pull requests will create a branch in Omni, even those created outside of the tool.
+          example: false
+        gitFollower:
+          type: boolean
+          description: If `true`, the shared model is read-only and can only be updated by merging pull requests to the base branch.
+          example: false
+        gitServiceProvider:
+          type: string
+          enum:
+          - github
+          - gitlab
+          - azure_devops
+          - bitbucket
+          description: 'The git provider type.
+
+
+            - `github` - GitHub
+
+            - `gitlab` - GitLab
+
+            - `azure_devops` - Azure DevOps
+
+            - `bitbucket` - Bitbucket
+
+            '
+          example: github
+        modelPath:
+          type: string
+          nullable: true
+          description: Path to model files in the repository.
+          example: omni/blobs_r_us
+        publicKey:
+          type:
+          - string
+          - null
+          description: 'SSH public key for repository access (deploy key). Null for HTTPS token auth (`authMethod: https_token`).
+
+            '
+          example: ssh-ed25519 AAAA...
+        requirePullRequest:
+          type: string
+          enum:
+          - always
+          - users-only
+          - never
+          description: 'Controls when pull requests are required for changes:
+
+
+            - `always` - Required for all changes
+
+            - `users-only` - Required only for user-initiated changes
+
+            - `never` - Never required
+
+            '
+          example: users-only
+        sshUrl:
+          type: string
+          deprecated: true
+          description: '**Deprecated. Use `cloneUrl` instead**. SSH URL of the git repository.
+
+            '
+          example: git@github.com:org/repo.git
+        webUrl:
+          type: string
+          nullable: true
+          description: Custom web URL for the git repository, or null if not set.
+          example: https://github.com/org/repo
+        webhookSecret:
+          type: string
+          description: Webhook secret for signature verification. Only included if requested via `?include=webhookSecret`.
+        webhookUrl:
+          type: string
+          description: Webhook URL to configure in your git provider.
+          example: https://app.omni.co/api/webhooks/model/...
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

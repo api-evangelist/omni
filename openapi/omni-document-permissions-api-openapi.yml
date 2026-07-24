@@ -1,0 +1,904 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Document permissions API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Document permissions
+  description: Manage document-level access
+paths:
+  /v1/documents/{documentId}/access-list:
+    get:
+      tags:
+      - Document permissions
+      summary: List all users and groups with document access
+      description: "Returns all users and groups with access to a document in a single paginated call. \n\nThe response includes a list of `principal` objects, where each entry represents a distinct access grant with its own role and settings. A `principal` may appear twice in the response if they have both `direct` access and `folder`-based access to the same document. \n"
+      security:
+      - bearerAuth: []
+      operationId: listDocumentAccessList
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of results per page (1-100).
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Pagination cursor from a previous response's `pageInfo.nextCursor`.
+      - name: sortField
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - name
+          - email
+          - role
+          default: name
+        description: Field to sort results by.
+      - name: sortDirection
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Sort order.
+      - name: accessSource
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - direct
+          - folder
+        description: 'Filter by how access was granted:
+
+          - `direct` — Only principals with explicit document permissions
+
+          - `folder` — Only principals with inherited folder permissions
+
+          '
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - user
+          - userGroup
+        description: 'Filter by principal type:
+
+          - `user` — Only individual users
+
+          - `userGroup` — Only user groups
+
+          '
+      responses:
+        '200':
+          description: Successfully retrieved access list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  principals:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentAccessPrincipal'
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+              example:
+                principals:
+                - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  name: Jane Smith
+                  email: jane@example.com
+                  type: user
+                  role: EDITOR
+                  accessBoost: false
+                  accessSource: direct
+                  isOwner: false
+                - id: b2c3d4e5-f6a7-8901-bcde-f23456789012
+                  name: John Doe
+                  email: john@example.com
+                  type: user
+                  role: VIEWER
+                  accessBoost: false
+                  accessSource: folder
+                  isOwner: false
+                  folderInfo:
+                    id: c3d4e5f6-a7b8-9012-cdef-345678901234
+                    name: Marketing Reports
+                    path: /Shared/Marketing Reports
+                - id: d4e5f6a7-b8c9-0123-def0-456789012345
+                  name: Data Analysts
+                  type: userGroup
+                  role: VIEWER
+                  accessBoost: false
+                  accessSource: direct
+                pageInfo:
+                  hasNextPage: true
+                  nextCursor: eyJuYW1lIjoiSm9obiIsImlkIjoiMTIzIn0=
+                  pageSize: 20
+                  totalRecords: 47
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Invalid `pageSize` value (must be 1-100)
+
+            - Invalid `sortField` value
+
+            - Invalid `sortDirection` value
+
+            - Invalid `accessSource` value
+
+            - Invalid `type` value
+
+            - Invalid `cursor` value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidPageSize:
+                  summary: Invalid pageSize value
+                  value:
+                    detail: 'pageSize: Must be between 1 and 100'
+                    status: 400
+                invalidSortField:
+                  summary: Invalid sortField value
+                  value:
+                    detail: 'sortField: Must be one of: name, email, role'
+                    status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/permissions:
+    post:
+      tags:
+      - Document permissions
+      summary: Grant document permissions
+      description: Grant document permissions to users or groups
+      security:
+      - bearerAuth: []
+      operationId: grantDocumentPermissions
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - NO_ACCESS
+                  - VIEWER
+                  - EDITOR
+                  - MANAGER
+                  description: 'The content role to assign. Must be one of:
+
+                    - `NO_ACCESS` - No access. Document won''t appear in content system or search results.
+
+                    - `VIEWER` - View dashboard
+
+                    - `EDITOR` - Edit dashboard and workbook
+
+                    - `MANAGER` - Edit dashboard and workbook and manage permissions
+
+                    '
+                accessBoost:
+                  type: boolean
+                  default: false
+                  description: If `true`, AccessBoost will be enabled for the document.
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to assign permissions to. Use the [List users](/api/users/list-users) and [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to assign permissions to. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+      responses:
+        '200':
+          description: Permissions granted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing `userIds` or `userGroupIds` parameter
+
+            - Invalid `userId` value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingIds:
+                  summary: Missing userIds or userGroupIds
+                  value:
+                    detail: 'userIds.userGroupIds: userIds or userGroupIds must be provided'
+                    status: 400
+                invalidUuid:
+                  summary: Invalid userId value
+                  value:
+                    detail: 'userIds.0: Invalid uuid'
+                    status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Document permissions
+      summary: Update document permissions
+      description: Update existing document permissions for users or groups
+      security:
+      - bearerAuth: []
+      operationId: updateDocumentPermissions
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - NO_ACCESS
+                  - VIEWER
+                  - EDITOR
+                  - MANAGER
+                  description: 'The content role to assign. Must be one of:
+
+                    - `NO_ACCESS` - No access. Document won''t appear in content system or search results.
+
+                    - `VIEWER` - View dashboard
+
+                    - `EDITOR` - Edit dashboard and workbook
+
+                    - `MANAGER` - Edit dashboard and workbook and manage permissions
+
+                    '
+                accessBoost:
+                  type: boolean
+                  default: false
+                  description: If `true`, AccessBoost will be enabled for the document.
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to update permissions for. Use the [List users](/api/users/list-users) and [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to update permissions for. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+      responses:
+        '200':
+          description: Permissions updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing `userIds` or `userGroupIds` parameter
+
+            - Invalid `userId` value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingIds:
+                  summary: Missing userIds or userGroupIds
+                  value:
+                    detail: 'userIds.userGroupIds: userIds or userGroupIds must be provided'
+                    status: 400
+                invalidUuid:
+                  summary: Invalid userId value
+                  value:
+                    detail: 'userIds.0: Invalid uuid'
+                    status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - Document permissions
+      summary: Update document permission settings
+      description: 'Updates the permission and [interactivity settings](/share#controlling-document-interactivity) for a document. For example, the ability to allow users to schedule or download the document''s content.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: updateDocumentSettings
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                organizationRole:
+                  type: string
+                  enum:
+                  - NO_ACCESS
+                  - VIEWER
+                  - EDITOR
+                  - MANAGER
+                  description: 'The default content role for the organization. Must be one of:
+
+                    - `NO_ACCESS` - No access. Document won''t appear in content system or search results.
+
+                    - `VIEWER` - View dashboard
+
+                    - `EDITOR` - Edit dashboard and workbook
+
+                    - `MANAGER` - Edit dashboard and workbook and manage permissions
+
+                    '
+                canDownload:
+                  type: boolean
+                  description: If `true`, users with required permissions will be able to [download the document's query results](/analyze-explore/point-click-queries#downloading-results) or [dashboards](/visualize-present/dashboards/download). In the UI, this is the **Download** setting in the document's settings.
+                canDrill:
+                  type: boolean
+                  description: If `true`, users with required permissions will be able to drill into data points in the document's content. In the UI, this is the **Drill** setting in the document's settings.
+                canSchedule:
+                  type: boolean
+                  description: If `true`, users with required permissions will be able to create [deliveries (schedules and alerts)](/share/deliveries) on the document. In the UI, this is the **Schedule** setting in the document's settings.
+                canUpload:
+                  type: boolean
+                  description: 'If `true`, users with required permissions can [upload data](/analyze-explore/data-input-csvs) (ex: CSVs) into the document to create data input tables. In the UI, this is the **Upload data** setting in the document''s settings.
+
+                    '
+                canViewWorkbook:
+                  type: boolean
+                  description: If `true`, users with required permissions can view a read-only version of the workbook. In the UI, this is the **Viewers can see workbook** setting in the document's settings.
+      responses:
+        '200':
+          description: Settings updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Invalid parameter value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: '<parameter>: Invalid <parameter>'
+                status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Document permissions
+      summary: Retrieve document permissions for a user
+      description: Retrieves the document permissions for a specific user.
+      security:
+      - bearerAuth: []
+      operationId: getDocumentPermissions
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'ID of the user to retrieve document permissions for. Use the [List users](/api/users/list-users) and [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+
+          '
+      responses:
+        '200':
+          description: Document permissions for the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permits:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                          description: Description of the permission type. For example, `Organization`
+                        id:
+                          type: string
+                          description: ID of the user
+                        name:
+                          type: string
+                          description: Name of the user
+                        type:
+                          type: string
+                          description: The type of the permission holder (e.g., "user")
+                        direct:
+                          type: object
+                          description: Direct permissions assigned to the user
+                          properties:
+                            accessBoost:
+                              type: boolean
+                              description: If `true`, AccessBoost is enabled for the user
+                            isOwner:
+                              type: boolean
+                              description: If `true`, the user is the owner of the document
+                            role:
+                              type: string
+                              description: The content role assigned to the user
+                        folder:
+                          type: object
+                          description: Permissions inherited from a folder
+                          properties:
+                            accessBoost:
+                              type: boolean
+                              description: If `true`, AccessBoost is enabled via folder permissions
+                            isOwner:
+                              type: boolean
+                              description: If `true`, the user is the owner via folder permissions
+                            role:
+                              type: string
+                              description: The content role inherited from folder permissions
+              example:
+                permits:
+                - description: Organization
+                  direct:
+                    accessBoost: false
+                    isOwner: false
+                    role: VIEWER
+                  id: df290ed4-b721-4efe-914b-95d30ce1c5f2
+                  name: Organization
+                  type: user
+                - description: Organization
+                  folder:
+                    accessBoost: false
+                    isOwner: false
+                    role: VIEWER
+                  id: df290ed4-b721-4efe-914b-95d30ce1c5f2
+                  name: Organization
+                  type: user
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing `userId` parameter
+
+            - Invalid `userId` value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingUserId:
+                  summary: Missing userId parameter
+                  value:
+                    detail: 'userId: userId must be provided'
+                    status: 400
+                invalidUserId:
+                  summary: Invalid userId value
+                  value:
+                    detail: 'userId: Invalid userId'
+                    status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Document permissions
+      summary: Revoke document permissions
+      description: Revokes document permissions for users or user groups.
+      security:
+      - bearerAuth: []
+      operationId: revokeDocumentPermissions
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: 'The list of user IDs to revoke permissions from. Use the [List users](/api/users/list-users) and [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+                userGroupIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'The list of user group IDs to revoke permissions from. Use the [List user groups](/api/user-groups/list-user-groups) endpoint to retrieve user group IDs. **Either `userIds` or `userGroupIds` is required.**
+
+                    '
+      responses:
+        '200':
+          description: Permissions revoked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing `userIds` or `userGroupIds` parameter
+
+            - Invalid `userId` value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingIds:
+                  summary: Missing userIds or userGroupIds
+                  value:
+                    detail: 'userId: userId must be provided'
+                    status: 400
+                invalidUserId:
+                  summary: Invalid userId value
+                  value:
+                    detail: 'userId: Invalid userId'
+                    status: 400
+        '403':
+          description: 'Forbidden. The user sending the API request must have **Manager** permissions for the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to manage document permissions
+                status: 403
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "<documentId>" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    DocumentAccessPrincipal:
+      type: object
+      description: Represents a user or group with access to a document.
+      properties:
+        id:
+          type: string
+          description: The ID of the user or user group.
+        name:
+          type: string
+          description: Display name of the user or user group.
+        email:
+          type: string
+          description: Email address. Only present for users, not user groups.
+        type:
+          type: string
+          enum:
+          - user
+          - userGroup
+          description: The type of principal.
+        role:
+          type: string
+          enum:
+          - VIEWER
+          - INTERACTOR
+          - EDITOR
+          - MANAGER
+          description: Permission level assigned to this principal.
+        accessBoost:
+          type: boolean
+          description: Whether elevated access is enabled for this principal.
+        accessSource:
+          type: string
+          enum:
+          - direct
+          - folder
+          description: 'How access was granted:
+
+            - `direct` — Explicit document permissions
+
+            - `folder` — Inherited from folder permissions
+
+            '
+        isOwner:
+          type: boolean
+          description: Whether this user owns the document. Only present for users, not user groups.
+        folderInfo:
+          type: object
+          description: Information about the folder that grants access. Only present when `accessSource` is `folder`.
+          properties:
+            id:
+              type: string
+              description: The ID of the folder.
+            name:
+              type: string
+              description: The name of the folder.
+            path:
+              type: string
+              description: The full path of the folder.
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

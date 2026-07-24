@@ -1,0 +1,819 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Schedule recipients API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Schedule recipients
+  description: Manage schedule recipients
+paths:
+  /v1/schedules/{scheduleId}/recipients:
+    get:
+      tags:
+      - Schedule recipients
+      summary: List schedule recipients
+      description: 'Retrieves the list of recipients for the specified schedule. Successful responses will include the recipients and details about the schedule''s destination type.
+
+
+        To retrieve a schedule''s full configuration, use the [List schedules](/api/schedules#list-schedules) endpoint.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: listScheduleRecipients
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          '
+      responses:
+        '200':
+          description: 'Successful requests return a `200 OK` status and response body specific to the schedule''s destination type.
+
+            '
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ScheduleRecipientsEmail'
+                - $ref: '#/components/schemas/ScheduleRecipientsSftp'
+                - $ref: '#/components/schemas/ScheduleRecipientsSlack'
+                - $ref: '#/components/schemas/ScheduleRecipientsWebhook'
+                - $ref: '#/components/schemas/ScheduleRecipientsS3'
+              examples:
+                email:
+                  summary: Email destination
+                  value:
+                    recipients:
+                    - email: blobby@blobsrus.com
+                      emailOnly: false
+                      id: 3e7c4152-cdac-42ce-8749-fe3b81d5d8ab
+                      name: blobby@blobsrus.com
+                    type: email
+                sftp:
+                  summary: SFTP destination
+                  value:
+                    type: sftp
+                    address: sftp.example.com
+                    port: 22
+                    username: username
+                slackChannel:
+                  summary: Slack destination with channel recipients
+                  value:
+                    type: slack
+                    recipients:
+                    - recipientType: channel
+                      slackId: C123456789
+                slackUser:
+                  summary: Slack destination with user recipients
+                  value:
+                    type: slack
+                    recipients:
+                    - recipientType: users
+                      slackId: U123456789
+                webhook:
+                  summary: Webhook destination
+                  value:
+                    type: webhook
+                    url: https://example.com/webhook
+                s3:
+                  summary: Amazon S3 destination
+                  value:
+                    type: s3
+                    bucketName: my-reports-bucket
+                    region: us-east-1
+                    roleArn: arn:aws:iam::123456789012:role/OmniS3DeliveryRole
+                    externalId: 4fbeb98a-d973-4529-9f36-0df471894ea8
+                    keyPrefix: reports/daily/
+                    filename: '{{entityName}}-{{currentDate}}'
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `Bad Request: scheduleId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible error messages include:
+
+
+            - `Scheduled task with id {scheduleId} does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}/add-recipients:
+    put:
+      tags:
+      - Schedule recipients
+      summary: Add schedule recipients
+      x-mint:
+        content: "Adds one or more recipients to an existing scheduled email task. Recipients can be specified by email address or user ID.\n\n<Note>\n  This endpoint only works with schedules that have [email destinations](/share/deliveries/email).\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: addScheduleRecipients
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule to add recipients to. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: '**At least one email or user ID must be provided.** Array of email addresses to add as recipients.
+
+                    '
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: '**At least one email or user ID must be provided.** Array of user UUIDs to add as recipients. Use the [List users](/api/users#list-users) and [List embed users](/api/users#list-embed-users) endpoints to retrieve user IDs.
+
+                    '
+      responses:
+        '200':
+          description: Recipients added successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addedRecipientsCount:
+                    type: integer
+                    description: The number of recipients added to the schedule.
+                  success:
+                    type: boolean
+                    description: Indicates whether the operation was successful.
+              example:
+                addedRecipientsCount: 2
+                success: true
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `userIds: Invalid uuid`
+
+            - `emails: Invalid email address`
+
+            - `Please provide either valid email addresses, valid user IDs, or both`
+
+            - `At least one recipient must be provided`
+
+            - `{parameter}: Array must contain at least 1 element(s)`
+
+            - `Invalid recipient(s): The following members do not exist or do not have access to this organization: {userId}`
+
+            - `Cannot add recipients to destination type {destinationType}`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible error messages include:
+
+
+            - `Scheduled task with id {scheduleId} does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}/remove-recipients:
+    put:
+      tags:
+      - Schedule recipients
+      summary: Remove schedule recipients
+      x-mint:
+        content: 'Removes one or more recipients from an existing scheduled email task. Recipients can be specified by email address or user ID.
+
+
+          <Note>This endpoint only works with schedules that have [email destinations](/share/deliveries/email).</Note>
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: removeScheduleRecipients
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule to remove recipients from. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: '**At least one email or user ID must be provided.** Array of recipient email addresses to remove from the scheduled task.
+
+                    '
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: '**At least one email or user ID must be provided.** Array of recipient user UUIDs to remove from the scheduled task. Use the [List users](/api/users#list-users) and [List embed users](/api/users#list-embed-users) endpoints to retrieve user IDs.
+
+                    '
+      responses:
+        '200':
+          description: Recipients removed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  removedRecipientsCount:
+                    type: integer
+                    description: The number of recipients removed from the schedule.
+                  success:
+                    type: boolean
+                    description: Indicates whether the operation was successful.
+              example:
+                removedRecipientsCount: 2
+                success: true
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `Bad Request: userIds: Invalid uuid`
+
+            - `Bad Request: emails: Invalid email address`
+
+            - `Please provide either valid email addresses, valid user IDs, or both`
+
+            - `At least one recipient must be provided`
+
+            - `{parameter}: Array must contain at least 1 element(s)`
+
+            - `Invalid recipient(s): The following members do not exist or do not have access to this organization: {userId}`
+
+            - `Cannot change recipients on a scheduled task destination of type {destinationType}`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible error messages include:
+
+
+            - `Scheduled task with id {scheduleId} does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/users/email-only:
+    post:
+      tags:
+      - Schedule recipients
+      summary: Manage email-only user
+      x-mint:
+        content: "Creates or updates an [email-only user](/share/deliveries/email). An email-only user is a recipient of a delivery that isn't associated with an Omni account.\n\nIf Omni matches the provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.\n\n<Tip>\n  Need to include multiple email-only users? Use the [Create or update multiple email-only users](/api/schedule-recipients/bulk-manage-email-only-users) endpoint.\n</Tip>\n"
+      security:
+      - orgApiKey: []
+      operationId: manageEmailOnlyUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The user's email address.
+                userAttributes:
+                  type: object
+                  description: 'An object defining the user''s [user attributes](/administration/users/attributes). Attributes are represented as key/value pairs, where the keys map to the IDs of user attributes (the **Reference** column in the **User attributes** page) defined in Omni.
+
+
+                    When providing user attributes, note that:
+
+
+                    - `omni_user_timezone` is the only supported system attribute
+
+                    - **Values must match the user attribute''s specified type**. For example, `number` attribute values must be numbers such as `1`, `10`, etc.
+
+                    - **Multi-value attributes should be provided using arrays**. For example: `["US","EU"]` or `[1, 10]`
+
+
+                    To unset attributes:
+
+
+                    - `null` values
+
+                    - `""` - Empty strings for string attributes
+
+                    - `[]` - Empty arrays for multi-value attributes
+
+                    '
+            examples:
+              basic:
+                summary: Basic request
+                value:
+                  email: iamagoodblob@blobsrus.co
+              withAttributes:
+                summary: Set user attributes
+                value:
+                  email: iamagoodblob@blobsrus.co
+                  userAttributes:
+                    region:
+                    - US
+                    - EU
+                    omni_user_timezone: America/New_York
+                    is_admin: 0
+                    is_sales_team: 1
+              unsetAttributes:
+                summary: Unset user attributes
+                value:
+                  email: iamagoodblob@blobsrus.co
+                  userAttributes:
+                    is_admin: null
+                    is_sales_team: ''
+                    region: []
+      responses:
+        '200':
+          description: Email-only user created or updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    description: The email address of the created or updated user.
+                  userId:
+                    type: string
+                    format: uuid
+                    description: The unique identifier of the email-only user.
+              example:
+                email: iamagoodblob@blobsrus.co
+                userId: 9e8719d9-276a-4964-9395-a493189a247c
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `Invalid JSON`
+
+            - `email: email is required`
+
+            - `email: Invalid email address`
+
+            - `The provided user attributes: "<attribute>" do not match the names of existing user attributes.`
+
+            - `User Attribute <attribute> is type number, but passed-in value <value> is not a number.`
+
+            - `The timezone <invalidTimezone> is not supported. Please see the connection page or [user profile page](/administration/users/your-account) for the list of valid timezones. Use e.g. "America/New_York" instead of "EST"`
+
+            - `User Attribute <attribute> has multiple values enabled, but the passed-in value is not an array. If passing a single value for a user attribute with multiple values enabled, please wrap the value in an array [x].`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/users/email-only/bulk:
+    post:
+      tags:
+      - Schedule recipients
+      summary: Bulk manage email-only users
+      description: 'Creates or updates up to 20 [email-only users](/share/deliveries/email). An email-only user is a recipient of a delivery that isn''t associated with an Omni account.
+
+
+        If Omni matches a provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: bulkManageEmailOnlyUsers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - users
+              properties:
+                users:
+                  type: array
+                  maxItems: 20
+                  description: 'An array of user objects, which includes `email` and `userAttributes` properties. Up to 20 users can be included in each request.
+
+                    '
+                  items:
+                    type: object
+                    required:
+                    - email
+                    properties:
+                      email:
+                        type: string
+                        format: email
+                        description: The user's email address.
+                      userAttributes:
+                        type: object
+                        description: 'An object defining the user''s [user attributes](/administration/users/attributes). Attributes are represented as key/value pairs, where the keys map to the IDs of user attributes (the **Reference** column in the **User attributes** page) defined in Omni.
+
+
+                          When providing user attributes, note that:
+
+
+                          - `omni_user_timezone` is the only supported system attribute
+
+                          - **Values must match the user attribute''s specified type**. For example, `number` attribute values must be numbers such as `1`, `10`, etc.
+
+                          - **Multi-value attributes should be provided using arrays**. For example: `["US","EU"]` or `[1, 10]`
+
+
+                          To unset attributes:
+
+
+                          - `null` values
+
+                          - `""` - Empty strings for string attributes
+
+                          - `[]` - Empty arrays for multi-value attributes
+
+                          '
+            examples:
+              basic:
+                summary: Basic request
+                value:
+                  users:
+                  - email: iamagoodblob@blobsrus.co
+                  - email: blobmanager@blobsrus.co
+              withAttributes:
+                summary: Set user attributes
+                value:
+                  users:
+                  - email: iamagoodblob@blobsrus.co
+                    userAttributes:
+                      region:
+                      - US
+                      - EU
+                      omni_user_timezone: America/New_York
+                      is_admin: 0
+                      is_sales_team: 1
+                  - email: blobmanager@blobsrus.co
+                    userAttributes:
+                      region:
+                      - US
+                      omni_user_timezone: America/New_York
+                      is_admin: 1
+                      is_sales_team: 0
+              unsetAttributes:
+                summary: Unset user attributes
+                value:
+                  users:
+                  - email: iamagoodblob@blobsrus.co
+                    userAttributes:
+                      region: []
+                      omni_user_timezone: ''
+                      is_admin: null
+      responses:
+        '200':
+          description: Email-only users created or updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    description: An array of created or updated email-only users.
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          format: email
+                          description: The email address of the created or updated user.
+                        userId:
+                          type: string
+                          format: uuid
+                          description: The unique identifier of the email-only user.
+              example:
+                results:
+                - email: iamagoodblob@blobsrus.co
+                  userId: 1e23dadc-961b-4a21-b36b-17168130fc3f
+                - email: blobmanager@blobsrus.co
+                  userId: e9d19f71-0b59-4f8e-8343-a75d30576d28
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `Invalid JSON`
+
+            - `users: Maximum of 20 users can be processed in a single request`
+
+            - `users: users is required`
+
+            - `email: email is required`
+
+            - `email: Invalid email address`
+
+            - `The provided user attributes: "<attribute>" do not match the names of existing user attributes.`
+
+            - `User Attribute <attribute> is type number, but passed-in value <value> is not a number.`
+
+            - `The timezone <invalidTimezone> is not supported. Please see the connection page or [user profile page](/administration/users/your-account) for the list of valid timezones. Use e.g. "America/New_York" instead of "EST"`
+
+            - `User Attribute <attribute> has multiple values enabled, but the passed-in value is not an array. If passing a single value for a user attribute with multiple values enabled, please wrap the value in an array [x].`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    ScheduleRecipientsWebhook:
+      type: object
+      description: Response for schedules with webhook destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - webhook
+          description: The destination type.
+        url:
+          type: string
+          format: uri
+          description: The webhook URL.
+    ScheduleRecipientsSftp:
+      type: object
+      description: Response for schedules with SFTP destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - sftp
+          description: The destination type.
+        address:
+          type: string
+          description: The SFTP server address.
+        port:
+          type: integer
+          description: The SFTP server port.
+        username:
+          type: string
+          description: The SFTP username.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ScheduleRecipientsEmail:
+      type: object
+      description: Response for schedules with email destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - email
+          description: The destination type.
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: The recipient's email address.
+              emailOnly:
+                type: boolean
+                description: Indicates whether the recipient is an email-only user.
+              id:
+                type: string
+                format: uuid
+                description: The recipient's unique identifier.
+              name:
+                type: string
+                description: The recipient's name.
+    ScheduleRecipientsSlack:
+      type: object
+      description: Response for schedules with Slack destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - slack
+          description: The destination type.
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              recipientType:
+                type: string
+                enum:
+                - channel
+                - users
+                description: 'The type of Slack recipient:
+
+                  - `channel` - A Slack channel
+
+                  - `users` - A Slack user
+
+                  '
+              slackId:
+                type: string
+                description: The Slack channel or user ID.
+    ScheduleRecipientsS3:
+      type: object
+      description: Response for schedules with Amazon S3 destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - s3
+          description: The destination type.
+        bucketName:
+          type: string
+          description: The name of the S3 bucket.
+        region:
+          type: string
+          description: The AWS region of the S3 bucket.
+        roleArn:
+          type: string
+          description: The ARN of the customer's IAM role.
+        externalId:
+          type: string
+          description: The external ID for IAM trust policy configuration.
+        keyPrefix:
+          type: string
+          description: The folder path prefix for uploaded files.
+        filename:
+          type: string
+          description: The filename template using Mustache syntax.
+  responses:
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

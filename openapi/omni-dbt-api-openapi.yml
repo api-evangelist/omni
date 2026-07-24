@@ -1,0 +1,1262 @@
+openapi: 3.1.0
+info:
+  title: Omni AI dbt API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: dbt
+  description: Manage dbt configuration for connections
+paths:
+  /v1/connections/{connectionId}/dbt:
+    get:
+      operationId: getDbtConfiguration
+      summary: Get dbt configuration
+      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves the dbt configuration for the specified connection.\n"
+      tags:
+      - dbt
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the connection where dbt is configured
+          example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: dbt configuration successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - autogenRelationships
+                - branch
+                - dbtVersion
+                - enableSemanticLayer
+                - enableVirtualSchemas
+                - projectRootPath
+                - sshUrl
+                - supportsDbt
+                properties:
+                  autogenRelationships:
+                    type: boolean
+                    description: Whether relationships are auto-generated from dbt
+                    example: true
+                  branch:
+                    type: string
+                    description: Git branch name
+                    example: main
+                  dbtVersion:
+                    type: string
+                    description: dbt version being used
+                    example: Auto
+                  enableSemanticLayer:
+                    type: boolean
+                    description: Whether the [dbt semantic layer integration](/integrations/dbt/semantic-layer) is enabled
+                    example: false
+                  enableVirtualSchemas:
+                    type: boolean
+                    description: Whether virtual schemas are enabled
+                    example: false
+                  projectRootPath:
+                    type:
+                    - string
+                    - 'null'
+                    description: Path to dbt project root
+                    example: dbt_project
+                  sshUrl:
+                    type: string
+                    description: SSH URL for git repository
+                    example: git@github.com:org/repo.git
+                  supportsDbt:
+                    type: boolean
+                    description: 'Whether the connection dialect supports dbt.
+
+                      '
+                    example: true
+                  message:
+                    type: string
+                    description: Message explaining dbt status. Returned if dbt is not configured.
+                    example: dbt not configured for this connection
+              examples:
+                dbtConfigured:
+                  summary: dbt is configured
+                  value:
+                    autogenRelationships: true
+                    branch: main
+                    dbtVersion: Auto
+                    enableSemanticLayer: false
+                    enableVirtualSchemas: false
+                    projectRootPath: dbt_project
+                    sshUrl: git@github.com:org/repo.git
+                    supportsDbt: true
+                dbtNotConfigured:
+                  summary: dbt is not configured
+                  value:
+                    supportsDbt: true
+                    message: dbt not configured for this connection
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Permission denied - connection admin role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      operationId: updateDbtConfiguration
+      summary: Update dbt configuration
+      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nUpdates the dbt configuration for the specified connection.\n"
+      tags:
+      - dbt
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the connection where dbt is configured
+          example: 550e8400-e29b-41d4-a716-446655440000
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - autogenRelationships
+              - branch
+              - enableVirtualSchemas
+              - sshUrl
+              properties:
+                autogenRelationships:
+                  type: boolean
+                  description: Automatically generate relationships from dbt
+                  example: true
+                branch:
+                  type: string
+                  minLength: 1
+                  description: Git branch name
+                  example: main
+                dbtVersion:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - Auto
+                  - '1.10'
+                  - '1.11'
+                  description: dbt version to use
+                  example: '1.11'
+                enableSemanticLayer:
+                  type: boolean
+                  default: false
+                  description: Enable [dbt semantic layer integration](/integrations/dbt/semantic-layer)
+                  example: false
+                enableVirtualSchemas:
+                  type: boolean
+                  description: Enable virtual schemas from dbt
+                  example: false
+                projectRootPath:
+                  anyOf:
+                  - type: string
+                    pattern: ^(?!\/)(?!.*\.\.)[\w ./-]+$
+                  - type: string
+                    enum:
+                    - ''
+                  - type: 'null'
+                  default: null
+                  description: Path to dbt project root within repository
+                  example: dbt_project
+                rotateKeys:
+                  type: boolean
+                  default: false
+                  description: Rotate SSH deploy keys
+                  example: false
+                sshUrl:
+                  type: string
+                  minLength: 1
+                  description: SSH URL for git repository
+                  example: git@github.com:org/repo.git
+      responses:
+        '200':
+          description: dbt configuration updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - message
+                - success
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                    example: dbt configuration updated successfully
+                  success:
+                    type: boolean
+                    description: Whether the operation succeeded
+                    example: true
+        '400':
+          description: Invalid request body or validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Permission denied - connection admin role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      operationId: connectionsDbtDelete
+      summary: Delete dbt configuration
+      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRemoves the dbt configuration for the specified connection by removing the link to the dbt repository.\n"
+      tags:
+      - dbt
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: ID of the connection where dbt is configured
+          example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: dbt configuration deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - message
+                - success
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                    example: dbt repository unlinked successfully
+                  success:
+                    type: boolean
+                    description: Whether the operation succeeded
+                    example: true
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Permission denied - Connection Admin role required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection not found or dbt not configured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/connections/{connectionId}/dbt/environments:
+    post:
+      tags:
+      - dbt
+      summary: Create dbt environment
+      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nCreates a new dbt environment on the specified connection, enabling programmatic environment management.\n\nA dbt environment allows you to connect Omni to a specific dbt project and manage dbt-related functionality within the connection context.\n"
+      security:
+      - bearerAuth: []
+      operationId: createDbtEnvironment
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - targetSchema
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  description: The name of the dbt environment
+                  example: Production dbt
+                targetSchema:
+                  type: string
+                  minLength: 1
+                  description: The target schema for the environment
+                  example: analytics
+                isDeferralEnabled:
+                  type: boolean
+                  default: false
+                  description: 'Whether deferral is enabled for this environment. Defaults to `false`. Ignored (forced to `false`) for the default (production) environment.
+
+                    '
+                  example: false
+                ownerId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: '**Only valid with Organization API keys.** The user ID of the owner for the dbt environment. Personal Access Tokens (PATs) automatically use the authenticated user as the owner.
+
+                    '
+                  example: 550e8400-e29b-41d4-a716-446655440000
+                targetDatabase:
+                  type: string
+                  nullable: true
+                  description: Target database override
+                  example: analytics_db
+                targetName:
+                  type: string
+                  nullable: true
+                  description: Target name override
+                  example: my_project
+                targetRole:
+                  type: string
+                  nullable: true
+                  description: Target role override
+                  example: transformer
+                variables:
+                  type: array
+                  default: []
+                  description: 'Environment variables for the dbt environment. **Note**: While `variables` is not required, at least one variable object must be defined if `variables` is included in the request body.
+
+                    '
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - value
+                    - isSecret
+                    properties:
+                      name:
+                        type: string
+                        minLength: 1
+                        description: Variable name
+                        example: DBT_TARGET
+                      value:
+                        type: string
+                        description: Variable value
+                        example: production
+                      isSecret:
+                        type: boolean
+                        description: Whether the variable value is secret
+                        example: false
+            examples:
+              basic:
+                summary: Basic dbt environment
+                value:
+                  name: Production dbt
+                  targetSchema: analytics
+              withOwner:
+                summary: dbt environment with specific owner
+                value:
+                  name: Production dbt
+                  targetSchema: analytics
+                  ownerId: 550e8400-e29b-41d4-a716-446655440000
+              withVariables:
+                summary: dbt environment with variables
+                value:
+                  name: Production dbt
+                  targetSchema: analytics
+                  targetDatabase: analytics_db
+                  variables:
+                  - name: DBT_TARGET
+                    value: production
+                    isSecret: false
+                  - name: DBT_API_KEY
+                    value: sk-...
+                    isSecret: true
+      responses:
+        '201':
+          description: dbt environment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbtEnvironment'
+              example:
+                id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                name: Production dbt
+                isDefaultEnvironment: false
+                isDeferralEnabled: false
+                ownerId: 550e8400-e29b-41d4-a716-446655440000
+                targetDatabase: analytics_db
+                targetName: null
+                targetRole: null
+                targetSchema: analytics
+                variables:
+                - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                  name: DBT_TARGET
+                  value: production
+                  isSecret: false
+                - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+                  name: DBT_API_KEY
+                  value: null
+                  isSecret: true
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - Invalid request body
+
+            - User specified in `ownerId` is not a member of the organization
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible causes:
+
+            - Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            - Non-admin user attempting to set `ownerId` for another user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - dbt
+      summary: List dbt environments
+      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nRetrieves a list of all dbt environments configured for the specified connection.\n"
+      security:
+      - bearerAuth: []
+      operationId: listDbtEnvironments
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      responses:
+        '200':
+          description: List of dbt environments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DbtEnvironment'
+              examples:
+                multipleEnvironments:
+                  summary: Multiple environments
+                  value:
+                  - id: 247dc6dc-2a58-4688-9521-c5ed3e99c1e8
+                    name: Production
+                    isDefaultEnvironment: true
+                    isDeferralEnabled: false
+                    ownerId: null
+                    targetDatabase: null
+                    targetName: null
+                    targetRole: null
+                    targetSchema: public
+                    variables: []
+                  - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    name: Development
+                    isDefaultEnvironment: false
+                    isDeferralEnabled: true
+                    ownerId: 550e8400-e29b-41d4-a716-446655440000
+                    targetDatabase: dev_analytics_db
+                    targetName: null
+                    targetRole: null
+                    targetSchema: analytics_dev
+                    variables:
+                    - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                      name: DBT_TARGET
+                      value: dev
+                      isSecret: false
+                    - id: c3d4e5f6-a7b8-9012-cdef-123456789012
+                      name: DBT_API_KEY
+                      value: null
+                      isSecret: true
+                emptyList:
+                  summary: No environments configured
+                  value: []
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible causes:
+
+            - Insufficient permissions
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/connections/{connectionId}/dbt/environments/{environmentId}:
+    put:
+      tags:
+      - dbt
+      summary: Update dbt environment
+      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nUpdates an existing dbt environment on the specified connection. All fields are optional; only the provided fields will be updated.\n"
+      security:
+      - bearerAuth: []
+      operationId: updateDbtEnvironment
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      - name: environmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the dbt environment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  description: The name of the dbt environment
+                  example: Development
+                targetSchema:
+                  type: string
+                  minLength: 1
+                  description: The target schema for the environment
+                  example: dev_schema
+                isDeferralEnabled:
+                  type: boolean
+                  description: 'Whether deferral is enabled for this environment. Ignored (forced to `false`) for the default (production) environment.
+
+                    '
+                  example: true
+                ownerId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: '**Only valid with Organization API keys.** The user ID of the owner for the dbt environment. Personal Access Tokens (PATs) automatically use the authenticated user as the owner.
+
+                    '
+                  example: 550e8400-e29b-41d4-a716-446655440000
+                targetDatabase:
+                  type: string
+                  nullable: true
+                  description: Target database override
+                  example: analytics_dev
+                targetName:
+                  type: string
+                  nullable: true
+                  description: Target name override
+                  example: custom_target
+                targetRole:
+                  type: string
+                  nullable: true
+                  description: Target role override
+                  example: developer
+                variables:
+                  type: array
+                  description: 'Environment variables for the dbt environment. To update existing variables, include the variable `id` field. New variables should omit the `id` field.
+
+                    '
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - value
+                    - isSecret
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: Variable identifier. Required for updating existing variables, otherwise omit.
+                        example: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                      name:
+                        type: string
+                        minLength: 1
+                        description: Variable name. Required for new variables, otherwise omit.
+                        example: DBT_TARGET
+                      value:
+                        type: string
+                        description: Variable value. Required for new variables, otherwise omit or set to `null` to keep the existing value for secrets.
+                        example: production
+                      isSecret:
+                        type: boolean
+                        description: Whether the variable value is secret. Required for new and updating existing variables.
+                        example: false
+            examples:
+              basic:
+                summary: Update name and schema
+                value:
+                  name: Development
+                  targetSchema: dev_schema
+              withOwner:
+                summary: Update ownership
+                value:
+                  name: Production
+                  ownerId: 550e8400-e29b-41d4-a716-446655440000
+              withVariables:
+                summary: Update with variables
+                value:
+                  name: Production
+                  targetSchema: dev_schema
+                  variables:
+                  - id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                    name: DBT_TARGET
+                    value: staging
+                    isSecret: false
+                  - name: NEW_VAR
+                    value: new_value
+                    isSecret: false
+      responses:
+        '200':
+          description: dbt environment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbtEnvironment'
+              example:
+                id: 247dc6dc-2a58-4688-9521-c5ed3e99c1e8
+                name: Development
+                isDefaultEnvironment: false
+                isDeferralEnabled: true
+                ownerId: 550e8400-e29b-41d4-a716-446655440000
+                targetDatabase: analytics_dev
+                targetName: custom_target
+                targetRole: developer
+                targetSchema: dev_schema
+                variables:
+                  id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                  name: DBT_TARGET
+                  value: staging
+                  isSecret: false
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - Invalid request body
+
+            - User specified in `ownerId` is not a member of the organization
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible causes:
+
+            - Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            - Non-admin user attempting to set `ownerId` for another user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection or dbt environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - dbt
+      summary: Delete dbt environment
+      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nDeletes an existing dbt environment from the specified connection. This action cannot be undone.\n"
+      security:
+      - bearerAuth: []
+      operationId: deleteDbtEnvironment
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      - name: environmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the dbt environment to delete
+      responses:
+        '200':
+          description: dbt environment deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible causes:
+
+            - Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            - Connection dialect does not support dbt environments
+
+            - Attempting to access a resource in a different organization
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connection or dbt environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/models/{modelId}/dbt-exposures:
+    get:
+      operationId: getDbtExposures
+      summary: Get dbt exposures
+      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves dbt exposures for the specified model. This endpoint computes exposures on-demand by analyzing which dbt models are referenced by dashboards that use the specified model.\n\nThis enables automated retrieval of exposure data previously only available via the manual **Sync exposures** flow in Omni, making it ideal for CI/CD pipelines and automated workflows.\n"
+      tags:
+      - dbt
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: ID of the model
+        example: 550e8400-e29b-41d4-a716-446655440000
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of results per page (1-100).
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Pagination cursor from a previous response's `pageInfo.nextCursor`.
+      - name: branch_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Branch ID for branch-aware model operations.
+      responses:
+        '200':
+          description: dbt exposures successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - pageInfo
+                - records
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - dashboard_identifier
+                      - deduplication_name
+                      - exposure
+                      properties:
+                        dashboard_identifier:
+                          type: string
+                          description: Unique identifier of the dashboard associated with this exposure.
+                          example: abc123
+                        deduplication_name:
+                          type: string
+                          description: Unique name used for deduplication, combining the exposure name and dashboard identifier.
+                          example: sales_overview_abc123
+                        exposure:
+                          type: object
+                          description: 'The generated exposure, with a structure matching the format defined in [dbt''s exposures documentation](https://docs.getdbt.com/docs/build/exposures).
+
+
+                            This field will be `null` if the dashboard doesn''t reference any dbt models.
+
+                            '
+                          required:
+                          - name
+                          - type
+                          - owner
+                          - depends_on
+                          - label
+                          - url
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the exposure. Generated from dashboard title.
+                              example: sales_overview
+                            type:
+                              type: string
+                              description: Type of the exposure
+                              example: dashboard
+                            owner:
+                              type: object
+                              required:
+                              - name
+                              - email
+                              properties:
+                                name:
+                                  type: string
+                                  description: Owner's name
+                                  example: Blob Ross
+                                email:
+                                  type: string
+                                  description: Owner's email address
+                                  example: blob.ross@blobsrus.com
+                            depends_on:
+                              type: array
+                              items:
+                                type: string
+                              description: Array of dbt ref strings for models this exposure depends on
+                              example:
+                              - ref('orders')
+                              - ref('customers')
+                            label:
+                              type: string
+                              description: Human-readable label for the exposure
+                              example: Sales Overview
+                            url:
+                              type: string
+                              description: URL to the dashboard
+                              example: https://your-org.omni.co/dashboards/abc123
+              example:
+                pageInfo:
+                  hasNextPage: false
+                  nextCursor: null
+                  pageSize: 1000
+                  totalRecords: 1
+                records:
+                - dashboard_identifier: abc123
+                  deduplication_name: sales_overview_abc123
+                  exposure:
+                    name: sales_overview
+                    type: dashboard
+                    owner:
+                      name: Blob Ross
+                      email: blob.ross@blobsrus.com
+                    depends_on:
+                    - ref('orders')
+                    - ref('customers')
+                    label: Sales Overview
+                    url: https://your-org.omni.co/dashboards/abc123
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: Invalid modelId format`
+
+            - `cursor: Invalid UUID`
+
+            - `pageSize: Page size must be at least 1`
+
+            - `pageSize: Page size cannot exceed 100`
+
+            - `Bad Request: branch_id: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Model with id <modelId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/models/{modelId}/branch/{branchName}/dbt:
+    post:
+      tags:
+      - dbt
+      summary: Set dbt environment on model branch
+      description: 'Sets the active dbt environment on a model branch. This endpoint allows you to programmatically configure which dbt environment a branch should use, enabling CI/CD pipelines to automate dbt environment configuration before triggering schema refreshes.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: setModelBranchDbtEnvironment
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the model
+        example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+      - name: branchName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the branch to configure
+        example: feature/new-models
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - dbt_environment_id
+              properties:
+                dbt_environment_id:
+                  type: string
+                  format: uuid
+                  description: The ID of the dbt environment to set as active for the branch
+                  example: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                dbt_git_branch:
+                  type: string
+                  description: Optional git branch name to associate with the dbt environment
+                  example: feature/branch
+            example:
+              dbt_environment_id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+              dbt_git_branch: feature/branch
+      responses:
+        '200':
+          description: dbt environment configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: Invalid modelId format`
+
+            - `Bad Request: Invalid dbt_environment_id format`
+
+            - `dbt_environment_id is required`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Shared model or branch model does not exist`
+
+            - `Branch model with id <branch-id> does not exist`
+
+            - `dbt environment not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    DbtEnvironment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the dbt environment
+        name:
+          type: string
+          description: The name of the dbt environment
+        isDefaultEnvironment:
+          type: boolean
+          description: Whether this is the default environment
+        isDeferralEnabled:
+          type: boolean
+          description: 'Whether deferral is enabled for this environment. Ignored (forced to `false`) for the default (production) environment.
+
+            '
+        ownerId:
+          type: string
+          format: uuid
+          nullable: true
+          description: The user ID of the owner of the dbt environment, or null
+        targetDatabase:
+          type: string
+          nullable: true
+          description: Target database override
+        targetName:
+          type: string
+          nullable: true
+          description: Target name override
+        targetRole:
+          type: string
+          nullable: true
+          description: Target role override
+        targetSchema:
+          type: string
+          description: Target schema for the environment
+        variables:
+          type: array
+          description: Environment variables
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Variable identifier
+              name:
+                type: string
+                description: Variable name
+              value:
+                type: string
+                nullable: true
+                description: 'Variable value. If `isSecret: true`, this value will be `null` in responses to protect sensitive information.
+
+                  '
+              isSecret:
+                type: boolean
+                description: 'Whether the variable value is secret.
+
+                  '
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  responses:
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

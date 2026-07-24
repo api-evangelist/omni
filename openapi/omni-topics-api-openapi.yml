@@ -1,0 +1,472 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Topics API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Topics
+  description: Retrieve topic information from models
+paths:
+  /v1/models/{modelId}/topic/{topicName}:
+    get:
+      tags:
+      - Topics
+      summary: Retrieve a topic
+      description: Retrieves a topic in a model by name.
+      security:
+      - bearerAuth: []
+      operationId: getTopic
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the model that contains the topic.
+      - name: topicName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the topic.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates the request was successful
+                  topic:
+                    type: object
+                    description: Details about the topic. The properties included in the response will typically mirror the [IDE parameters](/modeling/topics/parameters) for topic files.
+                    properties:
+                      name:
+                        type: string
+                        description: The name of the topic
+                      base_view_name:
+                        type: string
+                        description: The name of the base view for the topic
+                      label:
+                        type: string
+                        description: The display label for the topic
+                      default_filters:
+                        type: object
+                        description: Default filters applied to the topic
+                      join_via_map:
+                        type: object
+                        description: Join path mappings for the topic. Keys are view names, values are arrays of view names representing the join path.
+                        additionalProperties:
+                          type: array
+                          items:
+                            type: string
+                      join_via_map_key_order:
+                        type: array
+                        items:
+                          type: string
+                        description: Order of join path keys
+                      ignored_props:
+                        type: array
+                        items:
+                          type: string
+                        description: Properties to ignore
+                      always_where_filters:
+                        type: object
+                        description: 'Filters that applied to all rows in a query. In the model IDE, this is the [`always_where_filters`](/modeling/topics/parameters/always-where-filters) parameter.
+
+                          '
+                      extension_model_id:
+                        type: string
+                        format: uuid
+                        description: The ID of the extension model
+                      has_frozen_join_via_map:
+                        type: boolean
+                        description: Whether the join via map is frozen
+                      relationships:
+                        type: array
+                        description: Relationships defined in the topic. The properties in each object will typically mirror the [IDE parameters](/modeling/relationships/parameters) used in a model's `relationships` file.
+                        items:
+                          type: object
+                          properties:
+                            left_view_name:
+                              type: string
+                              description: The left view in the relationship
+                            right_view_name:
+                              type: string
+                              description: The right view in the relationship
+                            join_type:
+                              type: string
+                              description: The type of join (e.g., ALWAYS_LEFT)
+                            'on':
+                              type: object
+                              description: The join condition expression
+                              properties:
+                                type:
+                                  type: string
+                                operator:
+                                  type: string
+                                operands:
+                                  type: array
+                                  items:
+                                    type: object
+                                distinct:
+                                  type: boolean
+                            sql:
+                              type: string
+                              description: The SQL expression for the join
+                            id:
+                              type: string
+                              description: Unique identifier for the relationship
+                            type:
+                              type: string
+                              description: The relationship type (e.g., `ONE_TO_MANY`)
+                            ignored:
+                              type: boolean
+                              description: Whether the relationship is ignored
+                            bidirectional:
+                              type: boolean
+                              description: Whether the relationship is bidirectional
+                            original_on_sql:
+                              type: string
+                              description: The original SQL for the join condition
+                            yaml_path_prefix:
+                              type: string
+                              description: The YAML path prefix for the relationship
+                      ide_file_name:
+                        type: string
+                        description: The file name for the topic in the IDE
+                      views:
+                        type: array
+                        description: A list of views included in the topic. The properties in each object will mirror the [IDE parameters](/modeling/views/parameters) available for views.
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: The name of the view
+                            label:
+                              type: string
+                              description: The display label for the view
+                            table_name:
+                              type: string
+                              description: The underlying database table name
+                            schema:
+                              type: string
+                              description: The database schema
+                            schema_label:
+                              type: string
+                              description: The display label for the schema
+                            extension_model_id:
+                              type: string
+                              format: uuid
+                            ide_file_name:
+                              type: string
+                              description: The name of the IDE file for the view
+                            yaml_path:
+                              type: string
+                              description: The YAML file path for the view
+                            filter_only_fields:
+                              type: array
+                              items:
+                                type: string
+                            is_pseudo_display_view:
+                              type: boolean
+                            primary_key:
+                              type: array
+                              description: Primary key fields for the view
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                  field_name:
+                                    type: string
+                            dimensions:
+                              type: array
+                              description: A list of dimensions defined in the view. The properties in each object will mirror the [IDE parameters](/modeling/dimensions/parameters) for `dimensions.`
+                              items:
+                                type: object
+                                properties:
+                                  field_name:
+                                    type: string
+                                  view_name:
+                                    type: string
+                                  data_type:
+                                    type: string
+                                    description: Data type (e.g., STRING, NUMBER, TIMESTAMP)
+                                  format:
+                                    type: string
+                                    description: Display format (e.g., ID)
+                                  label:
+                                    type: string
+                                    description: Display label for the dimension
+                                  description:
+                                    type: string
+                                    description: Description of the dimension
+                                  view_label:
+                                    type: string
+                                  extension_model_id:
+                                    type: string
+                                    format: uuid
+                                  is_dimension:
+                                    type: boolean
+                                  fully_qualified_name:
+                                    type: string
+                                  time_frames:
+                                    type: array
+                                    description: Available time frames for date dimensions
+                                    items:
+                                      type: string
+                                  date_type:
+                                    type: string
+                                    description: Date granularity (e.g., DATE, WEEK, MONTH, QUARTER, YEAR)
+                                  drill_fields:
+                                    type: array
+                                    description: Fields available for drilling
+                                    items:
+                                      type: string
+                                  parent_field:
+                                    type: string
+                                    description: Parent field name for grouped dimensions
+                                  parent_label:
+                                    type: string
+                                    description: Parent field label
+                                  group_label:
+                                    type: string
+                                    description: Group label for the dimension
+                                  is_group_parent_field:
+                                    type: boolean
+                                    description: Whether this is a parent field in a group
+                                  data_type_metadata:
+                                    type: object
+                                    description: Additional metadata about the data type
+                                    properties:
+                                      is_date_type:
+                                        type: boolean
+                                  ai_context:
+                                    type: string
+                                    description: Context hints for AI usage
+                            measures:
+                              type: array
+                              description: Measures defined in the view. The properties in each object will mirror the [IDE parameters](/modeling/measures/parameters) for `measures.`
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    description: Measure type (e.g., aggregation)
+                                  field_name:
+                                    type: string
+                                  view_name:
+                                    type: string
+                                  aggregate_type:
+                                    type: string
+                                    description: Aggregation type (e.g., COUNT, SUM, AVG)
+                                  data_type:
+                                    type: string
+                                  label:
+                                    type: string
+                                  format:
+                                    type: string
+                                  view_label:
+                                    type: string
+                                  ignored:
+                                    type: boolean
+                                    description: Whether the measure is ignored
+                                  display_sql:
+                                    type: string
+                                    description: SQL displayed in the UI
+                                  dialect_sql:
+                                    type: string
+                                    description: SQL specific to the database dialect
+                                  fully_qualified_name:
+                                    type: string
+                                  filters:
+                                    type: object
+                                    description: Filters applied to the measure
+              example:
+                success: true
+                topic:
+                  name: Customers
+                  base_view_name: main__customers
+                  label: Customers
+                  default_filters: {}
+                  join_via_map:
+                    main__orders: []
+                    main__order_items:
+                    - main__orders
+                  join_via_map_key_order:
+                  - main__orders
+                  - main__order_items
+                  ignored_props: []
+                  always_where_filters: {}
+                  extension_model_id: 5da4e30e-45e2-4693-b87d-51c39d69963f
+                  has_frozen_join_via_map: true
+                  relationships:
+                  - left_view_name: main__orders
+                    right_view_name: main__customers
+                    join_type: ALWAYS_LEFT
+                    sql: ${main__orders.customer_id} = ${main__customers.id}
+                    id: main__orders_main__customers
+                    type: ASSUMED_MANY_TO_ONE
+                    ignored: false
+                    bidirectional: false
+                  ide_file_name: Customers.topic
+                  views:
+                  - name: main__customers
+                    label: Customers
+                    table_name: customers
+                    schema: main
+                    schema_label: Main
+                    extension_model_id: 5da4e30e-45e2-4693-b87d-51c39d69963f
+                    ide_file_name: main/customers.view
+                    yaml_path: main__customers.view
+                    filter_only_fields: []
+                    is_pseudo_display_view: false
+                    primary_key:
+                    - type: field
+                      field_name: main__customers.id
+                    dimensions:
+                    - field_name: country
+                      view_name: main__customers
+                      data_type: STRING
+                      description: User's country
+                      view_label: Customers
+                      is_dimension: true
+                      fully_qualified_name: main__customers.country
+                    - field_name: created_date
+                      view_name: main__customers
+                      data_type: TIMESTAMP
+                      time_frames:
+                      - null
+                      - DATE
+                      - WEEK
+                      - MONTH
+                      - QUARTER
+                      - YEAR
+                      date_type: DATE
+                      description: Date of user creation
+                      parent_field: created_date
+                      parent_label: Created Date
+                      view_label: Customers
+                      group_label: Created Date
+                      is_dimension: true
+                      is_group_parent_field: true
+                      fully_qualified_name: main__customers.created_date
+                    measures:
+                    - type: aggregation
+                      field_name: count
+                      view_name: main__customers
+                      aggregate_type: COUNT
+                      data_type: NUMBER
+                      ignored: false
+                      label: Customers Count
+                      format: NUMBER_0
+                      view_label: Customers
+                      display_sql: COUNT(*)
+                      dialect_sql: COUNT(*)
+                      fully_qualified_name: main__customers.count
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Invalid model UUID
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Model with id <modelId> does not exist
+                status: 400
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - Model not found
+
+            - Topic not found or access not permitted
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                modelNotFound:
+                  summary: Model not found
+                  value:
+                    detail: Model with id <modelId> does not exist
+                    status: 404
+                topicNotFound:
+                  summary: Topic not found
+                  value:
+                    detail: No such topic "<topicName>" or access not permitted
+                    status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

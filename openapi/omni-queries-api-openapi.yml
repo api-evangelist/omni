@@ -1,0 +1,652 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Queries API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Queries
+  description: Execute workbook queries
+paths:
+  /v1/query/run:
+    post:
+      tags:
+      - Queries
+      summary: Run query
+      description: 'Runs the query specified in the request body. Successful requests will return the data as a base64 encoded [Apache Arrow](https://arrow.apache.org/) table, allowing you to extract query results from Omni and use them elsewhere. For example, piping data to Google Sheets or leveraging data in a Python notebook.
+
+        '
+      x-mint:
+        content: '**Encountering timeouts?** If a request takes too long, the API will return a `408 timeout` error with a body that includes a `remaining_job_ids` property. When this occurs, poll the [Wait for query results](/api/queries/wait-for-query-results) endpoint until the `timed_out` property is `false`.
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: runQuery
+      parameters:
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: '**Requires an Organization API key.** The ID of the user to run the query as.
+
+
+          Personal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.
+
+          '
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: object
+                  description: 'A JSON object representing the query to be run.
+
+
+                    To retrieve a query''s JSON object from an Omni workbook:
+
+
+                    1. Open a workbook in Omni.
+
+                    2. Click the **bug icon** to toggle open the **Inspector** panel. For **Mac** use `Option + 9`; for **Windows**, use `Alt + 9`.
+
+                    3. Locate the **Query structure** section.
+
+                    4. Copy the query JSON.
+
+                    '
+                  required:
+                  - modelId
+                  - table
+                  - fields
+                  properties:
+                    modelId:
+                      type: string
+                      format: uuid
+                      description: The ID of the model to execute the query against.
+                    table:
+                      type: string
+                      description: The base table or topic name.
+                    fields:
+                      type: array
+                      items:
+                        type: string
+                      description: The column names to include in the query results.
+                    limit:
+                      oneOf:
+                      - type: integer
+                        maximum: 75000
+                        default: 1000
+                      - type: 'null'
+                      description: 'Number of rows to return. Defaults to `1000` if not defined. Maximum is `75000`.
+
+
+                        - If `null`, unlimited results will be returned. **Note**: This is compatible with pivoted queries if `resultType` is `csv` or `xlsx`.
+
+                        - If set to a negative number, the API will return a `400` response.
+
+                        '
+                    sorts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          column_name:
+                            type: string
+                            description: The column to sort by
+                          sort_descending:
+                            type: boolean
+                            description: If `true`, sort in descending order
+                          is_column_sort:
+                            type: boolean
+                          null_sort:
+                            type: string
+                            description: How to handle nulls (e.g., `OMNI_DEFAULT`)
+                      description: Sort specifications for the query results.
+                    filters:
+                      type: object
+                      description: Filter conditions to apply to the query.
+                    pivots:
+                      type: array
+                      items:
+                        type: object
+                      description: Pivot configurations for the query.
+                    calculations:
+                      type: array
+                      items:
+                        type: object
+                      description: Custom calculations to include in the query.
+                    column_totals:
+                      type: object
+                      description: Column total configuration.
+                    row_totals:
+                      type: object
+                      description: Row total configuration.
+                    column_limit:
+                      type: integer
+                      description: Column limit for pivoted queries.
+                    join_paths_from_topic_name:
+                      type: string
+                      description: Topic name for join paths.
+                    join_via_map:
+                      type: object
+                      description: Custom join path mappings.
+                    version:
+                      type: integer
+                      description: Query version number.
+                    default_group_by:
+                      type: boolean
+                      description: If `true`, enable default grouping behavior.
+                    dbtMode:
+                      type: boolean
+                      description: If `true`, enable dbt mode.
+                    rewriteSql:
+                      type: boolean
+                      description: If `true`, enable SQL mode.
+                    dimensionIndex:
+                      type: integer
+                      description: The index of the last dimension in the list of fields in the query. Used internally to order and group fields in the UI.
+                    controls:
+                      type: array
+                      items:
+                        type: object
+                      description: Control configurations for the query.
+                    manualSort:
+                      type: boolean
+                      description: If `true`, sorting was manually applied to the query instead of using Omni's default behavior.
+                    fill_fields:
+                      type: array
+                      items:
+                        type: string
+                      description: A list of dimensions that should have missing values filled with placeholder rows.
+                    userEditedSQL:
+                      type: string
+                      description: User-edited SQL override.
+                    custom_summary_types:
+                      type: object
+                      description: Custom summary type configurations.
+                branchId:
+                  type: string
+                  format: uuid
+                  description: 'Optional ID of a model branch to execute the query against. When provided, the query runs against the specified branch instead of the shared model.
+
+
+                    The branch must belong to the same shared model specified in `query.modelId` and be within your organization.
+
+                    '
+                connectionEnvironmentId:
+                  type: string
+                  format: uuid
+                  description: 'Optional connection environment ID to override the session-derived connection environment for this query run. The requesting user must have access to the specified environment.
+
+
+                    When provided, the query runs against the specified connection environment instead of the user''s session selection.
+
+                    '
+                userId:
+                  type: string
+                  format: uuid
+                  description: 'Executes the query as the specified user.
+
+
+                    Prefer passing `userId` as a query parameter instead of in the request body. Providing `userId` in both locations will return a `400` error.
+
+
+                    If not provided in either location, the API uses the user associated with the API token. The `userId` must belong to a user in your organization.
+
+                    '
+                cache:
+                  type: string
+                  default: SkipRequery
+                  enum:
+                  - Standard
+                  - SkipRequery
+                  - SkipCache
+                  description: 'Optional cache policy to control how query caching behaves. Must be one of:
+
+
+                    - `Standard` - Uses standard caching behavior
+
+                    - `SkipRequery` - Uses cached results if available, but does not requery if not found (default)
+
+                    - `SkipCache` - Bypasses cache and always executes a fresh query
+
+                    '
+                resultType:
+                  type: string
+                  enum:
+                  - csv
+                  - json
+                  - xlsx
+                  description: '**Cannot be used with `planOnly`.** Specifies the format of query results exported by the API.
+
+
+                    If omitted, the API will return results in a base-64 encoded format.
+
+                    '
+                planOnly:
+                  type: boolean
+                  description: '**Cannot be used with `resultType`.** If `true`, the API will return the query execution plan without running the query. The response will include the generated SQL and query metadata.
+
+                    '
+                formatResults:
+                  type: boolean
+                  default: true
+                  description: '**Applicable only if `resultType` is specified.** If `true`, formatting will be applied to numeric and currency values in the form of currency symbols and thousand separators.
+
+                    '
+            example:
+              query:
+                modelId: bcf0cffd-ec1b-44d5-945a-a261ebe407fc
+                table: order_items
+                fields:
+                - inventory_items.product_department
+                - inventory_items.product_category
+                - inventory_items.count
+                limit: 10
+                sorts:
+                - column_name: inventory_items.product_department
+                  sort_descending: false
+                join_paths_from_topic_name: order_items
+      responses:
+        '200':
+          description: 'Successful responses will contain the following:
+
+
+            - An object with a `jobs_submitted` property
+
+            - An object containing details about the job, such as `job_id`, `status`, and the provided query. **Note**: If `planOnly: true` was included in the request body, the status will be `PLANNED`.
+
+            - The job details object will also contain a `result` property, which contains the query results as a base64 encoded Apache Arrow table. You can use the [Omni Python SDK](https://github.com/exploreomni/omni-python-sdk) to decode and validate the results.
+
+
+            If the request times out, the response will include `remaining_job_ids`. Poll the `/api/v1/query/wait` endpoint with these IDs until `timed_out` is `false`.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobs_submitted:
+                    type: object
+                    description: Map of job IDs to client result IDs
+                  job_id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for the query job
+                  status:
+                    type: string
+                    description: Job status (e.g., `COMPLETE`, `PLANNED`)
+                  client_result_id:
+                    type: string
+                    format: uuid
+                    description: Client-side result identifier
+                  summary:
+                    type: object
+                    description: Query execution summary including SQL, stats, and field metadata
+                  cache_metadata:
+                    type: object
+                    description: Cache information including TTL and data freshness
+                  query:
+                    type: object
+                    description: The executed query details
+                  result:
+                    type: string
+                    description: Base64 encoded Apache Arrow table containing query results
+                  stream_stats:
+                    type: object
+                    description: Server-side streaming metrics
+                    properties:
+                      server_stream:
+                        description: Time in milliseconds to stream the result data from the server
+                        type: integer
+                  remaining_job_ids:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                    description: IDs of the jobs still processing if the request timed out. Poll `/api/v1/query/wait` with these IDs.
+                  timed_out:
+                    type: string
+                    description: Indicates if the request timed out. If `true`, use `remaining_job_ids` to poll for results.
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - `userId` provided in both the query parameter and request body
+
+            - `formatResults` provided without `resultType`
+
+            - `planOnly` and `resultType` both provided (incompatible)
+
+            - `query.limit` is a negative number
+
+            - `branchId` provided when querying a schema model (schema models do not have branches)
+
+            - `branchId` is not a valid UUID
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                userIdInBothLocations:
+                  summary: userId in both query parameter and request body
+                  value:
+                    detail: userId may be provided in either the request body or as a query parameter, but not both
+                    status: 400
+                formatResultsWithoutResultType:
+                  summary: formatResults without resultType
+                  value:
+                    detail: formatResults cannot be provided without resultType
+                    status: 400
+                planOnlyWithResultType:
+                  summary: planOnly and resultType both provided
+                  value:
+                    detail: planOnly and resultType cannot both be provided
+                    status: 400
+                negativeLimitValue:
+                  summary: Negative limit value
+                  value:
+                    detail: 'query.limit: Too small: expected number to be >0'
+                    status: 400
+                schemaModelWithBranch:
+                  summary: Schema model with branchId
+                  value:
+                    detail: Schema models do not have branches
+                    status: 400
+        '403':
+          description: 'Forbidden. Possible causes:
+
+
+            - A Personal Access Token (PAT) attempted to use `userId` to run the query as a different user. PATs can only run queries as their own user.
+
+            - If including a `connectionEnvironmentId`, the requesting user must have access to the specified environment.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                userScopedKeyDifferentUser:
+                  summary: PAT attempting to use different userId
+                  value:
+                    detail: Personal Access Tokens cannot run queries on behalf of other users
+                    status: 403
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - The specified `userId` does not exist or does not belong to your organization
+
+            - The specified model, topic, or view does not exist
+
+            - The specified `branchId` does not exist, belongs to a different model, or is in a different organization
+
+            - The branch has been soft-deleted
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                userNotFound:
+                  summary: User not found
+                  value:
+                    detail: User with id 550e8400-e29b-41d4-a716-446655440000 does not exist
+                    status: 404
+                branchNotFound:
+                  summary: Branch not found
+                  value:
+                    detail: Branch model with id 550e8400-e29b-41d4-a716-446655440000 does not exist
+                    status: 404
+        '408':
+          $ref: '#/components/responses/QueryTimeoutError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/query/wait:
+    get:
+      tags:
+      - Queries
+      summary: Wait for query results
+      description: 'Polls for the results of one or more query jobs. Use this endpoint when a request to the [Run query endpoint](/api/queries/run-query) times out and returns `remaining_job_ids` in the response.
+
+
+        This endpoint will wait for the specified jobs to complete and return their results. If the jobs are still processing when the request times out, the response will include the remaining job IDs to poll again.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: waitForQuery
+      parameters:
+      - name: job_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: 'An array of job IDs to poll for results. These IDs are returned in the `remaining_job_ids` property when a request to the [Run query endpoint](/api/queries/run-query) times out.
+
+
+          Format the parameter as a JSON array (e.g., `?job_ids=["job-id-1","job-id-2"]`).
+
+          '
+      responses:
+        '200':
+          description: 'Successful response containing the query results for completed jobs.
+
+
+            If all jobs have completed, `timed_out` will be `false` and the response will include the full query results.
+
+
+            If some jobs are still processing when this request times out, `timed_out` will be `true` and `remaining_job_ids` will contain the IDs of jobs that are still running. Continue polling with these IDs until all jobs complete.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for the query job
+                  status:
+                    type: string
+                    description: Job status (e.g., `COMPLETE`, `PLANNED`)
+                  client_result_id:
+                    type: string
+                    format: uuid
+                    description: Client-side result identifier
+                  summary:
+                    type: object
+                    description: Query execution summary including SQL, stats, and field metadata
+                  cache_metadata:
+                    type: object
+                    description: Cache information including TTL and data freshness
+                  query:
+                    type: object
+                    description: The executed query details
+                  result:
+                    type: string
+                    description: Base64 encoded Apache Arrow table containing query results
+                  stream_stats:
+                    type: object
+                    description: Server-side streaming metrics
+                    properties:
+                      server_stream:
+                        description: Time in milliseconds to stream the result data from the server
+                        type: integer
+                  remaining_job_ids:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                    description: IDs of jobs still processing if this request timed out. Continue polling with these IDs.
+                  timed_out:
+                    type: boolean
+                    description: Indicates if the request timed out. If `true`, use `remaining_job_ids` to poll again.
+              examples:
+                completedJob:
+                  summary: Job completed successfully
+                  value:
+                    job_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    status: COMPLETE
+                    client_result_id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+                    summary:
+                      sql: SELECT * FROM order_items LIMIT 10
+                      total_rows: 10
+                      execution_time_ms: 245
+                    result: QVJST1cxAAD/////...
+                    timed_out: false
+                timedOut:
+                  summary: Request timed out with remaining jobs
+                  value:
+                    timed_out: true
+                    remaining_job_ids:
+                    - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    - b2c3d4e5-f6a7-8901-bcde-f12345678901
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing or invalid `job_ids` parameter
+
+            - `job_ids` is not a valid JSON array
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingJobIds:
+                  summary: Missing job_ids parameter
+                  value:
+                    detail: job_ids parameter is required
+                    status: 400
+                invalidJobIds:
+                  summary: Invalid job_ids format
+                  value:
+                    detail: job_ids must be a valid JSON array of UUIDs
+                    status: 400
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible causes:
+
+
+            - One or more job IDs do not exist
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                jobNotFound:
+                  summary: Job not found
+                  value:
+                    detail: Job with id <jobId> does not exist
+                    status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    QueryTimeoutError:
+      description: Timeout
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QueryTimeoutResponse'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    QueryTimeoutResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message indicating the request timed out
+          example: Request timeout
+        remaining_job_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: IDs of jobs still processing when the request timed out. Poll the [Wait for query results endpoint](/api/queries/wait-for-query-results) with these IDs to retrieve results.
+        timed_out:
+          type: boolean
+          description: Indicates that the request timed out. Will be `true` for 408 responses.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

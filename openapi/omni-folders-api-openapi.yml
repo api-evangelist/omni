@@ -1,0 +1,814 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Folders API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Folders
+  description: Create and organize content folders
+paths:
+  /v1/folders:
+    post:
+      tags:
+      - Folders
+      summary: Create folder
+      description: 'Create a new folder. Folders can be nested up to 7 levels.
+
+
+        Folder paths are automatically generated based on hierarchy. Child folder paths include the paths of their parents.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: createFolder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: Name of the folder.
+                parentFolderId:
+                  type: string
+                  format: uuid
+                  description: 'ID of the parent folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+
+
+                    Maximum nesting depth is 7 levels. A `400` error is returned when the limit is reached.
+
+                    '
+                scope:
+                  type: string
+                  enum:
+                  - organization
+                  - restricted
+                  default: organization
+                  description: 'Scope of the folder.
+
+
+                    - If no scope is provided and no parent folder exists, defaults to `organization`
+
+                    - If no scope is provided but a parent folder exists, inherits the parent folder''s scope
+
+                    - Child folder scope must match the parent folder''s scope
+
+                    '
+                userId:
+                  type: string
+                  format: uuid
+                  description: ID of the folder owner. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.
+      responses:
+        '201':
+          description: Folder created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier for the folder
+                  name:
+                    type: string
+                    description: Display name of the folder
+                  path:
+                    type: string
+                    description: Full path to the folder
+                  scope:
+                    type: string
+                    enum:
+                    - organization
+                    - restricted
+                    description: 'Visibility scope of the folder
+
+                      '
+                  ownerId:
+                    type: string
+                    description: ID of the user that owns the folder
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: Invalid JSON`
+
+            - `Bad Request: name: Required`
+
+            - `Bad Request: Maximum folder nesting depth reached`
+
+            - `Bad Request: Child folder scope must match parent folder scope`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages/causes:
+
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            - Operations targeting personal/restricted scope require the user''s **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.
+
+            '
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Parent folder with id <parentFolderId> does not exist`
+
+            - `User with id <userId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Folders
+      summary: List folders
+      description: "Retrieve a paginated list of folders within an organization. Supports filtering, sorting, and cursor-based pagination.\n\nThe folders endpoint behaves differently based on the type of API key used to authenticate the request:\n\n- **Organization-scoped API keys:** Full access to all folders. Can view any user's restricted folders with `ownerId`. Must provide `ownerId` for `scope=restricted`.\n- **Personal Access Tokens (PAT):** Permission-filtered access matching the UI.\n   - For `scope=organization` - Returns all organization-shared folders the user can access\n   - For `scope=restricted` - Returns only the user's own restricted folders. An `ownerId` is optional; if not provided, it will be auto-inferred and the API will return only the folders belonging to PAT owner.\n"
+      security:
+      - bearerAuth: []
+      operationId: listFolders
+      parameters:
+      - name: include
+        in: query
+        schema:
+          type: string
+        description: "Comma-separated list of additional fields to include:\n\n- `_count` - Include document and favorite counts\n- `labels` - Include folder labels\n- `onlySharedWithMe` - Returns only folders explicitly shared with the specified user via folder permissions. Excludes folders owned by the user. Cannot be combined with `ownerId` or `path`.\n\n   Additionally, depending on the type of API key being used:\n\n   - **Organization API keys** require the `userId` parameter\n   - **Personal Access Tokens** automatically infer the `userId` from the token\n"
+      - name: path
+        in: query
+        schema:
+          type: string
+        description: 'Filter folders by path. Wildcards are supported and must appear at the end of the path:
+
+
+          - `*` - Include direct children only (e.g., `blob-sales/*`)
+
+          - `**` - Include all descendants recursively (e.g., `blob-sales/**`)
+
+          '
+      - name: labels
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: Comma-separated list of labels to filter by.
+      - name: scope
+        in: query
+        schema:
+          type: string
+          enum:
+          - organization
+          - restricted
+          default: organization
+        description: 'Scope of folders to retrieve.
+
+
+          - When `include=onlySharedWithMe` is specified without a `scope` parameter, returns shared folders of all scopes with each folder''s actual scope preserved
+
+          - Otherwise, defaults to `organization`
+
+
+          When set to `restricted`, the `ownerId` parameter behavior depends on the API key type:
+
+
+          - **Organization-scoped API keys:** `ownerId` is required
+
+          - **Personal Access Tokens (PAT):** `ownerId` is optional and auto-inferred to the token owner
+
+          '
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          enum:
+          - favorites
+          - name
+          - path
+          default: name
+        description: 'Field to sort by:
+
+
+          - `favorites` - Sort by number of favorites
+
+          - `name` - Sort by folder name
+
+          - `path` - Sort by folder path
+
+          '
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort direction.
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Cursor for pagination positioning.
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          default: 20
+        description: Number of items per page.
+      - name: ownerId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'UUID of organization membership.
+
+
+          How the API behaves depends on the type of API key used to authenticate the request and the current `scope` value.
+
+
+          **Personal Access Tokens (PAT)**
+
+
+          | Scope | ownerId | Behavior |
+
+          |-------|---------|----------|
+
+          | `organization` | Not provided | All organization-shared folders user has permission to access |
+
+          | `organization` | own ID | Own organization folders only |
+
+          | `restricted` | Not provided | Infers owner''s ID, returns own restricted folders |
+
+          | `restricted` | Own ID | Own restricted folders |
+
+          | `restricted` | Other''s ID | 403 Forbidden |
+
+
+          **Organization API key**
+
+
+          | Scope | ownerId | Behavior |
+
+          |-------|---------|----------|
+
+          | `organization` | Not provided | All organization folders |
+
+          | `organization` | Any ID | That user''s organization folders |
+
+          | `restricted` | Not provided | 400 Bad Request (`ownerId` required) |
+
+          | `restricted` | Any ID | That user''s restricted folders |
+
+          '
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of a standard or embed user to filter results, returning only folders the specified user can view based on their permissions.
+
+
+          If `include=onlyFavorites` is specified:
+
+
+          - **And using an Organization API key**, this parameter is **required**
+
+          - **And using a Personal Access Token**, the `userId` will be automatically inferred from the token
+
+          '
+      responses:
+        '200':
+          description: Paginated folder list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    description: Array of folder objects matching the query.
+                    items:
+                      $ref: '#/components/schemas/Folder'
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+              example:
+                records:
+                - id: 21db26b3-466c-4791-90e7-b9ce9375426d
+                  name: Blob Sales
+                  path: /blob-sales
+                  scope: organization
+                  url: https://blobsrus.omni.co/f/blob-sales-reports
+                  owner:
+                    id: f4df8d6e-7f69-4d54-b23b-7abfe5c4da74
+                    name: Blob Ross
+                  labels:
+                  - important
+                  - archived
+                  _count:
+                    documents: 15
+                    favorites: 3
+                pageInfo:
+                  hasNextPage: true
+                  nextCursor: eyJpZCI6ImZvbGRlcjEyMyJ9
+                  pageSize: 20
+                  totalRecords: 45
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: pageSize: Page size must be at least 1`
+
+            - `Bad Request: ownerId: ownerId is required when scope is ''restricted''` (organization-scoped API keys only)
+
+            - `Bad Request: sortField: Invalid enum value. Expected ''name'' | ''path'', received ''<invalidField>''`
+
+            - `Bad Request: include: Invalid value. Expected: _count, labels, onlySharedWithMe, received ''<invalidValue>''`
+
+            - `Bad Request: Invalid path pattern. Only a single wildcard (*) is allowed at the end of the pattern`
+
+            - `Bad Request: onlySharedWithMe requires userId` - When using `include=onlySharedWithMe` with an Organization API key without providing a `userId` parameter
+
+            - `Bad Request: onlySharedWithMe cannot be combined with ownerId` - When using `include=onlySharedWithMe` with an `ownerId` parameter
+
+            - `Bad Request: onlySharedWithMe cannot be combined with path` - When using `include=onlySharedWithMe` with a `path` parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages/causes:
+
+
+            - Personal Access Tokens (PAT) cannot access other users'' restricted folders.
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            - Operations targeting personal/restricted scope require the user''s **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with path <path> does not exist`
+
+            - `User membership not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/folders/{folderId}:
+    patch:
+      tags:
+      - Folders
+      summary: Update folder
+      description: "<Note>\n  This endpoint requires [**Editor** permissions or higher](/share#content-access-permissions) on the folder being updated.\n</Note>\n\nUpdate a folder's name and/or path segment. Either or both fields can be updated in a single request.\n"
+      x-mint:
+        content: "Name-only updates will not trigger updates to descendant folders (subfolders).\n\nHowever, path updates will automatically update all descendent folder paths. Consider the following folder structure:\n\n```text title=\"Existing paths with /blob-shared\"\n.\n└── blob-shared\n    ├── sales      # full path: /blob-shared/sales\n    └── marketing  # full path: /blob-shared/marketing\n```\n\nIf the path for `blob-shared` is updated to `all-blobs`, the full paths for its descendent folders will be automatically updated:\n\n```text title=\"New paths with /all-blobs\"\n.\n└── all-blobs\n    ├── sales       # full path: /all-blobs/sales\n    └── marketing   # full path: /all-blobs/marketing\n```\n"
+      security:
+      - bearerAuth: []
+      operationId: updateFolder
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder to update. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The new display name for the folder. Leading and trailing whitespace is automatically trimmed.
+
+
+                    At least one of `name` or `path` must be provided.
+
+                    '
+                path:
+                  type: string
+                  description: 'The new URL path segment for the folder, which will automatically be converted to lowercase. When a folder''s path is updated, all descendant folder paths are automatically updated.
+
+
+                    To be valid, path segments:
+
+
+                    - Can contain only alphanumeric characters and dashes
+
+                    - Cannot use reserved names: `favorite`, `labels`, `move`, `share`, `transfer`. Folder names may include these words, but the name cannot be only this word. For example, `favorite` is invalid but `my-favorite` is not.
+
+
+                    At least one of `name` or `path` must be provided.
+
+                    '
+                resolvePathConflict:
+                  type: boolean
+                  default: false
+                  description: 'When `true`, automatically resolves path conflicts by appending a numeric suffix (e.g., `blob-sales-2`).
+
+
+                    When `false` (default), returns a `409 Conflict` error if the path already exists.
+
+                    '
+              example:
+                name: Blob Sales Reports
+                path: sales-reports
+                resolvePathConflict: 'true'
+      responses:
+        '200':
+          description: Folder updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier for the folder
+                  name:
+                    type: string
+                    description: Display name of the folder
+                  path:
+                    type: string
+                    description: Full path to the folder
+              examples:
+                success:
+                  summary: Successful update
+                  value:
+                    id: 3c90c3cc-0d44-4b50-8888-8dd25736052a
+                    name: Blob Sales Reports
+                    path: sales-reports
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `At least one of ''name'' or ''path'' must be provided`
+
+            - `Path cannot be one of the reserved names: favorite, labels, move, share, transfer`
+
+            - `Path must contain only alphanumeric characters and dashes`
+
+            - Invalid JSON or validation errors
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingFields:
+                  summary: No fields provided
+                  value:
+                    error: '400'
+                    message: At least one of 'name' or 'path' must be provided
+                reservedPath:
+                  summary: Reserved path name
+                  value:
+                    error: '400'
+                    message: 'Path cannot be one of the reserved names: favorite, labels, move, share, transfer'
+                invalidPathCharacters:
+                  summary: Invalid path characters
+                  value:
+                    error: '400'
+                    message: Path must contain only alphanumeric characters and dashes
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - Permission denied. Authenticating user must have **Edit** permissions on the folder.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with id <folderId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: 'Conflict
+
+
+            Returned when `resolvePathConflict=false` (default) and the requested path already exists in the parent folder.
+
+
+            Possible error messages:
+
+
+            - `A folder with path ''<path>'' already exists at this location`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                pathConflict:
+                  summary: Path already exists
+                  value:
+                    error: '409'
+                    message: A folder with path 'sales-reports' already exists at this location
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Folders
+      summary: Delete folder
+      description: 'Delete a folder. By default, only empty folders can be deleted. Use the `force` parameter to recursively delete folders containing documents and sub-folders.
+
+
+        When `force` is enabled:
+
+
+        - All documents are archived (soft-delete to trash) across the folder tree
+
+        - Subfolders are deleted recursively, starting with the most deeply-nested subfolder and walking up the folder tree
+
+        - Up to 100 items (documents and subfolders) can be deleted. If a folder contains more than 100 items, the item will return a `400`. No items will be deleted.
+
+        - All operations occur in a single transaction - partial failures roll back completely
+
+        - SSO embed users cannot force-delete entity folders
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: deleteFolder
+      parameters:
+      - name: folderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the folder to delete. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs.
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: When `true`, recursively archives documents (to trash) and deletes sub-folders. Limited to 100 total items.
+      responses:
+        '200':
+          description: Folder deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Folders with documents cannot be deleted` (when `force=false` and folder is not empty)
+
+            - `Only empty folders can be deleted` (when `force=false` and folder is not empty)
+
+            - `Folder contains too many items to force delete. Found <count> items (limit: 100)` (when `force=true` and folder tree exceeds 100 items)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - Permission denied (when user lacks delete permission)
+
+            - SSO embed users cannot force-delete entity folders (when SSO embed user attempts to force-delete entity folder)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Folder with id <folderId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Folder:
+      type: object
+      description: Represents a folder in Omni.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the folder.
+        name:
+          type: string
+          description: Display name of the folder.
+        path:
+          type: string
+          description: Full path to the folder.
+        scope:
+          type: string
+          enum:
+          - organization
+          - restricted
+          description: 'Visibility scope of the folder.
+
+
+            - `organization` - Organization-wide access
+
+            - `restricted` - Limited access
+
+            '
+        owner:
+          type: object
+          description: Information about the folder owner.
+          properties:
+            id:
+              type: string
+              description: ID of the folder owner.
+            name:
+              type: string
+              description: Display name of the owner.
+        labels:
+          type: array
+          items:
+            type: string
+          description: List of labels associated with the folder. Only included when requested via the `include` parameter.
+        _count:
+          type: object
+          description: Contains count information. Only included when requested via the `include` parameter.
+          properties:
+            documents:
+              type: integer
+              description: Number of documents contained in the folder.
+            favorites:
+              type: integer
+              description: Number of users who favorited this folder.
+        url:
+          type: string
+          format: uri
+          description: Direct link to the folder in the Omni UI.
+          example: https://blobsrus.omni.co/f/blob-sales-reports
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

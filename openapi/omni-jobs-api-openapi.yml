@@ -1,0 +1,172 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Jobs API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Jobs
+  description: Check status of asynchronous jobs
+paths:
+  /v1/jobs/{jobId}/status:
+    get:
+      tags:
+      - Jobs
+      summary: Get job status
+      description: "<Note>\n  Currently, this endpoint only supports schema refresh jobs. Job IDs from other job types will return an error.\n</Note>\n\nRetrieves the current status of an asynchronous job. The user authenticating the request must have **read** permissions on the connection.\n\nThis endpoint is used to check the status of jobs initiated by other API calls, such as schema refreshes. Poll this endpoint to determine when the job has completed.\n"
+      x-mint:
+        content: "The response will contain one of the following statuses:\n\n| Status      | Description             |\n|-------------|-------------------------|\n| `RUNNING`   | Job is currently executing |\n| `COMPLETED` | Job finished successfully |\n| `FAILED`    | Job failed              |\n\n<Tip>\n  We recommend the following when polling:\n\n  - Use a reasonable polling interval (2-5 seconds)\n  - Avoid polling more frequently than once per second\n</Tip>\n"
+      security:
+      - bearerAuth: []
+      operationId: getJobStatus
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)
+      responses:
+        '200':
+          description: Job status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_type:
+                    type: string
+                    description: The type of job
+                    example: refresh_schema
+                  job_id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier of the job
+                  status:
+                    type: string
+                    enum:
+                    - RUNNING
+                    - COMPLETED
+                    - FAILED
+                    description: Current status of the job
+              examples:
+                running:
+                  summary: Job running
+                  value:
+                    job_type: refresh_schema
+                    job_id: 4e6953a9-a71b-4c0b-8b63-a9ea308f6aaf
+                    status: RUNNING
+                completed:
+                  summary: Job completed
+                  value:
+                    job_type: refresh_schema
+                    job_id: 4e6953a9-a71b-4c0b-8b63-a9ea308f6aaf
+                    status: COMPLETED
+                failed:
+                  summary: Job failed
+                  value:
+                    job_type: refresh_schema
+                    job_id: 4e6953a9-a71b-4c0b-8b63-a9ea308f6aaf
+                    status: FAILED
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: jobId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Job type not supported for status checks`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

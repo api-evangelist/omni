@@ -1,0 +1,566 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Content validator API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Content validator
+  description: Validate content against models and perform find/replace operations
+paths:
+  /v1/models/{modelId}/content-validator:
+    get:
+      tags:
+      - Content validator
+      summary: Validate content
+      description: 'Validates all content against the model and returns documents with queries and any validation issues.
+
+
+        This endpoint scans all documents associated with the model and identifies any fields, views, or other model elements referenced in queries that are no longer valid.
+
+
+        You can optionally scope validation to only content that references a specific model element (view, field, or topic) using the `find` and `find_type` parameters. This is useful when you only need to validate content using a specific element, avoiding the overhead of validating all documents.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: validateContent
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the model to validate content against.
+      - name: branch_id
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the branch to validate against. If not provided, validates against the main model.
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'The user ID to act on behalf of. Only valid when using an organization API key.
+
+
+          User-scoped API keys cannot use this parameter and will receive a 403 error if provided.
+
+          '
+      - name: include_personal_folders
+        in: query
+        schema:
+          type: boolean
+        description: When enabled, include personal folders in the search.
+      - name: find
+        in: query
+        schema:
+          type: string
+        description: 'The name of the model element to find content references for. Must be used together with `find_type`.
+
+
+          For `FIELD` type, the value must be fully qualified with the view name (e.g., `orders.status`).
+
+          '
+      - name: find_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - VIEW
+          - FIELD
+          - TOPIC
+        description: 'The type of model element to search for. Must be used together with `find`.
+
+
+          When both parameters are provided, only content that references the specified element will be validated and included in the response.
+
+          '
+      responses:
+        '200':
+          description: Content validation results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  model_id:
+                    type: string
+                    format: uuid
+                    description: The ID of the model that was validated.
+                  branch:
+                    type: object
+                    nullable: true
+                    description: Branch information if a branch was specified, null otherwise.
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The branch ID.
+                      name:
+                        type: string
+                        description: The branch name.
+                  content:
+                    type: array
+                    description: List of documents with their validation results.
+                    items:
+                      type: object
+                      properties:
+                        document_id:
+                          type: string
+                          description: The document ID.
+                        identifier:
+                          type: string
+                          description: The document identifier (slug).
+                        name:
+                          type: string
+                          description: The document name.
+                        type:
+                          type: string
+                          description: The document type (e.g., "Published").
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: When the document was last updated.
+                        folder:
+                          type: object
+                          nullable: true
+                          description: Folder information if the document is in a folder.
+                          properties:
+                            name:
+                              type: string
+                              description: The folder name.
+                            path:
+                              type: string
+                              description: The full folder path.
+                        owner:
+                          type: object
+                          description: Information about the document owner.
+                          properties:
+                            email:
+                              type: string
+                              format: email
+                              description: The owner's email address.
+                            name:
+                              type: string
+                              description: The owner's display name.
+                        require_pull_request_to_publish:
+                          type: boolean
+                          description: Whether the document requires a pull request to publish changes.
+                        queries_and_issues:
+                          type: array
+                          description: List of queries and their validation issues.
+                          items:
+                            type: object
+                            properties:
+                              query_name:
+                                type: string
+                                description: The name of the query.
+                              query_presentation_id:
+                                type: string
+                                description: The query presentation ID.
+                              query_id_map_key:
+                                type: string
+                                description: The query ID map key.
+                              issues:
+                                type: array
+                                items:
+                                  type: string
+                                description: List of validation issue messages for this query.
+                        dashboard_filter_issues:
+                          type: array
+                          items:
+                            type: string
+                          description: List of validation issues for dashboard filters.
+              examples:
+                allContent:
+                  summary: Validate all content
+                  value:
+                    model_id: 550e8400-e29b-41d4-a716-446655440000
+                    branch: null
+                    content:
+                    - document_id: abc123
+                      identifier: dashboard-1
+                      name: Sales Dashboard
+                      type: Published
+                      updated_at: '2025-01-15T10:00:00Z'
+                      folder:
+                        name: Reports
+                        path: /Reports
+                      owner:
+                        email: user@example.com
+                        name: Jane Doe
+                      require_pull_request_to_publish: false
+                      queries_and_issues:
+                      - query_name: Total Revenue
+                        query_presentation_id: qp-123
+                        query_id_map_key: '1'
+                        issues:
+                        - Field 'orders.old_field' not found in model
+                      dashboard_filter_issues: []
+                filteredByField:
+                  summary: Validate content using a specific field
+                  description: When using find=orders.status&find_type=FIELD, only content that references the orders.status field is validated.
+                  value:
+                    model_id: 550e8400-e29b-41d4-a716-446655440000
+                    branch: null
+                    content:
+                    - document_id: def456
+                      identifier: order-analysis
+                      name: Order Analysis
+                      type: Published
+                      updated_at: '2025-01-15T11:30:00Z'
+                      folder:
+                        name: Analytics
+                        path: /Analytics
+                      owner:
+                        email: analyst@example.com
+                        name: John Smith
+                      require_pull_request_to_publish: false
+                      queries_and_issues:
+                      - query_name: Orders by Status
+                        query_presentation_id: qp-456
+                        query_id_map_key: '1'
+                        issues: []
+                      dashboard_filter_issues: []
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `modelId: Invalid UUID`
+
+            - `Both ''find'' and ''find_type'' parameters must be provided together`
+
+            - `When find_type is FIELD, the find parameter must be scoped by view name (e.g., view_name.field_name)`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: 'Bad Request: modelId: Invalid UUID'
+                status: 400
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User-scoped API keys cannot act on behalf of other users
+                status: 403
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Shared model with id <modelId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Shared model with id 550e8400-e29b-41d4-a716-446655440000 does not exist
+                status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Content validator
+      summary: Find and replace content
+      description: 'Performs find/replace operations on content using the specified model.
+
+
+        This endpoint allows you to replace views or fields across all documents associated with the model. This is useful when renaming model elements and need to update all references.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: findReplaceContent
+      parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the model to perform find/replace against.
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'The user ID to act on behalf of. Only valid when using an organization API key.
+
+
+          User-scoped API keys cannot use this parameter and will receive a 403 error if provided.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - find
+              - replacement
+              - find_or_replace_type
+              properties:
+                find:
+                  type: string
+                  description: 'The value to find. Used with `find_or_replace_type` to scope the search:
+
+
+                    - `VIEW` - The name of the view to find
+
+                    - `FIELD` - The fully qualified name of the field to find, specified as `view_name.field_name`
+
+                    - `TOPIC` - The name of the topic to find
+
+                    '
+                replacement:
+                  type: string
+                  description: 'The replacement value.
+
+
+                    - `VIEW` - The name of the replacement view
+
+                    - `FIELD` - The fully qualified name of the replacement field, specified as `view_name.field_name`
+
+                    - `TOPIC` - The name of the replacement topic
+
+                    '
+                find_or_replace_type:
+                  type: string
+                  enum:
+                  - VIEW
+                  - FIELD
+                  - TOPIC
+                  description: 'The type of find/replace operation.
+
+
+                    - `VIEW` - Replace view references
+
+                    - `FIELD` - Replace field references. `find` and `replacement` values must be the fully qualified name of the field, e.g. `view_name.field_name`.
+
+                    - `TOPIC` - Replace topic references
+
+                    '
+                branch_id:
+                  type: string
+                  format: uuid
+                  description: The branch ID to perform the operation on. If not provided, operates on the main model.
+                include_personal_folders:
+                  type: boolean
+                  description: When enabled, include personal folders.
+                only_in_workbook_id:
+                  type: string
+                  format: uuid
+                  description: 'When provided, scopes the find/replace action to the specified workbook.
+
+
+                    Must be the workbook model''s internal **UUID** — visible in the model IDE URL as `/model/{uuid}`. This is **not** the same as the document''s URL identifier (slug) that appears in the dashboard or workbook URL (for example, `/dashboards/abc123`). **Passing a document identifier / slug will silently return 0 replacements instead of raising an error.**
+
+                    '
+                  example: 550e8400-e29b-41d4-a716-446655440000
+            examples:
+              replaceView:
+                summary: Replace a view
+                value:
+                  find: old_view
+                  replacement: new_view
+                  find_or_replace_type: VIEW
+              replaceField:
+                summary: Replace a field
+                value:
+                  find: orders.old_field
+                  replacement: orders.new_field
+                  find_or_replace_type: FIELD
+              replaceViewInBranch:
+                summary: Replace a view in a branch
+                value:
+                  find: old_view
+                  replacement: new_view
+                  find_or_replace_type: VIEW
+                  branch_id: 550e8400-e29b-41d4-a716-446655440001
+      responses:
+        '200':
+          description: Find/replace operation completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  replaced_queries_count:
+                    type: integer
+                    description: The number of queries that had replacements made.
+                  replaced_documents_count:
+                    type: integer
+                    description: The number of documents that had replacements made.
+                  replaced_workbook_models_count:
+                    type: integer
+                    description: The number of workbook models that had replacements made.
+                  replaced_dashboard_filters_count:
+                    type: integer
+                    description: The number of dashboard filters that had replacements made.
+                  skipped_pr_required_count:
+                    type: integer
+                    description: The number of documents skipped because they require a pull request to publish.
+              example:
+                replaced_queries_count: 15
+                replaced_documents_count: 5
+                replaced_workbook_models_count: 3
+                replaced_dashboard_filters_count: 2
+                skipped_pr_required_count: 0
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `modelId: Invalid UUID`
+
+            - `Find field must be scoped by view name.`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidModelId:
+                  summary: Invalid model ID
+                  value:
+                    detail: 'Bad Request: modelId: Invalid UUID'
+                    status: 400
+                fieldNotScoped:
+                  summary: Field not scoped by view name
+                  value:
+                    detail: Find field must be scoped by view name.
+                    status: 400
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User-scoped API keys cannot act on behalf of other users
+                status: 403
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Shared model with id <modelId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Shared model with id 550e8400-e29b-41d4-a716-446655440000 does not exist
+                status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

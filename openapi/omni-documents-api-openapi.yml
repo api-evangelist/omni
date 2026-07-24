@@ -1,0 +1,2444 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Documents API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Documents
+  description: Create, retrieve, and manage documents
+paths:
+  /v1/documents:
+    post:
+      tags:
+      - Documents
+      summary: Create document
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nCreate a new document\n"
+      security:
+      - bearerAuth: []
+      operationId: createDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - modelId
+              - name
+              properties:
+                modelId:
+                  type: string
+                  format: uuid
+                  description: The ID of the model to build the document on
+                name:
+                  type: string
+                  description: The name of the document
+                description:
+                  type: string
+                  minLength: 1
+                  maxLength: 1024
+                  description: Description of the document
+                identifier:
+                  type: string
+                  description: 'Custom identifier for the document. If not provided, an identifier will be auto-generated.
+
+
+                    The identifier is used in the document''s URL and must be unique across all documents in your organization.
+
+
+                    **Format requirements:**
+
+
+                    - Must match the pattern: lowercase letters, numbers, hyphens, and underscores only
+
+                    - Cannot start or end with a hyphen or underscore
+
+
+                    **Note:** Once created, the identifier can be changed using the [Update document endpoint](/api/documents/update-document).
+
+                    '
+                  example: sales-dashboard-2026
+                queryPresentations:
+                  type: array
+                  description: An array of query presentation objects, each representing a query in the document's workbook
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: The name of the query
+                      description:
+                        type: string
+                        description: A description of the query
+                      query:
+                        type: object
+                        description: The query definition object
+                      visConfig:
+                        type: object
+                        description: Visualization configuration for the query
+            examples:
+              basicDocument:
+                summary: Create document with auto-generated identifier
+                value:
+                  modelId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  name: Sales Dashboard
+                  description: Q1 2026 sales performance metrics
+              customIdentifier:
+                summary: Create document with custom identifier
+                value:
+                  modelId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  name: Sales Dashboard
+                  identifier: sales-dashboard-2026
+                  description: Q1 2026 sales performance metrics
+      responses:
+        '200':
+          description: Document created successfully
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dashboard:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The dashboard ID
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the dashboard was created
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the dashboard was last updated
+                      metadata:
+                        type: object
+                        description: Dashboard metadata including layouts and tile settings
+                        properties:
+                          layouts:
+                            type: object
+                            description: Layout configurations for different screen sizes
+                          textTiles:
+                            type: array
+                            items:
+                              type: object
+                          hiddenTiles:
+                            type: array
+                            items:
+                              type: string
+                          tileSettings:
+                            type: object
+                          tileFilterMap:
+                            type: object
+                          tileControlMap:
+                            type: object
+                      metadataVersion:
+                        type: integer
+                        description: Version of the metadata schema
+                      refreshInterval:
+                        type: integer
+                        description: Auto-refresh interval in seconds
+                      facetFilters:
+                        type: boolean
+                        description: Whether facet filters are enabled
+                      organizationId:
+                        type: string
+                        format: uuid
+                        description: The organization ID
+                      workbookId:
+                        type: string
+                        format: uuid
+                        description: The associated workbook ID
+                      creatorId:
+                        type: string
+                        format: uuid
+                        description: The ID of the user who created the dashboard
+                      updaterId:
+                        type: string
+                        format: uuid
+                        description: The ID of the user who last updated the dashboard
+                      queryPresentationCollectionId:
+                        type: string
+                        format: uuid
+                        description: The query presentation collection ID
+                      dashboardId:
+                        type: string
+                        format: uuid
+                        description: The dashboard ID (same as id)
+                  workbook:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The workbook ID
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the workbook was created
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the workbook was last updated
+                      deletedAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the workbook was deleted, if applicable
+                      publishedAt:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the workbook was published
+                      isDraft:
+                        type: boolean
+                        description: Whether the workbook is a draft
+                      identifier:
+                        type: string
+                        description: The unique identifier for the document
+                      name:
+                        type: string
+                        description: The name of the document
+                      lastItemIndex:
+                        type: integer
+                        description: Index of the last item in the workbook
+                      ephemeral:
+                        type: string
+                        description: Ephemeral state identifier
+                      organizationRole:
+                        type: string
+                        description: Organization-level role for the document
+                      organizationAccessBoost:
+                        type: boolean
+                      publicRole:
+                        type: string
+                      publicAccessBoost:
+                        type: boolean
+                      canAnalyze:
+                        type: boolean
+                        description: Whether users can analyze data in the document
+                      canDownload:
+                        type: boolean
+                        description: Whether users can download data from the document
+                      canDrill:
+                        type: boolean
+                        description: Whether users can drill into data in the document
+                      canSchedule:
+                        type: boolean
+                        description: Whether users can create schedules in the document
+                      canUpload:
+                        type: boolean
+                        description: Whether users can upload data in the document's workbook
+                      canViewWorkbook:
+                        type: boolean
+                        description: Whether users can view the workbook in the document
+                      canUseTimezoneOverride:
+                        type: boolean
+                        description: Whether users can use the [timezone picker](/visualize-present/dashboards/timezone-override) to change the query timezone for this document
+                      organizationId:
+                        type: string
+                        format: uuid
+                        description: The organization ID
+                      ownerId:
+                        type: string
+                        format: uuid
+                        description: The ID of the document owner
+                      updaterId:
+                        type: string
+                        format: uuid
+                        description: The ID of the user who last updated the document
+                      folderId:
+                        type: string
+                        format: uuid
+                        description: The folder ID, if the document is in a folder
+                      originDocumentId:
+                        type: string
+                        format: uuid
+                        description: The origin document ID, if duplicated
+                      documentId:
+                        type: string
+                        format: uuid
+                        description: The document ID
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `modelId: Required`
+
+            - `name: Required`
+
+            - Identifier format is invalid (must be lowercase letters, numbers, hyphens, and underscores; cannot start/end with hyphen or underscore)
+
+            - Identifier is already in use by another document
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Documents
+      summary: List documents
+      description: List documents with pagination and filtering
+      security:
+      - bearerAuth: []
+      operationId: listDocuments
+      parameters:
+      - name: include
+        in: query
+        schema:
+          type: string
+        description: "Comma-separated list of additional fields to include in the response:\n- `_count` - Adds favorite and view count metrics\n- `labels` - Includes associated document labels\n- `includeDeleted` - Include deleted documents\n- `onlyFavorites` - **Must be used with `userId`.** Include only documents that the specified user has favorited.\n- `onlySharedWithMe` - Returns only documents explicitly shared with the specified user via documents permissions. Excludes documents owned by the user. Cannot be combined with `ownerId` or `path`.\n\n   Additionally, depending on the type of API key being used:\n\n   - **Organization API keys** require the `userId` parameter\n   - **Personal Access Tokens** automatically infer the `userId` from the token\n"
+      - name: labels
+        in: query
+        schema:
+          type: string
+        description: 'Comma-separated list of labels to filter results. For example: `finance,marketing`
+
+          '
+      - name: folderId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: ID of the folder to filter results. Returns only documents within the specified folder.
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of records per page
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          enum:
+          - favorites
+          - name
+          - updatedAt
+          - visits
+          default: name
+        description: 'Field to sort by:
+
+          - `favorites` - Sort by the number of favorites
+
+          - `name` - Sort by document name
+
+          - `updatedAt` - Sort by last update time
+
+          - `visits` - Sort by view count
+
+          '
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort direction (`asc` for ascending, `desc` for descending)
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Cursor for pagination. Used with `sortField`/`sortDirection` for relative positioning.
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of a standard or embed user to filter results, returning only documents the specified user can view based on their permissions.
+
+
+          If `include=onlyFavorites` is specified:
+
+
+          - **And using an Organization API key**, this parameter is **required**
+
+          - **And using a Personal Access Token**, the `userId` will be automatically inferred from the token
+
+          '
+      - name: creatorId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: ID of the user who created the document(s), returning only documents that the specified user created.
+      responses:
+        '200':
+          description: Paginated document list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsListResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `pageSize: Page size must be at least 1`
+
+            - `pageSize: Page size cannot exceed 100`
+
+            - `sortField: Invalid enum value. Expected ''favorites'' | ''name'' | ''updatedAt'' | ''visits'', received ''<invalidField>''`
+
+            - `creatorId: Invalid uuid`
+
+            - `userId: Invalid uuid`
+
+            - `formErrors: Unrecognized key(s) in object: ''<unknownParameter>''`
+
+            - `onlySharedWithMe requires userId` - When using `include=onlySharedWithMe` without providing a `userId` parameter
+
+            - `onlySharedWithMe cannot be combined with onlyFavorites` - When using both `include=onlySharedWithMe` and `include=onlyFavorites` together
+
+            - `onlySharedWithMe cannot be combined with folderId` - When using `include=onlySharedWithMe` with a `folderId` parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `User with id <uuid> does not exist`
+
+
+            **Note**: An invalid UUID format will result in a 400 error. This 404 error occurs when the provided ID is a valid UUID format but the user cannot be found.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/move:
+    put:
+      tags:
+      - Documents
+      summary: Move document
+      description: 'Move document to new folder or change scope.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: moveDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The ID of the document to move. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - folderPath
+              properties:
+                folderPath:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                  description: The path of the destination folder. Use `null` to move the document to the root level (no folder).
+                scope:
+                  type: string
+                  enum:
+                  - organization
+                  - restricted
+                  description: 'Optional sharing scope for the document:
+
+                    - `organization` - Organization-wide access
+
+                    - `restricted` - Limited access
+
+
+                    If not provided, the scope will be computed based on the document or the destination folder.
+
+
+                    **Note**: When providing a scope, it must match the destination folder''s scope.
+
+                    '
+      responses:
+        '200':
+          description: Document moved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Scope "<scope>" and folder scope "<folderScope>" do not match`
+
+            - `Invalid method`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages/causes:
+
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            - Operations targeting personal/restricted scope require the user''s **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.
+
+            '
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier "<documentId>" not found`
+
+            - `Folder with path <path> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/duplicate:
+    post:
+      tags:
+      - Documents
+      summary: Duplicate published document
+      x-mint:
+        content: "<Warning>\n  Only published documents can be duplicated. Attempting to duplicate a draft document will return a 404 error.\n</Warning>\n\nDuplicate a published document.\n"
+      security:
+      - bearerAuth: []
+      operationId: duplicateDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Document identifier
+      - name: userId
+        in: query
+        schema:
+          type: string
+        description: '**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: The name for the duplicated document
+                folderPath:
+                  oneOf:
+                  - type: string
+                  - type: 'null'
+                  description: Path to the destination folder. If not provided, the document will be duplicated to the root.
+                scope:
+                  type: string
+                  enum:
+                  - organization
+                  - restricted
+                  description: 'The visibility scope for the duplicated document.
+
+
+                    If not provided, inherits from the destination folder or defaults to `restricted`.
+
+                    '
+            example:
+              name: My Dashboard Copy
+              folderPath: /reports/2024/q4
+              scope: organization
+      responses:
+        '201':
+          description: Document duplicated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dashboardId:
+                    type: string
+                    description: The dashboard ID, if the duplicated document has a dashboard
+                  identifier:
+                    type: string
+                    description: Unique identifier for the newly created document
+                  name:
+                    type: string
+                    description: The name of the duplicated document
+                  workbookId:
+                    type: string
+                    description: The workbook ID of the duplicated document
+              example:
+                dashboardId: abc123-dash-id
+                identifier: xyz789-new-identifier
+                name: My Dashboard Copy
+                workbookId: def456-workbook-id
+        '400':
+          description: 'Bad Request. Possible error messages:
+
+
+            - `name: Name cannot be empty`
+
+            - `name: Name must be 255 characters or less`
+
+            - `Scope "organization" and folder scope "restricted" do not match`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. Possible error messages/causes:
+
+
+            - `User does not have access to create content on the specified connection`
+
+            - `User-scoped API keys can only be used to act on behalf of the authenticated user.`
+
+            - `Document duplication is disabled`. The document''s duplication permission is disabled.
+
+            - Operations targeting personal/restricted scope require the user''s **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible error messages:
+
+
+            - `Document with identifier "<documentId>" not found`
+
+            - `Published document with id "<documentId>" does not exist`. This will surface when attempting to duplicate a draft.
+
+            - `Folder with path "<folderPath>" does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{identifier}/upgrade:
+    post:
+      tags:
+      - Documents
+      summary: Upgrade dashboard layout
+      description: "Upgrade a document to the advanced dashboard layout — the same action available in the UI under **File > Upgrade layout**.\n\n<Note>\n  This operation is idempotent. If the document already uses the advanced layout, the request is a no-op and returns `upgraded: false`.\n</Note>\n\nFor published documents the upgrade runs through a draft-and-publish workflow automatically. If a draft already exists, the request returns `409` unless `clearExistingDraft` is set to `true`, which discards the existing draft before upgrading.\n"
+      operationId: documentsUpgradeLayout
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Document identifier (either document ID or identifier slug)
+        example: abc123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentsUpgradeLayoutBody'
+            example:
+              clearExistingDraft: true
+      responses:
+        '200':
+          description: Layout upgraded, or no-op if the document already had advanced layout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsUpgradeLayoutResponse'
+              example:
+                identifier: abc123
+                upgraded: true
+        '400':
+          description: 'Bad Request
+
+
+            - The document does not have a dashboard to upgrade.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '409':
+          description: A draft already exists for the published document; set `clearExistingDraft` to `true` to override.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError409'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/transfer-ownership:
+    put:
+      tags:
+      - Documents
+      summary: Transfer document ownership
+      description: "Transfer ownership of a document to another user in the organization.\n\nTo successfully transfer a document: \n\n- The user performing the transfer must have `MANAGER` permissions or higher on the document\n- The new owner must be a member of the organization AND have explicit access to the document\n\nUpon success, the following occurs: \n\n- Ownership of the document is updated to the new owner\n- The previous owner is granted `MANAGER` permissions on the document\n- Explicit permits for the new owner are revoked, as they now have owner access\n- Content search index is updated\n\n**Note:** Transferring to the current owner is a no-op and returns success.\n"
+      security:
+      - bearerAuth: []
+      operationId: transferDocumentOwnership
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The ID of the document to transfer. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - userId
+              properties:
+                userId:
+                  type: string
+                  description: The membership ID of the user to transfer ownership to. This must be a valid organization member who has explicit permission on the document.
+            example:
+              userId: 9e8719d9-276a-4964-9395-a493189a247c
+      responses:
+        '200':
+          description: 'Document ownership transferred successfully.
+
+
+            **Note:** This response is also returned when transferring to the current owner.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid JSON`
+
+            - `userId is required`
+
+            - `New owner must have explicit document permission`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidJson:
+                  summary: Invalid JSON body
+                  value:
+                    error: Invalid JSON
+                missingUserId:
+                  summary: Missing userId field
+                  value:
+                    error: userId is required
+                noPermission:
+                  summary: New owner lacks document permission
+                  value:
+                    error: New owner must have explicit document permission
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Insufficient permissions` - Acting user does not have `MANAGER` or higher permissions on the document
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Insufficient permissions
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Document with identifier "<documentId>" not found`
+
+            - `User not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                documentNotFound:
+                  summary: Document not found
+                  value:
+                    error: Document with identifier "doc-123" not found
+                userNotFound:
+                  summary: User not found
+                  value:
+                    error: User not found
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/draft:
+    post:
+      tags:
+      - Documents
+      summary: Create draft
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Note>\n  This endpoint requires **Editor** permissions or higher on the specified document.\n</Note>\n\nCreates a [draft](/content/develop/drafts) of the specified document. Drafts are isolated copies of a document - including its workbook and dashboard - that can be modified without impacting the published version.\n\nTo create a draft on a [branch](/content/develop/branch-mode), include a `branchId` in the request body. Each branch can have one draft per document.\n\nIf a draft already exists for the document (or branch, if specified), the existing draft is returned instead of creating a new one.\n"
+      security:
+      - bearerAuth: []
+      operationId: createDraft
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The ID of the document to create a draft for. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branchId:
+                  type: string
+                  format: uuid
+                  description: The UUID of the branch to create the draft on. Required when creating a draft on a branch. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`.
+      responses:
+        '200':
+          description: Draft created successfully (or existing draft returned)
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: Identifier of the new draft. If a draft already exists for the document or branch specified, this will be the identifier of the existing draft.
+                    example: 93874a87
+        '400':
+          description: 'Bad request
+
+
+            Possible error messages:
+
+            - Document is not eligible for publishing workflow
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - Permission denied - EDITOR role required
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier <documentId> not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Documents
+      summary: Archive draft
+      description: 'Archives the current draft of the specified document. Archived drafts will be placed in the in the [**Archived** section of the **Drafts** drawer](/content/develop/drafts#archiving-drafts) in the document''s workbook and retained for 30 days.
+
+
+        If a branch is specified, the current draft on the branch is archived.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: archiveDraft
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The ID of the document to archive the draft from. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branchId:
+                  type: string
+                  format: uuid
+                  description: The UUID of the branch the draft is attached to. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`.
+      responses:
+        '200':
+          description: Draft archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Draft deleted successfully
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier <documentId> not found`
+
+            - `Draft with id <documentId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{identifier}/drafts:
+    get:
+      tags:
+      - Documents
+      summary: List document drafts
+      description: "<Note>\n  This endpoint requires **Viewer** permissions or higher on the specified document.\n</Note>\n\nList all drafts attached to a published document. A document in Omni can have up to one draft per branch plus one draft not attached to a branch.\n\nBy default, returns active drafts only. Pass `?include=archived` to include soft-deleted drafts retained for approximately 7 days.\n"
+      security:
+      - bearerAuth: []
+      operationId: listDocumentDrafts
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The identifier of the published document. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - archived
+        description: 'Pass `archived` to include soft-deleted drafts in the response. By default, only active drafts are returned.
+
+          '
+        example: archived
+      responses:
+        '200':
+          description: 'List of drafts retrieved successfully. Results are sorted in descending order using the draft''s `updatedAt`.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    identifier:
+                      type: string
+                      description: The identifier of the draft.
+                      example: d56b7f56
+                    publishedIdentifier:
+                      type: string
+                      description: The identifier of the published document this draft is attached to.
+                      example: ecd01fe5
+                    workbookModelId:
+                      type: string
+                      format: uuid
+                      description: The UUID of the workbook model.
+                      example: d61034e2-05fe-4268-a3a7-d4cdb8d650e9
+                    branch:
+                      type: object
+                      nullable: true
+                      description: The branch this draft is attached to, or `null` for draft not attached to a branch. A document can only have one draft not attached to a branch.
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The UUID of the branch.
+                        name:
+                          type: string
+                          nullable: true
+                          description: The name of the branch. Can be `null` if the branch is unnamed.
+                      example:
+                        id: a9bc51d2-1234-5678-9abc-def012345678
+                        name: governance/relabel-age-average
+                    status:
+                      type: string
+                      enum:
+                      - active
+                      - archived
+                      description: The status of the draft.
+                      example: active
+                    draftOutOfDate:
+                      type: boolean
+                      description: Indicates whether the draft is [out of date](/content/develop/branch-mode#working-with-out-of-date-drafts) compared to the published document.
+                      example: false
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the draft was created.
+                      example: '2026-05-06T13:44:00.000Z'
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: Timestamp when the draft was last updated.
+                      example: '2026-05-06T13:44:26.000Z'
+                    createdBy:
+                      type: object
+                      description: User who created the draft.
+                      properties:
+                        name:
+                          type: string
+                          description: Display name of the user who created the draft.
+                      example:
+                        name: Blob Ross
+                    lastEditedBy:
+                      type: object
+                      description: User who last edited the draft.
+                      properties:
+                        name:
+                          type: string
+                          description: Display name of the user who last edited the draft.
+                      example:
+                        name: Blob Ross
+              example:
+              - identifier: d56b7f56
+                publishedIdentifier: ecd01fe5
+                workbookModelId: d61034e2-05fe-4268-a3a7-d4cdb8d650e9
+                branch:
+                  id: a9bc51d2-1234-5678-9abc-def012345678
+                  name: governance/relabel-age-average
+                status: active
+                draftOutOfDate: false
+                createdAt: '2026-05-06T13:44:00.000Z'
+                updatedAt: '2026-05-06T13:44:26.000Z'
+                createdBy:
+                  name: Blob Ross
+                lastEditedBy:
+                  name: Blob Ross
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid include parameter value`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `You do not have permission to view this document.` - Authenticating user must have **Viewer** permissions or higher on the document
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier <identifier> not found`
+
+            - `Published document with id <identifier> does not exist` - Document exists but has not been published
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}/queries:
+    get:
+      tags:
+      - Documents
+      summary: Get document queries
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves queries associated with a document by its identifier.\n"
+      x-mint:
+        content: "<Tip>\n  Check out the [Running document queries with APIs guide](/guides/api/run-document-queries) to learn how to programmatically run the queries you retrieve with this API.\n</Tip>\n"
+      security:
+      - bearerAuth: []
+      operationId: getDocumentQueries
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The unique identifier of the document. This can be retrieved by:
+
+          - **Opening the document settings**: Navigate to **File > Document settings** and click **Settings**. The **Identifier** field contains the document ID.
+
+          - **Using the dashboard''s URL**: The string after `/dashboards/` is the identifier (e.g., `https://myorg.omniapp.co/dashboards/12db1a0a`)
+
+          '
+      responses:
+        '200':
+          description: Queries retrieved successfully
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queries:
+                    type: array
+                    description: An array of queries used in the document
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The UUID of the query
+                        name:
+                          type: string
+                          description: The name of the query
+                        url:
+                          type: string
+                          description: URL to view this specific query/sheet in the workbook
+                          example: https://org.omni.co/w/abc123?key=1
+                        query:
+                          type: object
+                          description: The query JSON structure that can be used with the Query API
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `User cannot view document`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with id <identifier> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/documents/{documentId}:
+    get:
+      tags:
+      - Documents
+      summary: Get dashboard document
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves dashboard document configuration in a format compatible with PUT for round-trip editing. This endpoint returns all fields needed to modify and update a dashboard document.\n\n**Note:** This endpoint only supports dashboard documents. Workbook-only documents are not supported and will return a `400 Bad Request` error.\n"
+      security:
+      - bearerAuth: []
+      operationId: getDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      responses:
+        '200':
+          description: Document retrieved successfully
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the document
+                  modelId:
+                    type: string
+                    format: uuid
+                    description: The ID of the model the document is built on
+                  facetFilters:
+                    type: boolean
+                    description: Whether facet filters are enabled for the document
+                  description:
+                    type: string
+                    description: The description of the document
+                  refreshInterval:
+                    type: integer
+                    description: Auto-refresh interval in seconds
+                  filterConfig:
+                    type: object
+                    description: Filter configuration for the document
+                  filterOrder:
+                    type: array
+                    items:
+                      type: string
+                    description: Array of filter field names defining the order of filters
+                  queryPresentations:
+                    type: array
+                    description: Array of query presentation objects representing tabs in the document's workbook
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the query tab
+                        query:
+                          type: object
+                          description: Full OmniQuery object with all query fields
+                          properties:
+                            fields:
+                              type: array
+                              items:
+                                type: string
+                              description: Array of field names to include in the query
+                            table:
+                              type: string
+                              description: The table to query from
+                            limit:
+                              type: integer
+                              description: Maximum number of rows to return
+                            filters:
+                              type: object
+                              description: Filter conditions for the query
+                            sorts:
+                              type: array
+                              items:
+                                type: object
+                              description: Sort order for the query results
+                            modelId:
+                              type: string
+                              format: uuid
+                              description: The model ID for the query
+                        chartType:
+                          type: string
+                          description: Chart type (e.g., "bar", "line", "area", "table")
+                        visualization:
+                          type: object
+                          description: Visualization configuration
+                          properties:
+                            visType:
+                              type: string
+                              description: The visualization type (e.g., "basic")
+                            config:
+                              type: object
+                              description: Visualization-specific configuration
+                            fields:
+                              type: array
+                              items:
+                                type: string
+                              description: Fields used in the visualization
+                        prefersChart:
+                          type: boolean
+                          description: Whether the query prefers chart view over table view
+                        id:
+                          type: string
+                          format: uuid
+                          description: Query presentation ID
+                        queryIdentifierMapKey:
+                          type: string
+                          description: Query identifier map key
+                        description:
+                          type: string
+                          description: Description of the query (if set)
+                        subTitle:
+                          type: string
+                          description: Subtitle for the query (if set)
+                        topicName:
+                          type: string
+                          description: Topic name associated with the query (if set)
+                        aiConfig:
+                          type: object
+                          description: AI configuration for the query
+                        resultConfig:
+                          type: object
+                          description: Result table configuration
+              example:
+                name: Sales Dashboard
+                modelId: abc123de-f456-7890-abcd-ef1234567890
+                facetFilters: true
+                refreshInterval: 300
+                filterConfig:
+                  date_range:
+                    type: date
+                    defaultValue: last_7_days
+                filterOrder:
+                - date_range
+                - region
+                queryPresentations:
+                - name: Revenue by Region
+                  query:
+                    fields:
+                    - order_items.total_revenue
+                    - orders.region
+                    table: order_items
+                    limit: 1000
+                    filters: {}
+                    sorts: []
+                    modelId: abc123de-f456-7890-abcd-ef1234567890
+                  chartType: bar
+                  prefersChart: true
+                  visualization:
+                    visType: basic
+                    config:
+                      xAxis: orders.region
+                      yAxis: order_items.total_revenue
+                    fields:
+                    - order_items.total_revenue
+                    - orders.region
+                  id: cd54494d-318f-4105-af1c-10af59e62b2e
+                  queryIdentifierMapKey: '1'
+                  aiConfig: {}
+                  resultConfig: {}
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Analysis documents are not supported`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Analysis documents are not supported
+                status: 400
+        '403':
+          description: 'Forbidden. User does not have permission to view the document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User does not have permission to view this document
+                status: 403
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier "<documentId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document with identifier "054518c8" not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Documents
+      summary: Delete document
+      description: Delete document (moves to Trash)
+      security:
+      - bearerAuth: []
+      operationId: deleteDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'The ID of the document to delete. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.
+
+          '
+      responses:
+        '200':
+          description: Document deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Document with identifier "<documentId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Documents
+      summary: Update document
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nUpdates the name, description, and/or identifier of a document. **Note**: At least one of `name`, `description`, or `identifier` must be provided or the API will return a `Bad Request` error.\n\nRenaming a document follows the app's draft/publish workflow:\n\n| Document Type | Behavior |\n|---------------|----------|\n| **Draft** | Renamed directly |\n| **Published (no existing draft)** | Creates draft > Renames draft > Publishes draft |\n| **Published (existing draft, `clearExistingDraft: true`)** | Discards existing draft > Creates new draft > Renames > Publishes |\n| **Published (existing draft, `clearExistingDraft` not set)** | Returns `409 Conflict` |\n"
+      security:
+      - bearerAuth: []
+      operationId: renameDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Document identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: New name for the document.
+                description:
+                  type: string
+                  maxLength: 1024
+                  description: Updated description of the document. Set as `null` to clear the description.
+                clearExistingDraft:
+                  type: boolean
+                  description: 'If `true`, discards any existing draft before renaming.
+
+
+                    **Note**: This parameter is required when a draft exists for the document.
+
+                    '
+                identifier:
+                  type: string
+                  description: 'New identifier for the document. Renaming the identifier works with published documents and maintains old URLs via automatic redirects.
+
+
+                    When you change a document''s identifier:
+
+                    - Both the workbook and document identifiers are updated in one transaction
+
+                    - A `DocumentIdentifierHistory` entry is created so requests to the old identifier automatically redirect to the new one
+
+                    - Dashboard and document history entries are updated
+
+
+                    **Format requirements:**
+
+                    - Must match the pattern: lowercase letters, numbers, hyphens, and underscores only
+
+                    - Cannot start or end with a hyphen or underscore
+
+                    - Must be unique across all documents in your organization
+
+
+                    **Common use case:** Migrating content between environments (e.g., staging → production) while maintaining specific identifiers.
+
+                    '
+                  example: sales-dashboard-archived
+            examples:
+              renameIdentifier:
+                summary: Rename document identifier only
+                value:
+                  identifier: sales-dashboard-archived
+              updateNameAndIdentifier:
+                summary: Update both name and identifier
+                value:
+                  name: Q2 2026 Sales Report
+                  identifier: q2-sales-report
+              renameName:
+                summary: Rename document name only
+                value:
+                  name: Updated Dashboard Name
+      responses:
+        '200':
+          description: Document renamed successfully
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-draft-and-patch-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: The document identifier
+                  name:
+                    type: string
+                    description: The new document name
+              examples:
+                renameIdentifier:
+                  summary: Rename document identifier
+                  value:
+                    identifier: sales-dashboard-archived
+                    name: Sales Dashboard
+                updateNameAndIdentifier:
+                  summary: Update both name and identifier
+                  value:
+                    identifier: q2-sales-report
+                    name: Q2 2026 Sales Report
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Request body must have `name`, `description`, or `identifier`
+
+            - Name exceeds 255 characters
+
+            - Description exceeds 1024 characters
+
+            - Identifier format is invalid (must be lowercase letters, numbers, hyphens, and underscores; cannot start/end with hyphen or underscore)
+
+            - Identifier is already in use by another document
+
+            - Draft already exists - set clearExistingDraft to true to discard it and proceed
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User has insufficient permissions to update document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: 'Conflict. Published document has an existing draft and `clearExistingDraft` is not set to `true`.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - Documents
+      summary: Update dashboard document
+      deprecated: true
+      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Warning>\n  This endpoint only works with dashboard documents. Workbook-only documents are not supported.\n</Warning>\n\nUpdates a document with the specified identifier. This endpoint performs a full resource replacement — all required fields must be provided and existing query presentations are replaced entirely.\n"
+      x-mint:
+        content: 'The update operation follows the Omni''s [draft/publish workflow](/content/develop):
+
+
+          | Document Type | Behavior |
+
+          |---------------|----------|
+
+          | **Draft** | Updated directly |
+
+          | **Published (no existing draft)** | Creates draft > Updates draft > Publishes draft |
+
+          | **Published (existing draft, `clearExistingDraft: true`)** | Discards existing draft > Creates new draft > Updates > Publishes |
+
+          | **Published (existing draft, `clearExistingDraft` not set)** | Returns `409 Conflict` |
+
+
+          This endpoint follows Omni''s draft/publish workflow. Updates to published documents create a draft, apply changes, then publish. Use the `clearExistingDraft` parameter to discard any existing draft before updating.
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: updateDocument
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Document identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - modelId
+              - name
+              - facetFilters
+              - refreshInterval
+              - filterConfig
+              - filterOrder
+              - queryPresentations
+              properties:
+                modelId:
+                  type: string
+                  description: Model ID for query transformation
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 254
+                  description: Document name
+                description:
+                  type: string
+                  maxLength: 1024
+                  description: Optional description of the document. Set as `null` to clear the description.
+                  example: Total monthly sales. Used in sales review meetings.
+                facetFilters:
+                  type: boolean
+                  description: When `true`, enable facet filters on the dashboard
+                refreshInterval:
+                  oneOf:
+                  - type: integer
+                    minimum: 60
+                  - type: 'null'
+                  description: Auto-refresh interval in seconds. Minimum value must be `60`. Use `null` to disable.
+                filterConfig:
+                  type: object
+                  description: 'Dashboard filter configuration. Pass `{}` for no filters.
+
+
+                    Each key is a field name and the value is a filter definition object.
+
+                    '
+                  additionalProperties:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Field type (e.g., "string", "number")
+                      kind:
+                        type: string
+                        description: Filter kind (e.g., "EQUALS", "GREATER_THAN")
+                      values:
+                        type: array
+                        items: {}
+                        description: Filter values
+                      is_negative:
+                        type: boolean
+                        description: When `true`, negate the filter condition
+                filterOrder:
+                  type: array
+                  items:
+                    type: string
+                  description: Order of filters in the filter bar. Pass `[]` if no filters.
+                queryPresentations:
+                  type: array
+                  minItems: 1
+                  description: Array of query presentations (at least one required)
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - query
+                    properties:
+                      name:
+                        type: string
+                        description: Name of the query tab
+                      query:
+                        type: object
+                        required:
+                        - fields
+                        - table
+                        properties:
+                          fields:
+                            type: array
+                            items:
+                              type: string
+                            description: Array of field names to include in the query
+                          table:
+                            type: string
+                            description: Table name for the query
+                        description: Query definition
+                      description:
+                        type: string
+                        description: Query description
+                      subTitle:
+                        type: string
+                        description: Subtitle for the query
+                      prefersChart:
+                        type: boolean
+                        description: When `true`, show chart by default
+                      topicName:
+                        type: string
+                        description: Topic name for the query
+                      chartType:
+                        oneOf:
+                        - type: string
+                        - type: 'null'
+                        description: Chart type (line, bar, etc.)
+                      visConfig:
+                        type: object
+                        description: Full visualization configuration
+                      resultConfig:
+                        type: object
+                        description: Result display configuration
+                      aiConfig:
+                        type: object
+                        description: AI configuration
+                documentMetadata:
+                  type: object
+                  description: Document metadata for presentation settings
+                  properties:
+                    presentation:
+                      type: object
+                      properties:
+                        filters:
+                          type: object
+                          properties:
+                            collapsible:
+                              type: boolean
+                              description: Whether filters are collapsible
+                            defaultExpanded:
+                              type: boolean
+                              description: Whether filters are expanded by default
+                clearExistingDraft:
+                  type: boolean
+                  description: 'If `true`, discards any existing draft before updating.
+
+
+                    **Note**: This parameter is required when a draft exists for the document.
+
+                    '
+            example:
+              modelId: abc123
+              name: Monthly Sales Dashboard
+              description: Total monthly sales. Used in sales review meetings.
+              facetFilters: true
+              refreshInterval: null
+              filterConfig:
+                order_items.category:
+                  type: string
+                  kind: EQUALS
+                  values:
+                  - Electronics
+                  is_negative: false
+              filterOrder:
+              - order_items.category
+              queryPresentations:
+              - name: Sales Trend
+                description: Monthly sales over time
+                prefersChart: true
+                topicName: order_items
+                query:
+                  fields:
+                  - order_items.created_at[month]
+                  - order_items.sale_price_sum
+                  table: order_items
+                visConfig:
+                  visType: basic
+                  spec:
+                    mark:
+                      type: line
+              documentMetadata:
+                presentation:
+                  filters:
+                    collapsible: true
+                    defaultExpanded: false
+      responses:
+        '200':
+          description: Document updated successfully
+          headers:
+            Deprecation:
+              description: Indicates that this endpoint is deprecated
+              schema:
+                type: string
+                example: 'true'
+            Sunset:
+              description: The date this endpoint will be removed (RFC 9110)
+              schema:
+                type: string
+                format: date
+                example: '2026-07-31'
+            Link:
+              description: Link to the replacement API (RFC 8288)
+              schema:
+                type: string
+                example: </api/documents-v2/create-document>; rel="successor-version"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  identifier:
+                    type: string
+                    description: The document identifier
+                  name:
+                    type: string
+                    description: The updated document name
+                  description:
+                    type: string
+                    description: The updated document description
+              example:
+                identifier: my-dashboard
+                name: Q4 Sales Dashboard
+                description: Total monthly sales. Used in sales review meetings.
+        '400':
+          description: 'Bad Request. Possible causes:
+
+
+            - Missing required fields (`modelId`, `name`, `facetFilters`, `refreshInterval`, `filterConfig`, `filterOrder`, `queryPresentations`)
+
+            - Invalid field values (`name` too long, `refreshInterval` less than `60`)
+
+            - Empty `queryPresentations` array (at least one required)
+
+            - Document has no dashboard (workbook-only document)
+
+            - Analysis documents (workbooks or documents without a dashboard) are not supported
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User has insufficient permissions to update document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: 'Conflict. Draft already exists - set clearExistingDraft to true to discard it and proceed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v2/documents/{documentId}/draft/{draftId}/dashboard:
+    delete:
+      description: 'Remove the dashboard from an existing draft, leaving a workbook-only document. Documents that are already workbook-only will remain unchanged.
+
+
+        Use the [Publish draft endpoint](/api/documents-v2/publish-draft) to apply the changes from this endpoint to the published version of the document. **Note**: Schedules will be removed when the document is published.'
+      operationId: documentsV2RemoveDashboard
+      summary: Remove dashboard from document
+      tags:
+      - Documents
+      parameters:
+      - schema:
+          type: string
+          example: def456
+        required: true
+        description: ID of the existing draft, created from a successful call to the [Create draft and patch document endpoint](/api/documents-v2/create-draft-and-patch-document).
+        name: draftId
+        in: path
+      - schema:
+          type: string
+          example: abc123
+        required: true
+        description: ID of the published document associated with the draft.
+        name: documentId
+        in: path
+      responses:
+        '200':
+          description: Dashboard removed on the draft. The response includes the `draftIdentifier`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2PatchDraftResponse'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Insufficient permissions to update the document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '404':
+          description: Document or draft not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '405':
+          description: Method not allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The specified document is not a published document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError409'
+        '422':
+          description: The document is an app, not a dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    DocumentOwner:
+      type: object
+      description: Document owner
+      properties:
+        id:
+          type: string
+          description: Owner membership ID
+        name:
+          type: string
+          description: Owner display name
+      required:
+      - id
+      - name
+    DocumentFolder:
+      type:
+      - object
+      - 'null'
+      description: Folder containing the document
+      properties:
+        id:
+          type: string
+          description: Folder ID
+        name:
+          type: string
+          description: Folder name
+        path:
+          type: string
+          description: Folder path
+        scope:
+          type: string
+          enum:
+          - restricted
+          - organization
+          description: Folder access scope
+      required:
+      - id
+      - name
+      - path
+      - scope
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Document:
+      type: object
+      properties:
+        _count:
+          type: object
+          properties:
+            favorites:
+              type: number
+              description: Number of users who favorited this document
+            views:
+              type: number
+              description: Number of views
+          required:
+          - favorites
+          - views
+          description: Document counts (included when `_count` is in `include` param)
+        connectionId:
+          type: string
+          description: Connection ID the document is associated with
+        deleted:
+          type: boolean
+          description: Whether the document is deleted (archived)
+        folder:
+          $ref: '#/components/schemas/DocumentFolder'
+        hasDashboard:
+          type: boolean
+          description: Whether the document has an associated dashboard
+        identifier:
+          type: string
+          description: Document identifier
+          example: abc123
+        labels:
+          type: array
+          items:
+            type: string
+          description: Labels applied to the document (included when `labels` is in `include` param)
+        name:
+          type: string
+          description: Document name
+        description:
+          type: string
+          description: Description of the document
+        owner:
+          $ref: '#/components/schemas/DocumentOwner'
+        scope:
+          type: string
+          enum:
+          - restricted
+          - organization
+          description: Document access scope
+        type:
+          type: string
+          enum:
+          - document
+          description: Content type
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Last updated timestamp
+        url:
+          type: string
+          description: URL to view the document. Returns dashboard URL if document has a dashboard, otherwise workbook URL.
+          example: https://org.omni.co/dashboards/abc123
+      required:
+      - connectionId
+      - deleted
+      - folder
+      - hasDashboard
+      - identifier
+      - name
+      - owner
+      - scope
+      - type
+      - updatedAt
+      - url
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    DocumentsListResponse:
+      type: object
+      properties:
+        pageInfo:
+          allOf:
+          - $ref: '#/components/schemas/PageInfo'
+          - description: Pagination information
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          description: List of documents
+      required:
+      - pageInfo
+      - records
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutBody:
+      type: object
+      properties:
+        clearExistingDraft:
+          type: boolean
+          default: false
+          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
+    DocumentsUpgradeLayoutResponse:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: Document identifier
+        upgraded:
+          type: boolean
+          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
+      required:
+      - identifier
+      - upgraded
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    ApiError409:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
+  responses:
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

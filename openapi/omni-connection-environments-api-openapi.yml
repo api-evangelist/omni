@@ -1,0 +1,314 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Connection environments API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Connection environments
+  description: Manage connection environments database connections
+paths:
+  /v1/connection-environments:
+    post:
+      tags:
+      - Connection environments
+      summary: Create connection environments
+      description: Creates connection environments by associating environment-specific connections with a base connection
+      security:
+      - bearerAuth: []
+      operationId: createConnectionEnvironments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - baseConnectionId
+              - environmentConnectionIds
+              properties:
+                baseConnectionId:
+                  type: string
+                  format: uuid
+                  description: The UUID of the base connection to associate environment connections with
+                environmentConnectionIds:
+                  type: string
+                  description: 'A comma-separated list of connection UUIDs to use as environment connections. All connection IDs must be valid UUIDs that:
+
+
+                    - Exist in your organization
+
+                    - Have the same dialect as the base connection
+
+                    - Aren''t already used as environment connections for the base connection
+
+                    - Aren''t the same as the base connection
+
+                    '
+            example:
+              baseConnectionId: 123e4567-e89b-12d3-a456-426614174000
+              environmentConnectionIds: 223e4567-e89b-12d3-a456-426614174001,323e4567-e89b-12d3-a456-426614174002
+      responses:
+        '201':
+          description: Connection environment(s) created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        environmentConnectionId:
+                          type: string
+                          format: uuid
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid method`
+
+            - `Invalid JSON`
+
+            - `baseConnectionId: Base connection ID must be a valid UUID`
+
+            - `environmentConnectionIds: All environment connection IDs must be valid UUIDs`
+
+            - `The following environment connection IDs are not valid for this connection: <ids>`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - `Connection with id <baseConnectionId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/connection-environments/{connectionEnvironmentId}:
+    put:
+      tags:
+      - Connection environments
+      summary: Update connection environment
+      description: 'Associates user attribute values with a specific connection environment, which will determine when it is used.
+
+        '
+      security:
+      - bearerAuth: []
+      x-mint:
+        content: "<Note>\n  User attribute values for environment connections work in conjunction with the user attribute name and values set on the base connection, which can be defined using the [Update connection endpoint](/api/connections/update-connection).\n  \n  The base connection specifies which user attribute to evaluate, while each environment connection specifies which values of that attribute will trigger its use.\n</Note>\n"
+      operationId: updateConnectionEnvironment
+      parameters:
+      - name: connectionEnvironmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the connection environment to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - userAttributeValues
+              properties:
+                userAttributeValues:
+                  type: string
+                  description: 'A comma-separated list of user attribute values to associate with the connection environment. For example: `"dev,staging"`
+
+
+                    **Note**: User attribute values must be unique across all environments for a base connection.
+
+                    '
+      responses:
+        '200':
+          description: Connection environment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `Invalid JSON`
+
+            - `Invalid method`
+
+            - `Invalid uuid`
+
+            - `User attribute value "<value>" is already in use`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Connection environment with id <id> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Connection environments
+      summary: Delete connection environment
+      description: 'Deletes a connection environment by ID. Requires Connection Admin or Organization Admin permissions.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: deleteConnectionEnvironment
+      parameters:
+      - name: connectionEnvironmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the connection environment to delete
+      responses:
+        '200':
+          description: Connection environment deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '403':
+          description: 'Forbidden
+
+
+            The authenticated user does not have sufficient permissions to delete this connection environment.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Connection environment with id <id> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

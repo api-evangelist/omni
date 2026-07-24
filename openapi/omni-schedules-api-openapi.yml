@@ -1,0 +1,1929 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Schedules API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Schedules
+  description: Create and manage scheduled tasks
+paths:
+  /v1/schedules:
+    post:
+      tags:
+      - Schedules
+      summary: Create schedule
+      description: 'Creates a scheduled task for the specified dashboard. Supports applying filters and formatting, creating alert conditions, and triggering test deliveries.
+
+
+        Supports the following destinations:
+
+
+        - [**Email**](/share/deliveries/email)
+
+        - [**Slack**](/share/deliveries/slack) - **Note**: A Slack workspace must already be connected to Omni to use this destination type.
+
+        - [**SFTP**](/share/deliveries/sftp)
+
+        - [**Webhook**](/share/deliveries/webhooks)
+
+        - [**Amazon S3**](/share/deliveries/amazon-s3)
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: createSchedule
+      parameters:
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: '**Only supported when using an Organization API key.** The membership ID of the user who should own the schedule. **Note**: This value is the **membership ID**, not the user ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.
+
+
+          When using an Organization API key:
+
+
+          - If `userId` is provided, the schedule is owned by the specified user
+
+          - If `userId` is not provided, the schedule is owned by the organization
+
+
+          Attempting to use a Personal Access Token (PAT) with this parameter will result in a `403 Forbidden` error. When using a PAT, the schedule owner will be the creator of the PAT.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - identifier
+              - name
+              - schedule
+              - timezone
+              - format
+              - destinationType
+              properties:
+                identifier:
+                  type: string
+                  description: 'The ID of the dashboard where the task will be created. This can be retrieved by:
+
+
+                    - **Opening the document settings** - Navigate to **File > Document settings** in the dashboard and then click **Settings**. The **Identifier** field contains the dashboard ID.
+
+                    - **Using the dashboard''s URL** - The string after `/dashboards` is the dashboard''s ID; for example: `https://myorg.omniapp.co/dashboards/12db1a0a`
+
+                    '
+                name:
+                  type: string
+                  description: The name of the task.
+                schedule:
+                  type: string
+                  description: 'A cron expression defining when the schedule will run, in [Amazon Web Services (AWS) Cloudwatch syntax](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-scheduled-rule-pattern.html).
+
+
+                    **Note**: Delivery times are approximate and will happen within 15 minutes of the specified schedule run time.
+
+                    '
+                timezone:
+                  type: string
+                  description: 'The IANA timezone where the task should run, such as `Asia/Dubai`. Refer to the [`TZ` column in this IANA.org timezone description file](https://data.iana.org/time-zones/tzdb-2021a/zone1970.tab) for a list of accepted values.
+
+                    '
+                format:
+                  type: string
+                  enum:
+                  - csv
+                  - link_only
+                  - json
+                  - pdf
+                  - png
+                  - xlsx
+                  description: 'The output format of the schedule.
+
+                    '
+                destinationType:
+                  type: string
+                  enum:
+                  - webhook
+                  - email
+                  - sftp
+                  - slack
+                  - s3
+                  description: 'The destination where the task''s output should be delivered.
+
+
+                    **Note**: If using `slack`, you must connect a Slack workspace to Omni first.
+
+                    '
+                filterConfig:
+                  type: object
+                  description: 'An object specifying the filter conditions to apply to the task. The filter key specified must already exist in the dashboard. If the dashboard doesn''t have any filters configured, filters can''t be used in the task.
+
+
+                    Use the [Get dashboard filters and controls endpoint](/api/dashboard-filters/get-dashboard-filters-and-controls) to retrieve filter configuration objects.
+
+
+                    **Note**: Filter keys are case-sensitive and must match exactly.
+
+                    '
+                conditionType:
+                  type: string
+                  enum:
+                  - RESULTS_PRESENT
+                  - RESULTS_CHANGED
+                  - RESULTS_MISSING
+                  - RESULTS_UNCHANGED
+                  description: '**Required if `conditionQueryMapKey` is provided.** Defines the type of condition to use for alerts.
+
+                    '
+                conditionQueryMapKey:
+                  type: string
+                  description: '**Required if `conditionType` is provided.** The ID of the query to monitor for triggering an alert. Must reference a valid query in the dashboard.
+
+                    '
+                queryIdentifierMapKey:
+                  type: string
+                  description: 'The ID of the query to include in a single tile task. Must reference a valid query in the dashboard.
+
+
+                    **Required for:**
+
+                    - `format: json` with `enableFormatting: true`
+
+                    - `format: xlsx` with `overrideRowLimit: true`
+
+                    '
+                killJobsOnFailure:
+                  type: boolean
+                  default: false
+                  description: 'If `true`, stop the entire job if any queries included in the task fail.
+
+                    '
+                testNow:
+                  type: boolean
+                  default: false
+                  description: 'If `true`, run the task immediately instead of scheduling.
+
+
+                    Not supported for `RESULTS_CHANGED` alert conditions or `s3` destinations.
+
+                    '
+                hideTitle:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `pdf` and `png` formats.** If `true`, the content''s title will be hidden in the task''s output.
+
+                    '
+                hideHiddenFields:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `csv` and `xlsx` formats.** If `true`, fields marked as `hidden` won''t be displayed in the task''s output.
+
+                    '
+                enableFormatting:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `csv`, `xlsx`, and `json` formats.** If `true`, number and date formatting will be preserved in the task''s output.
+
+
+                    If `true` for `json` format, `queryIdentifierMapKey` is required.
+
+                    '
+                overrideRowLimit:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `csv`, `json`, and `xlsx` formats.** If `true`, the default row limit will be overridden.
+
+
+                    If `true` for `json` and `xlsx` formats, a `queryIdentifierMapKey` is required.
+
+                    '
+                maxRowLimit:
+                  type: integer
+                  description: '**Compatible with `csv`, `json`, and `xlsx` formats.** Used with `overrideRowLimit`. Specifies the maximum number of rows.
+
+                    '
+                showContentLink:
+                  type: boolean
+                  default: true
+                  description: '**Compatible with all formats except `link_only`.** If `true`, a link to the content will be shown in the task''s output.
+
+                    '
+                showFilters:
+                  type: boolean
+                  default: true
+                  description: '**Compatible with all formats except `link_only` and `csv`.** If `true`, filters will be shown in the task''s output.
+
+                    '
+                expandTablesToShowAllRows:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `pdf` and `png` formats.** If `true`, up to 1,000 rows in table visualizations will be included in the delivery.
+
+
+                    This parameter cannot be used when `paperFormat: fit_page`.
+
+                    '
+                paperFormat:
+                  type: string
+                  enum:
+                  - a3
+                  - a4
+                  - letter
+                  - legal
+                  - fit_page
+                  - tabloid
+                  description: '**Compatible with `pdf` format.** Defines the paper format (size) of the resulting PDF.
+
+
+                    The `fit_page` option cannot be used if `expandTablesToShowAllRows: true`.
+
+                    '
+                paperOrientation:
+                  type: string
+                  enum:
+                  - portrait
+                  - landscape
+                  description: '**Compatible with `pdf` format.** Defines the paper orientation of the resulting PDF.
+
+                    '
+                singleColumnLayout:
+                  type: boolean
+                  default: false
+                  description: '**Compatible with `pdf` and `png` formats.** If `true`, dashboard tiles will be arranged into a single vertical column.
+
+                    '
+                url:
+                  type: string
+                  description: '**Required if `destinationType: webhook`.** A webhook URL. Must be a valid HTTP/HTTPS URL.
+
+                    '
+                recipients:
+                  oneOf:
+                  - type: string
+                  - type: array
+                    items:
+                      type: string
+                  description: "**Required if `destinationType: email` or `destinationType: slack`.**\n\nFor **email** destinations: An array of strings, each specifying a valid email address.\n\nFor **Slack** destinations: Channel or user IDs. Accepts either a string or array format:\n\n- **Channels** can be a single channel ID (`\"C01234567\"`) or an array with exactly **one** channel ID (`[\"C01234567\"]`). Additionally:\n  - **For private channels**, invite the Omni Slackbot to the channel first\n  - Only one Slack channel is supported per schedule. Multiple channels will return a 400 error.\n- **Users** can be a string of comma-separated user IDs (`\"U111,U222\"`) or an array of user IDs (`[\"U111\", \"U222\"]`)   \n"
+                subject:
+                  type: string
+                  description: '**Required if `destinationType: email`.** Email subject line.
+
+                    '
+                textBody:
+                  type: string
+                  description: '**Applicable to email and Slack destinations.** Custom message text included with the delivery.
+
+                    '
+                slackRecipientType:
+                  type: string
+                  enum:
+                  - channel
+                  - users
+                  description: '**Required if `destinationType: slack`.** Specifies whether recipients are a channel or individual users.
+
+
+                    - `channel`: Deliver to a Slack channel. If the channel is private, you''ll also need to invite the Omni Slackbot to the channel.
+
+                    - `users`: Deliver to individual Slack users
+
+                    '
+                fanOut:
+                  type: boolean
+                  default: false
+                  description: '**Applicable to email destinations.** If `true`, send individual emails to each recipient.
+
+                    '
+                address:
+                  type: string
+                  description: '**Required if `destinationType: sftp`.** SFTP server address.
+
+                    '
+                port:
+                  type: integer
+                  description: '**Required if `destinationType: sftp`.** SFTP port.
+
+                    '
+                username:
+                  type: string
+                  description: '**Required if `destinationType: sftp`.** SFTP username.
+
+                    '
+                path:
+                  type: string
+                  description: '**Required if `destinationType: sftp`.** Remote file path.
+
+                    '
+                passwordUnencrypted:
+                  type: string
+                  description: '**Applicable to SFTP destinations.** SFTP password.
+
+                    '
+                bucketName:
+                  type: string
+                  description: '**Required if `destinationType: s3`.** The name of the target S3 bucket. Must be 3-63 characters, lowercase letters, numbers, hyphens, and periods only.
+
+                    '
+                  example: my-reports-bucket
+                region:
+                  type: string
+                  description: '**Required if `destinationType: s3`.** The AWS region of the S3 bucket (e.g., `us-east-1`).
+
+                    '
+                  example: us-east-1
+                roleArn:
+                  type: string
+                  description: '**Required if `destinationType: s3`.** The ARN of the IAM role in the customer''s AWS account that grants Omni write access to the S3 bucket.
+
+                    '
+                  example: arn:aws:iam::123456789012:role/OmniS3DeliveryRole
+                keyPrefix:
+                  type: string
+                  description: '**Applicable to S3 destinations.** Folder path prefix for the uploaded file (e.g., `reports/daily/`). Must not contain path traversal sequences.
+
+                    '
+                  example: reports/daily/
+                filename:
+                  type: string
+                  description: '**Applicable to S3 destinations.** Filename template (without extension) using Mustache syntax. Supported variables: `{{currentDate}}`, `{{currentTime}}`, `{{currentYear}}`, `{{currentMonth}}`, `{{currentDay}}`, `{{yesterdayDate}}`, `{{timeZone}}`, `{{entityName}}`, `{{format}}`, `{{scheduledTaskName}}`.
+
+                    '
+                  example: '{{scheduledTaskName}}_{{currentDate}}'
+            examples:
+              Webhook:
+                summary: Webhook destination
+                value:
+                  identifier: 12db1a0a
+                  name: My Webhook schedule
+                  schedule: 0 9 ? * * *
+                  timezone: UTC
+                  format: json
+                  destinationType: webhook
+                  url: https://webhooksrus.com/1234566
+              Email:
+                summary: Email destination
+                value:
+                  identifier: 12db1a0a
+                  name: My Email schedule
+                  schedule: 0 9 ? * * *
+                  timezone: UTC
+                  format: pdf
+                  destinationType: email
+                  paperFormat: legal
+                  expandTablesToShowAllRows: true
+                  paperOrientation: landscape
+                  recipients:
+                  - user1@example.com
+                  - user2@example.com
+                  subject: Daily Sales report
+                  textBody: Here are the daily sales!
+                  fanOut: false
+              SFTP:
+                summary: SFTP destination
+                value:
+                  identifier: 12db1a0a
+                  name: My SFTP schedule
+                  schedule: 0 9 ? * * *
+                  timezone: UTC
+                  format: xlsx
+                  destinationType: sftp
+                  address: sftp.example.com
+                  port: 22
+                  username: sftpuser
+                  passwordUnencrypted: password123
+              Slack channel:
+                summary: Slack channel destination
+                value:
+                  identifier: 12db1a0a
+                  name: Weekly Report
+                  schedule: 0 9 ? * MON *
+                  timezone: America/New_York
+                  format: pdf
+                  destinationType: slack
+                  recipients: C01234567
+                  slackRecipientType: channel
+                  textBody: Here is your weekly report!
+              Slack users:
+                summary: Slack users destination
+                value:
+                  identifier: 12db1a0a
+                  name: Sales Team Report
+                  schedule: 0 9 ? * * *
+                  timezone: America/New_York
+                  format: pdf
+                  destinationType: slack
+                  recipients:
+                  - U11111111
+                  - U22222222
+                  slackRecipientType: users
+                  textBody: Your daily sales report
+              Amazon S3:
+                summary: Amazon S3 destination
+                value:
+                  identifier: 12db1a0a
+                  name: Daily Export to S3
+                  schedule: 0 9 ? * * *
+                  timezone: UTC
+                  format: csv
+                  destinationType: s3
+                  bucketName: my-reports-bucket
+                  region: us-east-1
+                  roleArn: arn:aws:iam::123456789012:role/OmniS3DeliveryRole
+                  keyPrefix: reports/daily/
+                  filename: '{{entityName}}-{{currentDate}}'
+              Filters and formatting:
+                summary: Filters and formatting
+                value:
+                  identifier: dashboard-abc123
+                  name: Weekly Regional Report
+                  schedule: 0 0 ? * MON *
+                  timezone: UTC
+                  format: pdf
+                  destinationType: email
+                  recipients:
+                  - iamagoodblob@blobsrus.com
+                  - managerblob@blobsrus.com
+                  subject: Weekly Regional Report
+                  filterConfig:
+                    region:
+                      kind: EQ
+                      left_side: US
+                      type: string
+                  hideTitle: true
+              Alert condition:
+                summary: Alert condition
+                value:
+                  identifier: dashboard-abc123
+                  name: Data Alert Webhook
+                  schedule: 0 */6 * * ? *
+                  timezone: UTC
+                  format: json
+                  destinationType: webhook
+                  url: https://api.example.com/webhook
+                  conditionType: RESULTS_PRESENT
+                  conditionQueryMapKey: '1'
+                  queryIdentifierMapKey: '1'
+                  overrideRowLimit: true
+                  maxRowLimit: 1000
+              Test delivery:
+                summary: Test delivery
+                value:
+                  identifier: dashboard-abc123
+                  name: Test Delivery
+                  schedule: 0 0 1 1 ? 2099
+                  timezone: UTC
+                  format: pdf
+                  destinationType: email
+                  recipients:
+                  - iamagoodblob@blobsrus.com
+                  subject: Test Delivery
+                  testNow: true
+      responses:
+        '200':
+          description: Schedule created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The ID of the created schedule.
+                  message:
+                    type: string
+                    example: Successfully created schedule
+                    description: A success message.
+                  delivererRoleArn:
+                    type: string
+                    description: '**S3 destinations only.** The ARN of Omni''s deliverer IAM role. The customer uses this as the `Principal` in their IAM trust policy to allow Omni to assume their role.
+
+                      '
+                  externalId:
+                    type: string
+                    description: '**S3 destinations only.** The organization ID, used as the external ID in the IAM trust policy `sts:ExternalId` condition. This value is the same for all S3 destinations in the organization.
+
+                      '
+              examples:
+                Default:
+                  summary: Default response
+                  value:
+                    id: 12db1a0a
+                    message: Successfully created schedule
+                Amazon S3:
+                  summary: Amazon S3 destination
+                  value:
+                    id: 12db1a0a
+                    message: Successfully created schedule
+                    delivererRoleArn: arn:aws:iam::123456789012:role/OmniS3DeliveryRole
+                    externalId: <externalId>
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Analyses do not support dashboards.`
+
+            - `Document does not have a dashboard`
+
+            - `schedule: Schedule is an invalid cron expression`
+
+            - `timezone: Time zone must be IANA valid.`
+
+            - `hideTitle can only be used with PDF or PNG formats`
+
+            - `Invalid filter keys found in schedule configuration: <filterKey>. Available dashboard filter keys are: <key1>, <key2>, ....`
+
+            - `Test delivery not supported for condition type RESULTS_CHANGED`
+
+            - `Print options are not supported for this format`
+
+            - `Single column layout and table expansion options are not supported for FIT_PAGE format.`
+
+            - `Must provide both a trigger query and an alert condition type`
+
+            - `slackRecipientType is required for Slack destinations`
+
+            - `Only one Slack channel is supported per schedule`
+
+            - `Organization does not have a Slack credential configured`
+
+            - `Test delivery not supported for S3 destinations`
+
+            - `Invalid bucket name`
+
+            - `Invalid role ARN`
+
+            - `Invalid region`
+
+            - `Key prefix contains invalid path traversal`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Personal access tokens cannot create schedules on behalf of other users`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Document with identifier "<dashboardId>" not found`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+      - Schedules
+      summary: List schedules
+      description: 'Retrieves scheduled tasks. This endpoint supports filtering, sorting, and cursor-based pagination.
+
+
+        To retrieve the recipients for a schedule, use the [List schedule recipients](/api/schedule-recipients/list-schedule-recipients) endpoint.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: listSchedules
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+        description: 'Search term for filtering schedules by name, dashboard name, or owner name (case-insensitive).
+
+          '
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - success
+          - error
+          - canceled
+          - none
+        description: Filter schedules by delivery status.
+      - name: destination
+        in: query
+        schema:
+          type: string
+          enum:
+          - email
+          - slack
+          - webhook
+          - sftp
+          - s3
+        description: Filter schedules by destination type.
+      - name: scheduleType
+        in: query
+        schema:
+          type: string
+          enum:
+          - alert
+          - schedule
+        description: Filter by schedule type.
+      - name: contentType
+        in: query
+        schema:
+          type: string
+          enum:
+          - dashboard
+          - single tile
+        description: Filter schedules by content type.
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          default: scheduleName
+          enum:
+          - scheduleName
+          - dashboardName
+          - ownerName
+          - lastRun
+          - lastRunStatus
+        description: The field to sort results by.
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+        description: The direction to sort results.
+      - name: cursor
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: The page number for offset-based pagination.
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: The number of results to include on each page.
+      - name: ownerId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: 'Filter schedules by the owner''s membership ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.
+
+
+          API results vary by API key type:
+
+
+          - **Organization API keys** - When specified, only schedules for the specified owner are returned. Otherwise, all schedules in the organization are returned.
+
+          - **Personal access token** - When specified, only the token owner''s membership ID is allowed. If another user''s membership ID is provided, the API will return a `403 Forbidden` error.
+
+          '
+      - name: embedEntity
+        in: query
+        schema:
+          type: string
+        description: 'Filter schedules by embed entity:
+
+
+          - If used as the only filter, list all schedules in the embed entity
+
+          - If used with `ownerId`, list only schedules for the specified user if they are associated with the `embedEntity`. The response will be empty if the specified `ownerId` doesn''t have the entity.
+
+          - Can be combined with other filters for more specific results
+
+          '
+      - name: identifier
+        in: query
+        schema:
+          type: string
+        description: 'Filter schedules by dashboard ID. This can be retrieved by:
+
+
+          - **Opening the document settings** - Navigate to **File > Document settings** in the dashboard and then click **Settings**. The **Identifier** field contains the dashboard ID.
+
+          - **Using the dashboard''s URL** - The string after `/dashboards` is the dashboard''s ID; for example: `https://myorg.omniapp.co/dashboards/12db1a0a`
+
+          '
+      responses:
+        '200':
+          description: Paginated schedule list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    description: List of schedule records.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The schedule ID.
+                        schedule:
+                          type: string
+                          description: The cron expression for the schedule.
+                        disabledAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: Timestamp when the schedule was paused, if applicable.
+                        name:
+                          type: string
+                          description: The name of the schedule.
+                        timezone:
+                          type: string
+                          description: The IANA timezone for the schedule.
+                        identifier:
+                          type: string
+                          description: The ID of the dashboard associated with the schedule.
+                        dashboardName:
+                          type: string
+                          description: The name of the dashboard associated with the schedule.
+                        ownerId:
+                          type: string
+                          format: uuid
+                          description: The membership ID of the schedule owner. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.
+                        ownerName:
+                          type: string
+                          description: The name of the schedule owner.
+                        lastCompletedAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: Timestamp of the last completed run.
+                        lastStatus:
+                          type: string
+                          nullable: true
+                          description: Status of the last run (e.g., `COMPLETE`, `ERROR_DELIVERED`).
+                        destinationType:
+                          type: string
+                          description: The destination type (e.g., `email`, `webhook`, `sftp`, `slack`).
+                        format:
+                          type: string
+                          description: The output format of the schedule. (e.g., `CSV`, `JSON`)
+                        recipientCount:
+                          type: integer
+                          description: Number of recipients. Returns `-1` for webhook destinations.
+                        content:
+                          type: string
+                          description: Content type (`dashboard` or `single tile`).
+                        slackRecipientType:
+                          type: string
+                          nullable: true
+                          description: Slack recipient type, if applicable.
+                        systemDisabledAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: Timestamp when the schedule was system-disabled, if applicable.
+                        systemDisabledReason:
+                          type: string
+                          nullable: true
+                          description: Reason for system disabling, if applicable.
+                        alert:
+                          type: string
+                          nullable: true
+                          description: Alert configuration, if applicable.
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Invalid enum value`
+
+            - `ownerId: Invalid uuid`
+
+            - `Page size cannot exceed 100`
+
+            - `Invalid page number. The last valid page is <number>.`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `Personal access tokens can only filter by their own ownerId`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `User with id <id> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}:
+    get:
+      tags:
+      - Schedules
+      summary: Get schedule
+      description: 'Returns the details of a single schedule, including its delivery destinations, recurrence configuration, and current status.
+
+        '
+      x-mint:
+        content: 'How this endpoint behaves depends on the type of API key being used:
+
+
+          | API Key Type          | Behavior                                                                                                        |
+
+          | --------------------- | --------------------------------------------------------------------------------------------------------------- |
+
+          | Personal Access Token | The user must be able to view and manage the associated dashboard. Users who can view and schedule but do not have permissions to manage schedules must also be the schedule owner to access the schedule. |
+
+          | Organization API Key  | Acts at org level with no additional permission check; optionally accepts `userId` to check permissions as a specific user. |
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: getSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'UUID of the schedule. Found in the schedule URL after `/schedules/`.
+
+
+          To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          ```
+
+          '
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: 'Membership ID of the user whose permissions should be checked (org API keys only). When provided, the endpoint verifies the user can view the associated dashboard before returning the schedule.
+
+          '
+      responses:
+        '200':
+          description: Schedule retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Schedule UUID
+                  name:
+                    type: string
+                    description: Schedule name
+                  organizationId:
+                    type: string
+                    format: uuid
+                    description: Organization UUID
+                  entityId:
+                    type: string
+                    format: uuid
+                    description: ID of the associated dashboard
+                  ownerId:
+                    type: string
+                    format: uuid
+                    description: User ID of the schedule owner
+                  owner:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Display name of the schedule owner
+                  schedule:
+                    type: string
+                    description: Schedule's cron expression (`minute hour day-of-month month day-of-week year`)
+                  timezone:
+                    type: string
+                    description: IANA timezone identifier (e.g., `America/New_York`)
+                  fanOut:
+                    type: boolean
+                    description: When `true`, each recipient receives a personalized delivery
+                  killJobsOnFailure:
+                    type: boolean
+                    description: When `true`, the job stops if any queries fail
+                  filterConfig:
+                    type: object
+                    nullable: true
+                    description: Dashboard filter values applied at delivery time
+                  metadata:
+                    type: object
+                    nullable: true
+                    description: Format options and other delivery settings
+                  conditionType:
+                    type: string
+                    nullable: true
+                    enum:
+                    - RESULTS_CHANGED
+                    - RESULTS_PRESENT
+                    - RESULTS_MISSING
+                    description: Alert condition type. `null` for standard schedules.
+                  conditionQueryMapKey:
+                    type: string
+                    nullable: true
+                    description: Query key used to evaluate the alert condition. `null` for standard schedules.
+                  disabledAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    description: Timestamp when the schedule was manually paused. `null` if active.
+                  systemDisabledAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    description: Timestamp when the system automatically disabled the schedule
+                  systemDisabledReason:
+                    type: string
+                    nullable: true
+                    enum:
+                    - missingQuery
+                    - noAccess
+                    - orphanedFilterConfigKeys
+                    description: Reason for system disabling
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: ISO 8601 creation timestamp
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: ISO 8601 last-updated timestamp
+                  destinations:
+                    type: array
+                    description: Delivery destination configurations
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: Destination UUID
+                        format:
+                          type: string
+                          enum:
+                          - pdf
+                          - png
+                          - csv
+                          - xlsx
+                          - json
+                          - link_only
+                          description: Output format
+                        lastStatus:
+                          type: string
+                          nullable: true
+                          enum:
+                          - COMPLETE
+                          - ERROR
+                          - ERROR_DELIVERED
+                          - KILLED
+                          - CONDITION_UNMET
+                          description: Status of last delivery
+                        lastCompletedAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: ISO 8601 timestamp of last successful delivery
+                        metadata:
+                          type: object
+                          nullable: true
+                          description: Destination-specific configuration
+                        recipients:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              membershipId:
+                                type: string
+                                format: uuid
+                              membership:
+                                type: object
+                                properties:
+                                  user:
+                                    type: object
+                                    properties:
+                                      email:
+                                        type: string
+                                        format: email
+                                      name:
+                                        type: string
+                                        nullable: true
+                        userGroupRecipients:
+                          type: array
+                          items:
+                            type: object
+              example:
+                id: 123e4567-e89b-12d3-a456-426614174000
+                name: Weekly Sales Report
+                organizationId: org-uuid
+                entityId: dashboard-uuid
+                ownerId: user-uuid
+                owner:
+                  name: Jane Smith
+                schedule: 0 9 ? * MON *
+                timezone: America/New_York
+                fanOut: false
+                killJobsOnFailure: false
+                filterConfig: null
+                metadata: null
+                conditionType: null
+                conditionQueryMapKey: null
+                disabledAt: null
+                systemDisabledAt: null
+                systemDisabledReason: null
+                createdAt: '2025-01-15T10:00:00.000Z'
+                updatedAt: '2025-01-20T08:30:00.000Z'
+                destinations:
+                - id: dest-uuid
+                  format: pdf
+                  lastStatus: COMPLETE
+                  lastCompletedAt: '2025-01-20T09:00:05.000Z'
+                  metadata:
+                    type: email
+                  recipients:
+                  - id: recipient-uuid
+                    membershipId: membership-uuid
+                    membership:
+                      user:
+                        email: alice@example.com
+                        name: Alice
+                  userGroupRecipients: []
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `scheduleId` is not a valid UUID
+
+            - `userId` is not a valid UUID
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidScheduleId:
+                  summary: Invalid schedule ID
+                  value:
+                    detail: 'Bad Request: scheduleId: Invalid UUID'
+                    status: 400
+                invalidUserId:
+                  summary: Invalid user ID
+                  value:
+                    detail: 'Bad Request: userId: Invalid UUID'
+                    status: 400
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            The authenticated user does not have permission to view the schedule. Possible scenarios:
+
+
+            - User cannot view the associated dashboard
+
+            - User cannot schedule the associated dashboard
+
+            - User is not the schedule owner
+
+            - User-scoped API key attempted to use `userId` parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                cannotViewDashboard:
+                  summary: Cannot view dashboard
+                  value:
+                    detail: You do not have permission to view this dashboard
+                    status: 403
+                cannotScheduleDashboard:
+                  summary: Cannot schedule dashboard
+                  value:
+                    detail: User does not have permission to schedule this dashboard
+                    status: 403
+                userScopedKeyWithUserId:
+                  summary: User-scoped key cannot act as another user
+                  value:
+                    detail: User-scoped API keys cannot act on behalf of other users
+                    status: 403
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - Schedule not found (or belongs to a different organization)
+
+            - `userId` not found in the organization
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                scheduleNotFound:
+                  summary: Schedule not found
+                  value:
+                    detail: Scheduled task with id 123e4567-e89b-12d3-a456-426614174000 does not exist
+                    status: 404
+                userNotFound:
+                  summary: User not found
+                  value:
+                    detail: User with id foreign-membership-uuid does not exist
+                    status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - Schedules
+      summary: Update schedule
+      x-mint:
+        content: "Updates the specified task. Changes to the schedule will be applied to future runs. Currently running jobs are not affected.\n\n<Note>\n  Only properties included in the request will be updated. Omitted properties will retain their current values.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: updateSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 'Same properties as [Create schedule](/api/schedules/create-schedule). All properties are optional - only included properties will be updated.
+
+                '
+            example:
+              name: Weekly Sales Report
+              schedule: 0 9 * * MON
+              timezone: America/New_York
+              format: pdf
+              destinationType: email
+              recipients:
+              - blob.ross@blobsrus.com
+              subject: Weekly Sales Dashboard
+              paperFormat: letter
+              paperOrientation: landscape
+      responses:
+        '200':
+          description: Schedule updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates the request was successful.
+                  scheduledTaskId:
+                    type: string
+                    format: uuid
+                    description: The ID of the updated schedule.
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: scheduleId: Invalid uuid`
+
+            - `Invalid method`
+
+            - `Bad Request: name: name is required, schedule: schedule is required, timezone: timezone is required, destinationType: Invalid discriminator value. Expected email | webhook | sftp | slack | s3`
+
+            - `schedule: Schedule is an invalid cron expression`
+
+            - `timezone: Time zone must be IANA valid.`
+
+            - `hideTitle can only be used with PDF or PNG formats`
+
+            - `Invalid filter keys found in schedule configuration: <filterKey>. Available dashboard filter keys are: <key1>, <key2>, ....`
+
+            - `Print options are not supported for this format`
+
+            - `Single column layout and table expansion options are not supported for FIT_PAGE format.`
+
+            - `slackRecipientType is required for Slack destinations`
+
+            - `Only one Slack channel is supported per schedule`
+
+            - `Organization does not have a Slack credential configured`
+
+            - `Invalid bucket name`
+
+            - `Invalid role ARN`
+
+            - `Invalid region`
+
+            - `Key prefix contains invalid path traversal`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+      - Schedules
+      summary: Delete schedule
+      description: Deletes a schedule.
+      security:
+      - bearerAuth: []
+      operationId: deleteSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          ```
+
+          '
+      responses:
+        '200':
+          description: Schedule deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `scheduleId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}/trigger:
+    post:
+      tags:
+      - Schedules
+      summary: Trigger schedule
+      description: Triggers the execution of a schedule on demand, outside of its regular schedule.
+      security:
+      - bearerAuth: []
+      operationId: triggerSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          ```
+
+          '
+      responses:
+        '200':
+          description: Schedule triggered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Bad Request: scheduleId: Invalid uuid`
+
+            - `Invalid method`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: '409 Conflict
+
+
+            Possible error messages:
+
+
+            - `Cannot trigger schedule while another execution is in progress` - Occurs when an `EMAIL` schedule has more than 50 recipients, has `fanOut: true`, and is currently in progress
+
+            - `Cannot trigger an inactive schedule` - Occurs when the schedule is paused (`disabledAt`) or system-disabled (`systemDisabledAt`)
+
+            '
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          description: 'Internal Server Error
+
+
+            Possible error messages:
+
+
+            - Various error messages related to dispatch failures
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/schedules/{scheduleId}/pause:
+    put:
+      tags:
+      - Schedules
+      summary: Pause schedule
+      description: Pauses a schedule.
+      security:
+      - bearerAuth: []
+      operationId: pauseSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          ```
+
+          '
+      responses:
+        '200':
+          description: Schedule paused successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Schedule is system disabled`
+
+            - `Schedule is already paused`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}/resume:
+    put:
+      tags:
+      - Schedules
+      summary: Resume schedule
+      description: Resumes a schedule.
+      security:
+      - bearerAuth: []
+      operationId: resumeSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          '
+      responses:
+        '200':
+          description: Schedule resumed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates the schedule has been resumed successfully.
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `Schedule is system disabled`
+
+            - `Schedule is already resumed`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/schedules/{scheduleId}/transfer-ownership:
+    put:
+      tags:
+      - Schedules
+      summary: Transfer schedule ownership
+      x-mint:
+        content: 'Transfers ownership of a schedule from one user to another user in the same organization. New ownership will be immediate and can''t be reversed using this endpoint.
+
+
+          How ownership transfer affects schedule execution depends on the type of destination the schedule uses, and for email destinations, whether the **Personalize delivery with the recipient''s user attributes** is enabled:
+
+
+          |                                                                     | Slack, SFTP, &amp; Webhooks | Email without personalization | Email with personalization |
+
+          |---------------------------------------------------------------------|-----------------------------|-------------------------------|----------------------------|
+
+          | **Future jobs are executed by...**                                  | New owner                   | New owner                     | Each recipient             |
+
+          | **Permissions, data access, &amp; user attributes are based on...** | New owner                   | New owner                     | Each recipient             |
+
+          | **Output is generated using...**                                    | New owner access            | New owner access              | Recipient access           |
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: transferScheduleOwnership
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: 'The ID of the schedule. To find a schedule''s ID:
+
+
+          1. Navigate to the dashboard of a document.
+
+          2. Click **File > Deliveries & Alerts**.
+
+          3. Next to a schedule, click **Edit**.
+
+
+          The schedule''s ID is in the page''s URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:
+
+
+          ```markdown
+
+          https://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000
+
+          ```
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - userId
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                  description: 'The ID of the user to transfer schedule ownership to. Use the [List users](/api/users/list-users) endpoint to retrieve user IDs.
+
+
+                    The new owner must:
+
+
+                    - Be a member of the same organization
+
+                    - Not be the current owner
+
+                    - Have permission to view the dashboard associated with the schedule
+
+                    '
+      responses:
+        '200':
+          description: Ownership transferred successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+
+            - `userId: Invalid uuid`
+
+            - `userId is a required field`
+
+            - `User already owns the schedule`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `New owner does not have permission to view the dashboard`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+
+            - `Scheduled task with id <scheduleId> does not exist`
+
+            - `New owner is not a member of the organization`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

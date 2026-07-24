@@ -1,0 +1,490 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Uploads API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Uploads
+  description: Manage CSV and spreadsheet uploads
+paths:
+  /v1/uploads:
+    get:
+      tags:
+      - Uploads
+      summary: List uploads
+      description: 'List all uploads ([CSV files and spreadsheets](/analyze-explore/data-input-csvs)) in the organization with metadata and optional filtering.
+
+
+        This endpoint requires **Organization Admin** permissions.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: listUploads
+      parameters:
+      - name: type
+        in: query
+        schema:
+          type: string
+          enum:
+          - csv
+          - spreadsheet
+          default: csv
+        description: Filter by upload type.
+      - name: connectionId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: Filter by connection ID.
+      - name: modelId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: Filter by model ID. Shared models return non-private connection uploads; workbook models return their own uploads.
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+        description: Search term to filter by file name (case-insensitive).
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Number of items to return.
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Cursor for pagination (from previous response).
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          enum:
+          - createdAt
+          - fileName
+          - updatedAt
+          default: updatedAt
+        description: Field to sort by.
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Sort direction.
+      responses:
+        '200':
+          description: Uploads retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: Unique ID for the upload.
+                        file_name:
+                          type: string
+                          description: Original file name.
+                        view_name:
+                          type: string
+                          description: View name in the model.
+                        connection_id:
+                          type: string
+                          format: uuid
+                          description: ID of the connection associated with the upload.
+                        in_db_as_table_name:
+                          type: string
+                          nullable: true
+                          description: '**Requires that the connection have a defined table upload schema.** The name of the database table associated with the upload.
+
+                            '
+                        model_id:
+                          type: string
+                          format: uuid
+                          nullable: true
+                          description: ID of the model the upload is associated with. Inferred from connection's shared model if not explicitly set via query parameter.
+                        size_bytes:
+                          type: integer
+                          nullable: true
+                          description: File size in bytes.
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: ISO 8601 timestamp of when the upload was created.
+                        updated_at:
+                          type: string
+                          format: date-time
+                          description: ISO 8601 timestamp of when the upload was last updated.
+                        uploaded_by_user:
+                          type: object
+                          nullable: true
+                          description: User who uploaded the file. null if unknown.
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                              description: Membership ID.
+                            name:
+                              type: string
+                              description: User display name.
+              example:
+                pageInfo:
+                  hasNextPage: false
+                  nextCursor: null
+                  pageSize: 20
+                  totalRecords: 2
+                records:
+                - id: 550e8400-e29b-41d4-a716-446655440000
+                  file_name: users.csv
+                  view_name: users
+                  connection_id: 660e8400-e29b-41d4-a716-446655440001
+                  in_db_as_table_name: omni_upload_t550e8400
+                  model_id: 880e8400-e29b-41d4-a716-446655440003
+                  size_bytes: 1024
+                  created_at: '2025-01-15T10:00:00Z'
+                  updated_at: '2025-01-15T10:00:00Z'
+                  uploaded_by_user:
+                    id: 770e8400-e29b-41d4-a716-446655440002
+                    name: John Doe
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `connectionId: Invalid uuid`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: 'Bad Request: connectionId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions. Requires `MANAGE_UPLOADS` permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: You do not have permission to perform this action
+                status: 403
+        '404':
+          description: Model not found (invalid `modelId`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Uploads
+      summary: Upload a CSV file
+      description: "<Note>\n  To use this endpoint:\n  \n  - The **Upload data** setting in **Settings > Content permissions** must enabled by an **Organization Admin**\n  - The authenticating user must have **Restricted Querier** permissions or higher on the model the file will be uploaded to\n</Note>\n\nUpload a CSV file to create a new [data input table](/analyze-explore/data-input-csvs). The file is parsed, converted to Arrow format, uploaded to storage, written to the connection's table upload (scratch) schema, and a view is created in the specified model.\n\nUploaded files:\n\n- Must be a CSV file with `.csv` extension\n- Can have a maximum of 500,000 rows. Files will be truncated if this limit is exceeded.\n"
+      security:
+      - bearerAuth: []
+      operationId: uploadCsvFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              - modelId
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The CSV file to upload, which must have a `.csv` extension
+                modelId:
+                  type: string
+                  format: uuid
+                  description: UUID of the model to create the view in
+                  example: 880e8400-e29b-41d4-a716-446655440003
+                branchId:
+                  type: string
+                  format: uuid
+                  description: UUID of the branch to create the view in. Mutually exclusive with `branchName`.
+                  example: 990e8400-e29b-41d4-a716-446655440004
+                branchName:
+                  type: string
+                  description: Name of the branch to create the view in. Mutually exclusive with `branchId`.
+                  example: my-branch
+                viewName:
+                  type: string
+                  description: Override the view name. Defaults to sanitized file name.
+                  example: custom_view_name
+            encoding:
+              file:
+                contentType: text/csv
+      responses:
+        '201':
+          description: CSV file uploaded successfully and view created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier for the upload
+                  fileName:
+                    type: string
+                    description: Original file name
+                  viewName:
+                    type: string
+                    description: Name of the view created
+                  modelId:
+                    type: string
+                    format: uuid
+                    description: ID of the model the view was created in
+                  inDbAsTableName:
+                    type: string
+                    description: Database table name in the scratch schema
+                  rowCount:
+                    type: integer
+                    description: Number of rows in the uploaded file
+                  truncated:
+                    type: boolean
+                    description: Whether the file was truncated due to row limit (500,000 rows)
+                  viewCreated:
+                    type: boolean
+                    description: Whether a view was created in the model
+              example:
+                id: 550e8400-e29b-41d4-a716-446655440000
+                fileName: users.csv
+                viewName: users
+                modelId: 880e8400-e29b-41d4-a716-446655440003
+                inDbAsTableName: omni_upload_t550e8400
+                rowCount: 150
+                truncated: false
+                viewCreated: true
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - Missing required fields (`file` or `modelId`)
+
+            - Invalid file type (not a CSV file)
+
+            - CSV parsing failed
+
+            - Invalid UUID format
+
+            - Both `branchId` and `branchName` provided (mutually exclusive)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: 'Bad Request: file must have .csv extension'
+                status: 400
+        '401':
+          description: Missing or invalid authentication.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Unauthorized
+                status: 401
+        '403':
+          description: Insufficient permissions. Authenticating user must have **Restricted Querier** permissions or higher on the model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: You do not have permission to perform this action
+                status: 403
+        '404':
+          description: 'Not Found. Possible error messages include:
+
+
+            - Model not found (invalid `modelId`)
+
+            - Branch not found (invalid `branchId` or `branchName`)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Model not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/uploads/{uploadId}:
+    delete:
+      tags:
+      - Uploads
+      summary: Delete an upload
+      description: "Delete a CSV upload by its ID. This removes the file from storage and marks the record as deleted.\n\n<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: deleteUpload
+      parameters:
+      - name: uploadId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the upload to delete
+      responses:
+        '200':
+          description: Upload deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+        '400':
+          description: Invalid upload ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: 'Bad Request: uploadId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions. Requires **Organization Admin** permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: You do not have permission to perform this action
+                status: 403
+        '404':
+          description: Upload not found or already deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Upload not found
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

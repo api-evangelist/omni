@@ -1,0 +1,517 @@
+openapi: 3.1.0
+info:
+  title: Omni AI AI Credit Controls API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: AI Credit Controls
+  description: Manage organization-level AI credit usage
+paths:
+  /v1/ai/credit-controls:
+    get:
+      description: "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nGet the organization's AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds).\n"
+      operationId: aiCreditControlsGet
+      summary: Get AI credit controls
+      tags:
+      - AI Credit Controls
+      responses:
+        '200':
+          description: Current credit controls. Thresholds are `null` when the corresponding control is off.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiCreditControlsResponse'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Insufficient permissions or AI credit controls are not enabled for the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      description: "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nUpdate the organization's AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:\n\n- Omit a field to leave it unchanged\n- Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)\n- Send a non-negative number to set it\n"
+      operationId: aiCreditControlsUpdate
+      summary: Update AI credit controls
+      tags:
+      - AI Credit Controls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                downgradeCredits:
+                  type: number
+                  nullable: true
+                  minimum: 0
+                  description: Credit usage at which AI downgrades to a cheaper model. Omit to leave unchanged, `null` to turn off, or a non-negative number to set. Must be less than or equal to `shutoffCredits`.
+                  example: 800
+                shutoffCredits:
+                  type: number
+                  nullable: true
+                  minimum: 0
+                  description: Credit usage at which AI shuts off entirely. Omit to leave unchanged, `null` to turn off, or a non-negative number to set.
+                  example: 1200
+                userDefaultCredits:
+                  type: number
+                  nullable: true
+                  minimum: 0
+                  description: Default per-user AI credit limit for the billing period. This limit is what what every user without an individual limit gets. Omit to leave unchanged, `null` for unlimited by default, or a non-negative number to set.
+                  example: 100
+      responses:
+        '200':
+          description: Thresholds updated. Returns the full current state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiCreditControlsResponse'
+        '400':
+          description: 'Invalid request. Common causes:
+
+
+            - Empty body
+
+            - A negative value
+
+            - An unknown field
+
+            - `downgradeCredits` greater than `shutoffCredits`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Insufficient permissions or AI credit controls are not enabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/credit-controls/users:
+    get:
+      description: "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nList the organization's active individual user AI credit limits, ordered by `userId` ascending.\n\nOnly users with an individual limit will be returned in the response.\n"
+      operationId: aiCreditControlsUsersList
+      summary: List individual users' AI credit limits
+      tags:
+      - AI Credit Controls
+      parameters:
+      - schema:
+          type: string
+          description: Cursor for pagination from previous response `nextCursor`
+          example: eyJpZCI6IjEyMzQ1In0
+        required: false
+        description: Cursor for pagination from previous response `nextCursor`
+        name: cursor
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+          description: Number of results per page
+          example: 20
+        required: false
+        description: Number of results per page
+        name: pageSize
+        in: query
+      responses:
+        '200':
+          description: One page of users' individual AI credit limits.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        creditLimit:
+                          type: number
+                          nullable: true
+                          minimum: 0
+                          description: The user's individual AI credit limit, or `null` for an explicit unlimited override.
+                          example: 50
+                        userId:
+                          type: string
+                          description: The user's id within this organization.
+                          example: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                      required:
+                      - creditLimit
+                      - userId
+                    description: Users with an individual AI credit limit, ordered by `userId` ascending.
+                required:
+                - pageInfo
+                - records
+              examples:
+                users_with_limits:
+                  summary: Example response with users
+                  value:
+                    pageInfo:
+                      nextCursor: eyJpZCI6IjEyMzQ1In0
+                      hasNextPage: true
+                    records:
+                    - userId: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                      creditLimit: 50
+                    - userId: a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d
+                      creditLimit: null
+        '400':
+          description: Invalid cursor or pageSize.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Insufficient permissions, or per-user AI credit limits are not enabled for the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      description: "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nSet individual users' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction.\n"
+      operationId: aiCreditControlsUsersUpdate
+      summary: Set individual users' AI credit limits
+      tags:
+      - AI Credit Controls
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      creditLimit:
+                        type: number
+                        nullable: true
+                        minimum: 0
+                        description: The user's individual AI credit limit for the billing period, or `null` for unlimited. This will override the organization default. Mutually exclusive with `useDefaultLimit`.
+                        example: 50
+                      useDefaultLimit:
+                        type: boolean
+                        enum:
+                        - true
+                        description: Removes the user's individual limit so they follow the organization default. Mutually exclusive with `creditLimit`.
+                      userId:
+                        type: string
+                        description: The user's ID within this organization.
+                        example: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                    required:
+                    - userId
+                    additionalProperties: false
+                  minItems: 1
+                  maxItems: 1000
+                  description: 'Users to update, at most 1000 per request. Each entry has a `userId` plus exactly one of `creditLimit` (number or `null`) or `useDefaultLimit: true`.'
+              required:
+              - users
+              additionalProperties: false
+            examples:
+              set_limits:
+                summary: Set limits for two users
+                value:
+                  users:
+                  - userId: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                    creditLimit: 50
+                  - userId: a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d
+                    creditLimit: null
+              reset_to_default:
+                summary: Remove individual limit
+                value:
+                  users:
+                  - userId: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                    useDefaultLimit: true
+      responses:
+        '200':
+          description: All entries applied. Returns each user's effective limit, in request order.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        creditLimit:
+                          type: number
+                          nullable: true
+                          minimum: 0
+                          description: The user's effective AI credit limit, or `null` for unlimited.
+                          example: 50
+                        userId:
+                          type: string
+                          description: The user's ID within this organization.
+                          example: f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c
+                        usesDefaultLimit:
+                          type: boolean
+                          description: 'If `true`, the user has no individual limit and follows the organization default.
+
+                            '
+                      required:
+                      - creditLimit
+                      - userId
+                      - usesDefaultLimit
+        '400':
+          description: 'Invalid request. Common causes:
+
+
+            - An empty users array
+
+            - More than 1000 entries
+
+            - An entry with both `creditLimit` and `useDefaultLimit` (or neither)
+
+            - A negative `creditLimit`
+
+            - A duplicated `userId`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: Insufficient permissions, per-user AI credit limits are not enabled, or credit controls editing is disabled for the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '404':
+          description: Specified `userId` is not a member of the organization; the response names the first invalid id. No limits are changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    AiCreditControlsResponse:
+      type: object
+      required:
+      - accountCreditLimit
+      - creditsUsed
+      - downgradeCredits
+      - periodEnd
+      - periodStart
+      - shutoffCredits
+      - userDefaultCredits
+      properties:
+        accountCreditLimit:
+          type: number
+          minimum: 0
+          description: Monthly AI credit limit for the whole Omni account, which is shared across every organization associated with the account. `0` when no limit is configured.
+          example: 2000
+        creditsUsed:
+          type: number
+          minimum: 0
+          description: This organizations's credit usage for the current billing period.
+          example: 450
+        downgradeCredits:
+          type: number
+          nullable: true
+          minimum: 0
+          description: Downgrade threshold, or `null` if the downgrade control is off.
+          example: 800
+        periodEnd:
+          type: integer
+          minimum: 0
+          description: End of the current billing period as a Unix ms timestamp (UTC calendar-month boundary).
+        periodStart:
+          type: integer
+          minimum: 0
+          description: Start of the current billing period as a Unix ms timestamp (UTC calendar-month boundary).
+        shutoffCredits:
+          type: number
+          nullable: true
+          minimum: 0
+          description: Shutoff threshold, or `null` if the shutoff control is off.
+          example: 1200
+        userDefaultCredits:
+          type: number
+          nullable: true
+          minimum: 0
+          description: Default per-user AI credit limit, or `null` when users are unlimited by default.
+          example: 100
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

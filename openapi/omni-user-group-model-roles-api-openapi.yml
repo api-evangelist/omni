@@ -1,0 +1,303 @@
+openapi: 3.1.0
+info:
+  title: Omni AI User group model roles API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: User group model roles
+  description: Manage model and connection role assignments for user groups
+paths:
+  /v1/user-groups/{userGroupId}/model-roles:
+    post:
+      tags:
+      - User group model roles
+      summary: Assign or update user group model role
+      description: 'Assigns or updates a model role for a user group. If the user group already has a role for the specified model, this endpoint will update it to the new role. All members of the user group will inherit this role.
+
+
+        Model roles control what actions user group members can perform on models and connections. To manage user groups, see the [User group APIs](/api/user-groups).
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: assignUserGroupModelRole
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user group to assign or update a model role for.
+        example: mEhXj6ZI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - roleName
+              properties:
+                connectionId:
+                  type: string
+                  format: uuid
+                  description: 'The ID of the connection that the model belongs to:
+
+
+                    - **Required** if `modelId` is not provided
+
+                    - **Optional** if `modelId` is provided, as it will be inferred from the model
+
+                    '
+                modelId:
+                  type: string
+                  format: uuid
+                  description: 'The ID of the model to assign the role for:
+
+
+                    - **Optional** when assigning `CONNECTION_ADMIN` or [custom roles](/administration/users/custom-roles) with `CONNECTION_ADMIN` as the base role
+
+                    - **Required** for other role types
+
+                    '
+                roleName:
+                  type: string
+                  description: 'The role to assign. Available roles include:
+
+
+                    - `VIEWER` - Can view the model
+
+                    - `QUERIER` - Can view and query the model
+
+                    - `QUERY_TOPICS` - Can query specific topics. Equivalent to **Restricted Querier.**
+
+                    - `MODELER` - Can edit and model the data
+
+                    - `CONNECTION_ADMIN` - Full administrative access to the connection
+
+                    - `NO_ACCESS` - No access to the model
+
+                    - [Custom roles](/administration/users/custom-roles) defined for your organization
+
+                    '
+            example:
+              connectionId: bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed
+              modelId: 7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a
+              roleName: QUERIER
+      responses:
+        '200':
+          description: Model role assigned or updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userGroupId:
+                    type: string
+                    description: The ID of the user group.
+                  connectionId:
+                    type: string
+                    format: uuid
+                    description: The ID of the connection.
+                  modelId:
+                    type: string
+                    format: uuid
+                    description: The ID of the model.
+                  roleName:
+                    type: string
+                    description: The assigned role name.
+              example:
+                userGroupId: mEhXj6ZI
+                connectionId: bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed
+                modelId: 7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a
+                roleName: QUERIER
+        '400':
+          description: 'Bad Request. Possible error messages include:
+
+
+            - `Invalid JSON`
+
+            - `Invalid model ID`
+
+            - `Invalid connection ID`
+
+            - `Method not allowed`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found. Possible error messages include:
+
+
+            - `User group not found in organization`
+
+            - `Model does not exist`
+
+            - `Connection does not exist`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'Unprocessable Entity. Possible error messages include:
+
+
+            - `Invalid role`
+
+            - `Model does not belong to connection`
+
+            - `Only shared and shared_extension models can be assigned model roles`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - User group model roles
+      summary: Retrieve user group model roles
+      description: 'Retrieves the model role assignments for a user group.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getUserGroupModelRoles
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user group to retrieve model roles for.
+        example: mEhXj6ZI
+      - name: modelId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to.
+        example: 7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a
+      - name: connectionId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        description: Filter results to models from a specific connection. If not provided, returns roles for all connections.
+        example: bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed
+      responses:
+        '200':
+          description: User group model roles retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userGroupId:
+                    type: string
+                    description: The ID of the user group.
+                  results:
+                    type: array
+                    description: Array of role assignments for the user group.
+                    items:
+                      type: object
+                      properties:
+                        modelId:
+                          type: string
+                          format: uuid
+                          description: The ID of the model.
+                        connectionId:
+                          type: string
+                          format: uuid
+                          description: The ID of the connection.
+                        roleName:
+                          type: string
+                          description: The role assigned to the user group for this model.
+                        baseRole:
+                          type: string
+                          description: The base role assigned to the user group.
+              example:
+                userGroupId: mEhXj6ZI
+                results:
+                - baseRole: QUERIER
+                  roleName: QUERIER
+                  connectionId: bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed
+                  modelId: 7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a
+        '404':
+          description: User group not found in organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: User group not found in organization
+                status: 404
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

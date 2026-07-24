@@ -1,0 +1,233 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Content migration API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Content migration
+  description: Export and import dashboards
+paths:
+  /unstable/documents/{dashboardId}/export:
+    get:
+      tags:
+      - Content migration
+      summary: Export dashboard
+      description: Export dashboard for migration between Omni instances
+      x-mint:
+        content: "<Warning>\n  This API is in beta and may have future breaking changes.\n</Warning>\n"
+      security:
+      - orgApiKey: []
+      operationId: exportDashboard
+      parameters:
+      - name: dashboardId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Dashboard identifier
+      responses:
+        '200':
+          description: Dashboard export data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dashboard:
+                    type: object
+                    description: Dashboard configuration
+                  document:
+                    type: object
+                    description: Document metadata
+                  exportVersion:
+                    type: string
+                    example: '0.1'
+                  workbookModel:
+                    type: object
+                    description: Workbook model data
+                  fileUploads:
+                    type: array
+                    description: Spreadsheet file data included in the export. Each item contains the file content and metadata needed to restore spreadsheet tiles during import.
+                    items:
+                      type: object
+                      properties:
+                        fileUploadId:
+                          type: string
+                          description: Unique identifier for the file upload
+                        fileName:
+                          type: string
+                          description: Original file name
+                        contentType:
+                          type: string
+                          description: MIME type of the file
+                        data:
+                          type: string
+                          description: Base64-encoded file content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /unstable/documents/import:
+    post:
+      tags:
+      - Content migration
+      summary: Import dashboard
+      description: 'Import dashboard to Omni instance.
+
+        '
+      x-mint:
+        content: "<Warning>\n  This API is in beta and may have future breaking changes.\n</Warning>\n"
+      security:
+      - orgApiKey: []
+      operationId: importDashboard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - baseModelId
+              - dashboard
+              - document
+              - workbookModel
+              - exportVersion
+              properties:
+                baseModelId:
+                  type: string
+                  format: uuid
+                  description: Target model ID
+                dashboard:
+                  type: object
+                  description: Dashboard configuration from export
+                document:
+                  type: object
+                  description: Document metadata from export
+                workbookModel:
+                  type: object
+                  description: Workbook model from export
+                exportVersion:
+                  type: string
+                  enum:
+                  - '0.1'
+                  description: Export format version (must be "0.1")
+                identifier:
+                  type: string
+                  description: Custom identifier for the imported dashboard
+                folderPath:
+                  type: string
+                  description: Destination folder path
+                fileUploads:
+                  type: array
+                  description: Spreadsheet file data to restore during import. Include the `fileUploads` array from the export response to restore spreadsheet tiles in the imported dashboard.
+                  items:
+                    type: object
+                    properties:
+                      fileUploadId:
+                        type: string
+                        description: Unique identifier for the file upload (from export)
+                      fileName:
+                        type: string
+                        description: Original file name
+                      contentType:
+                        type: string
+                        description: MIME type of the file
+                      data:
+                        type: string
+                        description: Base64-encoded file content
+      responses:
+        '200':
+          description: Dashboard imported successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dashboard:
+                    type: object
+                    properties:
+                      dashboardId:
+                        type: string
+                        format: uuid
+                  miniUuidMap:
+                    type: object
+                  workbook:
+                    type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages/causes:
+
+
+            - `User-scoped API keys cannot act on behalf of other users`
+
+            - Operations targeting personal/restricted scope require the user''s **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.
+
+            '
+components:
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

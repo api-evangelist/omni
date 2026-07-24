@@ -1,0 +1,1496 @@
+openapi: 3.1.0
+info:
+  title: Omni AI AI Eval API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: AI Eval
+  description: 'AI evaluation: manage prompt sets and runs used to score AI quality against curated prompt suites.'
+paths:
+  /v1/ai/eval/prompt-sets:
+    get:
+      description: List eval prompt sets, sorted alphabetically by name. When `model_ids` is omitted, returns prompt sets for every shared model the caller can access. Requires at least the Querier role on each requested model.
+      operationId: aiEvalPromptSetsList
+      summary: List eval prompt sets
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: When `true`, returns archived prompt sets instead of active ones. Defaults to `false`.
+          example: 'false'
+        required: false
+        description: When `true`, returns archived prompt sets instead of active ones. Defaults to `false`.
+        name: archived
+        in: query
+      - schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Optional list of model IDs to filter prompt sets by. When omitted, returns prompt sets for every model the caller can access. Supply multiple times to filter by more than one model (e.g., `?model_ids=A&model_ids=B`).
+        required: false
+        description: Optional list of model IDs to filter prompt sets by. When omitted, returns prompt sets for every model the caller can access. Supply multiple times to filter by more than one model (e.g., `?model_ids=A&model_ids=B`).
+        name: model_ids
+        in: query
+      responses:
+        '200':
+          description: List of prompt sets, sorted alphabetically by name.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsListResponse'
+        '400':
+          description: Invalid query params (e.g. `model_ids` contains a non-UUID, or `archived` is not `true`/`false`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions. The caller must have at least the Querier role on each requested model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: No eval-accessible models for this caller.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+    post:
+      description: Create a new eval prompt set bound to a shared model. Initial prompts can be supplied; additional prompts can be added later via PATCH.
+      operationId: aiEvalPromptSetsCreate
+      summary: Create an eval prompt set
+      tags:
+      - AI Eval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalPromptSetsCreateBody'
+      responses:
+        '201':
+          description: Prompt set created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsCreateResponse'
+        '400':
+          description: Invalid request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions. The caller must have at least the Querier role on the model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+  /v1/ai/eval/prompt-sets/{promptSetId}:
+    get:
+      description: Get a single prompt set with all of its prompts.
+      operationId: aiEvalPromptSetsGet
+      summary: Get an eval prompt set
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+        description: The unique identifier of the eval prompt set.
+        name: promptSetId
+        in: path
+      responses:
+        '200':
+          description: Prompt set details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsGetResponse'
+        '400':
+          description: Invalid `promptSetId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Prompt set not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+    patch:
+      description: Update a prompt set's name, description, and/or prompts. When `prompts` is supplied, it fully replaces the existing list — existing prompts omitted from the list are deleted, entries without an `id` are created, and entries with a matching `id` are updated in place.
+      operationId: aiEvalPromptSetsUpdate
+      summary: Update an eval prompt set
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+        description: The unique identifier of the eval prompt set.
+        name: promptSetId
+        in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalPromptSetsUpdateBody'
+      responses:
+        '200':
+          description: Prompt set updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsUpdateResponse'
+        '400':
+          description: Invalid request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Prompt set not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+        '422':
+          description: A `prompts[].id` in the request does not belong to this prompt set.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: A prompt being updated does not belong to this prompt set
+                status: 422
+    delete:
+      description: 'Archive (soft-delete) a prompt set. Omni also attempts to cancel every in-flight agentic job associated with the set; the returned `cancelled_job_count` reports how many were cancelled. Cancellation is best-effort — the archive is committed first, so if a run-cancellation later fails the endpoint returns 500 even though the set is already archived. The call is idempotent: retrying drains any remaining runs.'
+      operationId: aiEvalPromptSetsArchive
+      summary: Archive an eval prompt set
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+        description: The unique identifier of the eval prompt set.
+        name: promptSetId
+        in: path
+      responses:
+        '200':
+          description: Prompt set archived successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsDeleteResponse'
+        '400':
+          description: Invalid `promptSetId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Prompt set not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+        '500':
+          description: Archive committed but a run-cancellation failed; the set is already archived — safe to retry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Archive committed but a run-cancellation failed; retry to complete
+                status: 500
+  /v1/ai/eval/prompt-sets/{promptSetId}/unarchive:
+    post:
+      description: Restore an archived prompt set.
+      operationId: aiEvalPromptSetsUnarchive
+      summary: Restore an archived eval prompt set
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+        description: The unique identifier of the eval prompt set.
+        name: promptSetId
+        in: path
+      responses:
+        '200':
+          description: Prompt set restored successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalPromptSetsUnarchiveResponse'
+        '400':
+          description: Invalid `promptSetId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Prompt set not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+  /v1/ai/eval/runs:
+    get:
+      description: List runs for a prompt set, newest first, filtered to runs whose model the caller can access. The `prompt_set_id` query parameter is required.
+      operationId: aiEvalRunsList
+      summary: List eval runs
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: When `true`, returns archived runs instead of active ones. Defaults to `false`.
+          example: 'false'
+        required: false
+        description: When `true`, returns archived runs instead of active ones. Defaults to `false`.
+        name: archived
+        in: query
+      - schema:
+          type: string
+          format: uuid
+          description: Required — the prompt set whose runs should be listed.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+        description: Required — the prompt set whose runs should be listed.
+        name: prompt_set_id
+        in: query
+      responses:
+        '200':
+          description: List of runs for the prompt set.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsListResponse'
+        '400':
+          description: Missing or invalid `prompt_set_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Prompt set not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+    post:
+      description: Create and start a new run against an existing prompt set. The run enqueues one agentic job per prompt and begins executing immediately. Returns the newly created run with its initial per-prompt result rows.
+      operationId: aiEvalRunsCreate
+      summary: Start an eval run
+      tags:
+      - AI Eval
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvalRunsCreateBody'
+      responses:
+        '201':
+          description: Run created and jobs enqueued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsCreateResponse'
+        '400':
+          description: Invalid request body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: name: Required'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions. The caller must have at least the Querier role on the prompt set's model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: The prompt set was not found, or `run_config.branch_id` does not match an existing branch in the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+        '422':
+          description: '`run_config.branch_id` does not belong to the prompt set''s model.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: A prompt being updated does not belong to this prompt set
+                status: 422
+        '429':
+          description: Per-user active-run cap reached.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Too many active runs; wait for an in-flight run to finish
+                status: 429
+        '503':
+          description: AI eval is paused for this organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval is paused for this organization
+                status: 503
+  /v1/ai/eval/runs/{runId}:
+    get:
+      description: Get an eval run with every per-prompt result row, including the underlying agentic job state and any scoring data.
+      operationId: aiEvalRunsGet
+      summary: Get an eval run
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        required: true
+        description: The unique identifier of the eval run.
+        name: runId
+        in: path
+      responses:
+        '200':
+          description: Run detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsGetResponse'
+        '400':
+          description: Invalid `runId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: runId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Run not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+    delete:
+      description: Archive (soft-delete) an eval run. Any non-terminal per-prompt agentic jobs are cancelled as part of the archive (best-effort), and a still-RUNNING run is flipped to CANCELLED before archival. The call is idempotent; archiving an already-terminal or already-archived run is a no-op.
+      operationId: aiEvalRunsArchive
+      summary: Archive an eval run
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        required: true
+        description: The unique identifier of the eval run.
+        name: runId
+        in: path
+      responses:
+        '200':
+          description: Run archived successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsDeleteResponse'
+        '400':
+          description: Invalid `runId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: runId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Run not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+  /v1/ai/eval/runs/{runId}/cancel:
+    post:
+      description: 'Cancel an in-flight eval run. Marks the run cancelled first so no in-progress per-prompt job can flip it back to COMPLETE, then cancels every non-terminal agentic job associated with the run. The run is also archived as part of the cancel — the response returns the updated run inline (`status: CANCELLED`, `is_archived: true`); use `/unarchive` to surface it in the default `archived=false` list again.'
+      operationId: aiEvalRunsCancel
+      summary: Cancel an eval run
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        required: true
+        description: The unique identifier of the eval run.
+        name: runId
+        in: path
+      responses:
+        '200':
+          description: Cancellation processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsCancelResponse'
+        '400':
+          description: Invalid `runId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: runId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Run not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+  /v1/ai/eval/runs/{runId}/unarchive:
+    post:
+      description: Restore an archived eval run.
+      operationId: aiEvalRunsUnarchive
+      summary: Restore an archived eval run
+      tags:
+      - AI Eval
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+          description: The unique identifier of the eval run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        required: true
+        description: The unique identifier of the eval run.
+        name: runId
+        in: path
+      responses:
+        '200':
+          description: Run restored successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalRunsUnarchiveResponse'
+        '400':
+          description: Invalid `runId` — must be a UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Bad Request: runId: Invalid uuid'
+                status: 400
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: 'Unauthorized: Missing or invalid API key'
+                status: 401
+        '403':
+          description: Insufficient permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: AI eval requires at least Querier access on the model
+                status: 403
+        '404':
+          description: Run not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvalApiError'
+              example:
+                detail: Prompt set not found
+                status: 404
+components:
+  schemas:
+    EvalPromptSetsCreateBody:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 1024
+          description: Optional human-readable description of the prompt set. Max 1024 characters.
+          example: Regression suite for the orders topic
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Human-readable name for the prompt set. 255 characters or fewer.
+          example: Orders regression
+        prompts:
+          type: array
+          items:
+            type: object
+            properties:
+              expectation:
+                type:
+                - string
+                - 'null'
+                maxLength: 16000
+                description: Optional expectation the analysis judge scores the analysis against. Max 16000 characters.
+                example: The top product by revenue should be Aniseed Syrup.
+              prompt_text:
+                type: string
+                minLength: 1
+                maxLength: 8000
+                description: The natural language prompt text. Max 8000 characters.
+                example: What are the top 5 products by revenue?
+            required:
+            - prompt_text
+          maxItems: 25
+          default: []
+          description: Initial prompts for the set. Defaults to an empty list. At most 25 prompts.
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[a-z][a-z0-9-]*$
+          description: URL-safe identifier for the prompt set. Must be unique per `model_id` and match `^[a-z][a-z0-9-]*$`. Max 255 characters.
+          example: orders-regression
+      required:
+      - model_id
+      - name
+      - slug
+    EvalRunStats:
+      type: object
+      properties:
+        terminal:
+          type: integer
+          description: Number of per-prompt jobs that have reached a terminal state (COMPLETE, FAILED, or CANCELLED).
+          example: 8
+        total:
+          type: integer
+          description: Total number of per-prompt jobs in the run.
+          example: 12
+      required:
+      - terminal
+      - total
+    EvalPromptSetsCreateResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalPromptSetListItem:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description of the prompt set.
+          example: Regression suite for the orders topic
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        is_archived:
+          type: boolean
+          description: Whether the prompt set has been archived.
+          example: false
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        name:
+          type: string
+          description: Human-readable name for the prompt set.
+          example: Orders regression
+        slug:
+          type: string
+          description: URL-safe identifier for the prompt set. Unique per `model_id`.
+          example: orders-regression
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was last updated.
+          example: '2025-01-15T10:00:00.000Z'
+        latest_run_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp of the most recent run on this prompt set, if any.
+          example: '2025-01-15T10:05:00.000Z'
+        prompt_count:
+          type: integer
+          description: Number of prompts in the set.
+          example: 12
+      required:
+      - created_at
+      - description
+      - id
+      - is_archived
+      - model_id
+      - name
+      - slug
+      - updated_at
+      - latest_run_at
+      - prompt_count
+    EvalPromptSetsUpdateBody:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 1024
+          description: New description for the prompt set. Pass `null` to clear. Max 1024 characters.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: New human-readable name for the prompt set. 255 characters or fewer.
+        prompts:
+          type: array
+          items:
+            type: object
+            properties:
+              expectation:
+                type:
+                - string
+                - 'null'
+                maxLength: 16000
+                description: Optional expectation the analysis judge scores the analysis against. Pass `null` to clear. Max 16000 characters.
+                example: The top product by revenue should be Aniseed Syrup.
+              id:
+                type: string
+                format: uuid
+                description: Existing prompt id. When provided, updates that prompt; when omitted, a new prompt is created. Prompts not included in this list are removed.
+              prompt_text:
+                type: string
+                minLength: 1
+                maxLength: 8000
+                description: Updated or new prompt text. Max 8000 characters.
+                example: What are the top 10 products by revenue this quarter?
+            required:
+            - prompt_text
+          maxItems: 25
+          description: Full desired set of prompts after the update. Prompts omitted from this list are deleted; new prompts (no `id`) are appended in body order. Existing prompts retain their original position — reordering is not supported on this endpoint. At most 25 prompts total.
+    EvalRunsDeleteResponse:
+      type: object
+      properties:
+        is_archived:
+          type: boolean
+          enum:
+          - true
+          description: Always `true` on success — the run has been archived.
+      required:
+      - is_archived
+    EvalRunsListResponse:
+      type: object
+      properties:
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalRunListItem'
+          description: Runs for the prompt set, newest first, filtered to those whose model the caller can access.
+      required:
+      - runs
+    EvalRunsCreateBody:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 1024
+          description: Optional human-readable description for the run. Omit or pass `null` to leave it unset. Max 1024 characters.
+          example: Re-running after switching to gpt-4o for query generation
+        prompt_set_id:
+          type: string
+          format: uuid
+          description: The prompt set to execute.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        run_config:
+          type: object
+          properties:
+            branch_id:
+              type: string
+              format: uuid
+              description: Optional branch ID to run against. Must be a branch of the prompt set's model.
+              example: 440e8400-e29b-41d4-a716-446655440006
+          description: Per-run configuration. Optional — omit if no overrides.
+      required:
+      - prompt_set_id
+    EvalRunsCancelResponse:
+      type: object
+      properties:
+        cancelled:
+          type: integer
+          description: Number of per-prompt agentic jobs that were cancelled by this request.
+          example: 4
+        run:
+          allOf:
+          - $ref: '#/components/schemas/EvalRunDetail'
+          - description: 'The cancelled run. `status: CANCELLED` and `is_archived: true` after this call.'
+        total:
+          type: integer
+          description: Total number of per-prompt jobs in the run.
+          example: 12
+      required:
+      - cancelled
+      - run
+      - total
+    EvalPromptSetsGetResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalRunsCreateResponse:
+      type: object
+      properties:
+        job_count:
+          type: integer
+          description: Number of per-prompt agentic jobs created for this run (one per prompt that fanned out successfully). Enqueue onto the work queue happens after creation and is best-effort, so this count reflects jobs created, not necessarily those successfully enqueued.
+          example: 12
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - job_count
+      - run
+    EvalRunResultAgenticJob:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Conversation the agentic job belongs to.
+          example: 770e8400-e29b-41d4-a716-446655440002
+        id:
+          type: string
+          format: uuid
+          description: Agentic job identifier.
+          example: 990e8400-e29b-41d4-a716-446655440004
+        state:
+          type: string
+          enum:
+          - CANCELLED
+          - COMPLETE
+          - DELIVERING
+          - EXECUTING
+          - FAILED
+          - QUEUED
+          description: Current state of the agentic job that ran this prompt.
+          example: COMPLETE
+      required:
+      - conversation_id
+      - id
+      - state
+    EvalPromptSetsDeleteResponse:
+      type: object
+      properties:
+        cancelled_job_count:
+          type: integer
+          description: Number of in-flight agentic jobs associated with this prompt set that were cancelled as part of the archive.
+          example: 0
+        is_archived:
+          type: boolean
+          enum:
+          - true
+          description: Always `true` on success — archives the prompt set.
+      required:
+      - cancelled_job_count
+      - is_archived
+    EvalPromptSet:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description of the prompt set.
+          example: Regression suite for the orders topic
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        is_archived:
+          type: boolean
+          description: Whether the prompt set has been archived.
+          example: false
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        name:
+          type: string
+          description: Human-readable name for the prompt set.
+          example: Orders regression
+        prompts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalPrompt'
+          description: Prompts that make up the set.
+        slug:
+          type: string
+          description: URL-safe identifier for the prompt set. Unique per `model_id`.
+          example: orders-regression
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was last updated.
+          example: '2025-01-15T10:00:00.000Z'
+      required:
+      - created_at
+      - description
+      - id
+      - is_archived
+      - model_id
+      - name
+      - prompts
+      - slug
+      - updated_at
+    EvalPromptSetsListResponse:
+      type: object
+      properties:
+        prompt_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalPromptSetListItem'
+          description: Prompt sets matching the query, sorted alphabetically by name.
+      required:
+      - prompt_sets
+    EvalPrompt:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt was created.
+          example: '2025-01-15T10:00:00.000Z'
+        expectation:
+          type:
+          - string
+          - 'null'
+          description: The expectation the analysis judge scores the analysis against, or null when none was set.
+          example: The top product by revenue should be Aniseed Syrup.
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the prompt.
+          example: 770e8400-e29b-41d4-a716-446655440002
+        prompt_text:
+          type: string
+          description: The natural language prompt text the AI is evaluated on.
+          example: What are the top 5 products by revenue?
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt was last updated.
+          example: '2025-01-15T10:00:00.000Z'
+      required:
+      - created_at
+      - expectation
+      - id
+      - prompt_text
+      - updated_at
+    EvalRunResult:
+      type: object
+      properties:
+        agentic_job:
+          $ref: '#/components/schemas/EvalRunResultAgenticJob'
+        cost:
+          type:
+          - number
+          - 'null'
+          description: Total LLM cost (USD) for this prompt, if available.
+          example: 0.0021
+        error_reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason string for prompts whose underlying job failed.
+          example: null
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the run result row.
+          example: aa0e8400-e29b-41d4-a716-446655440005
+        prompt:
+          type: string
+          description: The prompt text that was evaluated.
+          example: What are the top 5 products by revenue?
+        score:
+          type:
+          - number
+          - 'null'
+          description: Numeric judge score for this prompt result, if scoring ran.
+          example: 0.9
+        scoring_cost:
+          type:
+          - number
+          - 'null'
+          description: Total LLM cost (USD) for scoring this prompt result.
+          example: 0.0004
+        timing_ms:
+          type:
+          - integer
+          - 'null'
+          description: Wall-clock duration of the underlying job in milliseconds.
+          example: 4321
+      required:
+      - agentic_job
+      - cost
+      - error_reason
+      - id
+      - prompt
+      - score
+      - scoring_cost
+      - timing_ms
+    EvalPromptSetsUpdateResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalRunsGetResponse:
+      type: object
+      properties:
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - run
+    EvalRunDetail:
+      type: object
+      properties:
+        branch_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Optional branch ID the run was executed against. Null when run against the main shared model.
+          example: null
+        branch_name:
+          type:
+          - string
+          - 'null'
+          description: Display name for the branch, if `branch_id` is set.
+          example: null
+        completed_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run reached a terminal state.
+          example: null
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description for the run.
+          example: null
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        is_archived:
+          type: boolean
+          description: Whether the run has been archived.
+          example: false
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this run was executed against.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        prompt_set_id:
+          type: string
+          format: uuid
+          description: The prompt set this run was created from.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalRunResult'
+          description: Per-prompt results for this run, ordered by their creation order in the prompt set.
+        run_number:
+          type: integer
+          description: Sequential, per-prompt-set run number.
+          example: 3
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - COMPLETE
+          - CANCELLED
+          description: Run-level lifecycle. Flips to a terminal state (COMPLETE or CANCELLED) exactly once.
+          example: RUNNING
+      required:
+      - branch_id
+      - branch_name
+      - completed_at
+      - created_at
+      - description
+      - id
+      - is_archived
+      - model_id
+      - prompt_set_id
+      - results
+      - run_number
+      - status
+      description: The newly created run with its initial results.
+    EvalRunListItem:
+      type: object
+      properties:
+        branch_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Optional branch ID the run was executed against. Null when run against the main shared model.
+          example: null
+        branch_name:
+          type:
+          - string
+          - 'null'
+          description: Display name for the branch, if `branch_id` is set.
+          example: null
+        completed_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run reached a terminal state.
+          example: null
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description for the run.
+          example: null
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        is_archived:
+          type: boolean
+          description: Whether the run has been archived.
+          example: false
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this run was executed against.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        prompt_set_id:
+          type: string
+          format: uuid
+          description: The prompt set this run was created from.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        run_number:
+          type: integer
+          description: Sequential, per-prompt-set run number.
+          example: 3
+        stats:
+          $ref: '#/components/schemas/EvalRunStats'
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - COMPLETE
+          - CANCELLED
+          description: Run-level lifecycle. Flips to a terminal state (COMPLETE or CANCELLED) exactly once.
+          example: RUNNING
+      required:
+      - branch_id
+      - branch_name
+      - completed_at
+      - created_at
+      - description
+      - id
+      - is_archived
+      - model_id
+      - prompt_set_id
+      - run_number
+      - stats
+      - status
+    EvalRunsUnarchiveResponse:
+      type: object
+      properties:
+        is_archived:
+          type: boolean
+          enum:
+          - false
+          description: Always `false` on success — the run has been unarchived.
+      required:
+      - is_archived
+    EvalPromptSetsUnarchiveResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalApiError:
+      type: object
+      description: Error response returned by the AI Eval endpoints.
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+      required:
+      - detail
+      - status
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

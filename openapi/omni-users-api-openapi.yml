@@ -1,0 +1,994 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Users API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Users
+  description: Manage users
+paths:
+  /v1/users/email-only:
+    get:
+      tags:
+      - Users
+      summary: List email-only users
+      description: Retrieve email-only users with their user attributes, with support for cursor-based pagination and filtering
+      security:
+      - bearerAuth: []
+      operationId: listEmailOnlyUsers
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+        description: Filter users by email (partial match, case-insensitive)
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Pagination cursor from previous response
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          default: 20
+          maximum: 20
+        description: Results per page
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: 'Sort order:
+
+          - `asc` - Ascending order (A-Z)
+
+          - `desc` - Descending order (Z-A)
+
+          '
+      responses:
+        '200':
+          description: Paginated list of email-only users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          format: email
+                          description: User's email address
+                        user_id:
+                          type: string
+                          format: uuid
+                          description: User's membership ID
+                        user_attributes:
+                          type: object
+                          description: Key-value map of user attributes, including system attributes like `omni_user_email`, `omni_user_name`, `omni_user_id`, `omni_is_org_admin`, plus any custom attributes.
+                          additionalProperties:
+                            type: string
+              example:
+                pageInfo:
+                  hasNextPage: true
+                  nextCursor: bob@example.com
+                  pageSize: 20
+                  totalRecords: 50
+                records:
+                - email: alice@example.com
+                  user_id: 550e8400-e29b-41d4-a716-446655440000
+                  user_attributes:
+                    omni_user_email: alice@example.com
+                    omni_user_name: alice@example.com
+                    omni_user_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                    omni_is_org_admin: 'false'
+                    omni_user_timezone: America/New_York
+                    department: Engineering
+                - email: bob@example.com
+                  user_id: 550e8400-e29b-41d4-a716-446655440001
+                  user_attributes:
+                    omni_user_email: bob@example.com
+                    omni_user_name: bob@example.com
+                    omni_user_id: b2c3d4e5-f6a7-8901-bcde-f23456789012
+                    omni_is_org_admin: 'false'
+                    omni_user_timezone: Europe/London
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          description: Unauthorized - Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /scim/v2/users:
+    post:
+      tags:
+      - Users
+      summary: Create user
+      description: Creates a user. To manage model and connection role assignments for users, see the [User model role APIs](/api/user-model-roles).
+      security:
+      - orgApiKey: []
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - displayName
+              - userName
+              properties:
+                displayName:
+                  type: string
+                  description: The user's display name
+                  example: Blob Ross
+                userName:
+                  type: string
+                  format: email
+                  description: The user's email address
+                  example: blob.ross@blobsrus.com
+                urn:omni:params:1.0:UserAttribute:
+                  type: object
+                  description: '[User attributes](/administration/users/attributes) as key/value pairs, where keys map to the IDs of user attributes defined in Omni. This is the **Reference** column in the **User attributes** page.
+
+                    '
+                  example:
+                    good_blob: true
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimUser'
+              example:
+                active: true
+                displayName: Blob Ross
+                emails:
+                - primary: true
+                  value: blob.ross@blobsrus.co
+                groups: []
+                id: 9e8719d9-276a-4964-9395-a493189a247c
+                meta:
+                  created: '2024-12-03T23:13:14.109Z'
+                  lastModified: '2024-12-03T23:13:14.109Z'
+                  resourceType: User
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:User
+                userName: blob.ross@blobsrus.co
+                urn:omni:params:1.0:UserAttribute:
+                  good_blob: 'yes'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Users
+      summary: List users
+      description: 'Returns a list of users, sorted by creation time. Use the [List embed users](/api/users/list-embed-users) endpoint to retrieve embed users.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: listUsers
+      parameters:
+      - name: filter
+        in: query
+        schema:
+          type: string
+        description: 'Filter users using the `userName` field with SCIM operators:
+
+
+          | Operator | Description | Example |
+
+          |----------|-------------|---------|
+
+          | `eq`     | Exact match | `userName eq "blob.ross@blobsrus.co"` |
+
+          | `co`     | Contains substring | `userName co "smith"` |
+
+
+          **Case sensitivity:**
+
+
+          - Attribute names (`userName`, `USERNAME`) are case-insensitive
+
+          - Operator names (`eq`, `EQ`, `co`, `CO`) are case-insensitive
+
+          - Email comparisons are case-insensitive
+
+
+          Usernames should be URL-encoded when passed as filters. For example, `userName eq "user@example.com"` will become `userName%20eq%20%22user%40example.com%22` when encoded.
+
+          '
+        example: userName co "smith"
+      - name: count
+        in: query
+        schema:
+          type: integer
+          default: 100
+        description: The number of users to return per page
+        example: 50
+      - name: startIndex
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: An integer index that determines the starting point of the sorted result list
+        example: 1
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Resources:
+                    type: array
+                    description: The list of users
+                    items:
+                      $ref: '#/components/schemas/ScimUser'
+                  schemas:
+                    type: array
+                    description: SCIM schema information for the response
+                    items:
+                      type: string
+                  itemsPerPage:
+                    type: integer
+                    description: The number of users returned in the current page
+                  totalResults:
+                    type: integer
+                    description: The total number of users matching the query
+                  startIndex:
+                    type: integer
+                    description: The starting index of the current page in the result set
+              example:
+                Resources:
+                - active: true
+                  displayName: Blob Ross
+                  emails:
+                  - primary: true
+                    value: blob.ross@blobsrus.co
+                  groups: []
+                  id: 9e8719d9-276a-4964-9395-a493189a247c
+                  meta:
+                    created: '2024-11-04T16:01:47.015Z'
+                    lastModified: '2024-11-04T16:05:45.356Z'
+                    resourceType: User
+                  schemas:
+                  - urn:ietf:params:scim:schemas:core:2.0:User
+                  - urn:omni:params:1.0:UserAttribute
+                  - urn:omni:params:scim:schemas:extension:user:2.0
+                  userName: blob.ross@blobsrus.co
+                  urn:omni:params:scim:schemas:extension:user:2.0:
+                    lastLogin: '2024-01-03T00:00:00.000Z'
+                itemsPerPage: 1
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:ListResponse
+                startIndex: 1
+                totalResults: 1
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /scim/v2/users/{userId}:
+    get:
+      tags:
+      - Users
+      summary: Retrieve user
+      description: Retrieves a user using their unique ID
+      security:
+      - orgApiKey: []
+      operationId: getUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user to be retrieved
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimUser'
+              example:
+                active: true
+                displayName: Blob Ross
+                emails:
+                - primary: true
+                  value: blob.ross@blobsrus.co
+                groups: []
+                id: 9e8719d9-276a-4964-9395-a493189a247c
+                meta:
+                  created: '2024-12-03T23:13:14.109Z'
+                  lastModified: '2024-12-03T23:13:14.109Z'
+                  resourceType: User
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:User
+                - urn:omni:params:1.0:UserAttribute
+                - urn:omni:params:scim:schemas:extension:user:2.0
+                userName: blob.ross@blobsrus.co
+                urn:omni:params:1.0:UserAttribute:
+                  good_blob: 'yes'
+                urn:omni:params:scim:schemas:extension:user:2.0:
+                  lastLogin: '2024-01-03T00:00:00.000Z'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - Users
+      summary: Replace user
+      description: 'Replaces the specified user. Per the SCIM 2.0 specification, `PUT` replaces the entire user resource: any optional attribute omitted from the request body is reset to its default value.
+
+
+        To update individual attributes without affecting others, use the [Update user](/api/users/update-user) endpoint, which performs a partial update via `PATCH`.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: replaceUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user to be replaced
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - userName
+              properties:
+                active:
+                  type: boolean
+                  default: true
+                  description: Whether the user is active. Set to `false` to deactivate the user.
+                  example: true
+                displayName:
+                  type: string
+                  description: The user's display name
+                  example: Blob Ross
+                userName:
+                  type: string
+                  format: email
+                  description: The user's email address.
+                  example: blob.ross@blobsrus.co
+                urn:omni:params:1.0:UserAttribute:
+                  type: object
+                  description: '[User attributes](/administration/users/attributes) as key/value pairs, where keys map to the IDs of user attributes defined in Omni. This is the **Reference** column in the **User attributes** page.
+
+                    '
+                  example:
+                    good_blob: 'yes'
+      responses:
+        '200':
+          description: User replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimUser'
+              example:
+                active: true
+                displayName: Blob Ross
+                emails:
+                - primary: true
+                  value: blob.ross@blobsrus.co
+                groups: []
+                id: 9e8719d9-276a-4964-9395-a493189a247c
+                meta:
+                  created: '2024-12-03T23:13:14.109Z'
+                  lastModified: '2024-12-03T23:13:14.109Z'
+                  resourceType: User
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:User
+                userName: blob.ross@blobsrus.co
+                urn:omni:params:1.0:UserAttribute:
+                  good_blob: 'yes'
+        '400':
+          description: Invalid request body
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Users
+      summary: Update user
+      description: 'Updates the specified user by applying a list of [SCIM 2.0 patch operations](https://datatracker.ietf.org/doc/html/rfc7644#section-3.5.2). Attributes not referenced in the request are left unchanged.
+
+
+        To replace the entire user resource in a single request, use the [Replace user](/api/users/replace-user) endpoint.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: updateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user to be updated
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - Operations
+              - schemas
+              properties:
+                schemas:
+                  type: array
+                  description: The SCIM schema URIs for the request. Must include `urn:ietf:params:scim:api:messages:2.0:PatchOp`.
+                  items:
+                    type: string
+                    enum:
+                    - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  example:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                Operations:
+                  type: array
+                  minItems: 1
+                  description: The list of patch operations to apply to the user.
+                  items:
+                    type: object
+                    required:
+                    - op
+                    - value
+                    properties:
+                      op:
+                        type: string
+                        description: The operation to perform.
+                        enum:
+                        - add
+                        - replace
+                        - remove
+                      path:
+                        type: string
+                        description: 'The attribute path the operation targets. Omit to apply the operation to the resource as a whole.
+
+                          '
+                        example: displayName
+                      value:
+                        description: The value to apply for the operation. Required for `add` and `replace` operations.
+                        example: Blob Ross
+                        anyOf:
+                        - type: string
+                        - type: number
+                        - type: boolean
+                        - type: array
+                          items:
+                            type: string
+                        - type: object
+                          properties:
+                            active:
+                              type: boolean
+                            displayName:
+                              type: string
+                            userName:
+                              type: string
+                              format: email
+            examples:
+              deactivateUser:
+                summary: Deactivate a user
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: active
+                    value: false
+              updateDisplayNameAndEmail:
+                summary: Update display name and email
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    value:
+                      displayName: Blob Ross
+                      userName: blob.ross@blobsrus.co
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimUser'
+              example:
+                active: false
+                displayName: Blob Ross
+                emails:
+                - primary: true
+                  value: blob.ross@blobsrus.co
+                groups: []
+                id: 9e8719d9-276a-4964-9395-a493189a247c
+                meta:
+                  created: '2024-12-03T23:13:14.109Z'
+                  lastModified: '2024-12-03T23:13:14.109Z'
+                  resourceType: User
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:User
+                userName: blob.ross@blobsrus.co
+        '400':
+          description: Invalid patch operations
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Users
+      summary: Delete user
+      description: Deletes the specified user. Use the [Delete embed user](/api/users/delete-embed-user) endpoint to delete embed users.
+      security:
+      - orgApiKey: []
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the user to be deleted
+        example: 9e8719d9-276a-4964-9395-a493189a247c
+      responses:
+        '204':
+          description: User deleted successfully
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /scim/v2/embed/users:
+    get:
+      tags:
+      - Users
+      summary: List embed users
+      description: 'Returns a list of embed users, sorted by creation time. Use the [List users](/api/users/list-users) endpoint to retrieve standard users.
+
+        '
+      security:
+      - orgApiKey: []
+      operationId: listEmbeddedUsers
+      parameters:
+      - name: filter
+        in: query
+        schema:
+          type: string
+        description: 'Filter embed users using the `userName` or `embedExternalId` fields with SCIM operators.
+
+
+          | Operator | Description | Example |
+
+          |----------|-------------|---------|
+
+          | `eq`     | Exact match | `userName eq "blob.ross@blobsrus.co"` |
+
+          | `co`     | Contains substring | `embedExternalId co "sales"` |
+
+
+          **Case sensitivity:**
+
+
+          - Attribute names (`userName`, `embedExternalId`) are case-insensitive
+
+          - Operator names (`eq`, `EQ`, `co`, `CO`) are case-insensitive
+
+          - Email comparisons are case-insensitive
+
+          - External ID (`embedExternalId`) comparisons are case-sensitive, per SCIM spec
+
+
+          Usernames should be URL-encoded when passed as filters. For example, `userName eq "user@example.com"` will become `userName%20eq%20%22user%40example.com%22` when encoded.
+
+          '
+        example: embedExternalId co "sales"
+      - name: count
+        in: query
+        schema:
+          type: integer
+          default: 100
+        description: The number of users to return
+        example: 50
+      - name: startIndex
+        in: query
+        schema:
+          type: integer
+          default: 1
+        description: An integer index that determines the starting point of the sorted result list
+        example: 1
+      responses:
+        '200':
+          description: List of embed users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Resources:
+                    type: array
+                    description: The list of embed users
+                    items:
+                      $ref: '#/components/schemas/ScimEmbedUser'
+                  schemas:
+                    type: array
+                    description: SCIM schema information for the response
+                    items:
+                      type: string
+                  itemsPerPage:
+                    type: integer
+                    description: The number of embed users returned in the current page
+                  totalResults:
+                    type: integer
+                    description: The total number of embed users matching the query
+                  startIndex:
+                    type: integer
+                    description: The starting index of the current page in the result set
+              example:
+                Resources:
+                - active: true
+                  displayName: Blobby
+                  emails:
+                  - primary: true
+                    value: embed-user-i_4TrNwyVTu34bZaC35VJVD3-pknp4YF7V8_Bi4TMdw@blobsrus.embed-exploreomni.co
+                  groups:
+                  - display: All Embed Users
+                    value: 4GcvQ2D9
+                  - display: Omni
+                    value: nqGuU_uh
+                  id: 2212aecf-a2ba-4d99-b23b-f615bc4c6522
+                  meta:
+                    created: '2024-09-30T20:25:01.822Z'
+                    lastModified: '2024-09-30T20:51:47.558Z'
+                    resourceType: User
+                  schemas:
+                  - urn:ietf:params:scim:schemas:core:2.0:User
+                  userName: embed-user-i_4TrNwyVTu34bZaC35VJVD3-pknp4YF7V8_Bi4TMdw@blobsrus.embed-exploreomni.co
+                  embedEmail: null
+                  embedEntity: omni
+                  embedExternalId: blobby-manager
+                itemsPerPage: 1
+                schemas:
+                - urn:ietf:params:scim:api:messages:2.0:ListResponse
+                startIndex: 1
+                totalResults: 1
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /scim/v2/embed/users/{userId}:
+    get:
+      tags:
+      - Users
+      summary: Retrieve embed user
+      description: Retrieves an embed user using their unique ID. Use the [Retrieve user](/api/users/retrieve-user) endpoint to retrieve standard users.
+      security:
+      - orgApiKey: []
+      operationId: getEmbeddedUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the embed user to be retrieved
+        example: 2212aecf-a2ba-4d99-b23b-f615bc4c6522
+      responses:
+        '200':
+          description: Embed user details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScimEmbedUser'
+              example:
+                active: true
+                displayName: Blobby
+                emails:
+                - primary: true
+                  value: embed-user-i_4TrNwyVTu34bZaC35VJVD3-pknp4YF7V8_Bi4TMdw@blobsrus.embed-exploreomni.co
+                groups:
+                - display: All Embed Users
+                  value: 4GcvQ2D9
+                - display: Omni
+                  value: nqGuU_uh
+                id: 2212aecf-a2ba-4d99-b23b-f615bc4c6522
+                meta:
+                  created: '2024-09-30T20:25:01.822Z'
+                  lastModified: '2024-09-30T20:51:47.558Z'
+                  resourceType: User
+                schemas:
+                - urn:ietf:params:scim:schemas:core:2.0:User
+                userName: embed-user-i_4TrNwyVTu34bZaC35VJVD3-pknp4YF7V8_Bi4TMdw@blobsrus.embed-exploreomni.co
+                embedEmail: null
+                embedEntity: omni
+                embedExternalId: blobby-manager
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Users
+      summary: Delete embed user
+      description: Deletes the specified embed user. Use the [Delete user](/api/users/delete-user) endpoint to delete standard users.
+      security:
+      - orgApiKey: []
+      operationId: deleteEmbeddedUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The ID of the embed user to be deleted
+        example: 2212aecf-a2ba-4d99-b23b-f615bc4c6522
+      responses:
+        '204':
+          description: Embed user deleted successfully
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ScimUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        userName:
+          type: string
+          description: The user's email address
+        displayName:
+          type: string
+          description: The user's display name
+        active:
+          type: boolean
+          description: Whether the user is active
+        emails:
+          type: array
+          description: The user's email addresses
+          items:
+            type: object
+            properties:
+              primary:
+                type: boolean
+                description: Whether this is the user's primary email
+              value:
+                type: string
+                description: The email address
+        groups:
+          type: array
+          description: User groups that the user belongs to
+          items:
+            type: object
+            properties:
+              display:
+                type: string
+                description: The group's display name
+              value:
+                type: string
+                description: The group's unique identifier
+        meta:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: User
+              description: The resource type. This will be `User`.
+            created:
+              type: string
+              format: date-time
+              description: The time the user was created
+            lastModified:
+              type: string
+              format: date-time
+              description: The time the user was last updated
+        schemas:
+          type: array
+          items:
+            type: string
+          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
+
+            '
+        urn:omni:params:1.0:UserAttribute:
+          type: object
+          description: '[User attributes](/administration/users/attributes) as key/value pairs, where keys map to the IDs of user attributes defined in Omni. This is the **Reference** column in the **User attributes** page.
+
+            '
+        urn:omni:params:scim:schemas:extension:user:2.0:
+          type: object
+          description: Omni SCIM extension schema containing additional user metadata
+          properties:
+            lastLogin:
+              type: string
+              format: date-time
+              nullable: true
+              description: The timestamp of the user's last login. Will be `null` if the user has never logged in.
+    ScimEmbedUser:
+      type: object
+      description: An embed user object (SCIM 2.0)
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        userName:
+          type: string
+          description: The user's email address
+        displayName:
+          type: string
+          description: The user's display name
+        active:
+          type: boolean
+          description: Whether the user is active
+        emails:
+          type: array
+          description: The user's email addresses
+          items:
+            type: object
+            properties:
+              primary:
+                type: boolean
+                description: Whether this is the user's primary email
+              value:
+                type: string
+                description: The email address
+        groups:
+          type: array
+          description: User groups that the user belongs to
+          items:
+            type: object
+            properties:
+              display:
+                type: string
+                description: The group's display name
+              value:
+                type: string
+                description: The group's unique identifier
+        meta:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: User
+              description: The type of resource. This will be `User`.
+            created:
+              type: string
+              format: date-time
+              description: The time the user was created
+            lastModified:
+              type: string
+              format: date-time
+              description: The time the user was last uodated
+        schemas:
+          type: array
+          items:
+            type: string
+          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
+
+            '
+        embedEmail:
+          type: string
+          nullable: true
+          description: The embed user's email address
+        embedEntity:
+          type: string
+          description: The embed entity identifier
+        embedExternalId:
+          type: string
+          description: The external ID for the embed user
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

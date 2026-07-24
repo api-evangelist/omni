@@ -1,0 +1,207 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Who Am I API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Who Am I
+  description: Inspect your own user permissions
+paths:
+  /v1/whoami:
+    get:
+      description: "Returns the authenticated caller's own identity, API key scope, organization role, and resolved per-model permissions. \n\nSelf-scoped and available to non-admins: it lets a caller decide whether an action is permitted without attempting it. Pass `modelId` to scope `rolesByModel` to specific models.\n"
+      operationId: whoami
+      summary: Get current identity and permissions
+      tags:
+      - Who Am I
+      parameters:
+      - name: modelId
+        in: query
+        schema:
+          type: string
+          example: 550e8400-e29b-41d4-a716-446655440000
+        required: false
+        description: 'Optional model filter. A single model ID or a comma-separated list.
+
+
+          When provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.
+
+          '
+      responses:
+        '200':
+          description: Caller's identity, key scope, org role, and per-model permissions
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - keyScope
+                - orgRole
+                - rolesByModel
+                - user
+                properties:
+                  keyScope:
+                    type: string
+                    enum:
+                    - user
+                    - organization
+                    description: 'Scope of the API key in use.
+
+
+                      - `user` - Personal Access Token. This is a user-scoped key (PAT/OAuth) that acts as a single user and cannot use SCIM, regardless of the user''s organization role.
+
+                      - `organization` - Organization API key
+
+                      '
+                  orgRole:
+                    type: string
+                    enum:
+                    - MEMBER
+                    - ORG_ADMIN
+                    description: The caller's organization role.
+                    example: MEMBER
+                  rolesByModel:
+                    type: object
+                    additionalProperties:
+                      $ref: '#/components/schemas/WhoamiModelRole'
+                    description: Resolved role and effective permissions per model, keyed by model ID. Connection role resolves per shared model, so this is per-model rather than a single global role.
+                  rolesByModelTruncated:
+                    type: boolean
+                    description: Present and `true` when `rolesByModel` was truncated because the caller can access more models than the unfiltered limit. Pass a `modelId` filter to retrieve specific models.
+                  user:
+                    $ref: '#/components/schemas/WhoamiUser'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '404':
+          description: One or more requested `modelId`s do not exist or are not accessible to the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+components:
+  schemas:
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    WhoamiModelRole:
+      type: object
+      required:
+      - baseRole
+      - connectionId
+      - permissions
+      - roleName
+      properties:
+        baseRole:
+          type: string
+          description: The resolved base role. For custom roles, the base role they extend.
+          example: QUERIER
+        connectionId:
+          type: string
+          description: The connection this model belongs to
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+            - QUERY_FULL_MODEL
+            - QUERY_SQL
+            - VIEW_SQL
+            - QUERY_TOPICS
+            - RUN_CONTENT_QUERIES
+            - DOWNLOAD_CONTENT_QUERY
+            - UPLOAD_CSV
+            - SCHEDULE
+            - SAVE_SPREADSHEETS
+            - USE_AI
+            - USE_WORKBOOKS
+            - UPDATE
+            - UPDATE_RESTRICTED
+          description: "The caller''s resolved/effective permissions on this model, reflecting custom roles. This is a capability signal for the directly-roleable model kinds (schema / shared / extension). \n\nIt does not enumerate the permissions you derive on branch, workbook, and query models from your role on the base model they descend from - bsence here does not mean you lack access on those derived models.`MANAGE_MODEL`, `READ`, and `REFRESH_SCHEMA` are also not reported: they derive from connection / sibling-model roles rather than a per-model rule.\n"
+          example:
+          - QUERY_TOPICS
+          - QUERY_SQL
+          - USE_WORKBOOKS
+        roleName:
+          type: string
+          description: The resolved role name; may be a custom role. Use `permissions` to decide capability.
+          example: QUERIER
+    WhoamiUser:
+      type: object
+      required:
+      - id
+      - membershipId
+      properties:
+        id:
+          type: string
+          description: The caller's user ID
+        membershipId:
+          type: string
+          description: The caller's own membership ID within this organization. This is the ID accepted by the [Get model roles endpoint](/api/user-model-roles/retrieve-user-model-roles) and is distinct from the user ID.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

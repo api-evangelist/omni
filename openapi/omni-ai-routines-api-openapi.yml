@@ -1,0 +1,881 @@
+openapi: 3.1.0
+info:
+  title: Omni AI AI Routines API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: AI Routines
+  description: 'Manage AI Routines: schedule recurring AI-powered tasks to run automatically on your data.'
+paths:
+  /v1/ai/routines:
+    get:
+      summary: List AI Routines
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nList AI Routines for the calling user, newest first. Includes routines paused by the owner or disabled by Omni, but excludes deleted routines. \n\nUse `pageInfo.nextCursor` from one response as the `cursor` query parameter on the next request. \n"
+      operationId: aiRoutinesList
+      tags:
+      - AI Routines
+      parameters:
+      - name: cursor
+        in: query
+        schema:
+          type: string
+          example: eyJpZCI6IjEyMzQ1In0
+        required: false
+        description: Cursor for pagination from previous response `nextCursor`
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+          example: 20
+        required: false
+        description: Number of results per page (1-100, integer)
+      - name: sortDirection
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+          example: desc
+        required: false
+        description: Sort direction for results
+      - name: sortField
+        in: query
+        schema:
+          type: string
+        required: false
+        description: Field to sort results by
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: '**Requires an Organization API key**. Target user membership ID.
+
+          '
+      responses:
+        '200':
+          description: List of AI Routines
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - pageInfo
+                - records
+                properties:
+                  pageInfo:
+                    $ref: '#/components/schemas/PageInfo'
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Routine'
+                    description: Routines returned for this request, newest first.
+        '400':
+          description: Invalid pagination cursor or `userId` value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have USE_AI permission`
+
+            - `AI Routines feature is not enabled (aiScheduledTasks flag required)`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not found.
+
+
+            Possible causes:
+
+
+            - The `userId` membership was not found in the organization.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Create an AI Routine
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nCreate a new AI Routine that will run on the specified schedule.\n\nEach scheduled run executes once using the routine owner's permissions, and every recipient receives the same result.\n"
+      operationId: routineCreate
+      tags:
+      - AI Routines
+      parameters:
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: '**Requires an Organization API key**. Target user membership ID.
+
+          '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - modelId
+              - prompt
+              - schedule
+              - timezone
+              - destination
+              properties:
+                branchId:
+                  type: string
+                  nullable: true
+                  format: uuid
+                  description: Branch of the shared model the prompt runs against, or null.
+                description:
+                  type: string
+                  nullable: true
+                  description: Display-only notes about the routine, or null.
+                destination:
+                  $ref: '#/components/schemas/RoutineDestination'
+                modelId:
+                  type: string
+                  format: uuid
+                  description: The shared model the prompt runs against.
+                name:
+                  type: string
+                  description: Customer-visible name of the routine, used as the email subject.
+                prompt:
+                  type: string
+                  description: Natural language prompt Omni runs on each scheduled run.
+                schedule:
+                  type: string
+                  description: Six-field cron expression (minute, hour, day-of-month, month, day-of-week, year; use `?` for an unspecified day field).
+                timezone:
+                  type: string
+                  description: IANA timezone identifier used to evaluate the schedule.
+                topicName:
+                  type: string
+                  nullable: true
+                  description: Topic scoping query generation, or null.
+      responses:
+        '201':
+          description: Routine created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The unique identifier for the newly created routine.
+                    example: 880e8400-e29b-41d4-a716-446655440003
+        '400':
+          description: Invalid request body, recipient configuration, timezone, or schedule. Also returned when the schedule is more frequent than the organization allows.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            AI routines or AI query generation are not enabled for the organization, or the API key cannot act on behalf of the requested user.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Model, branch, or topic not found, or not accessible to the requested user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '429':
+          description: The resolved user already has the maximum number of active routines.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError429'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/routines/{routineId}:
+    get:
+      summary: Get an AI Routine
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRetrieve details for a specific AI Routine by ID, including the status of its most recent completed run.\n"
+      operationId: routineGet
+      tags:
+      - AI Routines
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: The UUID of the routine.
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: '**Requires an Organization API key**. Target user membership ID.
+
+          '
+      responses:
+        '200':
+          description: Routine details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routine'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+
+            - `User does not have USE_AI permission`
+
+            - `AI Routines feature is not enabled (aiScheduledTasks flag required)`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Routine not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Update an AI Routine
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nUpdate an existing AI Routine. All request fields are optional, and only supplied fields are changed. Supplying `destination` replaces the full recipient configuration.\n"
+      operationId: routineUpdate
+      tags:
+      - AI Routines
+      parameters:
+      - schema:
+          type: string
+          format: uuid
+        required: true
+        description: The UUID of the routine.
+        name: id
+        in: path
+      - schema:
+          type: string
+          format: uuid
+        required: false
+        description: '**Requires an Organization API key**. Target user membership ID.
+
+          '
+        name: userId
+        in: query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - prompt
+              - schedule
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  description: Display name for the routine
+                description:
+                  type: string
+                  nullable: true
+                  description: Optional description of what the routine does
+                prompt:
+                  type: string
+                  minLength: 1
+                  description: The AI prompt that will be executed when the routine runs
+                schedule:
+                  type: string
+                  description: Cron expression or human-readable schedule (e.g., "daily", "weekly", "0 9 * * 1")
+                modelId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: Optional model ID to scope the routine to a specific data model
+                isActive:
+                  type: boolean
+                  description: Whether the routine is active and will execute on schedule
+      responses:
+        '200':
+          description: Routine updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Routine'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden
+
+
+            Possible error messages:
+
+            - `User does not have USE_AI permission`
+
+            - `AI Routines feature is not enabled (aiScheduledTasks flag required)`
+
+            - `Insufficient permissions to update this routine`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Routine not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete an AI Routine
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nDelete an AI Routine. This action cannot be undone.\n"
+      operationId: routineDelete
+      tags:
+      - AI Routines
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+          format: uuid
+          description: The UUID of the routine.
+        required: true
+        description: The UUID of the routine.
+      - name: userId
+        in: query
+        schema:
+          type: string
+          format: uuid
+        required: false
+        description: '**Requires an Organization API key**. Target user membership ID.
+
+          '
+      responses:
+        '200':
+          description: Routine deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - deleted
+                - id
+                properties:
+                  deleted:
+                    type: boolean
+                    enum:
+                    - true
+                    description: Always true on a successful delete.
+                  id:
+                    type: string
+                    format: uuid
+                    description: The deleted routine’s ID.
+        '400':
+          description: Invalid routine ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: AI routines or AI query generation are not enabled for the organization, or a user-scoped API key tried to delete another user's routine.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '404':
+          description: Routine not found or has already been deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/ai/routines/{routineId}/trigger:
+    post:
+      tags:
+      - AI Routines
+      summary: Run AI routine now
+      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRun an existing routine immediately, in addition to its schedule — e.g. to get an off-cycle result or verify a routine produces the email you expect.\n\nExecutes once using the routine owner's permissions and delivers the AI response to every recipient configured on the routine. Returns as soon as the run has started; the result arrives asynchronously via the routine's normal email delivery.\n\nIf a run is already in progress, the endpoint returns `409` rather than starting a second one. Manual runs that hit broken configuration will return `400` but not pause the schedule.\n"
+      security:
+      - bearerAuth: []
+      operationId: triggerAIRoutine
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the routine.
+      - name: userId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: "**Requires an Organization API key**. Target user membership ID. \n"
+      responses:
+        '202':
+          description: The run has started.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - id
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: The ID of the run (scheduled job) that was started.
+                    example: 990e8400-e29b-41d4-a716-446655440004
+        '400':
+          description: 'Bad request. Possible causes:
+
+
+            - Invalid routine ID
+
+            - Routine cannot run as configured (e.g. its model, branch, or owner is no longer accessible)
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError400'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError401'
+        '403':
+          description: AI routines or AI query generation are not enabled for the organization, or a user-scoped API key tried to run another user's routine.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError403'
+        '404':
+          description: The routine does not exist or cannot be triggered (deleted, paused, or disabled by Omni).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError404'
+        '409':
+          description: A run is already in progress for this routine.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError409'
+components:
+  schemas:
+    RoutineLastRun:
+      type: object
+      nullable: true
+      required:
+      - completedAt
+      - label
+      - state
+      description: Most recent completed run, or null if the routine has never completed a run.
+      properties:
+        completedAt:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp the last completed run finished.
+        label:
+          type: string
+          description: User-visible status of the last completed run.
+          example: Delivered
+        state:
+          type: string
+          description: Machine-readable status of the last completed run.
+          example: COMPLETE
+    RoutineDestination:
+      oneOf:
+      - $ref: '#/components/schemas/RoutineEmailDestination'
+      - $ref: '#/components/schemas/RoutineSlackDestination'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/RoutineEmailDestination'
+          slack: '#/components/schemas/RoutineSlackDestination'
+      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    Routine:
+      type: object
+      properties:
+        branchId:
+          type: string
+          nullable: true
+          format: uuid
+          description: Branch of the shared model the prompt runs against, or null.
+        createdAt:
+          type: string
+          description: ISO 8601 timestamp when the routine was created.
+        description:
+          type: string
+          nullable: true
+          description: Display-only notes about the routine, or null.
+        destination:
+          $ref: '#/components/schemas/RoutineDestination'
+        disabled:
+          type: boolean
+          description: Whether the owner has paused the routine.
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the routine.
+        lastRun:
+          $ref: '#/components/schemas/RoutineLastRun'
+        modelId:
+          type: string
+          format: uuid
+          description: The shared model the prompt runs against.
+        name:
+          type: string
+          description: Customer-visible name of the routine, used as the email subject.
+        prompt:
+          type: string
+          description: Natural language prompt Omni runs on each scheduled run.
+        recipientCount:
+          type: integer
+          description: Number of distinct deliverable recipients after expanding user groups and removing duplicates.
+        schedule:
+          type: string
+          description: Six-field cron expression (minute, hour, day-of-month, month, day-of-week, year; use `?` for an unspecified day field).
+        systemDisabled:
+          type: boolean
+          description: Whether Omni disabled the routine because it could no longer run successfully or safely.
+        systemDisabledReason:
+          type: string
+          nullable: true
+          description: Reason Omni disabled the routine, or null.
+        timezone:
+          type: string
+          description: IANA timezone identifier used to evaluate the schedule.
+        topicName:
+          type: string
+          nullable: true
+          description: Topic scoping query generation, or null.
+        updatedAt:
+          type: string
+          description: ISO 8601 timestamp when the routine was last updated.
+      required:
+      - branchId
+      - createdAt
+      - description
+      - destination
+      - disabled
+      - id
+      - lastRun
+      - modelId
+      - name
+      - prompt
+      - recipientCount
+      - schedule
+      - systemDisabled
+      - systemDisabledReason
+      - timezone
+      - topicName
+      - updatedAt
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    ApiError429:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 429
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    RoutineSlackDestination:
+      type: object
+      required:
+      - recipientId
+      - slackRecipientType
+      - type
+      additionalProperties: false
+      description: Slack delivery configuration for the routine. Requires a Slack workspace connected to Omni; to deliver to a private channel, invite the Omni Slackbot to it first.
+      properties:
+        recipientId:
+          type: string
+          minLength: 1
+          description: The Slack channel ID (e.g. `C01234567`) or user ID (e.g. `U01234567`) that receives each scheduled run. Exactly one recipient per Slack routine.
+          example: C01234567
+        slackRecipientType:
+          type: string
+          enum:
+          - channel
+          - users
+          description: Whether `recipientId` is a Slack channel or a user (delivered as a direct message).
+          example: channel
+        type:
+          type: string
+          enum:
+          - slack
+          description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
+          example: slack
+    RoutineEmailDestination:
+      type: object
+      required:
+      - type
+      additionalProperties: false
+      description: Email delivery configuration for the routine.
+      properties:
+        recipientEmails:
+          type: array
+          items:
+            type: string
+            format: email
+          maxItems: 100
+          default: []
+          description: Email addresses that receive each scheduled run of the routine.
+          example:
+          - blob.ross@blobsrus.com
+          - blob.the.builder@blobsrus.com
+        type:
+          type: string
+          enum:
+          - email
+          description: Selects email delivery — each scheduled run is sent to the listed email recipients and user groups.
+          example: email
+        userGroupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          maxItems: 100
+          default: []
+          description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
+          example:
+          - 550e8400-e29b-41d4-a716-446655440000
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    ApiError409:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

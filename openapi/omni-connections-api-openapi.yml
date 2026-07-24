@@ -1,0 +1,877 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Connections API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Connections
+  description: Manage database connections
+paths:
+  /v1/connections:
+    post:
+      tags:
+      - Connections
+      summary: Create connection
+      description: 'Creates a new database connection. See the **Parameters**
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: createConnection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - dialect
+              - name
+              - passwordUnencrypted
+              properties:
+                dialect:
+                  $ref: '#/components/schemas/Dialect'
+                name:
+                  type: string
+                  description: A descriptive name for the connection
+                host:
+                  type: string
+                  description: 'The hostname or IP address of the database server.
+
+                    - **MotherDuck** - Not required
+
+                    - **Snowflake** - Provide only the account identifier (e.g., `myaccount` not `myaccount.snowflakecomputing.com`)
+
+                    - **BigQuery** - Automatically determined from the service account
+
+                    '
+                port:
+                  type: integer
+                  description: 'The port number for the database connection.
+
+
+                    Not required for Snowflake, MotherDuck, BigQuery, Databricks, and Athena.
+
+                    '
+                database:
+                  type: string
+                  description: 'The default database/catalog to connect to.
+
+
+                    - **BigQuery** - Provide the project ID
+
+                    - **Athena** - Provide the data catalog
+
+                    '
+                username:
+                  type: string
+                  description: 'The username to authenticate with.
+
+
+                    - **MotherDuck** - Not required
+
+                    - **BigQuery** - Provide client email from the service account
+
+                    '
+                passwordUnencrypted:
+                  type: string
+                  description: 'The password to authenticate with.
+
+                    - **BigQuery** - This must be the JSON service account key file content
+
+                    - **Snowflake** with keypair authentication - Can be omitted
+
+                    '
+                baseRole:
+                  type: string
+                  description: 'The default role for users accessing the connection. Available roles include:
+
+
+                    - `VIEWER` - Can view the model
+
+                    - `QUERIER` - Can view and query the model
+
+                    - `QUERY_TOPICS` - Can query specific topics. Equivalent to **Restricted Querier.**
+
+                    - `MODELER` - Can edit and model the data
+
+                    - `CONNECTION_ADMIN` - Full administrative access to the connection
+
+                    - `NO_ACCESS` - No access to the model
+
+                    - [Custom roles](/administration/users/custom-roles) defined for your organization
+
+                    '
+                warehouse:
+                  type: string
+                  description: '**Required for**:
+
+
+                    - **Snowflake** - Specify the warehouse
+
+                    - **Databricks** - Specify the HTTP path
+
+                    '
+                includeSchemas:
+                  type: string
+                  description: Comma-separated list of schemas to include. Leave empty to include all schemas.
+                includeOtherCatalogs:
+                  type: string
+                  description: 'Comma-separated list of other catalogs/databases to include. **Only applicable for databases that support multi-catalog queries:** BigQuery, Snowflake, MotherDuck, Databricks, Trino, Athena.
+
+                    '
+                defaultSchema:
+                  type: string
+                  description: "**Required for MSSQL.** The default schema to use. \n"
+                queryTimeoutSeconds:
+                  type: integer
+                  description: The timeout in seconds for queries. Maximum value is `3600` (1 hour). Only applicable for databases that support query timeouts.
+                  maximum: 3600
+                  default: 900
+                region:
+                  type: string
+                  description: '**Required for BigQuery and Athena connections.**
+
+
+                    - **BigQuery** - Specify a region like `us`
+
+                    - **Athena** - Specify an AWS region like `us-east-1`
+
+                    '
+                maxBillingBytes:
+                  type: string
+                  description: '**Applicable for BigQuery.** Maximum bytes that can be billed for a BigQuery query.
+
+                    '
+                scratchSchema:
+                  type: string
+                  description: Schema to use for data input (upload) tables. If not specified, a suitable default will be chosen.
+                systemTimezone:
+                  type: string
+                  description: The timezone to use for the system.
+                  default: UTC
+                queryTimezone:
+                  type: string
+                  description: The timezone to use for queries.
+                  default: NONE
+                allowsUserSpecificTimezones:
+                  type: boolean
+                  description: Whether to allow users to specify their own timezones.
+                  default: false
+                alwaysScopeViewNames:
+                  type: boolean
+                  description: 'Whether to prefix generated view names with their schema and catalog, e.g. `my_catalog_public__orders` instead of `orders`. Defaults to `true` for dialects that support multiple catalogs, and `false` otherwise. See [View name generation](/connect-data/view-name-generation) for more information.
+
+                    '
+                trustServerCertificate:
+                  type: boolean
+                  description: '**Applicable for MSSQL, Exasol, and ClickHouse.** Whether to trust the server certificate.
+
+                    '
+                  default: false
+                privateKey:
+                  type: string
+                  description: "**Applicable for Snowflake only.** An RSA key for keypair authentication. Omni will automatically add PEM headers if none are provided. \n"
+                acceptsLicense:
+                  type: boolean
+                  description: "**Applicable for Oracle.** Whether to accept the license terms. \n"
+                authenticationType:
+                  type: string
+                  description: '**Applicable for BigQuery, MSSQL, Snowflake, Databricks, and Athena.** The authentication method to use.
+
+                    '
+                awsRoleArn:
+                  type: string
+                  description: '**Applicable for Athena.** The AWS role ARN to assume for the connection.
+
+                    '
+                enableDbSemanticLayerIntegration:
+                  type: boolean
+                  description: 'Whether to enable the database''s semantic layer integration:
+
+
+                    - **Snowflake** - [Snowflake semantic views](/connect-data/snowflake-semantic-views)
+
+                    - **Databricks** - [Databricks Unity Catalog](/connect-data/databricks-unity-catalog-integration)
+
+                    '
+                enableDbSemanticLayerTopics:
+                  type: boolean
+                  description: '**Applicable for Snowflake and Databricks.** Whether to enable database semantic layer topics.
+
+                    '
+                externalOauthAudience:
+                  type: string
+                  description: '**Applicable for Snowflake.** The audience for [external OAuth authentication](/connect-data/oauth/snowflake/external-okta).
+
+                    '
+                externalOauthAuthorizationUrl:
+                  type: string
+                  description: '**Applicable for Snowflake.** The authorization URL for [external OAuth authentication](/connect-data/oauth/snowflake/external-okta).
+
+                    '
+                externalOauthTokenUrl:
+                  type: string
+                  description: '**Applicable for Snowflake.** The token URL for [external OAuth authentication](/connect-data/oauth/snowflake/external-okta).
+
+                    '
+                hostOverride:
+                  type: string
+                  description: '**Applicable for Snowflake.** Override for the host value.
+
+                    '
+                inferRelationshipsFromColumnNames:
+                  type: boolean
+                  default: true
+                  description: 'Whether to automatically infer relationships from column-name conventions during schema refresh.
+
+                    '
+                inferRelationshipsFromForeignKeys:
+                  type: boolean
+                  description: '**Applicable for Postgres and Snowflake.** Whether to automatically infer relationships from foreign key constraints.
+
+                    '
+                oauthClientId:
+                  type: string
+                  description: '**Applicable for [Snowflake](/connect-data/oauth/snowflake/native) and Databricks.** The OAuth client ID for native OAuth.
+
+                    '
+                oauthClientSecretUnencrypted:
+                  type: string
+                  description: '**Applicable for Snowflake and Databricks.** The unencrypted OAuth client secret for [native OAuth](/connect-data/oauth/snowflake/native).
+
+                    '
+                offloadedSchemas:
+                  type: string
+                  description: '**Applicable for all dialects.** Comma-separated list of schemas to offload. See [Offloading schemas](/connect-data/offloading-schemas) for more information.
+
+                    '
+                useMachineAuth:
+                  type: boolean
+                  description: '**Applicable for Athena and Databricks.** Whether to use machine authentication.
+
+                    '
+            examples:
+              BigQuery:
+                summary: BigQuery
+                value:
+                  dialect: bigquery
+                  name: My BigQuery Connection
+                  region: us
+                  passwordUnencrypted: <SERVICE_ACCOUNT_JSON_FILE>
+                  defaultSchema: my_dataset
+                  includeSchemas: dataset1,dataset2
+                  includeOtherCatalogs: other_project1,other_project2
+                  maxBillingBytes: '1000000000'
+              MySQL:
+                summary: MySQL
+                value:
+                  dialect: mysql
+                  name: My MySQL Connection
+                  host: mysql.example.com
+                  port: 3306
+                  database: mydb
+                  username: dbuser
+                  passwordUnencrypted: mypassword
+                  includeSchemas: public,analytics
+                  queryTimeoutSeconds: 900
+              Postgres:
+                summary: PostgreSQL
+                value:
+                  dialect: postgres
+                  name: My Postgres Connection
+                  host: postgres.example.com
+                  port: 5432
+                  database: mydb
+                  username: dbuser
+                  passwordUnencrypted: mypassword
+                  includeSchemas: public,analytics
+                  queryTimeoutSeconds: 900
+              Snowflake:
+                summary: Snowflake
+                value:
+                  dialect: snowflake
+                  name: My Snowflake Connection
+                  host: myaccount
+                  database: MYDB
+                  username: dbuser
+                  passwordUnencrypted: mypassword
+                  warehouse: COMPUTE_WH
+                  includeSchemas: PUBLIC,ANALYTICS
+                  includeOtherCatalogs: OTHER_DB1,OTHER_DB2
+                  queryTimeoutSeconds: 900
+      responses:
+        '201':
+          description: Connection created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: string
+                    format: uuid
+                    description: Connection ID
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    get:
+      tags:
+      - Connections
+      summary: List connections
+      description: Retrieves a list of database connections with optional filtering and sorting
+      security:
+      - bearerAuth: []
+      operationId: listConnections
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: Filter connections by name (case-insensitive, partial matching)
+      - name: database
+        in: query
+        schema:
+          type: string
+        description: Filter connections by database name (case-insensitive, partial matching)
+      - name: dialect
+        in: query
+        schema:
+          $ref: '#/components/schemas/Dialect'
+        description: Filter connections by dialect(s). For multiple dialects, provide a comma-separated list (e.g., `postgres,mysql`).
+      - name: sortField
+        in: query
+        schema:
+          type: string
+          enum:
+          - database
+          - dialect
+          - name
+        description: Field to sort by
+      - $ref: '#/components/parameters/sortDirection'
+      - name: includeDeleted
+        in: query
+        schema:
+          type: boolean
+        description: When `true`, the response includes deleted connections. Defaults to `false`.
+      responses:
+        '200':
+          description: Returns a list of connections objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connections:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Connection'
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - `formErrors: Unrecognized key(s) in object: ''<invalidParam>''`
+
+            - `sortField: Invalid enum value. Expected ''database'' | ''dialect'' | ''name'', received ''<invalidField>''`
+
+            - `Invalid dialect(s): <invalidDialect>`
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/connections/{connectionId}:
+    get:
+      tags:
+      - Connections
+      summary: Get connection
+      description: '<Note>
+
+        This endpoint requires **Restricted Querier** permissions or higher.
+
+        </Note>
+
+
+        Fetch a single connection by ID.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: getConnection
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Connection ID
+      responses:
+        '200':
+          description: Connection retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connection:
+                    $ref: '#/components/schemas/Connection'
+              example:
+                connection:
+                  id: 550e8400-e29b-41d4-a716-446655440000
+                  name: Production Snowflake
+                  dialect: snowflake
+                  database: analytics_db
+                  defaultSchema: public
+                  deletedAt: null
+                  baseRole: QUERIER
+                  branchConnectionEnvironmentOverridesUserAttr: false
+                  environmentConnectionSwitchesSchemaModel: false
+                  userAttributeNameForConnectionEnvironments: null
+                  userAttributeValuesForDefaultEnvironment: null
+        '400':
+          description: Invalid connection ID format (not a valid UUID)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden. Possible error messages:
+
+
+            - `Caller lacks `READ` permission on the connection` - Requesting user has insufficient permissions for the connection
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    patch:
+      tags:
+      - Connections
+      summary: Update connection
+      description: 'Update connection properties including credentials. Credentials are encrypted at rest and never returned in API responses.
+
+
+        This endpoint supports credential rotation for infrastructure-as-code workflows. Depending on the connection type, you can update:
+
+        - **Password-based connections** (Postgres, MySQL, etc.): Use `passwordUnencrypted` to update the password
+
+        - **BigQuery**: Use `passwordUnencrypted` to update the service account JSON
+
+        - **Snowflake**: Use `privateKey` to update the RSA private key (PEM format, minimum 2048 bits)
+
+
+        At least one field must be provided in the request body.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: updateConnection
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Connection ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                passwordUnencrypted:
+                  type: string
+                  description: 'Password or service account JSON for credential rotation.
+
+
+                    - For **password-based connections** such as Postgres, MySQL, etc. -  Provide the new password as a string
+
+                    - For **BigQuery** - Provide the entire service account JSON file as a string
+
+                    '
+                  example: new-password-here
+                privateKey:
+                  type: string
+                  description: '**Only applicable to Snowflake connections**. RSA private key in PEM format for Snowflake connections. Must be at least 2048 bits.
+
+                    '
+                  example: '-----BEGIN PRIVATE KEY-----
+
+                    MIIEvgIBADANBg...'
+                baseRole:
+                  type: string
+                  description: 'The default role for users accessing the connection. Available roles include:
+
+
+                    - `VIEWER` - Can view the model
+
+                    - `QUERIER` - Can view and query the model
+
+                    - `QUERY_TOPICS` - Can query specific topics. Equivalent to **Restricted Querier.**
+
+                    - `MODELER` - Can edit and model the data
+
+                    - `CONNECTION_ADMIN` - Full administrative access to the connection
+
+                    - `NO_ACCESS` - No access to the model
+
+                    - [Custom roles](/administration/users/custom-roles) defined for your organization
+
+                    '
+                environmentUserAttribute:
+                  oneOf:
+                  - type: object
+                    properties:
+                      attributeName:
+                        type: string
+                        description: The name of the user attribute to use for environments
+                      defaultValues:
+                        type: array
+                        items:
+                          type: string
+                        description: Array of default values for the user attribute
+                    required:
+                    - attributeName
+                    - defaultValues
+                  - type: 'null'
+                  description: Configuration for environment user attributes. Set to `null` to remove environment user attribute settings.
+            examples:
+              rotatePassword:
+                summary: Rotate password (Postgres, MySQL, etc.)
+                value:
+                  passwordUnencrypted: new-password-here
+              rotateBigQueryKey:
+                summary: Rotate BigQuery service account key
+                value:
+                  passwordUnencrypted: '{"type":"service_account","project_id":"my-gcp-project","private_key_id":"abc123...","private_key":"-----BEGIN PRIVATE KEY-----\nMIIEvgIBA...\n-----END PRIVATE KEY-----\n","client_email":"my-service@my-gcp-project.iam.gserviceaccount.com","client_id":"123456789","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/..."}'
+              rotateSnowflakeKey:
+                summary: Rotate Snowflake keypair
+                value:
+                  privateKey: '-----BEGIN PRIVATE KEY-----
+
+                    MIIEvgIBADANBg...'
+              updateRole:
+                summary: Update base role
+                value:
+                  baseRole: QUERIER
+              combinedUpdate:
+                summary: Update credentials and role together
+                value:
+                  passwordUnencrypted: new-password-here
+                  baseRole: MODELER
+      responses:
+        '200':
+          description: Connection updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated connection credentials.
+        '400':
+          description: 'Bad request. Common causes:
+
+            - Empty or invalid request body
+
+            - `privateKey` used with non-Snowflake connection
+
+            - Invalid private key format or insufficient key length
+
+            - Empty private key provided
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden. User does not have Connection Admin permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Connections
+      summary: Delete connection
+      description: "<Note>\n  This endpoint requires **Connection Admin** permissions.\n</Note>\n\nArchives a connection (moves it to trash). Archived connections can be restored from the trash in the Omni app.\n\nThis endpoint performs a soft delete. The connection and its associated models and content are moved to trash, and sensitive information such as passwords and keys is permanently deleted.\n"
+      security:
+      - bearerAuth: []
+      operationId: deleteConnection
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Connection ID
+      responses:
+        '200':
+          description: Connection moved to trash successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+                message: Connection moved to trash.
+        '400':
+          description: Invalid connection ID format (not a valid UUID)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden. Caller lacks Connection Admin permissions on the connection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            The connection does not exist or belongs to another organization.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '410':
+          description: 'Gone
+
+
+            The connection has already been archived.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    Dialect:
+      type: string
+      description: 'The database dialect.
+
+        '
+      enum:
+      - athena
+      - bigquery
+      - clickhouse
+      - databricks
+      - databricks_lakebase
+      - exasol
+      - mariadb
+      - motherduck
+      - mssql
+      - mysql
+      - oracle
+      - postgres
+      - redshift
+      - sap_hana
+      - snowflake
+      - starrocks
+      - trino
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c0f12353-4817-4398-bcc0-d501e6dd2f64
+          description: The connection's unique ID
+        name:
+          type: string
+          example: Production Database
+          description: A descriptive name for the connection
+        dialect:
+          type: string
+          example: postgres
+          description: The type of database
+        database:
+          type: string
+          example: prod_db
+          description: The default database/catalog to connect to.
+        baseRole:
+          type: string
+          example: NO_ACCESS
+          description: The default role for users accessing the connection.
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-06-01T14:30:00.000Z'
+          description: The time the connection was created.
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-06-11T10:15:30.000Z'
+          description: The time the connection was last updated.
+        deletedAt:
+          type: string
+          format: date-time
+          example: null
+          description: The time the database was deleted.
+        userAttributeNameForConnectionEnvironments:
+          type: string
+          example: environment
+        userAttributeValuesForDefaultEnvironment:
+          type: string
+        branchConnectionEnvironmentOverridesUserAttr:
+          type: boolean
+          example: 'false'
+        environmentConnectionSwitchesSchemaModel:
+          type: boolean
+          example: 'false'
+        defaultSchema:
+          type: string
+          example: public
+          description: The default schema to use.
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  parameters:
+    sortDirection:
+      name: sortDirection
+      in: query
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: 'Direction for sorting:
+
+
+        - `asc` - Ascending order (A-Z, 0-9)
+
+        - `desc` - Descending order (Z-A, 9-0)
+
+        '
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

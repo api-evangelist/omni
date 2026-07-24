@@ -1,0 +1,1237 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Documents v2 API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Documents v2
+  description: 'A draft-based workflow for creating and editing documents: create a document, patch a draft, then publish. Replaces the one-shot `PUT`/`PATCH` v1 document write endpoints.
+
+    '
+paths:
+  /v2/documents:
+    post:
+      tags:
+      - Documents v2
+      summary: Create document
+      description: 'Create a brand-new document and publish it live in a single call. Accepts creation metadata (`modelId`, `name`, and optional `identifier` / `description` / `folderId`) plus the same content slice as the draft patch body — `queryPresentations`, `controls`, `settings`, and `containers`.
+
+
+        Tiles are addressed by their record key in `queryPresentations.data` (e.g. `"1"`, `"2"`); the server owns internal tile identity, so you never send `miniUuid`. A new document starts with a single empty seed tile at key `"1"` — write to `"1"` (or send it as `null`) to replace the seed.
+
+
+        Because this is the first publish of brand-new content, it is not subject to the organization''s `requirePullRequestToPublish` policy (which gates edits to existing content).
+
+        '
+      x-mint:
+        content: '## Content sections
+
+
+          - **`queryPresentations`** — Tabs/tiles keyed by record key. `data` is shallow-merged by key; `order` (when present) replaces the tab order.
+
+          - **`controls`** — Dashboard filters/controls keyed by control ID. `data` is shallow-merged by key (`data.{id}: null` deletes a control); `order` (when present) replaces the control order.
+
+          - **`settings`** — Dashboard settings, shallow-merged per key: `crossfilterEnabled`, `customText` (`queryError` / `queryNoResults`), `facetFilters`, `refreshInterval`, `runQueriesOn`.
+
+          - **`containers`** — The dashboard layout. When present it fully replaces the existing layout (grid / stack / page / reference containers, recursively nested).
+
+
+          ## Migrating from v1
+
+
+          The v1 one-shot [Update dashboard document](/api/documents/update-dashboard-document)) maps to the v2 **Create > Patch draft > Publish** workflow. For a brand-new document, a single request to this endpoint is enough. To edit an existing document, use [Create draft and patch document (v2)](/api/documents-v2/create-draft-and-patch-document) then [Publish draft (v2)](/api/documents-v2/publish-draft).
+
+
+          | v1 `PUT` field | v2 location |
+
+          |----------------|-------------|
+
+          | `modelId` | `modelId` (returned on read; accepted but immutable on patch) |
+
+          | `name` / `description` | `name` / `description` |
+
+          | `facetFilters` (top-level) | `settings.facetFilters` |
+
+          | `refreshInterval` (top-level) | `settings.refreshInterval` |
+
+          | `filterConfig` / `filterOrder` | `controls.data` / `controls.order` |
+
+          | `documentMetadata` (presentation) | `settings.*` / `containers` |
+
+          | `queryPresentations` (array) | `queryPresentations.data` (keyed) + `queryPresentations.order` |
+
+          | `clearExistingDraft` | **Removed.** A pre-existing draft now returns `409`; patch that draft or publish/discard it instead. |
+
+
+          There is no one-shot `PATCH` endpoint for full document updates that includes identifier changes. To rename a published document''s identifier, use the [Rename document identifier endpoint](/api/documents-v2/rename-document-identifier).
+
+
+          There is also no `narrative` field — AI summaries attach as `linked`-type query presentations. See [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document#ai-summaries-via-linked-tiles) for more information.
+
+          '
+      security:
+      - bearerAuth: []
+      operationId: documentsV2Create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentsV2CreateBody'
+            examples:
+              minimal:
+                summary: Create an empty document
+                value:
+                  modelId: b81e4679-1234-4abc-9def-0123456789ab
+                  name: Q2 Revenue
+              withContent:
+                summary: Create a document with one tile and a custom identifier
+                value:
+                  modelId: b81e4679-1234-4abc-9def-0123456789ab
+                  identifier: q2-revenue
+                  name: Q2 Revenue
+                  description: Quarterly revenue review
+                  queryPresentations:
+                    data:
+                      '1':
+                        type: query
+                        name: Revenue by month
+                        topicName: order_items
+                        prefersChart: true
+                        query:
+                          fields:
+                          - order_items.created_at[month]
+                          - order_items.sale_price_sum
+                  settings:
+                    crossfilterEnabled: true
+                    refreshInterval: 3600
+      responses:
+        '201':
+          description: Document created and published successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2CreateResponse'
+              example:
+                identifier: q2-revenue
+                name: Q2 Revenue
+                description: Quarterly revenue review
+        '400':
+          description: 'Invalid request body or schema validation error — for example an unknown top-level field, a length cap exceeded (`name must be 254 characters or fewer`), the query-presentation cap exceeded (`A single patch may carry at most 48 query presentations.`), or the `identifier` is already in use.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to create a document on this model.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Base model or branch not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+  /v2/documents/{documentId}:
+    get:
+      tags:
+      - Documents v2
+      summary: Get document state
+      description: 'Read the document''s published state. To read a draft''s state, use [Get draft state](/api/documents-v2/get-draft-state) instead.
+
+
+        The response can be used as-is as the request body in a call to the [Patch draft API](/api/documents-v2/patch-draft).
+
+
+        Tiles in `queryPresentations.data` are keyed by a stable record key (e.g. `"1"`, `"2"`); the server uses that key to identify existing tiles on a later patch, so you never need to track any other identifier. Control IDs and container `instanceKey` / `referenceKey` values also round-trip unchanged.
+
+
+        A workbook-only document (no dashboard layout yet) returns only the workbook-scoped fields (`name`, `description`, `queryPresentations`); the dashboard-scoped `containers`, `controls`, and `settings` are omitted until a layout exists.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: documentsV2Get
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The document's URL slug (e.g. `abc123`) or its canonical workbook UUID.
+      - name: pretty
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Format response with 2-space indentation for readability. Accepts `true`, `1`, or no value (e.g., `?pretty`). Default is compact (single-line) JSON.
+      responses:
+        '200':
+          description: Document state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2ReadResponse'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to read the document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'The document cannot be read as a dashboard: a classic-layout dashboard (upgrade to the advanced layout first) or an app document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/documents/{documentId}/draft:
+    patch:
+      tags:
+      - Documents v2
+      summary: Create draft and patch document
+      description: 'Create a new draft on the published document and apply the patch in one call. There is no auto-publish — the response includes the new `draftIdentifier` for follow-up calls. Pass an optional `branchId` to attach the draft to a branch; omit it for a draft on the main (unpublished) workspace.
+
+        '
+      x-mint:
+        content: "## Draft → publish workflow\n\nEditing an existing document is a three-step flow:\n\n1. **`PATCH /api/v2/documents/{documentId}/draft`** *(this endpoint)* — creates a new draft on the published document and applies your patch. Returns the new `draftIdentifier`.\n2. *(optional)* [**`PATCH /api/v2/documents/{documentId}/draft/{draftId}`**](/api/documents-v2/patch-draft) — apply further patches to that draft.\n3. [**`POST /api/v2/documents/{documentId}/draft/publish`**](/api/documents-v2/publish-draft) — publish the main draft live.\n\nA document may have only one main draft at a time. If one already exists, this endpoint returns `409` — patch the existing draft (step 2) or publish/discard it first. This replaces v1's `clearExistingDraft` flag, which **does not exist** in v2.\n\nA `GET` response is a valid `PATCH` body — [read the current state](/api/documents-v2/get-document-state), edit it, and submit it back verbatim.\n\n## Field constraints\n\n| Field | Limit | Error (`400`) |\n|-------|-------|---------------|\n| `name` (document) | 1–254 characters | `name cannot be empty` · `name must be 254 characters or fewer` |\n| `summary` | 1–255 characters, optional | `summary cannot be empty` · `summary must be 255 characters or fewer` |\n| `queryPresentations.data.{key}.name` | 1–144 characters | `name must be 144 characters or fewer` |\n| `queryPresentations.data.{key}.subTitle` | ≤ 250 characters | `subTitle must be 250 characters or fewer` |\n| `queryPresentations.data.{key}.description` | ≤ 500 characters | `description must be 500 characters or fewer` |\n| `queryPresentations.data` | ≤ 48 non-null entries per patch | `A single patch may carry at most 48 query presentations.` |\n\n`summary` is an audit-trail note describing the change (never returned by reads); when omitted the server generates one from the touched sections. Null `queryPresentations.data` entries (deletions) do not count toward the 48-entry cap.\n\n## Addressing tiles (no `miniUuid`)\n\nTiles are addressed by their record key in `queryPresentations.data` (e.g. `\"2\"`). The server owns internal tile identity, so you never send or manage `miniUuid`:\n\n- **New key** → a new tile is created.\n- **Existing key, identical content** (a verbatim round-trip of a `GET`) → treated as a **no-op** and dropped from the patch.\n- **Existing key, changed content** → the tile is updated (the server regenerates its internal identifier).\n- **`linked`-type tabs** always re-resolve — they are excluded from no-op detection.\n- Query presentations are immutable server-side: replace a tile by key, don't mutate it in place.\n\n`data` is **shallow-merged** by key — omitted keys are untouched; `data.{key}: null` deletes that tile. `order`, when present, replaces the tab order. `controls` and `settings` are likewise shallow-merged; `containers`, when present, fully replaces the layout.\n\n## AI summaries via linked tiles\n\nThere is no `narrative` field. To attach an AI-style summary that reuses another tile's query, add a `linked`-type query presentation whose `sourceQueryPresentationKey` points at the source tile's record key (a string such as `\"2\"` — **not** a positional index into `order`):\n\n```json\n{\n  \"queryPresentations\": {\n    \"data\": {\n      \"3\": {\n        \"type\": \"linked\",\n        \"name\": \"Summary\",\n        \"sourceQueryPresentationKey\": \"2\"\n      }\n    }\n  }\n}\n```\n"
+      security:
+      - bearerAuth: []
+      operationId: documentsV2PatchDraft
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentsV2CreateDraftBody'
+            examples:
+              metadataOnly:
+                summary: Rename the document and tweak a setting
+                value:
+                  name: Q2 Revenue (final)
+                  summary: Rename and enable cross-filtering
+                  settings:
+                    crossfilterEnabled: true
+              contentOnly:
+                summary: Add a tile and delete another
+                value:
+                  queryPresentations:
+                    data:
+                      '3':
+                        type: query
+                        name: Orders by region
+                        topicName: order_items
+                        query:
+                          fields:
+                          - users.state
+                          - order_items.count
+                      '4': null
+              linkedSummary:
+                summary: Attach an AI summary linked to tile "2"
+                value:
+                  queryPresentations:
+                    data:
+                      '5':
+                        type: linked
+                        name: Summary
+                        sourceQueryPresentationKey: '2'
+              onBranch:
+                summary: Create the draft on a branch
+                value:
+                  branchId: 8b1f0a2c-1234-4abc-9def-0123456789ab
+                  name: Q2 Revenue (branch edit)
+      responses:
+        '200':
+          description: Draft created and patch applied successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2PatchDraftResponse'
+              example:
+                identifier: q2-revenue
+                draftIdentifier: q2-revenue-draft-7f3a
+                name: Q2 Revenue (final)
+                description: Quarterly revenue review
+        '400':
+          description: 'Invalid request body or schema validation error — for example an unknown top-level field, a length cap exceeded, or the query-presentation cap exceeded (`A single patch may carry at most 48 query presentations.`). Also returned when `modelId` doesn''t match the document''s current base model.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to update the document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document or branch not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: 'The target is not a published document (drafts only attach to published documents) — for example a draft already exists for this document — or a concurrent request just created its layout; retry.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'The document cannot satisfy the patch: a classic-layout dashboard (upgrade to the advanced layout first), an app document, or a workbook-only document patched without a `containers` payload (or with an empty one).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/documents/{documentId}/draft/publish:
+    post:
+      tags:
+      - Documents v2
+      summary: Publish draft
+      description: 'Publish the document''s current main (non-branch) draft, promoting it to the published version. No request body — the draft is consumed, so the response echoes the now-published document''s metadata.
+
+
+        Only the main draft is publishable here. A branch-attached draft is published by [merging its branch](/api/model-branches/merge-a-branch) (`POST /api/v1/models/{modelId}/branch/{branchName}/merge`), so a document with no main draft returns `404`.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: documentsV2PublishDraft
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID.
+      responses:
+        '200':
+          description: Draft published successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2PublishDraftResponse'
+              example:
+                identifier: q2-revenue
+                name: Q2 Revenue (final)
+                description: Quarterly revenue review
+        '400':
+          description: 'The document requires a pull request to publish (detail: "Can''t publish because this document can only be edited through a branch").
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to publish the draft.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Document not found, or it has no main draft to publish (a branch-attached draft is published by merging its branch).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: The target is not a published document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/documents/{documentId}/draft/{draftId}:
+    get:
+      tags:
+      - Documents v2
+      summary: Get draft state
+      description: 'Read the named draft''s state. Returns the same `DocumentsV2ReadResponse` shape as [Get document state](/api/documents-v2/get-document-state), and is round-trippable as a `PATCH` body.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: documentsV2GetDraft
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID.
+      - name: draftId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The draft workbook identifier (returned by [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document)).
+      - name: pretty
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Format response with 2-space indentation for readability. Accepts `true`, `1`, or no value (e.g., `?pretty`). Default is compact (single-line) JSON.
+      responses:
+        '200':
+          description: Draft state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2ReadResponse'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to read the draft.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document or draft not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'The draft cannot be read as a dashboard: a classic-layout dashboard (upgrade to the advanced layout first) or an app document.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+      - Documents v2
+      summary: Patch draft
+      description: 'Apply a patch to an existing draft addressed by `draftId`. Pure apply — no draft creation, no publish. The request body, content sections, field caps, and tile-addressing rules are identical to [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document); this route does not accept `branchId`.
+
+        '
+      security:
+      - bearerAuth: []
+      operationId: documentsV2PatchDraftByIdentifier
+      parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID.
+      - name: draftId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The draft workbook identifier the patch is applied to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentsV2PatchDraftBody'
+            examples:
+              contentOnly:
+                summary: Update a tile's subtitle
+                value:
+                  queryPresentations:
+                    data:
+                      '2':
+                        type: query
+                        name: Revenue by month
+                        subTitle: Trailing 12 months
+                        topicName: order_items
+                        query:
+                          fields:
+                          - order_items.created_at[month]
+                          - order_items.sale_price_sum
+      responses:
+        '200':
+          description: Patch applied to draft successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentsV2PatchDraftResponse'
+        '400':
+          description: 'Invalid request body or schema validation error — for example an unknown top-level field, a length cap exceeded, or the query-presentation cap exceeded (`A single patch may carry at most 48 query presentations.`). Also returned when `modelId` doesn''t match the document''s current base model.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to update the draft.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Document or draft not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: 'The target is not a published document (drafts only attach to published documents), or a concurrent request just created its layout; retry.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'The draft cannot satisfy the patch: a classic-layout dashboard (upgrade to the advanced layout first), an app document, or a workbook-only draft patched without a `containers` payload (or with an empty one).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/documents/{documentId}/identifier:
+    put:
+      tags:
+      - Documents v2
+      summary: Rename document identifier
+      description: 'Rename a published document''s identifier. The change is applied live and immediately. Changes do not go through the draft/publish workflow. The former identifier is recorded in the document''s rename history to enable automatic redirects. Only published documents can be renamed.
+
+
+        The new identifier must be a valid slug and unused by any other document in the organization. If the new value is identical to the existing value (case-sensitive), the API will return a `200` but not write a history record.'
+      security:
+      - bearerAuth: []
+      operationId: documentsV2UpdateIdentifier
+      parameters:
+      - schema:
+          type: string
+        required: true
+        description: Document identifier — either the URL slug (e.g. `abc123`) or the canonical workbook UUID.
+        name: identifier
+        in: path
+        example: q2-revenue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - identifier
+              additionalProperties: false
+              properties:
+                identifier:
+                  type: string
+                  minLength: 2
+                  maxLength: 48
+                  pattern: ^[a-z0-9_-]+$
+                  description: Document identifier slug. Must be 2–48 characters, containing only lowercase letters (a-z), digits (0-9), hyphens (-), and underscores (_). Cannot be a reserved value. If omitted when creating a document, an identifier is auto-generated.
+                  example: q2-revenue
+            examples:
+              renameDocument:
+                summary: Rename a document identifier
+                value:
+                  identifier: new-q2-revenue
+              caseChange:
+                summary: Case-only change (case-sensitive rename)
+                value:
+                  identifier: Q2-Revenue
+      responses:
+        '200':
+          description: Identifier renamed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - description
+                - identifier
+                - name
+                properties:
+                  identifier:
+                    type: string
+                    description: The document identifier after the rename.
+                    example: new-slug
+                  name:
+                    type: string
+                    description: Document name.
+                    example: Q2 Revenue Analysis
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    description: Document description.
+              example:
+                identifier: new-q2-revenue
+                name: Q2 Revenue Analysis
+                description: Quarterly revenue review
+        '400':
+          description: Invalid identifier format — must be 2–48 characters, contain only lowercase letters, digits, hyphens, and underscores, and not be a reserved value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: identifier must be 2-48 characters
+                status: 400
+        '401':
+          description: Authentication required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient permissions to rename the document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: You do not have permission to update this document
+                status: 403
+        '404':
+          description: Document not found or archived.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: Document not found
+                status: 404
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          description: The target is a draft rather than a published document, or the requested identifier is already in use by another document in the organization (case-insensitive collision).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                collision:
+                  summary: Identifier already in use
+                  value:
+                    detail: identifier is already in use
+                    status: 409
+                draftTarget:
+                  summary: Target is not published
+                  value:
+                    detail: Cannot rename identifier of non-published document
+                    status: 409
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    DocumentsV2ReadResponse:
+      type: object
+      required:
+      - description
+      - name
+      - queryPresentations
+      description: 'Current document (or draft) state. Round-trippable: submit this verbatim as a draft `PATCH` body. `containers`, `controls`, and `settings` are dashboard-scoped and omitted for workbook-only documents with no layout yet.
+
+        '
+      properties:
+        name:
+          type: string
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        modelId:
+          type: string
+          format: uuid
+          description: 'The `SHARED` or `SHARED_EXTENSION` model the workbook is built on.
+
+            '
+        workbookModelId:
+          type: string
+          format: uuid
+          description: 'The workbook-layer model ID. Each document has its own workbook model for document-specific fields and calculations. For drafts, this returns the draft''s workbook model ID, not the published document''s.
+
+            '
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsRead'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsRead'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsRead'
+        containers:
+          $ref: '#/components/schemas/DocumentsV2Containers'
+    DocumentsV2SettingsRead:
+      type: object
+      required:
+      - crossfilterEnabled
+      - customText
+      - facetFilters
+      - refreshInterval
+      - runQueriesOn
+      properties:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+            queryNoResults:
+              type: string
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
+          type:
+          - string
+          - 'null'
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
+    DocumentsV2Control:
+      type: object
+      additionalProperties: true
+      description: 'A dashboard control (filter). The full config grammar — control type, field bindings, filter values, and (for multi-field filters) the recursive composite-filter grammar — is validated by the server on apply. See the dashboard filters & controls reference for the complete structure.
+
+        '
+    DocumentsV2QueryPresentationsRead:
+      type: object
+      required:
+      - data
+      - order
+      properties:
+        data:
+          type: object
+          description: Tabs keyed by record key (a positive-integer string).
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentsV2QueryPresentation'
+        order:
+          type: array
+          description: Tab display order.
+          items:
+            type: string
+            pattern: ^[1-9][0-9]*$
+    DocumentsV2CreateDraftBody:
+      type: object
+      additionalProperties: false
+      description: The draft-route patch body plus an optional `branchId` selecting the branch the new draft is attached to.
+      properties:
+        branchId:
+          type: string
+          format: uuid
+          description: Branch the draft is created on. Omit for a draft on the main (unpublished) workspace.
+        modelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
+        workbookModelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          allOf:
+          - $ref: '#/components/schemas/DocumentsV2Containers'
+          - description: Container layout. When present, fully replaces the existing layout.
+    DocumentsV2SettingsPatch:
+      type: object
+      description: Document settings. Shallow-merged with the existing settings.
+      properties:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+              description: Custom text shown when a query errors, replacing the default error text.
+            queryNoResults:
+              type: string
+              description: Custom text shown when a query returns no results, replacing the default empty state.
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
+          type:
+          - string
+          - 'null'
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
+    DocumentsV2Containers:
+      type: array
+      description: 'Container layout array (grid / stack / page / reference containers, recursively nested). On a patch, when present this **fully replaces** the existing layout. The server validates the full structure on apply; container `instanceKey` / `referenceKey` values round-trip unchanged. See the dashboard layout reference for the complete grammar.
+
+        '
+      items:
+        type: object
+        additionalProperties: true
+    DocumentsV2PatchDraftBody:
+      type: object
+      additionalProperties: false
+      description: The content/metadata diff applied to a draft. All fields optional — only the sections present are changed.
+      properties:
+        modelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
+        workbookModelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          allOf:
+          - $ref: '#/components/schemas/DocumentsV2Containers'
+          - description: Container layout. When present, fully replaces the existing layout.
+    DocumentsV2QueryPresentationsPatch:
+      type: object
+      description: Query presentations (tabs/tiles) keyed by record key.
+      properties:
+        data:
+          type: object
+          description: 'Tabs keyed by record key (a positive-integer string, e.g. `"1"`, `"2"`). Shallow-merged by key — omitted keys are untouched; set a key to `null` to delete that tab. Capped at 48 non-null entries per patch.
+
+            '
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentsV2QueryPresentation'
+            - type: 'null'
+        order:
+          type: array
+          description: Tab display order. When present, replaces the existing order.
+          items:
+            type: string
+            pattern: ^[1-9][0-9]*$
+    DocumentsV2PublishDraftResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2CreateBody:
+      type: object
+      required:
+      - modelId
+      - name
+      additionalProperties: false
+      properties:
+        modelId:
+          type: string
+          format: uuid
+          description: Base workbook model the document is built on — a SHARED model, or a SHARED_EXTENSION with `allowAsWorkbookBase = true`.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        identifier:
+          type: string
+          pattern: ^[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$
+          description: 'Identifier (URL slug) for the new document. Must be unique within the organization; auto-generated when omitted. Lowercase letters, numbers, hyphens, and underscores only; cannot start or end with a hyphen or underscore.
+
+            '
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        folderId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Folder to create the document in. When omitted, defaults to the caller's personal "My documents" (requires permission to save personal content — otherwise the request is rejected).
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied note describing the create, written to the history audit trail. When omitted, Omni auto-fills it with `"Created document"`.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          $ref: '#/components/schemas/DocumentsV2Containers'
+    DocumentsV2ControlsPatch:
+      type: object
+      description: Dashboard filters/controls keyed by control ID.
+      properties:
+        data:
+          type: object
+          description: Controls keyed by control ID. Shallow-merged by key — omitted keys are untouched; set to `null` to delete.
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentsV2Control'
+            - type: 'null'
+        order:
+          type: array
+          description: Display order for controls. When present, replaces the existing order.
+          items:
+            type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    DocumentsV2CreateResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Identifier of the newly created document.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
+    DocumentsV2QueryPresentation:
+      type: object
+      required:
+      - type
+      description: 'A single tab/tile. The server owns internal tile identity — callers never send `miniUuid`; tiles are addressed by their record key in `queryPresentations.data`.
+
+        '
+      properties:
+        type:
+          type: string
+          enum:
+          - blank
+          - csv
+          - query
+          - dataset
+          - spreadsheet
+          - sql
+          - dbt
+          - query-view
+          - linked
+          - app
+          description: The query presentation type. `query` is a semantic query; `sql` is raw SQL; `linked` reuses another tile's query (see `sourceQueryPresentationKey`).
+        name:
+          type: string
+          minLength: 1
+          maxLength: 144
+          description: User-provided tab name.
+        subTitle:
+          type:
+          - string
+          - 'null'
+          maxLength: 250
+          description: User-provided tab subtitle.
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          description: User-provided tab description.
+        sourceQueryPresentationKey:
+          type:
+          - string
+          - 'null'
+          pattern: ^[1-9][0-9]*$
+          description: 'For `linked`-type tabs, the record key — the same identifier used as a `queryPresentations.data` key — of the source tile whose query this tab reuses. Null for all other tab types. This is a tile record key, **not** a positional index into `order`.
+
+            '
+        topicName:
+          type:
+          - string
+          - 'null'
+          description: The topic (explore) this query is built on.
+        isSql:
+          type:
+          - boolean
+          - 'null'
+          description: Whether this tab is in raw SQL mode.
+        prefersChart:
+          type: boolean
+          description: When true, the chart view is shown by default instead of the data table.
+        automaticVis:
+          type:
+          - boolean
+          - 'null'
+          description: When true, the system automatically selects the best visualization type.
+        filterOrder:
+          type: array
+          items:
+            type: string
+          description: Ordered list of filter field names controlling display order on this tab.
+        editingModelObjectName:
+          type:
+          - string
+          - 'null'
+          description: Model object (view/topic) currently being edited via the dataset/query-view editor. Applies only to `dataset` / `query-view` tabs — omitted from reads and rejected on patches for other tab types.
+        editingModelObjectNameChange:
+          type:
+          - string
+          - 'null'
+          description: Pending rename of the model object being edited. Applies only to `dataset` / `query-view` tabs — omitted from reads and rejected on patches for other tab types.
+        query:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: The semantic query for this tab (fields, filters, sorts, limits, etc.), minus the server-owned workbook model anchors. Omitted on a no-op replay; the server anchors new/changed tiles to the draft.
+        visConfig:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: Visualization configuration for the tile.
+        resultConfig:
+          type: object
+          additionalProperties: true
+          description: Result display configuration (column widths, frozen columns, conditional formatting, number formatting, etc.).
+        aiConfig:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+          description: AI-generated metadata config (subtitle/description auto-generation settings).
+    DocumentsV2ControlsRead:
+      type: object
+      required:
+      - data
+      - order
+      properties:
+        data:
+          type: object
+          description: Controls keyed by control ID.
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentsV2Control'
+        order:
+          type: array
+          description: Display order for controls.
+          items:
+            type: string
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '

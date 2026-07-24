@@ -1,0 +1,558 @@
+openapi: 3.1.0
+info:
+  title: Omni AI Schema refresh schedules API
+  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  version: 1.0.0
+  contact:
+    name: Omni Support
+    url: https://docs.omni.co
+servers:
+- url: https://{instance}.omniapp.co/api
+  description: Production
+  variables:
+    instance:
+      default: blobsrus
+      description: Your production Omni instance subdomain
+- url: https://{instance}.playground.exploreomni.dev/api
+  description: Playground
+  variables:
+    instance:
+      default: blobsrus
+      description: Your playground Omni instance subdomain
+security:
+- bearerAuth: []
+- orgApiKey: []
+tags:
+- name: Schema refresh schedules
+  description: Manage automated schema refresh schedules for connections
+paths:
+  /v1/connections/{connectionId}/schedules:
+    get:
+      tags:
+      - Schema refresh schedules
+      summary: List schema refresh schedules
+      description: "Retrieves all schema refresh schedules configured for the specified connection. Each schedule uses a cron expression and timezone to define when the schema should be refreshed.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: listSchemaRefreshSchedules
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      responses:
+        '200':
+          description: Successfully retrieved schema refresh schedules
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SchemaRefreshSchedule'
+              example:
+                schedules:
+                - scheduleId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  connectionId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                  schedule: 00 09 * * ? *
+                  timezone: America/New_York
+                  description: At 09:00 AM EDT
+                  hardRefresh: false
+                  createdAt: '2025-01-15T10:30:00.000Z'
+                  updatedAt: '2025-01-15T10:30:00.000Z'
+                  disabledAt: null
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Schema refresh schedules
+      summary: Create schema refresh schedule
+      description: "Creates a new schema refresh schedule for the specified connection. Multiple schedules can be created for the same connection.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: createSchemaRefreshSchedule
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - schedule
+              - timezone
+              properties:
+                schedule:
+                  type: string
+                  description: 'A 6-field cron expression in AWS EventBridge format defining when the schema refresh should run, specified as:
+
+
+                    ```
+
+                    minute hour day-of-month month day-of-week year
+
+                    ```
+
+
+                    For example:
+
+
+                    - `00 09 * * ? *` - Every day at 9:00 AM
+
+                    - `00 18 ? * MON-FRI *` - Every weekday at 6:00 PM
+
+                    - `30 08 1 * ? *` - First day of every month at 8:30 AM
+
+                    '
+                timezone:
+                  type: string
+                  description: 'An IANA timezone identifier for when the schedule should run, such as `America/New_York`, `Europe/London`, `Asia/Tokyo`
+
+                    '
+                hardRefresh:
+                  type: boolean
+                  default: false
+                  description: Whether the scheduled refresh performs a hard refresh (removes dropped objects) or soft refresh (additive only). Defaults to false (soft refresh).
+            example:
+              schedule: 00 09 * * ? *
+              timezone: America/New_York
+              hardRefresh: false
+      responses:
+        '201':
+          description: Schema refresh schedule created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaRefreshSchedule'
+              example:
+                scheduleId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                connectionId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                schedule: 00 09 * * ? *
+                timezone: America/New_York
+                description: At 09:00 AM EDT
+                hardRefresh: false
+                createdAt: '2025-01-15T10:30:00.000Z'
+                updatedAt: '2025-01-15T10:30:00.000Z'
+                disabledAt: null
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - Invalid cron expression
+
+            - Invalid timezone
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /v1/connections/{connectionId}/schedules/{scheduleId}:
+    get:
+      tags:
+      - Schema refresh schedules
+      summary: Get schema refresh schedule
+      description: "Retrieves the details of a connection's specific schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: getSchemaRefreshSchedule
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the schema refresh schedule
+      responses:
+        '200':
+          description: Successfully retrieved schema refresh schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaRefreshSchedule'
+              example:
+                scheduleId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                connectionId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                schedule: 00 09 * * ? *
+                timezone: America/New_York
+                description: At 09:00 AM EDT
+                hardRefresh: false
+                createdAt: '2025-01-15T10:30:00.000Z'
+                updatedAt: '2025-01-15T10:30:00.000Z'
+                disabledAt: null
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - Schedule not found
+
+            - Schedule belongs to a different connection
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    put:
+      tags:
+      - Schema refresh schedules
+      summary: Update schema refresh schedule
+      description: "Updates the schedule and/or timezone for an existing schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: updateSchemaRefreshSchedule
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the schema refresh schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - schedule
+              - timezone
+              properties:
+                schedule:
+                  type: string
+                  description: 'A 6-field cron expression in AWS EventBridge format defining when the schema refresh should run, specified as:
+
+
+                    ```
+
+                    minute hour day-of-month month day-of-week year
+
+                    ```
+
+
+                    For example:
+
+
+                    - `00 09 * * ? *` - Every day at 9:00 AM
+
+                    - `00 18 ? * MON-FRI *` - Every weekday at 6:00 PM
+
+                    - `30 08 1 * ? *` - First day of every month at 8:30 AM
+
+                    '
+                timezone:
+                  type: string
+                  description: 'An IANA timezone identifier for when the schedule should run.
+
+                    '
+                hardRefresh:
+                  type: boolean
+                  default: false
+                  description: Whether the scheduled refresh performs a hard refresh (removes dropped objects) or soft refresh (additive only). Defaults to false (soft refresh).
+            example:
+              schedule: 00 18 ? * * *
+              timezone: Europe/London
+              hardRefresh: false
+      responses:
+        '200':
+          description: Schema refresh schedule updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaRefreshSchedule'
+              example:
+                scheduleId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                connectionId: f47ac10b-58cc-4372-a567-0e02b2c3d479
+                schedule: 00 18 ? * * *
+                timezone: Europe/London
+                description: At 06:00 PM GMT
+                hardRefresh: false
+                createdAt: '2025-01-15T10:30:00.000Z'
+                updatedAt: '2025-01-15T11:00:00.000Z'
+                disabledAt: null
+        '400':
+          description: 'Bad Request
+
+
+            Possible error messages:
+
+            - Invalid cron expression
+
+            - Invalid timezone
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - Schedule not found
+
+            - Connection not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Schema refresh schedules
+      summary: Delete schema refresh schedule
+      description: "Deletes a schema refresh schedule. This does not affect other schedules for the same connection.\n\n <Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+      security:
+      - bearerAuth: []
+      operationId: deleteSchemaRefreshSchedule
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the connection
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the schema refresh schedule
+      responses:
+        '200':
+          description: Schema refresh schedule deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+        '401':
+          description: Missing or invalid authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Insufficient permissions. **Connection Admin** permissions for the connection are required.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 'Not Found
+
+
+            Possible error messages:
+
+            - Schedule not found
+
+            - Connection not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    SchemaRefreshSchedule:
+      type: object
+      properties:
+        scheduleId:
+          type: string
+          format: uuid
+          description: The unique identifier of the schema refresh schedule
+        connectionId:
+          type: string
+          format: uuid
+          description: The unique identifier of the connection this schedule belongs to
+        schedule:
+          type: string
+          description: 'A 6-field cron expression in AWS EventBridge format defining when the schema refresh should run.
+
+
+            Format: `minute hour day-of-month month day-of-week year`
+
+            '
+        timezone:
+          type: string
+          description: The IANA timezone identifier for when the schedule should run
+        description:
+          type: string
+          description: A human-readable description of the schedule, automatically generated from the cron expression and timezone
+        hardRefresh:
+          type: boolean
+          default: false
+          description: Whether the scheduled refresh performs a hard refresh (removes dropped objects) or soft refresh (additive only). Defaults to false (soft refresh).
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the schedule was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the schedule was last updated
+        disabledAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp when the schedule was disabled, or `null` if active
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+
+        Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+
+        '
+    orgApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Requires an [Organization API Key](/api/authentication#organization-api-keys). Personal Access Tokens (PATs) are not supported for this endpoint.
+
+
+        Include in the `Authorization` header as: `Bearer ORGANIZATION_API_KEY`
+
+        '
