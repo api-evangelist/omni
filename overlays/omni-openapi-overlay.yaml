@@ -1,0 +1,19 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Omni API
+  version: 1.0.0
+extends: openapi/omni-openapi-original.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: omni
+      x-apievangelist-reviewed: '2026-07-20'
+      x-apievangelist-conventions: conventions/omni-conventions.yml
+      x-apievangelist-errors: errors/omni-problem-types.yml
+      x-apievangelist-authentication: authentication/omni-authentication.yml
+      x-apievangelist-rate-limit: "60 requests/minute"
+      x-apievangelist-pagination: cursor
+  - target: $.info
+    update:
+      x-apievangelist-mcp: mcp/omni-mcp.yml
+      x-apievangelist-cli: cli/omni-cli.yml

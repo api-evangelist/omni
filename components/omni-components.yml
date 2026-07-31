@@ -1,0 +1,19 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.omni.co/embed
+note: >-
+  Omni ships embedded-analytics surfaces for white-label embedding of dashboards,
+  workbooks and the query experience into external applications, driven by a
+  server-side embed SDK plus SSO/URL-signed embed links.
+families:
+  - name: Embedded Analytics
+    description: Embed Omni dashboards, workbooks, and the explore/query experience in external apps.
+    loaders:
+      - name: "@omni-co/embed"
+        registry: npm
+        url: https://www.npmjs.com/package/@omni-co/embed
+        context: server
+    docs: https://docs.omni.co/embed
+    capabilities:
+      - Signed / SSO embed URLs with per-user permissioning (SCIM embed users).
+      - Customization, events, and URL parameters for embedded content.

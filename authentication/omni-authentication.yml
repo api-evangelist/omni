@@ -1,0 +1,17 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/omni-openapi-original.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: |-
+    Can be either an [Organization API Key](/api/authentication#organization-api-keys) or [Personal Access Token (PAT)](/api/authentication#token-types).
+
+    Include in the `Authorization` header as: `Bearer YOUR_TOKEN`
+  sources:
+  - openapi/omni-openapi-original.yml

@@ -1,0 +1,20 @@
+generated: '2026-07-20'
+method: none
+source: probe of https://omni.co/.well-known/ and https://docs.omni.co/.well-known/
+note: >-
+  No /.well-known/ discovery documents are published on the omni.co or docs.omni.co
+  hosts. Absence recorded as valid data. No WellKnown/SecurityTxt pointer is wired.
+host: https://omni.co
+documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: https://docs.omni.co/.well-known/security.txt
+    status: 404

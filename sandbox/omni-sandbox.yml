@@ -1,0 +1,18 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/omni-openapi-original.yml
+note: >-
+  Omni publishes a Playground environment as an OpenAPI server. The API base
+  mirrors the login URL, so each customer instance is its own environment; there
+  is no shared public test-key surface with published magic values.
+environments:
+  - name: Production
+    base_url: https://{instance}.omniapp.co/api
+  - name: Playground
+    base_url: https://{instance}.playground.exploreomni.dev/api
+    note: Omni-hosted playground/sandbox instances for evaluation.
+test_credentials:
+  published: false
+  note: >-
+    Authentication is via Organization API Key or Personal Access Token generated
+    per instance; Omni does not publish shared test tokens or magic test values.

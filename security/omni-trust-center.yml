@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: searched
+probe: true
+source: https://omni.co/security
+url: https://omni.co/security
+certifications:
+- SOC 2
+- HIPAA
+- GDPR
+evidence:
+- source: https://omni.co/security
+  keywords:
+  - soc 2
+  - soc2
+  - hipaa
+  - gdpr

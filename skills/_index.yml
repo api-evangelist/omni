@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/omni-openapi-original.yml
+skills:
+  - file: omni-run-a-query.md
+    name: Run a query against an Omni model
+    api: openapi/omni-openapi-original.yml
+    operations: [whoami, listModels, runQuery, waitForQuery]
+  - file: omni-ai-generate-query.md
+    name: Generate and run a query with Omni AI
+    api: openapi/omni-openapi-original.yml
+    operations: [generateQuery, aiPickTopic, createAIJob, getAIJobStatus, getAIJobResult]
+  - file: omni-manage-documents.md
+    name: Create and manage Omni documents
+    api: openapi/omni-openapi-original.yml
+    operations: [listFolders, createDocument, listDocuments, getDocument, moveDocument, deleteDocument]

@@ -1,0 +1,40 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.omni.co/docs/API
+authentication:
+  style: bearer-token
+  header: "Authorization: Bearer <token>"
+  token_types: [Organization API Key, Personal Access Token (PAT)]
+  format: JWT
+  docs: https://docs.omni.co/api/authentication
+  ref: authentication/omni-authentication.yml
+idempotency:
+  supported: false
+  note: No idempotency-key header/parameter is documented or present in the OpenAPI.
+pagination:
+  style: cursor
+  request_params: [cursor, pageSize]
+  response_envelope: pageInfo
+  response_fields: [hasNextPage, nextCursor, pageSize, totalRecords]
+  records_field: records
+  note: List endpoints return {records, pageInfo}; follow pageInfo.nextCursor while hasNextPage is true.
+versioning:
+  style: uri-path
+  current: v1
+  note: Paths are prefixed /api/v1 (and /api/v2 for Documents v2, /scim/v2 for user/group SCIM). Unstable routes graduate from /api/unstable to /api/v1.
+  ref: lifecycle/omni-lifecycle.yml
+error_envelope:
+  format: json
+  media_type: application/json
+  shape: "{ status: <int>, detail: <string> }"
+  legacy_shape: "{ error: <string>, message: <string> }"
+  note: Not RFC 9457 problem+json. See errors/omni-problem-types.yml.
+  ref: errors/omni-problem-types.yml
+rate_limiting:
+  limit: 60
+  window: per-minute
+  signal: HTTP 429 Too Many Requests
+  note: Default documented limit is 60 requests/minute.
+base_url:
+  pattern: https://{instance}.omniapp.co/api
+  note: API base mirrors the Omni login URL with /api appended; HTTPS only.

@@ -1,0 +1,26 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.omni.co/developers/cli
+name: omni-cli
+repository: https://github.com/exploreomni/cli
+docs: https://docs.omni.co/developers/cli
+install:
+  guide: https://docs.omni.co/developers/cli/install
+authentication:
+  primary: oauth
+  alternative: api-key
+  docs: https://docs.omni.co/developers/cli/authentication
+output:
+  format: json
+  stdout: JSON results
+  stderr: JSON errors
+  flags:
+    - flag: "--compact"
+      note: Compact single-line JSON for piping to tools like jq.
+capabilities:
+  - Run queries against the semantic layer.
+  - Manage models and content.
+  - Administer users and permissions.
+  - Generate AI-powered queries from natural language.
+  - Upload files.
+  - Automate tasks in scripts or CI/CD pipelines.

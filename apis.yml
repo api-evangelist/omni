@@ -1,9 +1,27 @@
 aid: omni
 name: Omni
-description: 'Omni is a company surfaced as a portfolio company of gv, iconiq-capital, redpoint-ventures
-  and added to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead
-  awaiting the enrichment pipeline.'
+description: >-
+  Omni is an AI-powered business intelligence and embedded analytics platform that
+  turns a governed semantic model into a trusted source of truth for people and AI
+  agents. It connects to warehouses like Snowflake, BigQuery, Databricks and Postgres,
+  layers a git-versioned modeling layer (with dbt integration) on top, and exposes
+  everything through a 187-operation REST API, a first-party CLI, an embed SDK, and a
+  hosted MCP server for natural-language querying from Claude, ChatGPT, Cursor and
+  more. Omni is backed by GV, ICONIQ Capital and Redpoint Ventures.
 url: https://raw.githubusercontent.com/api-evangelist/omni/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://omni.co/favicon.ico
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -14,11 +32,564 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
 - Ai
-apis: []
+- Analytics
+- Business Intelligence
+- Data
+- Embedded Analytics
+- Semantic Layer
+- MCP
+apis:
+- aid: omni:omni-ai-api
+  name: Omni AI API
+  description: AI-powered query generation
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - AI
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-ai-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-ai-credit-controls-api
+  name: Omni AI Credit Controls API
+  description: Manage organization-level AI credit usage
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - AI Credit Controls
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-ai-credit-controls-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-ai-eval-api
+  name: Omni AI Eval API
+  description: >-
+    AI evaluation: manage prompt sets and runs used to score AI quality against curated prompt suites.
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - AI Eval
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-ai-eval-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-ai-model-suggestions-api
+  name: Omni AI Model Suggestions API
+  description: Manage AI-generated suggestions for shared models
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - AI Model Suggestions
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-ai-model-suggestions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-ai-routines-api
+  name: Omni AI Routines API
+  description: >-
+    Manage AI Routines: schedule recurring AI-powered tasks to run automatically on your data.
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - AI Routines
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-ai-routines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-api-tokens-api
+  name: Omni API Tokens API
+  description: Manage API tokens (Organization keys, Personal Access Tokens, MCP OAuth grants)
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - API Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-api-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-connection-environments-api
+  name: Omni Connection environments API
+  description: Manage connection environments database connections
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Connection environments
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-connection-environments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-connections-api
+  name: Omni Connections API
+  description: Manage database connections
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Connections
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-connections-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-content-api
+  name: Omni Content API
+  description: Unified content retrieval (documents and folders)
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-content-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-content-migration-api
+  name: Omni Content migration API
+  description: Export and import dashboards
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Content migration
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-content-migration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-content-validator-api
+  name: Omni Content validator API
+  description: Validate content against models and perform find/replace operations
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Content validator
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-content-validator-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-dashboard-downloads-api
+  name: Omni Dashboard downloads API
+  description: Download dashboards and tiles as PDF, PNG, XLSX, CSV, or JSON files
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Dashboard downloads
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-dashboard-downloads-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-dashboard-filters-api
+  name: Omni Dashboard filters API
+  description: The Dashboard filters API from Omni — 1 operation(s) for dashboard filters.
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Dashboard filters
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-dashboard-filters-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-dbt-api
+  name: Omni dbt API
+  description: Manage dbt configuration for connections
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - dbt
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-dbt-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-document-favorites-api
+  name: Omni Document favorites API
+  description: Favorite and unfavorite documents
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Document favorites
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-document-favorites-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-document-labels-api
+  name: Omni Document labels API
+  description: Apply and manage labels on documents
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Document labels
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-document-labels-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-document-permissions-api
+  name: Omni Document permissions API
+  description: Manage document-level access
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Document permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-document-permissions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-documents-api
+  name: Omni Documents API
+  description: Create, retrieve, and manage documents
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-documents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-documents-v2-api
+  name: Omni Documents v2 API
+  description: >-
+    A draft-based workflow for creating and editing documents: create a document, patch a draft, then
+    publish. Replaces the one-shot `PUT`/`PATCH` v1 document write endpoints.
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Documents v2
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-documents-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-folder-permissions-api
+  name: Omni Folder permissions API
+  description: Manage folder-level access
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Folder permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-folder-permissions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-folders-api
+  name: Omni Folders API
+  description: Create and organize content folders
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Folders
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-folders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-jobs-api
+  name: Omni Jobs API
+  description: Check status of asynchronous jobs
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-labels-api
+  name: Omni Labels API
+  description: >-
+    Manage labels in an organization. Labels can be applied to documents and folders to help organize
+    and categorize content.
+
+
+    **Label types:**
+
+    - **Basic labels**: Can be created and managed by any user
+
+    - **Verified labels**: Indicate curated or officially sanctioned content. Admin-only.
+
+    - **Homepage labels**: Appear on the organization homepage. Admin-only.
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-labels-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-model-branches-api
+  name: Omni Model branches API
+  description: Manage model branches and merge changes
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Model branches
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-model-branches-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-model-git-configuration-api
+  name: Omni Model git configuration API
+  description: Manage git configuration for shared models
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Model git configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-model-git-configuration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-models-api
+  name: Omni Models API
+  description: Create and manage data models
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Models
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-models-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-queries-api
+  name: Omni Queries API
+  description: Execute workbook queries
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Queries
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-queries-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-schedule-recipients-api
+  name: Omni Schedule recipients API
+  description: Manage schedule recipients
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Schedule recipients
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-schedule-recipients-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-schedules-api
+  name: Omni Schedules API
+  description: Create and manage scheduled tasks
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-schema-refresh-schedules-api
+  name: Omni Schema refresh schedules API
+  description: Manage automated schema refresh schedules for connections
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Schema refresh schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-schema-refresh-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-topics-api
+  name: Omni Topics API
+  description: Retrieve topic information from models
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Topics
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-topics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-uploads-api
+  name: Omni Uploads API
+  description: Manage CSV and spreadsheet uploads
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Uploads
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-uploads-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-user-attributes-api
+  name: Omni User attributes API
+  description: Manage user attribute definitions
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - User attributes
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-user-attributes-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-user-group-model-roles-api
+  name: Omni User group model roles API
+  description: Manage model and connection role assignments for user groups
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - User group model roles
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-user-group-model-roles-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-user-groups-api
+  name: Omni User groups API
+  description: Manage user groups
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - User groups
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-user-groups-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-user-model-roles-api
+  name: Omni User model roles API
+  description: Manage model and connection role assignments for users
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - User model roles
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-user-model-roles-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-users-api
+  name: Omni Users API
+  description: Manage users
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
+- aid: omni:omni-who-am-i-api
+  name: Omni Who Am I API
+  description: Inspect your own user permissions
+  humanURL: https://docs.omni.co/api
+  baseURL: https://blobsrus.omniapp.co/api
+  tags:
+  - Who Am I
+  properties:
+  - type: OpenAPI
+    url: openapi/omni-who-am-i-api-openapi.yml
+  - type: Documentation
+    url: https://docs.omni.co/api
+  - type: APIReference
+    url: https://docs.omni.co/api/api-explorer
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -27,3 +598,72 @@ maintainers:
 common:
 - type: Website
   url: https://omni.co
+- type: DeveloperPortal
+  url: https://docs.omni.co
+- type: Documentation
+  url: https://docs.omni.co
+- type: APIReference
+  url: https://docs.omni.co/api/api-explorer
+- type: GettingStarted
+  url: https://docs.omni.co/getting-started/developers
+- type: Blog
+  url: https://omni.co/blog
+- type: Support
+  url: https://community.omni.co/
+- type: GitHubOrganization
+  url: https://github.com/exploreomni
+- type: SignUp
+  url: https://omni.co/demo
+- type: TermsOfService
+  url: https://omni.co/terms
+- type: PrivacyPolicy
+  url: https://omni.co/privacy
+- type: LLMsTxt
+  url: llms/omni-llms.txt
+- type: Packages
+  url: packages/omni-packages.yml
+- type: SDKs
+  url: packages/omni-packages.yml
+- type: CLI
+  url: cli/omni-cli.yml
+- type: MCPServer
+  url: mcp/omni-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Authentication
+  url: authentication/omni-authentication.yml
+- type: Conventions
+  url: conventions/omni-conventions.yml
+- type: ErrorCatalog
+  url: errors/omni-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/omni-lifecycle.yml
+- type: StatusPage
+  url: https://status.omniapp.co
+- type: ChangeLog
+  url: changelog/omni-changelog.yml
+- type: Conformance
+  url: conformance/omni-conformance.yml
+- type: Compliance
+  url: https://omni.co/security
+- type: DataModel
+  url: data-model/omni-data-model.yml
+- type: Overlay
+  url: overlays/omni-openapi-overlay.yaml
+- type: Sandbox
+  url: sandbox/omni-sandbox.yml
+- type: Components
+  url: components/omni-components.yml
+- type: DomainSecurity
+  url: security/omni-domain-security.yml
+- type: TrustCenter
+  url: security/omni-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/omni-vulnerability-disclosure.yml
+- type: Security
+  url: https://omni.co/security
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

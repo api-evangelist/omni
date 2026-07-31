@@ -1,0 +1,77 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/omni-openapi-original.yml
+note: >-
+  Entity-relationship graph derived from OpenAPI component schemas (98 total) and
+  id-reference fields (modelId, connectionId, folderId, userId, branchId, ...).
+  Relationships reflect id references found in request/response bodies.
+entities:
+  - name: Connection
+    summary: A database/warehouse connection (Snowflake, BigQuery, Databricks, Postgres, ...).
+  - name: Model
+    summary: A semantic model built on a connection; the queryable layer.
+  - name: ModelBranch
+    summary: A git branch of a model for branch-mode development.
+  - name: Topic
+    summary: A curated subject area within a model.
+  - name: Document
+    summary: A workbook / dashboard document (v1 and v2 APIs).
+  - name: Folder
+    summary: Container organizing documents.
+  - name: Query
+    summary: A query run against a model/topic.
+  - name: Schedule
+    summary: A scheduled delivery of content.
+  - name: SchemaRefreshSchedule
+    summary: A scheduled schema refresh for a connection.
+  - name: User
+    summary: An Omni user (provisioned via SCIM 2.0).
+  - name: UserGroup
+    summary: A group of users (SCIM 2.0).
+  - name: Routine
+    summary: An AI routine bound to a model/branch.
+relationships:
+  - from: Model
+    type: belongs_to
+    to: Connection
+    via: connectionId
+  - from: Document
+    type: belongs_to
+    to: Connection
+    via: connectionId
+  - from: DocumentsV2CreateBody
+    type: belongs_to
+    to: Model
+    via: modelId
+  - from: DocumentsV2CreateBody
+    type: belongs_to
+    to: Folder
+    via: folderId
+  - from: SchemaRefreshSchedule
+    type: belongs_to
+    to: Connection
+    via: connectionId
+  - from: SchemaRefreshSchedule
+    type: belongs_to
+    to: Schedule
+    via: scheduleId
+  - from: ModelBranch
+    type: belongs_to
+    to: Model
+    via: modelId
+  - from: Topic
+    type: belongs_to
+    to: Model
+    via: modelId
+  - from: Routine
+    type: belongs_to
+    to: Model
+    via: modelId
+  - from: Routine
+    type: belongs_to
+    to: ModelBranch
+    via: branchId
+  - from: EvalPromptSet
+    type: belongs_to
+    to: Model
+    via: model_id

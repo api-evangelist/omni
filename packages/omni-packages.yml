@@ -1,0 +1,19 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.npmjs.com/package/@omni-co/embed
+packages:
+  - language: javascript
+    registry: npm
+    name: "@omni-co/embed"
+    url: https://www.npmjs.com/package/@omni-co/embed
+    install: npm install @omni-co/embed
+    version: 0.20.0
+    official: true
+    description: Omni embed SDK for securely embedding Omni analytics in a server context.
+  - language: go
+    registry: github
+    name: exploreomni/cli
+    url: https://github.com/exploreomni/cli
+    install: "See https://docs.omni.co/developers/cli/install"
+    official: true
+    description: First-party Omni command-line interface (binary catalogued in cli/omni-cli.yml).

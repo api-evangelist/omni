@@ -1,0 +1,57 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/omni-openapi-original.yml
+format: json
+envelope:
+  media_type: application/json
+  fields:
+    status: HTTP status code of the error (integer)
+    detail: Human-readable error message describing what went wrong (string)
+  legacy_fields:
+    error: HTTP response code for the error (string)
+    message: Detailed error description (string)
+note: >-
+  Omni does not use RFC 9457 application/problem+json. Errors are returned as a
+  JSON object with `status` and `detail` (schemas ApiError4xx/ApiError5xx), or a
+  legacy `{error, message}` shape (schema Error) on some rate-limit responses.
+problems:
+  - status: 400
+    schema: ApiError400
+    title: Bad Request
+    remediation: Validate request body/parameters against the OpenAPI schema.
+  - status: 401
+    schema: ApiError401
+    title: Unauthorized
+    example: "Unauthorized: Missing or invalid API key"
+    remediation: Supply a valid Bearer token (Organization API Key or PAT).
+  - status: 403
+    schema: ApiError403
+    title: Forbidden
+    remediation: Requested resource exists but is not accessible to the caller; check permissions.
+  - status: 404
+    schema: ApiError404
+    title: Not Found
+    remediation: Resource does not exist or is not visible to the caller.
+  - status: 405
+    schema: ApiError400
+    title: Method Not Allowed
+  - status: 408
+    title: Request Timeout
+  - status: 409
+    schema: ApiError409
+    title: Conflict
+    remediation: Resource state conflict (e.g. duplicate identifier); reconcile and retry.
+  - status: 410
+    title: Gone
+  - status: 422
+    title: Unprocessable Entity
+    remediation: Semantically invalid payload; correct the referenced fields.
+  - status: 429
+    schema: ApiError429
+    title: Too Many Requests
+    detail: Rate limit exceeded (60 requests/minute)
+    remediation: Back off and retry; stay within 60 requests/minute.
+  - status: 500
+    title: Internal Server Error
+  - status: 503
+    title: Service Unavailable

@@ -1,0 +1,21 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.omni.co/changelog
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    /api/v1 is the stable surface; /api/v2 (Documents v2) and /scim/v2 (SCIM
+    users/groups) coexist. Unstable routes graduate from /api/unstable to /api/v1.
+release_cadence:
+  scheme: continuous-weekly
+  note: Changes ship continuously and are documented weekly (e.g. "Week of July 13, 2026"); no discrete semantic version numbers.
+  changelog: https://docs.omni.co/changelog
+deprecation:
+  policy_url: null
+  sunset_header: null
+  note: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support was found in docs or the OpenAPI.
+sla:
+  url: null
+status_page: https://status.omniapp.co
+deprecated_operations: []

@@ -1,0 +1,39 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/omni-openapi-original.yml
+note: >-
+  Standards conformance derived from the OpenAPI (security schemes, paths, tags)
+  and the provider's published docs (MCP OAuth 2.1, SCIM 2.0 user provisioning,
+  SOC 2 / HIPAA / GDPR compliance program on omni.co/security).
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: openapi/omni-openapi-original.yml declares openapi 3.1.0
+  - id: oauth2
+    conforms: true
+    evidence: MCP server supports OAuth 2.1 (docs.omni.co/ai/mcp/authentication); REST API uses bearer JWT tokens
+  - id: oidc
+    conforms: false
+  - id: scim2
+    conforms: true
+    evidence: user & group management served under /scim/v2/users and /scim/v2/groups
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: errors use application/json {status, detail}, not application/problem+json
+  - id: cursor-pagination
+    conforms: true
+    evidence: list endpoints use cursor + pageSize with a pageInfo/nextCursor envelope
+  - id: rate-limiting
+    conforms: true
+    evidence: documented 60 req/min limit signalled via HTTP 429
+  - id: soc2
+    conforms: true
+    evidence: annual SOC 2 Type II audits (omni.co/security)
+  - id: hipaa
+    conforms: true
+    evidence: HIPAA compliance stated on omni.co/security
+  - id: gdpr
+    conforms: true
+    evidence: GDPR compliance stated on omni.co/security
+  - id: fhir-r4
+    conforms: false

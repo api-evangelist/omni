@@ -1,0 +1,31 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.omni.co/changelog
+scheme: continuous-weekly
+current: "Week of July 13, 2026"
+note: >-
+  Omni publishes a weekly, date-based changelog rather than semantic versions.
+  Recent window captured below; the live changelog is the source of truth.
+entries:
+  - date: "2026-07-13"
+    label: "Week of July 13, 2026"
+    highlights:
+      - New AI model-suggestion API endpoints (trigger a run, retrieve generation status).
+      - Per-user AI credit limit management endpoints.
+      - Dashboard removal from documents via API.
+    breaking: false
+  - date: "2026-07-06"
+    label: "Week of July 6, 2026"
+    highlights:
+      - Slack support for AI routines.
+      - MCP settings improvements.
+      - API enhancements for document state retrieval.
+    breaking: false
+  - date: "2026-06-29"
+    label: "Week of June 29, 2026"
+    highlights:
+      - AccessBoost for Apps.
+      - HTTPS deploy-token authentication for dbt.
+      - Filter suggestions in dashboard properties.
+      - Multiple /api/unstable/ routes promoted to /api/v1/.
+    breaking: false
