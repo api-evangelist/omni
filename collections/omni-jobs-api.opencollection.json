@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Jobs API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/jobs/:jobId/status",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  Currently, this endpoint only supports schema refresh jobs. Job IDs from other job types will return an error.\n</Note>\n\nRetrieves the current status of an asynchronous job. The user authenticating the request must have **read** permissions on the connection.\n\nThis endpoint is used to check the status of jobs initiated by other API calls, such as schema refreshes. Poll this endpoint to determine when the job has completed.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

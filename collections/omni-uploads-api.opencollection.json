@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Uploads API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Uploads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List uploads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/uploads",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by upload type."
+              },
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by connection ID."
+              },
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model ID. Shared models return non-private connection uploads; workbook models return their own uploads."
+              },
+              {
+                "name": "searchTerm",
+                "value": "",
+                "type": "query",
+                "description": "Search term to filter by file name (case-insensitive)."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination (from previous response)."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all uploads ([CSV files and spreadsheets](/analyze-explore/data-input-csvs)) in the organization with metadata and optional filtering.\n\nThis endpoint requires **Organization Admin** permissions.\n"
+        },
+        {
+          "info": {
+            "name": "Upload a CSV file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/uploads",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "modelId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "branchId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "branchName",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "viewName",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  To use this endpoint:\n  \n  - The **Upload data** setting in **Settings > Content permissions** must enabled by an **Organization Admin**\n  - The authenticating user must have **Restricted Querier** permissions or higher on the model the file will be uploaded to\n</Note>\n\nUpload a CSV file to create a new [data input table](/analyze-explore/data-input-csvs). The file is parsed, converted to Arrow format, uploaded to storage, written to the connection's table upload (scratch) schema, and a"
+        },
+        {
+          "info": {
+            "name": "Delete an upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/uploads/:uploadId",
+            "params": [
+              {
+                "name": "uploadId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the upload to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a CSV upload by its ID. This removes the file from storage and marks the record as deleted.\n\n<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

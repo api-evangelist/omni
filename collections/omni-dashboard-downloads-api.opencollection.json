@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Dashboard downloads API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dashboard downloads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate download",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/dashboards/:dashboardId/download",
+            "params": [
+              {
+                "name": "dashboardId",
+                "value": "",
+                "type": "path",
+                "description": "The dashboard identifier (ID or document UUID)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiate download"
+        },
+        {
+          "info": {
+            "name": "Check download status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/dashboards/:dashboardId/download/:jobId/status",
+            "params": [
+              {
+                "name": "dashboardId",
+                "value": "",
+                "type": "path",
+                "description": "The dashboard identifier. This must match the ID of the original download request."
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Check download status"
+        },
+        {
+          "info": {
+            "name": "Download file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/dashboards/:dashboardId/download/:jobId",
+            "params": [
+              {
+                "name": "dashboardId",
+                "value": "",
+                "type": "path",
+                "description": "The dashboard identifier. This must match the ID of the original download request."
+              },
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download file"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

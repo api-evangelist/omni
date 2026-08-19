@@ -1,0 +1,198 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI AI Routines API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AI Routines",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List AI Routines",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination from previous response `nextCursor`"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (1-100, integer)"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction for results"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort results by"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID.\n"
+              }
+            ]
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nList AI Routines for the calling user, newest first. Includes routines paused by the owner or disabled by Omni, but excludes deleted routines. \n\nUse `pageInfo.nextCursor` from one response as the `cursor` query parameter on the next request. \n"
+        },
+        {
+          "info": {
+            "name": "Create an AI Routine",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nCreate a new AI Routine that will run on the specified schedule.\n\nEach scheduled run executes once using the routine owner's permissions, and every recipient receives the same result.\n"
+        },
+        {
+          "info": {
+            "name": "Get an AI Routine",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines/:routineId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the routine."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID.\n"
+              }
+            ]
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRetrieve details for a specific AI Routine by ID, including the status of its most recent completed run.\n"
+        },
+        {
+          "info": {
+            "name": "Update an AI Routine",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines/:routineId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the routine."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nUpdate an existing AI Routine. All request fields are optional, and only supplied fields are changed. Supplying `destination` replaces the full recipient configuration.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an AI Routine",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines/:routineId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the routine."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID.\n"
+              }
+            ]
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nDelete an AI Routine. This action cannot be undone.\n"
+        },
+        {
+          "info": {
+            "name": "Run AI routine now",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/routines/:routineId/trigger",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the routine."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Target user membership ID. \n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRun an existing routine immediately, in addition to its schedule — e.g. to get an off-cycle result or verify a routine produces the email you expect.\n\nExecutes once using the routine owner's permissions and delivers the AI response to every recipient configured on the routine. Returns as soon as the run has started; the result arrives asynchronously via the routine's normal email delivery.\n\nIf a run is alre"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

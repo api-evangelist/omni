@@ -1,0 +1,231 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AI",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get AI Agent branding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/branding",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return the organization's AI Agent's [branding configuration](/ai/settings/branding), including display name, custom logo URL, and copy for AI Agent landing surfaces. Falls back to Omni's default values when custom branding hasn't been configured.\n"
+        },
+        {
+          "info": {
+            "name": "Generate a query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/generate-query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a structured Omni query from natural language using AI"
+        },
+        {
+          "info": {
+            "name": "Pick topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/pick-topic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Analyze a natural language prompt and determines which topic in the model is the best fit for answering the question. \n\nUseful as a preprocessing step before calling the [Generate AI query](/api/ai/generate-a-query) or [Create AI job](/api/ai/create-ai-job) endpoints, especially when the user's question could relate to multiple topics.\n"
+        },
+        {
+          "info": {
+            "name": "List AI conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/conversations",
+            "params": [
+              {
+                "name": "userId",
+                "value": "9e8719d9-276a-4964-9395-a493189a247c",
+                "type": "query",
+                "description": "**Requires an Organization API key.** Filter conversations to a specific user by their membership ID.\n\nUser-scoped tokens automatically see only their own conversations and cannot use this parameter. Organization API keys can optionally filter by user or see all conversations in the organization.\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of conversations to return per page."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response's `pageInfo.nextCursor`. Use to fetch the next page of results."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List a user's recent AI conversations, ordered by most-recent activity. Each conversation includes an ID that can be passed as `conversationId` to subsequent [Create AI job](/api/ai/create-ai-job) requests to continue the thread.\n\nReturns a paginated list with conversation metadata including optional names and the most recent user prompt for display purposes.\n"
+        },
+        {
+          "info": {
+            "name": "Get conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/conversations/:conversationId",
+            "params": [
+              {
+                "name": "conversationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the conversation"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a conversation with its full message history — alternating user and assistant turns. Each assistant turn carries the originating `jobId` and an `omniChatUrl` deep link.\n\nThe conversations returned by this API depend on the type of API key being used:\n\n- Organization API keys can access any conversation in the organization\n- Personal Access Tokens can only access the authenticating user's conversations\n"
+        },
+        {
+          "info": {
+            "name": "Create AI job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/jobs",
+            "params": [
+              {
+                "name": "userId",
+                "value": "9e8719d9-276a-4964-9395-a493189a247c",
+                "type": "query",
+                "description": "**Requires an Organization API key.** The ID of the user to run the query as.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit a new AI job for asynchronous execution. The AI will analyze the prompt, generate and execute queries against the specified model, and produce a summarized answer. \n\nJobs are processed by a background worker and typically complete within 15–60 seconds. Use [Get AI job status](/api/ai/get-ai-job-status) to poll for status, or configure a `webhookUrl` to receive a notification when the job completes. Optionally continue an existing conversation by providing a `conversationId`.\n\n#### Webhook"
+        },
+        {
+          "info": {
+            "name": "Get AI job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/jobs/:jobId",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the AI job"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the current status and details of an AI job, including its state, progress information, and result summary.\n\nThe response fields vary by `state` — for example, `progress` is only present during `EXECUTING`, and `resultSummary` is only present when `COMPLETE`.\n\nPoll this endpoint every 2–5 seconds until the job reaches a terminal state (`COMPLETE`, `FAILED`, or `CANCELLED`).\n"
+        },
+        {
+          "info": {
+            "name": "Cancel AI job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/jobs/:jobId/cancel",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the AI job to cancel"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Request cancellation of an AI job. This endpoint is idempotent — calling it on an already-cancelled or completed job returns success with the current state. \n\n- For `QUEUED` jobs, cancellation is immediate\n- For `EXECUTING` jobs, the worker will stop after completing its current iteration\n- Jobs in a `DELIVERING` state cannot be cancelled as they are already finalizing results. **Only the job owner or organization admins can cancel jobs.**\n"
+        },
+        {
+          "info": {
+            "name": "Stream AI job results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/jobs/:jobId/result",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the AI job"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the full result of a completed AI job, including all actions taken by the AI (queries generated, data retrieved) and the final summarized answer. \n\nResults are only available for jobs in `COMPLETE` state and are retained for 14 days after completion. The response is streamed directly from storage.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

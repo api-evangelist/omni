@@ -1,0 +1,3165 @@
+{
+  "item": [
+    {
+      "id": "2b1cf9e9-cbdc-4f9f-83ed-b80d419c7acb",
+      "name": "AI Routines",
+      "description": {
+        "content": "Manage AI Routines: schedule recurring AI-powered tasks to run automatically on your data.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2b8866c6-b82d-43bd-87b5-4a0388f51e6b",
+          "name": "List AI Routines",
+          "request": {
+            "name": "List AI Routines",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nList AI Routines for the calling user, newest first. Includes routines paused by the owner or disabled by Omni, but excludes deleted routines. \n\nUse `pageInfo.nextCursor` from one response as the `cursor` query parameter on the next request. \n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination from previous response `nextCursor`"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "Number of results per page (1-100, integer)"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "desc",
+                  "description": "Sort direction for results"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortField",
+                  "value": "<string>",
+                  "description": "Field to sort results by"
+                },
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8757679e-547e-4ccf-ad47-bf5ed7e675d0",
+              "name": "List of AI Routines",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": false,\n    \"nextCursor\": \"string\",\n    \"pageSize\": 6401,\n    \"totalRecords\": 7671\n  },\n  \"records\": [\n    {\n      \"branchId\": \"657b8f07-9f40-92a4-00e6-db439d4d2fce\",\n      \"createdAt\": \"string\",\n      \"description\": \"string\",\n      \"destination\": {\n        \"type\": \"email\",\n        \"recipientEmails\": [\n          \"blob.ross@blobsrus.com\",\n          \"blob.the.builder@blobsrus.com\"\n        ],\n        \"userGroupIds\": [\n          \"550e8400-e29b-41d4-a716-446655440000\"\n        ]\n      },\n      \"disabled\": true,\n      \"id\": \"8a2466a5-de86-c3c6-fcf7-03306e13f616\",\n      \"lastRun\": {\n        \"completedAt\": \"string\",\n        \"label\": \"Delivered\",\n        \"state\": \"COMPLETE\"\n      },\n      \"modelId\": \"a9d1c361-458a-ffbe-badb-754b05b0b570\",\n      \"name\": \"string\",\n      \"prompt\": \"string\",\n      \"recipientCount\": 5158,\n      \"schedule\": \"string\",\n      \"systemDisabled\": true,\n      \"systemDisabledReason\": \"string\",\n      \"timezone\": \"string\",\n      \"topicName\": \"string\",\n      \"updatedAt\": \"string\"\n    },\n    {\n      \"branchId\": \"963fcc98-d3ee-dbee-3afc-47d64fe2edaa\",\n      \"createdAt\": \"string\",\n      \"description\": \"string\",\n      \"destination\": {\n        \"type\": \"email\",\n        \"recipientEmails\": [\n          \"blob.ross@blobsrus.com\",\n          \"blob.the.builder@blobsrus.com\"\n        ],\n        \"userGroupIds\": [\n          \"550e8400-e29b-41d4-a716-446655440000\"\n        ]\n      },\n      \"disabled\": true,\n      \"id\": \"771fe655-3933-953b-3214-63a6e717385f\",\n      \"lastRun\": {\n        \"completedAt\": \"string\",\n        \"label\": \"Delivered\",\n        \"state\": \"COMPLETE\"\n      },\n      \"modelId\": \"e7717e2d-5cfe-433f-dd42-f7e940363468\",\n      \"name\": \"string\",\n      \"prompt\": \"string\",\n      \"recipientCount\": 8081,\n      \"schedule\": \"string\",\n      \"systemDisabled\": true,\n      \"systemDisabledReason\": \"string\",\n      \"timezone\": \"string\",\n      \"topicName\": \"string\",\n      \"updatedAt\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25cc76a5-177f-49fe-8a5b-97b5f778c162",
+              "name": "Invalid pagination cursor or `userId` value.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b8fe809-1bb8-4450-887a-948754e6c4fe",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6bd51fa-275c-44f1-9c6a-a73189fa2088",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have USE_AI permission`\n- `AI Routines feature is not enabled (aiScheduledTasks flag required)`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0001dcc5-559d-4727-8d66-40062fd419dc",
+              "name": "Not found.\n\nPossible causes:\n\n- The `userId` membership was not found in the organization.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c04ed25c-a958-4eae-9f0d-0b7751a6762b",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d89cbc82-3e22-4965-b764-800d736e9429",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "eyJpZCI6IjEyMzQ1In0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aad58f1f-c2ad-451e-81d3-c94b25a8c2cf",
+          "name": "Create an AI Routine",
+          "request": {
+            "name": "Create an AI Routine",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nCreate a new AI Routine that will run on the specified schedule.\n\nEach scheduled run executes once using the routine owner's permissions, and every recipient receives the same result.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"<string>\"\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "21fafa0e-28bc-469b-8994-6c08c60dc71a",
+              "name": "Routine created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"880e8400-e29b-41d4-a716-446655440003\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "430dc617-46ef-4b21-ba6f-c7f75ded2678",
+              "name": "Invalid request body, recipient configuration, timezone, or schedule. Also returned when the schedule is more frequent than the organization allows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1ebb267-4852-4a0f-a341-723f7753f407",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9846ee5f-76a0-41f4-ab22-48998d0cc12a",
+              "name": "Forbidden\n\nAI routines or AI query generation are not enabled for the organization, or the API key cannot act on behalf of the requested user.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "175c2ae2-6dbf-4658-a388-5b3db3763369",
+              "name": "Model, branch, or topic not found, or not accessible to the requested user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9648dac-3da4-4928-a4fd-8ec0d632cd22",
+              "name": "The resolved user already has the maximum number of active routines.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 429\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c102110a-34af-4201-88c0-c1d15ce184db",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"branchId\": \"<uuid>\",\n  \"description\": \"<string>\",\n  \"topicName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d7d8dbb-38d0-47fa-8ac5-382073372ea0",
+          "name": "Get an AI Routine",
+          "request": {
+            "name": "Get an AI Routine",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRetrieve details for a specific AI Routine by ID, including the status of its most recent completed run.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines",
+                ":routineId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the routine."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "47bb3d88-838d-45d6-9a7a-2137d08a3278",
+              "name": "Routine details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"branchId\": \"49a8c1ef-4cb6-7ffc-18b5-7e3383cfc7b4\",\n  \"createdAt\": \"string\",\n  \"description\": \"string\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"disabled\": true,\n  \"id\": \"b37cf589-4a13-143f-9da3-5bcf63ad0380\",\n  \"lastRun\": {\n    \"completedAt\": \"string\",\n    \"label\": \"Delivered\",\n    \"state\": \"COMPLETE\"\n  },\n  \"modelId\": \"1712d449-602e-02db-2e5e-09f819604d52\",\n  \"name\": \"string\",\n  \"prompt\": \"string\",\n  \"recipientCount\": 3195,\n  \"schedule\": \"string\",\n  \"systemDisabled\": true,\n  \"systemDisabledReason\": \"string\",\n  \"timezone\": \"string\",\n  \"topicName\": \"string\",\n  \"updatedAt\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb5e9181-5923-45cb-bbd4-018f03a9aeab",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60c249d7-11b8-4125-a5c5-1eb59e803c3d",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have USE_AI permission`\n- `AI Routines feature is not enabled (aiScheduledTasks flag required)`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17a85296-a561-4b44-9cb5-07c31280d584",
+              "name": "Routine not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f61005a-6719-4337-a266-abe86208ade5",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49e3aa0a-b181-4f76-8bc8-143e7f76e976",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f2f81ee-1cfb-4d7d-ba4c-1fc123fd8836",
+          "name": "Update an AI Routine",
+          "request": {
+            "name": "Update an AI Routine",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nUpdate an existing AI Routine. All request fields are optional, and only supplied fields are changed. Supplying `destination` replaces the full recipient configuration.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines",
+                ":routineId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the routine."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c7b783d2-c67a-480e-993d-b92de127272c",
+              "name": "Routine updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"branchId\": \"49a8c1ef-4cb6-7ffc-18b5-7e3383cfc7b4\",\n  \"createdAt\": \"string\",\n  \"description\": \"string\",\n  \"destination\": {\n    \"type\": \"email\",\n    \"recipientEmails\": [\n      \"blob.ross@blobsrus.com\",\n      \"blob.the.builder@blobsrus.com\"\n    ],\n    \"userGroupIds\": [\n      \"550e8400-e29b-41d4-a716-446655440000\"\n    ]\n  },\n  \"disabled\": true,\n  \"id\": \"b37cf589-4a13-143f-9da3-5bcf63ad0380\",\n  \"lastRun\": {\n    \"completedAt\": \"string\",\n    \"label\": \"Delivered\",\n    \"state\": \"COMPLETE\"\n  },\n  \"modelId\": \"1712d449-602e-02db-2e5e-09f819604d52\",\n  \"name\": \"string\",\n  \"prompt\": \"string\",\n  \"recipientCount\": 3195,\n  \"schedule\": \"string\",\n  \"systemDisabled\": true,\n  \"systemDisabledReason\": \"string\",\n  \"timezone\": \"string\",\n  \"topicName\": \"string\",\n  \"updatedAt\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "090799bf-8a22-4af7-9f27-371fc170b2fc",
+              "name": "Invalid request body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81a21139-986a-4d49-a824-0f45a47f6729",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b16d8060-0cc4-493a-8767-2ed19f01c0a2",
+              "name": "Forbidden\n\nPossible error messages:\n- `User does not have USE_AI permission`\n- `AI Routines feature is not enabled (aiScheduledTasks flag required)`\n- `Insufficient permissions to update this routine`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ae98939-fe02-4314-9229-a5e13e087cba",
+              "name": "Routine not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bad74be3-7456-4c45-82e9-b00b9ec0edb5",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4758b6df-0c9d-4d4e-89c9-9cf5bc9791e4",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"description\": \"<string>\",\n  \"modelId\": \"<uuid>\",\n  \"isActive\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85542c97-0670-41ee-abbe-5df4a593161b",
+          "name": "Delete an AI Routine",
+          "request": {
+            "name": "Delete an AI Routine",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nDelete an AI Routine. This action cannot be undone.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines",
+                ":routineId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the routine."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1e2f7e8b-f016-481f-afbb-311ec63409a7",
+              "name": "Routine deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"8c413b15-561e-ee92-7ee3-676b655e52ce\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c441133-06fd-4eaa-8eb1-e6b1b1044130",
+              "name": "Invalid routine ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e50bfa41-16c8-43d5-8f1f-f91ee5ad839f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "859b0b25-fc3f-4d49-8fd1-ff110688febd",
+              "name": "AI routines or AI query generation are not enabled for the organization, or a user-scoped API key tried to delete another user's routine.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe445ffe-7276-4f3a-bf8f-2575ffa4bf11",
+              "name": "Routine not found or has already been deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae5d7f0d-65bb-4407-bfd3-c765b4e7e21e",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b090e763-9b4f-4cd8-abba-dbff7669389b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2e3354f-6120-4144-851e-2383aaedc4f2",
+          "name": "Run AI routine now",
+          "request": {
+            "name": "Run AI routine now",
+            "description": {
+              "content": "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRun an existing routine immediately, in addition to its schedule — e.g. to get an off-cycle result or verify a routine produces the email you expect.\n\nExecutes once using the routine owner's permissions and delivers the AI response to every recipient configured on the routine. Returns as soon as the run has started; the result arrives asynchronously via the routine's normal email delivery.\n\nIf a run is already in progress, the endpoint returns `409` rather than starting a second one. Manual runs that hit broken configuration will return `400` but not pause the schedule.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "routines",
+                ":routineId",
+                "trigger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Requires an Organization API key**. Target user membership ID. \n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) The UUID of the routine."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "df268f26-2919-47f9-a799-aa39f9021881",
+              "name": "The run has started.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"990e8400-e29b-41d4-a716-446655440004\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7459ae28-e243-425c-8c17-3f449193aa67",
+              "name": "Bad request. Possible causes:\n\n- Invalid routine ID\n- Routine cannot run as configured (e.g. its model, branch, or owner is no longer accessible)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc209ded-6792-4ed9-af61-86d09723ea1c",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ddf2d27-aabb-4ae3-b8df-fa39ad25c50f",
+              "name": "AI routines or AI query generation are not enabled for the organization, or a user-scoped API key tried to run another user's routine.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b4db0a6-cb2b-4319-9c03-7df64e0a5ab5",
+              "name": "The routine does not exist or cannot be triggered (deleted, paused, or disabled by Omni).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b70af924-4a0b-4bac-beb6-5b6a5613857a",
+              "name": "A run is already in progress for this routine.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "routines",
+                    ":routineId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) The UUID of the routine."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 409\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c016f0be-caba-4751-bf79-1c74a1052af3",
+    "name": "Omni AI AI Routines API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

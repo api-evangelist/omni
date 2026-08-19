@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Model branches API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Model branches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Merge a branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/branch/:branchName/merge",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "type": "path",
+                "description": "The unique identifier of the model"
+              },
+              {
+                "name": "branchName",
+                "value": "feature/add-revenue-metrics",
+                "type": "path",
+                "description": "The name of the branch to merge"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Merges a model branch into the shared model.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

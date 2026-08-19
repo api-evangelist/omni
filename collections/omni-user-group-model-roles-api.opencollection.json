@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI User group model roles API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User group model roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve user group model roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/user-groups/:userGroupId/model-roles",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the user group to retrieve model roles for."
+              },
+              {
+                "name": "modelId",
+                "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
+                "type": "query",
+                "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to."
+              },
+              {
+                "name": "connectionId",
+                "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed",
+                "type": "query",
+                "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the model role assignments for a user group.\n"
+        },
+        {
+          "info": {
+            "name": "Assign or update user group model role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/user-groups/:userGroupId/model-roles",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the user group to assign or update a model role for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Assigns or updates a model role for a user group. If the user group already has a role for the specified model, this endpoint will update it to the new role. All members of the user group will inherit this role.\n\nModel roles control what actions user group members can perform on models and connections. To manage user groups, see the [User group APIs](/api/user-groups).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1763 @@
+{
+  "item": [
+    {
+      "id": "93ca102c-c17c-42cb-ac14-ffcb377ce2e1",
+      "name": "Uploads",
+      "description": {
+        "content": "Manage CSV and spreadsheet uploads",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "90c2687d-f359-4a75-89a4-cda1b8fb0ed8",
+          "name": "List uploads",
+          "request": {
+            "name": "List uploads",
+            "description": {
+              "content": "List all uploads ([CSV files and spreadsheets](/analyze-explore/data-input-csvs)) in the organization with metadata and optional filtering.\n\nThis endpoint requires **Organization Admin** permissions.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "uploads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "csv",
+                  "description": "Filter by upload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "connectionId",
+                  "value": "<uuid>",
+                  "description": "Filter by connection ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "modelId",
+                  "value": "<uuid>",
+                  "description": "Filter by model ID. Shared models return non-private connection uploads; workbook models return their own uploads."
+                },
+                {
+                  "disabled": false,
+                  "key": "searchTerm",
+                  "value": "<string>",
+                  "description": "Search term to filter by file name (case-insensitive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "Number of items to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Cursor for pagination (from previous response)."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortField",
+                  "value": "updatedAt",
+                  "description": "Field to sort by."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "desc",
+                  "description": "Sort direction."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d487fdd5-75c7-4f1d-872f-0176a602efcc",
+              "name": "Uploads retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": false,\n    \"nextCursor\": null,\n    \"pageSize\": 20,\n    \"totalRecords\": 2\n  },\n  \"records\": [\n    {\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"file_name\": \"users.csv\",\n      \"view_name\": \"users\",\n      \"connection_id\": \"660e8400-e29b-41d4-a716-446655440001\",\n      \"in_db_as_table_name\": \"omni_upload_t550e8400\",\n      \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"size_bytes\": 1024,\n      \"created_at\": \"2025-01-15T10:00:00Z\",\n      \"updated_at\": \"2025-01-15T10:00:00Z\",\n      \"uploaded_by_user\": {\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"name\": \"John Doe\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cab3ca1f-fc18-4108-859f-fcd35aeb81ec",
+              "name": "Bad Request. Possible error messages include:\n\n- `connectionId: Invalid uuid`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: connectionId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8aeb08c-37b5-41e3-a1ae-495ad3dc88cf",
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc5e2593-142f-45d5-8a72-0fc411858947",
+              "name": "Insufficient permissions. Requires `MANAGE_UPLOADS` permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"You do not have permission to perform this action\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bf53ffe-862e-4ba2-a995-f3b26c2b136c",
+              "name": "Model not found (invalid `modelId`).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "757d24b3-e33a-45c2-b4ff-63f3b0cdad4c",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "modelId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "updatedAt"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9540b63f-e934-4f70-ad61-b4db6451500e",
+          "name": "Upload a CSV file",
+          "request": {
+            "name": "Upload a CSV file",
+            "description": {
+              "content": "<Note>\n  To use this endpoint:\n  \n  - The **Upload data** setting in **Settings > Content permissions** must enabled by an **Organization Admin**\n  - The authenticating user must have **Restricted Querier** permissions or higher on the model the file will be uploaded to\n</Note>\n\nUpload a CSV file to create a new [data input table](/analyze-explore/data-input-csvs). The file is parsed, converted to Arrow format, uploaded to storage, written to the connection's table upload (scratch) schema, and a view is created in the specified model.\n\nUploaded files:\n\n- Must be a CSV file with `.csv` extension\n- Can have a maximum of 500,000 rows. Files will be truncated if this limit is exceeded.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "uploads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "contentType": "text/csv",
+                  "description": "(Required) The CSV file to upload, which must have a `.csv` extension"
+                },
+                {
+                  "key": "modelId",
+                  "value": "<uuid>",
+                  "type": "text",
+                  "description": "(Required) UUID of the model to create the view in"
+                },
+                {
+                  "key": "branchId",
+                  "value": "<uuid>",
+                  "type": "text",
+                  "description": "UUID of the branch to create the view in. Mutually exclusive with `branchName`."
+                },
+                {
+                  "key": "branchName",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Name of the branch to create the view in. Mutually exclusive with `branchId`."
+                },
+                {
+                  "key": "viewName",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "Override the view name. Defaults to sanitized file name."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cd953c95-4f45-4f8c-acb2-25a8732e7de5",
+              "name": "CSV file uploaded successfully and view created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"fileName\": \"users.csv\",\n  \"viewName\": \"users\",\n  \"modelId\": \"880e8400-e29b-41d4-a716-446655440003\",\n  \"inDbAsTableName\": \"omni_upload_t550e8400\",\n  \"rowCount\": 150,\n  \"truncated\": false,\n  \"viewCreated\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e480f5c7-d318-4adb-858e-4bf75f93e02d",
+              "name": "Bad Request. Possible error messages include:\n\n- Missing required fields (`file` or `modelId`)\n- Invalid file type (not a CSV file)\n- CSV parsing failed\n- Invalid UUID format\n- Both `branchId` and `branchName` provided (mutually exclusive)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: file must have .csv extension\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ec87c48-273e-4eef-af82-df7c81800e9c",
+              "name": "Missing or invalid authentication.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "660e3a43-f4ea-46b4-a09a-f3ffc6efe017",
+              "name": "Insufficient permissions. Authenticating user must have **Restricted Querier** permissions or higher on the model.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"You do not have permission to perform this action\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "361fa9f4-1d35-4650-bcd3-fb2ecae6f393",
+              "name": "Not Found. Possible error messages include:\n\n- Model not found (invalid `modelId`)\n- Branch not found (invalid `branchId` or `branchName`)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Model not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8fdacc1-e0b5-42cf-9706-c6d63a61c144",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The CSV file to upload, which must have a `.csv` extension",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text",
+                      "contentType": "text/csv"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) UUID of the model to create the view in",
+                        "type": "text/plain"
+                      },
+                      "key": "modelId",
+                      "value": "880e8400-e29b-41d4-a716-446655440003",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "UUID of the branch to create the view in. Mutually exclusive with `branchName`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchId",
+                      "value": "990e8400-e29b-41d4-a716-446655440004",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Name of the branch to create the view in. Mutually exclusive with `branchId`.",
+                        "type": "text/plain"
+                      },
+                      "key": "branchName",
+                      "value": "my-branch",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Override the view name. Defaults to sanitized file name.",
+                        "type": "text/plain"
+                      },
+                      "key": "viewName",
+                      "value": "custom_view_name",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b82807c8-898d-4d52-b42b-52779cdc1a69",
+          "name": "Delete an upload",
+          "request": {
+            "name": "Delete an upload",
+            "description": {
+              "content": "Delete a CSV upload by its ID. This removes the file from storage and marks the record as deleted.\n\n<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "uploads",
+                ":uploadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "uploadId",
+                  "description": "(Required) The unique identifier of the upload to delete"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d733a271-0725-4887-8c8f-1c6b0d52daa8",
+              "name": "Upload deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4acf2dae-3b85-40a6-9e0e-1644564a32da",
+              "name": "Invalid upload ID format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: uploadId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3f0fc0b-c4d4-4098-ab61-765f8aee0c89",
+              "name": "Missing or invalid authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26c79985-2d4a-43b2-99f5-67d4e4a79167",
+              "name": "Insufficient permissions. Requires **Organization Admin** permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"You do not have permission to perform this action\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7933a755-dc4f-484c-b585-5cea7dd40d92",
+              "name": "Upload not found or already deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Upload not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "718f49f8-8bbb-41c1-8628-6f94addcadf4",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "uploads",
+                    ":uploadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "uploadId",
+                      "description": "(Required) The unique identifier of the upload to delete"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "39231795-e240-4b31-972f-e8a98175276b",
+    "name": "Omni AI Uploads API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

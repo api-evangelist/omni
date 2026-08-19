@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Folder permissions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Folder permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get folder permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId/permissions",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve folder permissions for a user"
+        },
+        {
+          "info": {
+            "name": "Grant folder permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId/permissions",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Grant folder permissions to users or groups"
+        },
+        {
+          "info": {
+            "name": "Update folder permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId/permissions",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update existing folder permissions for users or groups"
+        },
+        {
+          "info": {
+            "name": "Revoke folder permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId/permissions",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Revoke folder permissions from users or groups"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

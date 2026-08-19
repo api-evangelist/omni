@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Schedule recipients API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Schedule recipients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List schedule recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/recipients",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the list of recipients for the specified schedule. Successful responses will include the recipients and details about the schedule's destination type.\n\nTo retrieve a schedule's full configuration, use the [List schedules](/api/schedules#list-schedules) endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Add schedule recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/add-recipients",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add schedule recipients"
+        },
+        {
+          "info": {
+            "name": "Remove schedule recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/remove-recipients",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove schedule recipients"
+        },
+        {
+          "info": {
+            "name": "Manage email-only user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/users/email-only",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manage email-only user"
+        },
+        {
+          "info": {
+            "name": "Bulk manage email-only users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/users/email-only/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or updates up to 20 [email-only users](/share/deliveries/email). An email-only user is a recipient of a delivery that isn't associated with an Omni account.\n\nIf Omni matches a provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

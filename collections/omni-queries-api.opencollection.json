@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Queries API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Queries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/query/run",
+            "params": [
+              {
+                "name": "userId",
+                "value": "9e8719d9-276a-4964-9395-a493189a247c",
+                "type": "query",
+                "description": "**Requires an Organization API key.** The ID of the user to run the query as.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Runs the query specified in the request body. Successful requests will return the data as a base64 encoded [Apache Arrow](https://arrow.apache.org/) table, allowing you to extract query results from Omni and use them elsewhere. For example, piping data to Google Sheets or leveraging data in a Python notebook.\n"
+        },
+        {
+          "info": {
+            "name": "Wait for query results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/query/wait",
+            "params": [
+              {
+                "name": "job_ids",
+                "value": "",
+                "type": "query",
+                "description": "An array of job IDs to poll for results. These IDs are returned in the `remaining_job_ids` property when a request to the [Run query endpoint](/api/queries/run-query) times out.\n\nFormat the parameter as a JSON array (e.g., `?job_ids=[\"job-id-1\",\"job-id-2\"]`).\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Polls for the results of one or more query jobs. Use this endpoint when a request to the [Run query endpoint](/api/queries/run-query) times out and returns `remaining_job_ids` in the response.\n\nThis endpoint will wait for the specified jobs to complete and return their results. If the jobs are still processing when the request times out, the response will include the remaining job IDs to poll again.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

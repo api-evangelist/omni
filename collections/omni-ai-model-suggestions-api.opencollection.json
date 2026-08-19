@@ -1,0 +1,277 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI AI Model Suggestions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AI Model Suggestions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List AI-generated suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the shared model to list suggestions for."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter suggestions by status:\n\n- `active` - Only active suggestions (default)\n- `ignored` - Only ignored suggestions\n- `all` - All suggestions regardless of status\n"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for keyset-based pagination. Use the `id` from the last suggestion in the previous page."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of suggestions to return per page. Defaults to 25, maximum 100."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nLists AI-generated suggestions for a shared model. Suggestions can be filtered by status and are returned with keyset-based pagination.\n\nSuggestions are sorted by priority, creation date, and ID for stable pagination.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/:suggestionId",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the shared model the suggestion belongs to"
+              },
+              {
+                "name": "suggestionId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the suggestion"
+              }
+            ]
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nPermanently deletes an AI Model suggestion.\n"
+        },
+        {
+          "info": {
+            "name": "Get the latest generation run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/runs/latest",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the shared model the suggestions belong to"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieve the most recent generation run for the shared model (the active run if one is in flight, otherwise the last terminal run), or `null` if none exists.\n"
+        },
+        {
+          "info": {
+            "name": "Get status for a generation run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/runs/:runId",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the shared model the run belongs to"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the generation run"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieve the status of a specific generation run. Poll until `status` is terminal (`complete` or `failed`), then re-fetch the suggestions list.\n"
+        },
+        {
+          "info": {
+            "name": "Generate model suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/generate",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "type": "path",
+                "description": "UUID of the shared model the suggestions belong to"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nTrigger an AI suggestion generation run for the shared model and enqueue the async job. Poll the [Get status for a generation run endpoint](/api/ai-model-suggestions/get-status-for-a-generation-run) for status.\n\nA model can have one active run at a time and a cooldown period is enforced after a successful run. See the `Retry-After` header in the response for more information.\n"
+        },
+        {
+          "info": {
+            "name": "Enable model AI suggestions schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/schedule",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nEnable the daily generation schedule for AI model suggestions on a shared model. Suggestions are generated daily at midnight in the specified timezone.\n\nThis operation is idempotent: calling it multiple times returns the persisted schedule.\n"
+        },
+        {
+          "info": {
+            "name": "Disable model AI suggestions schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/schedule",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the shared model the suggestions belong to"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nDisable the daily generation schedule for AI model suggestions on a shared model.\n\nThis operation is idempotent: calling it multiple times returns success even if the schedule is already disabled.\n"
+        },
+        {
+          "info": {
+            "name": "Dismiss a suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/:suggestionId/ignore",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              },
+              {
+                "name": "suggestionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the suggestion to dismiss."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nDismisses a suggestion, removing it from the active list. Dismissed suggestions can be restored using the [restore endpoint](/api/ai-model-suggestions/restore-a-dismissed-suggestion).\n"
+        },
+        {
+          "info": {
+            "name": "Restore a dismissed suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/suggestions/:suggestionId/restore",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the shared model the suggestion belongs to."
+              },
+              {
+                "name": "suggestionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the suggestion to restore."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nRestores a previously dismissed suggestion back to the active list.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

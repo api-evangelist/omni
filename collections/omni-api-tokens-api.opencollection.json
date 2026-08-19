@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI API Tokens API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/api-keys",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by token type. Omit to return all types.\n\n- `organization` - Organization-level API key. Not tied to a specific user.\n- `personal` - Personal access token. Acts as a specific user.\n- `mcp` - MCP OAuth grant issued during the OAuth authorization flow\n"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to return per page."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nList API token in the organization - including Organization API keys, Personal Access Tokens, and MCP OAuth grants - with optional filtering by type. Only metadata - not actual secret values - are returned.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve an API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/api-keys/:id"
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\n  description: Token id. Must be a valid UUID — malformed values return `400`.\n"
+        },
+        {
+          "info": {
+            "name": "Enable or disable API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/api-keys/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the API token. The token must exist in the authenticating user's organization."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nDisable or re-enable an API token. To permanently revoke a token, use the [Delete API token](/api/api-tokens/delete-api-token) endpoint.\n\nThis operation is **idempotent**: calling it twice with the same body produces the same result.\n"
+        },
+        {
+          "info": {
+            "name": "Delete API token",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/api-keys/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the token to revoke. The token must belong to the same organization as the authenticating user."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nPermanently delete an API token. Works for all token types — Organization API keys, Personal Access Tokens (PATs), and MCP OAuth grants. This is the same as revoking a token in the Omni app.\n\nConcurrent deletes are safe — the first caller receives `200` and the second receives `404` consistently. An Organization Admin can delete the token they authenticated with, which is useful for self-service rotation.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

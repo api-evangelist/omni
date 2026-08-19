@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Document labels API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Document labels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bulk update document labels",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/labels",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier (UUID)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Bulk update document labels"
+        },
+        {
+          "info": {
+            "name": "Apply label to document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/labels/:labelName",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier"
+              },
+              {
+                "name": "labelName",
+                "value": "",
+                "type": "path",
+                "description": "The label name to apply:\n\n- Must be 2-25 characters\n- Labels are **case insensitive**. For example, adding `BlobSales` when `blobsales` exists will be treated as a duplicate. \n- Special characters must be URL-encoded (e.g., `Q1%202024` for \"Q1 2024\").\n\nAdditionally, adding **Verified** or **Homepage** labels require Organization Admin permissions.\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Apply an existing label to a document. Labels must be created first via the [Create label](/api/labels/create-label) endpoint.\n\nDocuments can have multiple labels. When a new label is applied using this endpoint, the API adds it to the document's existing labels. Labels are not replaced.\n"
+        },
+        {
+          "info": {
+            "name": "Remove label from document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/labels/:labelName",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier"
+              },
+              {
+                "name": "labelName",
+                "value": "",
+                "type": "path",
+                "description": "The label name to remove:\n\n- Must be 2-25 characters\n- Labels are **case insensitive**. For example, removing `BlobSales` will remove `blobsales` if it exists on the document.\n- Special characters must be URL-encoded (e.g., `Q1%202024` for \"Q1 2024\").\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove label from document"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

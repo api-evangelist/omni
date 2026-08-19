@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Document favorites API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Document favorites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Favorite document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/favorite",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a document to a user's favorites. Only published documents can be favorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user's favorites.\n"
+        },
+        {
+          "info": {
+            "name": "Unfavorite document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/favorite",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove a document from a user's favorites. Only published documents can be unfavorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not.\n"
+        },
+        {
+          "info": {
+            "name": "List document favoriters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:identifier/favorites",
+            "params": [
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "Document identifier (either document ID or slug)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page (min 1, max 100)."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Manager** or **Owner** permissions on the requested document.\n</Note>\n\nLists users who have favorited a published document, paginated and sorted by `favoritedAt`.\n\nUse this endpoint when you need to know \"who favorited document X\" — for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

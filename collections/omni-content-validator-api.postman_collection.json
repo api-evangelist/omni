@@ -1,0 +1,1145 @@
+{
+  "item": [
+    {
+      "id": "71b90fa4-d7db-41da-b7f7-3e8ae75c033e",
+      "name": "Content validator",
+      "description": {
+        "content": "Validate content against models and perform find/replace operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9454dedd-6178-4562-90e8-e978829fa5b2",
+          "name": "Validate content",
+          "request": {
+            "name": "Validate content",
+            "description": {
+              "content": "Validates all content against the model and returns documents with queries and any validation issues.\n\nThis endpoint scans all documents associated with the model and identifies any fields, views, or other model elements referenced in queries that are no longer valid.\n\nYou can optionally scope validation to only content that references a specific model element (view, field, or topic) using the `find` and `find_type` parameters. This is useful when you only need to validate content using a specific element, avoiding the overhead of validating all documents.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "models",
+                ":modelId",
+                "content-validator"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "branch_id",
+                  "value": "<uuid>",
+                  "description": "The ID of the branch to validate against. If not provided, validates against the main model."
+                },
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "The user ID to act on behalf of. Only valid when using an organization API key.\n\nUser-scoped API keys cannot use this parameter and will receive a 403 error if provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_personal_folders",
+                  "value": "<boolean>",
+                  "description": "When enabled, include personal folders in the search."
+                },
+                {
+                  "disabled": false,
+                  "key": "find",
+                  "value": "<string>",
+                  "description": "The name of the model element to find content references for. Must be used together with `find_type`.\n\nFor `FIELD` type, the value must be fully qualified with the view name (e.g., `orders.status`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "find_type",
+                  "value": "<string>",
+                  "description": "The type of model element to search for. Must be used together with `find`.\n\nWhen both parameters are provided, only content that references the specified element will be validated and included in the response.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "modelId",
+                  "description": "(Required) The ID of the model to validate content against."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3f1917a1-ff8f-4246-bf14-829046fba500",
+              "name": "Content validation results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"model_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"branch\": null,\n  \"content\": [\n    {\n      \"document_id\": \"abc123\",\n      \"identifier\": \"dashboard-1\",\n      \"name\": \"Sales Dashboard\",\n      \"type\": \"Published\",\n      \"updated_at\": \"2025-01-15T10:00:00Z\",\n      \"folder\": {\n        \"name\": \"Reports\",\n        \"path\": \"/Reports\"\n      },\n      \"owner\": {\n        \"email\": \"user@example.com\",\n        \"name\": \"Jane Doe\"\n      },\n      \"require_pull_request_to_publish\": false,\n      \"queries_and_issues\": [\n        {\n          \"query_name\": \"Total Revenue\",\n          \"query_presentation_id\": \"qp-123\",\n          \"query_id_map_key\": \"1\",\n          \"issues\": [\n            \"Field 'orders.old_field' not found in model\"\n          ]\n        }\n      ],\n      \"dashboard_filter_issues\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c15b0fb8-0ab6-42b6-bb63-ec9f3251467e",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `modelId: Invalid UUID`\n- `Both 'find' and 'find_type' parameters must be provided together`\n- `When find_type is FIELD, the find parameter must be scoped by view name (e.g., view_name.field_name)`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: modelId: Invalid UUID\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4bd0449f-294c-4284-b62e-c5f398c86bef",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `User-scoped API keys cannot act on behalf of other users`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"User-scoped API keys cannot act on behalf of other users\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce9e0f12-913c-4dd1-b497-7b20d5303e10",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Shared model with id <modelId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Shared model with id 550e8400-e29b-41d4-a716-446655440000 does not exist\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e6e61de-ae79-4df8-b00a-8b1cf2fd207c",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b4e97e8-3e55-4ab8-832a-a712147d6337",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "branch_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "include_personal_folders",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "find",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "find_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to validate content against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32c5ee81-8cd2-4028-9846-6fb97cd833f2",
+          "name": "Find and replace content",
+          "request": {
+            "name": "Find and replace content",
+            "description": {
+              "content": "Performs find/replace operations on content using the specified model.\n\nThis endpoint allows you to replace views or fields across all documents associated with the model. This is useful when renaming model elements and need to update all references.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "models",
+                ":modelId",
+                "content-validator"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "The user ID to act on behalf of. Only valid when using an organization API key.\n\nUser-scoped API keys cannot use this parameter and will receive a 403 error if provided.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "modelId",
+                  "description": "(Required) The ID of the model to perform find/replace against."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"find\": \"<string>\",\n  \"replacement\": \"<string>\",\n  \"find_or_replace_type\": \"<string>\",\n  \"branch_id\": \"<uuid>\",\n  \"include_personal_folders\": \"<boolean>\",\n  \"only_in_workbook_id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9f6d946a-7f85-4bb5-a991-38917442ccc5",
+              "name": "Find/replace operation completed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"replaced_queries_count\": 15,\n  \"replaced_documents_count\": 5,\n  \"replaced_workbook_models_count\": 3,\n  \"replaced_dashboard_filters_count\": 2,\n  \"skipped_pr_required_count\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e2b13a4-9a5d-4dfe-8514-863ebc159daf",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `modelId: Invalid UUID`\n- `Find field must be scoped by view name.`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: modelId: Invalid UUID\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3d425dc-88ff-4c33-ac85-e67365b0887e",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `User-scoped API keys cannot act on behalf of other users`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"User-scoped API keys cannot act on behalf of other users\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddb6e35f-b544-4353-9a62-b92eb5065dfe",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Shared model with id <modelId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Shared model with id 550e8400-e29b-41d4-a716-446655440000 does not exist\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b19be604-4da9-410f-ab02-e1c170ccfe0c",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c647852-7b01-46be-83a9-e674c644f35c",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "content-validator"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The ID of the model to perform find/replace against."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"find\": \"old_view\",\n  \"replacement\": \"new_view\",\n  \"find_or_replace_type\": \"VIEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f2eef8db-e588-42a3-8865-18bbb0196d09",
+    "name": "Omni AI Content validator API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

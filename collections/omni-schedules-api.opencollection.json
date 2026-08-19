@@ -1,0 +1,315 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Schedules API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Schedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search term for filtering schedules by name, dashboard name, or owner name (case-insensitive).\n"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by delivery status."
+              },
+              {
+                "name": "destination",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by destination type."
+              },
+              {
+                "name": "scheduleType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by schedule type."
+              },
+              {
+                "name": "contentType",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by content type."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort results by."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "The direction to sort results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The page number for offset-based pagination."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to include on each page."
+              },
+              {
+                "name": "ownerId",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by the owner's membership ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.\n\nAPI results vary by API key type:\n\n- **Organization API keys** - When specified, only schedules for the specified owner are returned. Otherwise, all schedules in the organization are returned.\n- **Personal access token** - When specified, only the token owner's membership ID is allowed. If another user's membership ID is provided, the API will return a `403 Forbidden` error.\n"
+              },
+              {
+                "name": "embedEntity",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by embed entity:\n\n- If used as the only filter, list all schedules in the embed entity\n- If used with `ownerId`, list only schedules for the specified user if they are associated with the `embedEntity`. The response will be empty if the specified `ownerId` doesn't have the entity.\n- Can be combined with other filters for more specific results\n"
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "query",
+                "description": "Filter schedules by dashboard ID. This can be retrieved by:\n\n- **Opening the document settings** - Navigate to **File > Document settings** in the dashboard and then click **Settings**. The **Identifier** field contains the dashboard ID.\n- **Using the dashboard's URL** - The string after `/dashboards` is the dashboard's ID; for example: `https://myorg.omniapp.co/dashboards/12db1a0a`\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves scheduled tasks. This endpoint supports filtering, sorting, and cursor-based pagination.\n\nTo retrieve the recipients for a schedule, use the [List schedule recipients](/api/schedule-recipients/list-schedule-recipients) endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Create schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Only supported when using an Organization API key.** The membership ID of the user who should own the schedule. **Note**: This value is the **membership ID**, not the user ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.\n\nWhen using an Organization API key:\n\n- If `userId` is provided, the schedule is owned by the specified user\n- If `userId` is not provided, the schedule is owned by the organization\n\nAttempting to use a Personal Access Token (PAT) with this parameter will result in a `403 Forbidden` error. When using a PAT, the schedule owner will be the creator of the PAT.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a scheduled task for the specified dashboard. Supports applying filters and formatting, creating alert conditions, and triggering test deliveries.\n\nSupports the following destinations:\n\n- [**Email**](/share/deliveries/email)\n- [**Slack**](/share/deliveries/slack) - **Note**: A Slack workspace must already be connected to Omni to use this destination type.\n- [**SFTP**](/share/deliveries/sftp)\n- [**Webhook**](/share/deliveries/webhooks)\n- [**Amazon S3**](/share/deliveries/amazon-s3)\n"
+        },
+        {
+          "info": {
+            "name": "Get schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Membership ID of the user whose permissions should be checked (org API keys only). When provided, the endpoint verifies the user can view the associated dashboard before returning the schedule.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the details of a single schedule, including its delivery destinations, recurrence configuration, and current status.\n"
+        },
+        {
+          "info": {
+            "name": "Update schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update schedule"
+        },
+        {
+          "info": {
+            "name": "Delete schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a schedule."
+        },
+        {
+          "info": {
+            "name": "Trigger schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/trigger",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Triggers the execution of a schedule on demand, outside of its regular schedule."
+        },
+        {
+          "info": {
+            "name": "Pause schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/pause",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Pauses a schedule."
+        },
+        {
+          "info": {
+            "name": "Resume schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/resume",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Resumes a schedule."
+        },
+        {
+          "info": {
+            "name": "Transfer schedule ownership",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/schedules/:scheduleId/transfer-ownership",
+            "params": [
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Transfer schedule ownership"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

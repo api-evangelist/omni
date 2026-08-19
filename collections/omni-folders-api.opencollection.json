@@ -1,0 +1,176 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Folders API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Folders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List folders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/folders",
+            "params": [
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of additional fields to include:\n\n- `_count` - Include document and favorite counts\n- `labels` - Include folder labels\n- `onlySharedWithMe` - Returns only folders explicitly shared with the specified user via folder permissions. Excludes folders owned by the user. Cannot be combined with `ownerId` or `path`.\n\n   Additionally, depending on the type of API key being used:\n\n   - **Organization API keys** require the `userId` parameter\n   - **Personal Access Tokens** automatically infer the `userId` from the token\n"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Filter folders by path. Wildcards are supported and must appear at the end of the path:\n\n- `*` - Include direct children only (e.g., `blob-sales/*`)\n- `**` - Include all descendants recursively (e.g., `blob-sales/**`)\n"
+              },
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of labels to filter by."
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Scope of folders to retrieve.\n\n- When `include=onlySharedWithMe` is specified without a `scope` parameter, returns shared folders of all scopes with each folder's actual scope preserved\n- Otherwise, defaults to `organization`\n\nWhen set to `restricted`, the `ownerId` parameter behavior depends on the API key type:\n\n- **Organization-scoped API keys:** `ownerId` is required\n- **Personal Access Tokens (PAT):** `ownerId` is optional and auto-inferred to the token owner\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by:\n\n- `favorites` - Sort by number of favorites\n- `name` - Sort by folder name\n- `path` - Sort by folder path\n"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination positioning."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of items per page."
+              },
+              {
+                "name": "ownerId",
+                "value": "",
+                "type": "query",
+                "description": "UUID of organization membership.\n\nHow the API behaves depends on the type of API key used to authenticate the request and the current `scope` value.\n\n**Personal Access Tokens (PAT)**\n\n| Scope | ownerId | Behavior |\n|-------|---------|----------|\n| `organization` | Not provided | All organization-shared folders user has permission to access |\n| `organization` | own ID | Own organization folders only |\n| `restricted` | Not provided | Infers owner's ID, returns own restricted folders |\n| `restricted` | Own ID | Own restricted folders |\n| `restricted` | Other's ID | 403 Forbidden |\n\n**Organization API key**\n\n| Scope | ownerId | Behavior |\n|-------|---------|----------|\n| `organization` | Not provided | All organization folders |\n| `organization` | Any ID | That user's organization folders |\n| `restricted` | Not provided | 400 Bad Request (`ownerId` required) |\n| `restricted` | Any ID | That user's restricted folders |\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of a standard or embed user to filter results, returning only folders the specified user can view based on their permissions.\n\nIf `include=onlyFavorites` is specified:\n\n- **And using an Organization API key**, this parameter is **required**\n- **And using a Personal Access Token**, the `userId` will be automatically inferred from the token\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a paginated list of folders within an organization. Supports filtering, sorting, and cursor-based pagination.\n\nThe folders endpoint behaves differently based on the type of API key used to authenticate the request:\n\n- **Organization-scoped API keys:** Full access to all folders. Can view any user's restricted folders with `ownerId`. Must provide `ownerId` for `scope=restricted`.\n- **Personal Access Tokens (PAT):** Permission-filtered access matching the UI.\n   - For `scope=organization`"
+        },
+        {
+          "info": {
+            "name": "Create folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/folders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new folder. Folders can be nested up to 7 levels.\n\nFolder paths are automatically generated based on hierarchy. Child folder paths include the paths of their parents.\n"
+        },
+        {
+          "info": {
+            "name": "Update folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder to update. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires [**Editor** permissions or higher](/share#content-access-permissions) on the folder being updated.\n</Note>\n\nUpdate a folder's name and/or path segment. Either or both fields can be updated in a single request.\n"
+        },
+        {
+          "info": {
+            "name": "Delete folder",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/folders/:folderId",
+            "params": [
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the folder to delete. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "When `true`, recursively archives documents (to trash) and deletes sub-folders. Limited to 100 total items."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a folder. By default, only empty folders can be deleted. Use the `force` parameter to recursively delete folders containing documents and sub-folders.\n\nWhen `force` is enabled:\n\n- All documents are archived (soft-delete to trash) across the folder tree\n- Subfolders are deleted recursively, starting with the most deeply-nested subfolder and walking up the folder tree\n- Up to 100 items (documents and subfolders) can be deleted. If a folder contains more than 100 items, the item will return "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

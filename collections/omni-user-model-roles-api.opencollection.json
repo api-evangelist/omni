@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI User model roles API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User model roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve user model roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/users/:userId/model-roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "9e8719d9-276a-4964-9395-a493189a247c",
+                "type": "path",
+                "description": "The ID of the user to retrieve model roles for."
+              },
+              {
+                "name": "modelId",
+                "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
+                "type": "query",
+                "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user has access to."
+              },
+              {
+                "name": "connectionId",
+                "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed",
+                "type": "query",
+                "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the model role assignments for a user. This includes both direct role assignments and roles inherited from user group memberships.\n"
+        },
+        {
+          "info": {
+            "name": "Assign or update user model role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/users/:userId/model-roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "9e8719d9-276a-4964-9395-a493189a247c",
+                "type": "path",
+                "description": "The ID of the user to assign or update a model role for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Assigns or updates a model role for a user. If the user already has a role for the specified model, this endpoint will update it to the new role.\n\nModel roles control what actions a user can perform on models and connections. To manage users, see the [User APIs](/api/users).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

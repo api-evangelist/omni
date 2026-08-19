@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI AI Credit Controls API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AI Credit Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get AI credit controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/credit-controls"
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nGet the organization's AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds).\n"
+        },
+        {
+          "info": {
+            "name": "Update AI credit controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/credit-controls",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nUpdate the organization's AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:\n\n- Omit a field to leave it unchanged\n- Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)\n- Send a non-negative number to set it\n"
+        },
+        {
+          "info": {
+            "name": "List individual users' AI credit limits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/credit-controls/users",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination from previous response `nextCursor`"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page"
+              }
+            ]
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nList the organization's active individual user AI credit limits, ordered by `userId` ascending.\n\nOnly users with an individual limit will be returned in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Set individual users' AI credit limits",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/ai/credit-controls/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nSet individual users' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

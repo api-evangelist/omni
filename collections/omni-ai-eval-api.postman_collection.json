@@ -1,0 +1,4725 @@
+{
+  "item": [
+    {
+      "id": "498e073d-5eb7-476d-9ac9-8476e7939f1e",
+      "name": "AI Eval",
+      "description": {
+        "content": "AI evaluation: manage prompt sets and runs used to score AI quality against curated prompt suites.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3edb040b-886e-41e8-b358-45241170745b",
+          "name": "List eval prompt sets",
+          "request": {
+            "name": "List eval prompt sets",
+            "description": {
+              "content": "List eval prompt sets, sorted alphabetically by name. When `model_ids` is omitted, returns prompt sets for every shared model the caller can access. Requires at least the Querier role on each requested model.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "archived",
+                  "value": "<string>",
+                  "description": "When `true`, returns archived prompt sets instead of active ones. Defaults to `false`."
+                },
+                {
+                  "disabled": false,
+                  "key": "model_ids",
+                  "value": "<uuid>",
+                  "description": "Optional list of model IDs to filter prompt sets by. When omitted, returns prompt sets for every model the caller can access. Supply multiple times to filter by more than one model (e.g., `?model_ids=A&model_ids=B`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "model_ids",
+                  "value": "<uuid>",
+                  "description": "Optional list of model IDs to filter prompt sets by. When omitted, returns prompt sets for every model the caller can access. Supply multiple times to filter by more than one model (e.g., `?model_ids=A&model_ids=B`)."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cc7193b8-2f76-4cc3-913b-434e20b41a5a",
+              "name": "List of prompt sets, sorted alphabetically by name.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_sets\": [\n    {\n      \"created_at\": \"2025-01-15T10:00:00.000Z\",\n      \"description\": \"Regression suite for the orders topic\",\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"is_archived\": false,\n      \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"name\": \"Orders regression\",\n      \"slug\": \"orders-regression\",\n      \"updated_at\": \"2025-01-15T10:00:00.000Z\",\n      \"latest_run_at\": \"2025-01-15T10:05:00.000Z\",\n      \"prompt_count\": 12\n    },\n    {\n      \"created_at\": \"2025-01-15T10:00:00.000Z\",\n      \"description\": \"Regression suite for the orders topic\",\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"is_archived\": false,\n      \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"name\": \"Orders regression\",\n      \"slug\": \"orders-regression\",\n      \"updated_at\": \"2025-01-15T10:00:00.000Z\",\n      \"latest_run_at\": \"2025-01-15T10:05:00.000Z\",\n      \"prompt_count\": 12\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4df80401-4e69-4d58-a6ad-5350d3f205de",
+              "name": "Invalid query params (e.g. `model_ids` contains a non-UUID, or `archived` is not `true`/`false`).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6bd22b4d-e424-451d-abab-0015c32c5ddf",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "157ad779-e355-461f-8c84-8070641b199e",
+              "name": "Insufficient permissions. The caller must have at least the Querier role on each requested model.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39e4f432-0940-4e3d-bbb4-64966d63579f",
+              "name": "No eval-accessible models for this caller.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "model_ids",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0973955-c617-4351-ada6-edae7bedcd5a",
+          "name": "Create an eval prompt set",
+          "request": {
+            "name": "Create an eval prompt set",
+            "description": {
+              "content": "Create a new eval prompt set bound to a shared model. Initial prompts can be supplied; additional prompts can be added later via PATCH.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"description\": \"<string,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dd443bc1-06e2-44ca-a8b5-24b8298ab30b",
+              "name": "Prompt set created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n  \"name\": \"Orders regression\",\n  \"slug\": \"orders-regression\",\n  \"description\": \"Regression suite for the orders topic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_set\": {\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"Regression suite for the orders topic\",\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"name\": \"Orders regression\",\n    \"prompts\": [\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      },\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      }\n    ],\n    \"slug\": \"orders-regression\",\n    \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "734559b0-6f74-438c-a562-752c2e07cc98",
+              "name": "Invalid request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n  \"name\": \"Orders regression\",\n  \"slug\": \"orders-regression\",\n  \"description\": \"Regression suite for the orders topic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aace11ec-bfc4-4c92-aeb7-80dbc84ce8b3",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n  \"name\": \"Orders regression\",\n  \"slug\": \"orders-regression\",\n  \"description\": \"Regression suite for the orders topic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38ced69c-17f7-472c-b298-5a767456cc19",
+              "name": "Insufficient permissions. The caller must have at least the Querier role on the model.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n  \"name\": \"Orders regression\",\n  \"slug\": \"orders-regression\",\n  \"description\": \"Regression suite for the orders topic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32400b10-a25a-4d59-a880-593d4cf90314",
+          "name": "Get an eval prompt set",
+          "request": {
+            "name": "Get an eval prompt set",
+            "description": {
+              "content": "Get a single prompt set with all of its prompts.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets",
+                ":promptSetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "promptSetId",
+                  "description": "(Required) The unique identifier of the eval prompt set."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5ad7f52f-e57a-4392-be18-6131672962ae",
+              "name": "Prompt set details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_set\": {\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"Regression suite for the orders topic\",\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"name\": \"Orders regression\",\n    \"prompts\": [\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      },\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      }\n    ],\n    \"slug\": \"orders-regression\",\n    \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5181ef28-268a-48f1-896b-13e0db2334ab",
+              "name": "Invalid `promptSetId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26e20897-df2e-499f-aafa-ba167b6105b3",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36de7e8e-b9f8-478b-a159-cae6e88a60a9",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8bdb325a-42b5-4b13-88d7-bdedbac88ede",
+              "name": "Prompt set not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9880a30c-58e9-44d0-8c22-301d36f544ad",
+          "name": "Update an eval prompt set",
+          "request": {
+            "name": "Update an eval prompt set",
+            "description": {
+              "content": "Update a prompt set's name, description, and/or prompts. When `prompts` is supplied, it fully replaces the existing list — existing prompts omitted from the list are deleted, entries without an `id` are created, and entries with a matching `id` are updated in place.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets",
+                ":promptSetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "promptSetId",
+                  "description": "(Required) The unique identifier of the eval prompt set."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"<string>\",\n      \"expectation\": \"<string,null>\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"<string>\",\n      \"expectation\": \"<string,null>\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2f64b1a4-4872-48f4-b120-07dcac39fdc5",
+              "name": "Prompt set updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_set\": {\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"Regression suite for the orders topic\",\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"name\": \"Orders regression\",\n    \"prompts\": [\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      },\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      }\n    ],\n    \"slug\": \"orders-regression\",\n    \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8cd60f9-1da5-49fe-ad09-cf95e7f07f40",
+              "name": "Invalid request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8072f6ea-6fcd-4c9a-80ad-290c47630d2f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ac690a1-3f62-42c7-8a31-ce811912a818",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2f439cc-961e-4411-9cf0-1d56f01fbf7d",
+              "name": "Prompt set not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5607f05e-b208-4fb2-a6de-6ec85458d8fb",
+              "name": "A `prompts[].id` in the request does not belong to this prompt set.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string,null>\",\n  \"name\": \"<string>\",\n  \"prompts\": [\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    },\n    {\n      \"prompt_text\": \"What are the top 10 products by revenue this quarter?\",\n      \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n      \"id\": \"<uuid>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"A prompt being updated does not belong to this prompt set\",\n  \"status\": 422\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cf921333-5e00-40b5-9241-a96c81a06bc8",
+          "name": "Archive an eval prompt set",
+          "request": {
+            "name": "Archive an eval prompt set",
+            "description": {
+              "content": "Archive (soft-delete) a prompt set. Omni also attempts to cancel every in-flight agentic job associated with the set; the returned `cancelled_job_count` reports how many were cancelled. Cancellation is best-effort — the archive is committed first, so if a run-cancellation later fails the endpoint returns 500 even though the set is already archived. The call is idempotent: retrying drains any remaining runs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets",
+                ":promptSetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "promptSetId",
+                  "description": "(Required) The unique identifier of the eval prompt set."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c9ba9f1c-cd1c-484b-82a1-8d425b7fc9d9",
+              "name": "Prompt set archived successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cancelled_job_count\": 0,\n  \"is_archived\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90c81b5f-f10f-47cc-8d61-185606663016",
+              "name": "Invalid `promptSetId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7246ad8e-0929-4fd8-bb34-8b7b1f674852",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9dee574-0ae5-4713-81af-9f82117cac09",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49adffad-ac28-4872-bc38-3b366553c6f7",
+              "name": "Prompt set not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d466608-5513-4268-b06c-3aeb112527b5",
+              "name": "Archive committed but a run-cancellation failed; the set is already archived — safe to retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Archive committed but a run-cancellation failed; retry to complete\",\n  \"status\": 500\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57376645-633e-455b-ad71-c52c2dd4df97",
+          "name": "Restore an archived eval prompt set",
+          "request": {
+            "name": "Restore an archived eval prompt set",
+            "description": {
+              "content": "Restore an archived prompt set.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "prompt-sets",
+                ":promptSetId",
+                "unarchive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "promptSetId",
+                  "description": "(Required) The unique identifier of the eval prompt set."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d50f8aac-b064-4e57-a019-7eced269fde7",
+              "name": "Prompt set restored successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_set\": {\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"Regression suite for the orders topic\",\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"name\": \"Orders regression\",\n    \"prompts\": [\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      },\n      {\n        \"created_at\": \"2025-01-15T10:00:00.000Z\",\n        \"expectation\": \"The top product by revenue should be Aniseed Syrup.\",\n        \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n        \"prompt_text\": \"What are the top 5 products by revenue?\",\n        \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n      }\n    ],\n    \"slug\": \"orders-regression\",\n    \"updated_at\": \"2025-01-15T10:00:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2068aeff-ce17-4244-9e73-64256cc0cca0",
+              "name": "Invalid `promptSetId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2bab9c2b-9ee8-4c3b-818c-27b7abcec4d5",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1804f088-d8b8-4cd0-8e63-2c034c87adf9",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df6edc09-7031-4153-8585-f9967e0358d8",
+              "name": "Prompt set not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "prompt-sets",
+                    ":promptSetId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "promptSetId",
+                      "description": "(Required) The unique identifier of the eval prompt set."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fed73ea7-24b9-4b1f-8705-a4714ccc3939",
+          "name": "List eval runs",
+          "request": {
+            "name": "List eval runs",
+            "description": {
+              "content": "List runs for a prompt set, newest first, filtered to runs whose model the caller can access. The `prompt_set_id` query parameter is required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "archived",
+                  "value": "<string>",
+                  "description": "When `true`, returns archived runs instead of active ones. Defaults to `false`."
+                },
+                {
+                  "disabled": false,
+                  "key": "prompt_set_id",
+                  "value": "<uuid>",
+                  "description": "(Required) Required — the prompt set whose runs should be listed."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "83ee147d-ae94-4854-870b-4dcd52a404ae",
+              "name": "List of runs for the prompt set.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "prompt_set_id",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"runs\": [\n    {\n      \"branch_id\": \"532490f5-1551-5920-a5c4-2ab0eebf6ae4\",\n      \"branch_name\": \"string\",\n      \"completed_at\": \"string\",\n      \"created_at\": \"2025-01-15T10:00:00.000Z\",\n      \"description\": \"string\",\n      \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n      \"is_archived\": false,\n      \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"run_number\": 3,\n      \"stats\": {\n        \"terminal\": 8,\n        \"total\": 12\n      },\n      \"status\": \"RUNNING\"\n    },\n    {\n      \"branch_id\": \"14f4341a-afd1-5140-3967-061501008817\",\n      \"branch_name\": \"string\",\n      \"completed_at\": \"string\",\n      \"created_at\": \"2025-01-15T10:00:00.000Z\",\n      \"description\": \"string\",\n      \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n      \"is_archived\": false,\n      \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"run_number\": 3,\n      \"stats\": {\n        \"terminal\": 8,\n        \"total\": 12\n      },\n      \"status\": \"RUNNING\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94b172bb-9d5c-4713-81f4-d653b2990459",
+              "name": "Missing or invalid `prompt_set_id`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "prompt_set_id",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e1834dd-6fca-4e87-b00a-c5a329b83b87",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "prompt_set_id",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "977f80a4-1697-4ca3-9d31-4df220e35714",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "prompt_set_id",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca2194a2-2ba5-441e-b4e6-ce67308d0c32",
+              "name": "Prompt set not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "archived",
+                      "value": "false"
+                    },
+                    {
+                      "key": "prompt_set_id",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27b891cb-ffa2-4905-b870-0b76b3a80659",
+          "name": "Start an eval run",
+          "request": {
+            "name": "Start an eval run",
+            "description": {
+              "content": "Create and start a new run against an existing prompt set. The run enqueues one agentic job per prompt and begins executing immediately. Returns the newly created run with its initial per-prompt result rows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt_set_id\": \"<uuid>\",\n  \"description\": \"<string,null>\",\n  \"run_config\": {\n    \"branch_id\": \"<uuid>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "958d1664-f918-4527-a914-cebc9df44160",
+              "name": "Run created and jobs enqueued.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"job_count\": 12,\n  \"run\": {\n    \"branch_id\": \"cfee3d03-b7ab-6fff-6a68-a210b2fab552\",\n    \"branch_name\": \"string\",\n    \"completed_at\": \"string\",\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"string\",\n    \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"results\": [\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      },\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      }\n    ],\n    \"run_number\": 3,\n    \"status\": \"RUNNING\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b25ee71-2f6f-41c3-b745-8cd23912c7b5",
+              "name": "Invalid request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: name: Required\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1eec7120-ce84-4817-88d2-6a0a186f4303",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00e1bcc8-fdda-49ac-99da-79ec64f520b8",
+              "name": "Insufficient permissions. The caller must have at least the Querier role on the prompt set's model.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9fb877a8-ff46-4b35-b084-d341c07514db",
+              "name": "The prompt set was not found, or `run_config.branch_id` does not match an existing branch in the organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f486e6c-d8c2-4fb5-a18c-fce93e1aa763",
+              "name": "`run_config.branch_id` does not belong to the prompt set's model.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"A prompt being updated does not belong to this prompt set\",\n  \"status\": 422\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4aa889f-de53-47a7-bcc4-fbc86f54ff3e",
+              "name": "Per-user active-run cap reached.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Too many active runs; wait for an in-flight run to finish\",\n  \"status\": 429\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "227ab626-e66a-43db-8e5f-94b8da88efa7",
+              "name": "AI eval is paused for this organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"Re-running after switching to gpt-4o for query generation\",\n  \"run_config\": {\n    \"branch_id\": \"440e8400-e29b-41d4-a716-446655440006\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval is paused for this organization\",\n  \"status\": 503\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7013e941-a1c9-43cf-8d5b-f38e21a71d65",
+          "name": "Get an eval run",
+          "request": {
+            "name": "Get an eval run",
+            "description": {
+              "content": "Get an eval run with every per-prompt result row, including the underlying agentic job state and any scoring data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs",
+                ":runId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "runId",
+                  "description": "(Required) The unique identifier of the eval run."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8be48a5b-13f9-405a-8749-bd2dae8b06cc",
+              "name": "Run detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"run\": {\n    \"branch_id\": \"327ac496-bb09-e02b-b8ae-922eab4674bb\",\n    \"branch_name\": \"string\",\n    \"completed_at\": \"string\",\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"string\",\n    \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"results\": [\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      },\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      }\n    ],\n    \"run_number\": 3,\n    \"status\": \"RUNNING\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b27b1ac8-07ce-440c-b867-eb0793df0f41",
+              "name": "Invalid `runId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: runId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0d546d4-452d-4f53-b4a7-e85286e974f2",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "086c8d99-33b4-466e-8090-2e54bfbb7fa2",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89073a83-b956-46e0-a2a5-5030d11ba2ca",
+              "name": "Run not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "60af9d1e-08fc-4508-9533-8cbe93d29be7",
+          "name": "Archive an eval run",
+          "request": {
+            "name": "Archive an eval run",
+            "description": {
+              "content": "Archive (soft-delete) an eval run. Any non-terminal per-prompt agentic jobs are cancelled as part of the archive (best-effort), and a still-RUNNING run is flipped to CANCELLED before archival. The call is idempotent; archiving an already-terminal or already-archived run is a no-op.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs",
+                ":runId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "runId",
+                  "description": "(Required) The unique identifier of the eval run."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9ca4921a-b655-4f8c-9d4c-077a9a5f473b",
+              "name": "Run archived successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"is_archived\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f236ddad-57bd-4909-ba34-b1f7bec3535a",
+              "name": "Invalid `runId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: runId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db92ca72-9542-4a13-b21a-ff81fa1e391b",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "695a4236-8d94-43a2-a824-bf90e4ee17ef",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d89eb4a0-f34f-40f8-aac0-8102b879e4e7",
+              "name": "Run not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce41e348-5dce-4d91-8209-bb99e8080cd5",
+          "name": "Cancel an eval run",
+          "request": {
+            "name": "Cancel an eval run",
+            "description": {
+              "content": "Cancel an in-flight eval run. Marks the run cancelled first so no in-progress per-prompt job can flip it back to COMPLETE, then cancels every non-terminal agentic job associated with the run. The run is also archived as part of the cancel — the response returns the updated run inline (`status: CANCELLED`, `is_archived: true`); use `/unarchive` to surface it in the default `archived=false` list again.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs",
+                ":runId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "runId",
+                  "description": "(Required) The unique identifier of the eval run."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "771ce928-93b4-41a3-8309-4a89844c6c01",
+              "name": "Cancellation processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cancelled\": 4,\n  \"run\": {\n    \"branch_id\": \"65aeb2d5-c7c7-ccd9-22aa-8a1bcf8ebd1d\",\n    \"branch_name\": \"string\",\n    \"completed_at\": \"string\",\n    \"created_at\": \"2025-01-15T10:00:00.000Z\",\n    \"description\": \"string\",\n    \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n    \"is_archived\": false,\n    \"model_id\": \"880e8400-e29b-41d4-a716-446655440003\",\n    \"prompt_set_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"results\": [\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      },\n      {\n        \"agentic_job\": {\n          \"conversation_id\": \"770e8400-e29b-41d4-a716-446655440002\",\n          \"id\": \"990e8400-e29b-41d4-a716-446655440004\",\n          \"state\": \"COMPLETE\"\n        },\n        \"cost\": 0.0021,\n        \"error_reason\": \"string\",\n        \"id\": \"aa0e8400-e29b-41d4-a716-446655440005\",\n        \"prompt\": \"What are the top 5 products by revenue?\",\n        \"score\": 0.9,\n        \"scoring_cost\": 0.0004,\n        \"timing_ms\": 4321\n      }\n    ],\n    \"run_number\": 3,\n    \"status\": \"RUNNING\"\n  },\n  \"total\": 12\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c22bf474-a19e-4672-a52d-cbeecba6a7d4",
+              "name": "Invalid `runId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: runId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81e72613-fda2-4315-b6c9-887f3b5d1969",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdec440e-d024-4dca-871f-1d90cf7c52eb",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eee819bd-a2cc-4db8-8a6c-4f3608cd6590",
+              "name": "Run not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e05c4e27-842a-4073-af56-26acaa305a90",
+          "name": "Restore an archived eval run",
+          "request": {
+            "name": "Restore an archived eval run",
+            "description": {
+              "content": "Restore an archived eval run.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "ai",
+                "eval",
+                "runs",
+                ":runId",
+                "unarchive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "runId",
+                  "description": "(Required) The unique identifier of the eval run."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d2fd74c8-9f48-4a18-9488-62e1c5164151",
+              "name": "Run restored successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"is_archived\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b84fbbe4-2aa4-4d52-a873-923bbcf49ddd",
+              "name": "Invalid `runId` — must be a UUID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: runId: Invalid uuid\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c0d8ecdc-597e-4624-adb3-d24a49dd06f4",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c555565-e7fe-4154-bb49-29e692f7323c",
+              "name": "Insufficient permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"AI eval requires at least Querier access on the model\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9ad5300-ae25-449e-935f-c8bb4250b5e8",
+              "name": "Run not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "ai",
+                    "eval",
+                    "runs",
+                    ":runId",
+                    "unarchive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "runId",
+                      "description": "(Required) The unique identifier of the eval run."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Prompt set not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3b227fd5-1efe-4e87-ae09-fcd0e1862729",
+    "name": "Omni AI AI Eval API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

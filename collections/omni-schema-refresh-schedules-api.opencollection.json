@@ -1,0 +1,165 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Schema refresh schedules API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Schema refresh schedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List schema refresh schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/schedules",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all schema refresh schedules configured for the specified connection. Each schedule uses a cron expression and timezone to define when the schema should be refreshed.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Create schema refresh schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/schedules",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new schema refresh schedule for the specified connection. Multiple schedules can be created for the same connection.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Get schema refresh schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              },
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the schema refresh schedule"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the details of a connection's specific schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Update schema refresh schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              },
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the schema refresh schedule"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the schedule and/or timezone for an existing schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Delete schema refresh schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/schedules/:scheduleId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              },
+              {
+                "name": "scheduleId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the schema refresh schedule"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a schema refresh schedule. This does not affect other schedules for the same connection.\n\n <Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

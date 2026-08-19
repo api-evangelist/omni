@@ -1,0 +1,268 @@
+{
+  "item": [
+    {
+      "id": "e36925b0-8978-469a-8c95-82e363ba9db4",
+      "name": "Who Am I",
+      "description": {
+        "content": "Inspect your own user permissions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b79c1a80-2fa6-44d1-8886-361322210f4d",
+          "name": "Get current identity and permissions",
+          "request": {
+            "name": "Get current identity and permissions",
+            "description": {
+              "content": "Returns the authenticated caller's own identity, API key scope, organization role, and resolved per-model permissions. \n\nSelf-scoped and available to non-admins: it lets a caller decide whether an action is permitted without attempting it. Pass `modelId` to scope `rolesByModel` to specific models.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "whoami"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "modelId",
+                  "value": "<string>",
+                  "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0426a82a-3988-409d-9e73-5ac5dd605050",
+              "name": "Caller's identity, key scope, org role, and per-model permissions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "whoami"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"keyScope\": \"user\",\n  \"orgRole\": \"MEMBER\",\n  \"rolesByModel\": {\n    \"key_0\": {\n      \"baseRole\": \"QUERIER\",\n      \"connectionId\": \"string\",\n      \"permissions\": [\n        \"QUERY_TOPICS\",\n        \"QUERY_SQL\",\n        \"USE_WORKBOOKS\"\n      ],\n      \"roleName\": \"QUERIER\"\n    }\n  },\n  \"user\": {\n    \"id\": \"string\",\n    \"membershipId\": \"string\"\n  },\n  \"rolesByModelTruncated\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e52040d-90b7-4572-8c7e-29522df072bf",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "whoami"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e042fb4e-4222-4496-bc62-b75b9af30cea",
+              "name": "One or more requested `modelId`s do not exist or are not accessible to the caller",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "whoami"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "550e8400-e29b-41d4-a716-446655440000"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e8ea01db-46c2-4ab4-97c3-71b1633eda5c",
+    "name": "Omni AI Who Am I API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

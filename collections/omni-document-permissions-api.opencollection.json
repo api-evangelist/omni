@@ -1,0 +1,220 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Document permissions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Document permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all users and groups with document access",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/access-list",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (1-100)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response's `pageInfo.nextCursor`."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort results by."
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort order."
+              },
+              {
+                "name": "accessSource",
+                "value": "",
+                "type": "query",
+                "description": "Filter by how access was granted:\n- `direct` — Only principals with explicit document permissions\n- `folder` — Only principals with inherited folder permissions\n"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by principal type:\n- `user` — Only individual users\n- `userGroup` — Only user groups\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all users and groups with access to a document in a single paginated call. \n\nThe response includes a list of `principal` objects, where each entry represents a distinct access grant with its own role and settings. A `principal` may appear twice in the response if they have both `direct` access and `folder`-based access to the same document. \n"
+        },
+        {
+          "info": {
+            "name": "Retrieve document permissions for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/permissions",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the user to retrieve document permissions for. Use the [List users](/api/users/list-users) and [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the document permissions for a specific user."
+        },
+        {
+          "info": {
+            "name": "Grant document permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/permissions",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Grant document permissions to users or groups"
+        },
+        {
+          "info": {
+            "name": "Update document permission settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/permissions",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the permission and [interactivity settings](/share#controlling-document-interactivity) for a document. For example, the ability to allow users to schedule or download the document's content.\n"
+        },
+        {
+          "info": {
+            "name": "Update document permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/permissions",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update existing document permissions for users or groups"
+        },
+        {
+          "info": {
+            "name": "Revoke document permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/permissions",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Revokes document permissions for users or user groups."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

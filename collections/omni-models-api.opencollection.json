@@ -1,0 +1,544 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Models API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Models",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models",
+            "params": [
+              {
+                "name": "baseModelId",
+                "value": "",
+                "type": "query",
+                "description": "Filter models by base model ID.\n"
+              },
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query",
+                "description": "Filter models by connection ID.\n"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, include deleted models.\n"
+              },
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "query",
+                "description": "Filter models by a specific model ID.\n"
+              },
+              {
+                "name": "modelKind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by model kind.\n"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter models by name.\n"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the number of records per page."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction.\n"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by. \n"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of additional fields to include in the response.\n\n- `activeBranches` - Include active branches for each model\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a paginated list of models with their metadata."
+        },
+        {
+          "info": {
+            "name": "Create model",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new model. The typical workflow for using this endpoint is:\n\n1. Create a schema model using this endpoint\n2. Use the [Refresh schema](/api/models/refresh-schema) endpoint to load the schema for the created model\n3. Create shared models based on the schema model\n"
+        },
+        {
+          "info": {
+            "name": "Rename model",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the model to rename."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  Workbook models and query models cannot be renamed via this endpoint.\n</Warning>\n\nRenames a model by updating its name. This endpoint allows you to programmatically rename models without using the UI, which is particularly useful for bulk operations on shared extension models created via `POST /api/v1/models`.\n\nThe new name must be unique among active models with the same `modelKind` and `baseModelId`.\n\n**Branch-specific constraints:**\n\n- Name must match git-compatible regex: `[\\w\\-/"
+        },
+        {
+          "info": {
+            "name": "Get model AI agent actions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/ai-agent-actions",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return AI agent actions configured for a model — a unified list of sample queries and skills suitable for surfacing as suggested prompts in AI interfaces.\n\nSample queries come from both `model.sample_queries` and each topic's `sample_queries`. Skills come from `model.skills` and each topic's `skills`, deduped by ID with topic skills overriding model skills.\n\nWhen no actions are configured at the model or topic level, `records` returns an empty array.\n"
+        },
+        {
+          "info": {
+            "name": "Delete branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/branch/:branchName",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the shared model."
+              },
+              {
+                "name": "branchName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the branch to delete."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a branch associated with the specified shared model."
+        },
+        {
+          "info": {
+            "name": "Refresh schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/refresh",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model to be refreshed."
+              },
+              {
+                "name": "branch_id",
+                "value": "",
+                "type": "query",
+                "description": "**Required if Branch-based schema refresh is enabled**. The ID of the branch for models with this setting enabled.\n\nDo not provide this parameter when the setting is not enabled.\n"
+              },
+              {
+                "name": "hard_refresh",
+                "value": "",
+                "type": "query",
+                "description": "Whether to perform a hard refresh (removes dropped objects) or soft refresh (additive only). Defaults to true (hard refresh).\n"
+              },
+              {
+                "name": "schemas",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of schemas to selectively refresh. Can only be used when `hard_refresh=false`.\n"
+              },
+              {
+                "name": "tables",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of tables to selectively refresh. Can only be used when `hard_refresh=false`.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires either **Connection Admin** or **Modeler** permissions:\n\n  - **Modelers** can use this endpoint on connections that have exactly **one** shared model\n  - **Connection Admins** can use this endpoint on any connection they are an admin of, whether the connection has one or multiple models\n</Note>\n\nRefreshes the schema of the specified model. This will cause the model to reflect the latest changes to schemas, views, and fields from the data source. Schema refreshes w"
+        },
+        {
+          "info": {
+            "name": "Reset cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/cache_reset/:cachePolicyName",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model associated with the cache policy."
+              },
+              {
+                "name": "cachePolicyName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the cache policy to reset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Resets the cache for the specified cache policy.\n\n<Note>\n  `cachePolicyName` values are not validated against existing policies. Verify that the values you provide are exact matches to policies in the model.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Get model YAML",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/yaml",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the branch to retrieve YAML from. Only valid for shared models in `combined` mode. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`."
+              },
+              {
+                "name": "fileName",
+                "value": "",
+                "type": "query",
+                "description": "Filter YAML files by name. Can be a string or a regex pattern."
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "The mode to use when retrieving YAML.\n\n- `extension` - Returns extension-only format\n- `staged` - Returns staged changes\n- `combined` - Returns combined YAML\n"
+              },
+              {
+                "name": "includeChecksums",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, the response will include file checksums for concurrency control.\n\nA file's checksum can be passed as a query parameter in the [Create or update YAML endpoint](/api/models/create-or-update-yaml-files) to ensure changes made by another user aren't overwritten.\n"
+              },
+              {
+                "name": "includeSchemas",
+                "value": "",
+                "type": "query",
+                "description": "Filters the returned YAML to only include views from the specified schema. Relationships are preserved even if they reference views outside the specified schema.\n\nThis parameter accepts a single schema name only. Use the [List model schemas endpoint](/api/models/list-model-schemas) to discover available schema names.\n"
+              },
+              {
+                "name": "fullyResolved",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, returns YAML with any extensions (`extends`) resolved. This will match what runs at query time.\n\nWhen `false` (default), returns the YAML as authored in the model files. This means even if extensions are used, they will not be included in the returned YAML.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the YAML representation of a model with optional filtering and mode selection."
+        },
+        {
+          "info": {
+            "name": "Create or update YAML files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/yaml",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or overwrites a YAML file for a model. The file can be a special file (`model` or `relationships`) or a YAML file ending in `.topic` or `.view`.\n\nThe following models cannot be edited using this endpoint:\n\n- Schema models\n- Models using git follower mode\n"
+        },
+        {
+          "info": {
+            "name": "Delete a YAML file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/yaml",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model."
+              },
+              {
+                "name": "fileName",
+                "value": "",
+                "type": "query",
+                "description": "The name of the YAML file to delete. Valid values are:\n\n- `<topic_name>.topic` - [Topic file](/modeling/topics/parameters)\n- `<view_name>.view` - [View file](/modeling/views)\n"
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "**Required if git pull requests are required for the model.** The ID of the branch to delete from. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`.\n"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "The mode to use when deleting the YAML file.\n\n**Note**: Workbook models must use `combined` mode if there is a `branchId`.\n"
+              },
+              {
+                "name": "commitMessage",
+                "value": "",
+                "type": "query",
+                "description": "**Required for [git-enabled models](/integrations/git).** Commit message describing the change.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a topic or view YAML file from a model. The file must be a YAML file ending in `.topic` or `.view`.\n\nThe following models cannot be edited using this endpoint:\n\n- Schema models\n- Models using git follower mode\n"
+        },
+        {
+          "info": {
+            "name": "List model schemas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/schemas",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the branch to retrieve schemas from.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a sorted list of all available schema names for the specified model, including physical, virtual, and dynamic schemas."
+        },
+        {
+          "info": {
+            "name": "Validate model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/validate",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the branch to validate. The branch must exist for the model. If not provided, the model is validated directly. To retrieve branch IDs, use the [List models](/api/models/list-models) endpoint with `modelKind=BRANCH`.\n\n**Note**: Schema models do not support branches.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves validation issues for a model and its branches."
+        },
+        {
+          "info": {
+            "name": "Migrate a model",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/migrate",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The shared model ID to read YAML from."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Copies a model from one Omni connection to another by reading the source model's YAML at a specific git ref and writing it to the target model. Supports same-organization and cross-organization migrations.\n\nThis API:\n\n1. Reads the full model YAML from the source model's git repository at the specified `gitRef` (merged with the default branch).\n2. If `branchName` is provided and the branch already exists on the target model, the API writes to that branch. If the branch doesn't exist, one is creat"
+        },
+        {
+          "info": {
+            "name": "Delete view",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/view/:viewName",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the model."
+              },
+              {
+                "name": "viewName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the view to delete or ignore."
+              },
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "query",
+                "description": "Optional branch ID"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Controls how the view is deleted or hidden:\n\n- `COMBINED` — **Default**. Marks the view as ignored (`ignored: true`) if it exists in the parent model, otherwise hard-deletes\n- `EXTENSION` — Hard-deletes the view from the extension layer\n- `MERGED` — Marks the view as `shallowIgnored: true`, hiding it only from the immediate parent layer\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes or ignores a view from a model extension layer. Use the `mode` parameter to specify the behavior of this endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

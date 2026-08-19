@@ -1,0 +1,169 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Connections API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter connections by name (case-insensitive, partial matching)"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "query",
+                "description": "Filter connections by database name (case-insensitive, partial matching)"
+              },
+              {
+                "name": "dialect",
+                "value": "",
+                "type": "query",
+                "description": "Filter connections by dialect(s). For multiple dialects, provide a comma-separated list (e.g., `postgres,mysql`)."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Direction for sorting:\n\n- `asc` - Ascending order (A-Z, 0-9)\n- `desc` - Descending order (Z-A, 9-0)\n"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "When `true`, the response includes deleted connections. Defaults to `false`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a list of database connections with optional filtering and sorting"
+        },
+        {
+          "info": {
+            "name": "Create connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/connections",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new database connection. See the **Parameters**\n"
+        },
+        {
+          "info": {
+            "name": "Get connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "Connection ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\nThis endpoint requires **Restricted Querier** permissions or higher.\n</Note>\n\nFetch a single connection by ID.\n"
+        },
+        {
+          "info": {
+            "name": "Update connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "Connection ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update connection properties including credentials. Credentials are encrypted at rest and never returned in API responses.\n\nThis endpoint supports credential rotation for infrastructure-as-code workflows. Depending on the connection type, you can update:\n- **Password-based connections** (Postgres, MySQL, etc.): Use `passwordUnencrypted` to update the password\n- **BigQuery**: Use `passwordUnencrypted` to update the service account JSON\n- **Snowflake**: Use `privateKey` to update the RSA private k"
+        },
+        {
+          "info": {
+            "name": "Delete connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "Connection ID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Connection Admin** permissions.\n</Note>\n\nArchives a connection (moves it to trash). Archived connections can be restored from the trash in the Omni app.\n\nThis endpoint performs a soft delete. The connection and its associated models and content are moved to trash, and sensitive information such as passwords and keys is permanently deleted.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

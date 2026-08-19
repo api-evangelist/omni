@@ -1,0 +1,455 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Documents API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents",
+            "params": [
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of additional fields to include in the response:\n- `_count` - Adds favorite and view count metrics\n- `labels` - Includes associated document labels\n- `includeDeleted` - Include deleted documents\n- `onlyFavorites` - **Must be used with `userId`.** Include only documents that the specified user has favorited.\n- `onlySharedWithMe` - Returns only documents explicitly shared with the specified user via documents permissions. Excludes documents owned by the user. Cannot be combined with `ownerId` or `path`.\n\n   Additionally, depending on the type of API key being used:\n\n   - **Organization API keys** require the `userId` parameter\n   - **Personal Access Tokens** automatically infer the `userId` from the token\n"
+              },
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of labels to filter results. For example: `finance,marketing`\n"
+              },
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the folder to filter results. Returns only documents within the specified folder."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by:\n- `favorites` - Sort by the number of favorites\n- `name` - Sort by document name\n- `updatedAt` - Sort by last update time\n- `visits` - Sort by view count\n"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction (`asc` for ascending, `desc` for descending)"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination. Used with `sortField`/`sortDirection` for relative positioning."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of a standard or embed user to filter results, returning only documents the specified user can view based on their permissions.\n\nIf `include=onlyFavorites` is specified:\n\n- **And using an Organization API key**, this parameter is **required**\n- **And using a Personal Access Token**, the `userId` will be automatically inferred from the token\n"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the user who created the document(s), returning only documents that the specified user created."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List documents with pagination and filtering"
+        },
+        {
+          "info": {
+            "name": "Create document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/documents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nCreate a new document\n"
+        },
+        {
+          "info": {
+            "name": "Move document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/move",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the document to move. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Move document to new folder or change scope.\n"
+        },
+        {
+          "info": {
+            "name": "Duplicate published document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/duplicate",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Document identifier"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Duplicate published document"
+        },
+        {
+          "info": {
+            "name": "Upgrade dashboard layout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:identifier/upgrade",
+            "params": [
+              {
+                "name": "identifier",
+                "value": "abc123",
+                "type": "path",
+                "description": "Document identifier (either document ID or identifier slug)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upgrade a document to the advanced dashboard layout — the same action available in the UI under **File > Upgrade layout**.\n\n<Note>\n  This operation is idempotent. If the document already uses the advanced layout, the request is a no-op and returns `upgraded: false`.\n</Note>\n\nFor published documents the upgrade runs through a draft-and-publish workflow automatically. If a draft already exists, the request returns `409` unless `clearExistingDraft` is set to `true`, which discards the existing draf"
+        },
+        {
+          "info": {
+            "name": "Transfer document ownership",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/transfer-ownership",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the document to transfer. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Transfer ownership of a document to another user in the organization.\n\nTo successfully transfer a document: \n\n- The user performing the transfer must have `MANAGER` permissions or higher on the document\n- The new owner must be a member of the organization AND have explicit access to the document\n\nUpon success, the following occurs: \n\n- Ownership of the document is updated to the new owner\n- The previous owner is granted `MANAGER` permissions on the document\n- Explicit permits for the new owner a"
+        },
+        {
+          "info": {
+            "name": "Create draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/draft",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the document to create a draft for. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Note>\n  This endpoint requires **Editor** permissions or higher on the specified document.\n</Note>\n\nCreates a [draft](/content/develop/drafts) of the specified document. Drafts are isolated copies of a document - including its workbook and dashboard - that can be modified without impacting the published version.\n\nTo create a draft on a [branch]"
+        },
+        {
+          "info": {
+            "name": "Archive draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/draft",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the document to archive the draft from. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Archives the current draft of the specified document. Archived drafts will be placed in the in the [**Archived** section of the **Drafts** drawer](/content/develop/drafts#archiving-drafts) in the document's workbook and retained for 30 days.\n\nIf a branch is specified, the current draft on the branch is archived.\n"
+        },
+        {
+          "info": {
+            "name": "List document drafts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:identifier/drafts",
+            "params": [
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the published document. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              },
+              {
+                "name": "include",
+                "value": "archived",
+                "type": "query",
+                "description": "Pass `archived` to include soft-deleted drafts in the response. By default, only active drafts are returned.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Viewer** permissions or higher on the specified document.\n</Note>\n\nList all drafts attached to a published document. A document in Omni can have up to one draft per branch plus one draft not attached to a branch.\n\nBy default, returns active drafts only. Pass `?include=archived` to include soft-deleted drafts retained for approximately 7 days.\n"
+        },
+        {
+          "info": {
+            "name": "Get document queries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId/queries",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the document. This can be retrieved by:\n- **Opening the document settings**: Navigate to **File > Document settings** and click **Settings**. The **Identifier** field contains the document ID.\n- **Using the dashboard's URL**: The string after `/dashboards/` is the identifier (e.g., `https://myorg.omniapp.co/dashboards/12db1a0a`)\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves queries associated with a document by its identifier.\n"
+        },
+        {
+          "info": {
+            "name": "Get dashboard document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document identifier. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves dashboard document configuration in a format compatible with PUT for round-trip editing. This endpoint returns all fields needed to modify and update a dashboard document.\n\n**Note:** This endpoint only supports dashboard documents. Workbook-only documents are not supported and will return a `400 Bad Request` error.\n"
+        },
+        {
+          "info": {
+            "name": "Update dashboard document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Document identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Warning>\n  This endpoint only works with dashboard documents. Workbook-only documents are not supported.\n</Warning>\n\nUpdates a document with the specified identifier. This endpoint performs a full resource replacement — all required fields must be provided and existing query presentations are replaced entirely.\n"
+        },
+        {
+          "info": {
+            "name": "Update document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Document identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nUpdates the name, description, and/or identifier of a document. **Note**: At least one of `name`, `description`, or `identifier` must be provided or the API will return a `Bad Request` error.\n\nRenaming a document follows the app's draft/publish workflow:\n\n| Document Type | Behavior |\n|---------------|----------|\n| **Draft** | Renamed directly |\n"
+        },
+        {
+          "info": {
+            "name": "Delete document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the document to delete. To retrieve the ID, navigate to **File > Document settings** in the document and then click **Settings**. The **Identifier** field contains the document ID.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete document (moves to Trash)"
+        },
+        {
+          "info": {
+            "name": "Remove dashboard from document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/draft/:draftId/dashboard",
+            "params": [
+              {
+                "name": "draftId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the existing draft, created from a successful call to the [Create draft and patch document endpoint](/api/documents-v2/create-draft-and-patch-document)."
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the published document associated with the draft."
+              }
+            ]
+          },
+          "docs": "Remove the dashboard from an existing draft, leaving a workbook-only document. Documents that are already workbook-only will remain unchanged.\n\nUse the [Publish draft endpoint](/api/documents-v2/publish-draft) to apply the changes from this endpoint to the published version of the document. **Note**: Schedules will be removed when the document is published."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

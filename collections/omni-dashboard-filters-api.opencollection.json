@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Dashboard filters API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dashboard filters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get dashboard filters and controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/dashboards/:dashboardId/filters",
+            "params": [
+              {
+                "name": "dashboardId",
+                "value": "",
+                "type": "path",
+                "description": "The dashboard identifier"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n\nPersonal Access Tokens (PATs) cannot use this parameter.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the filter and control configuration for a dashboard, including IDs, types, current default values, and metadata.\n"
+        },
+        {
+          "info": {
+            "name": "Update dashboard filters/controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v1/dashboards/:dashboardId/filters",
+            "params": [
+              {
+                "name": "dashboardId",
+                "value": "",
+                "type": "path",
+                "description": "The dashboard identifier"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Membership ID to act on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update dashboard filters/controls"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

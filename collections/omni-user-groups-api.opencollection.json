@@ -1,0 +1,172 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI User groups API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List user groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups",
+            "params": [
+              {
+                "name": "count",
+                "value": "50",
+                "type": "query",
+                "description": "The number of groups to return"
+              },
+              {
+                "name": "startIndex",
+                "value": "1",
+                "type": "query",
+                "description": "An integer index that determines the starting point of the sorted result list"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of user groups, sorted by creation time."
+        },
+        {
+          "info": {
+            "name": "Create user group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a [user group](/administration/users/groups). To manage model and connection role assignments for user groups, see the [User group model role APIs](/api/user-group-model-roles).\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve user group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups/:userGroupId",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the group to be retrieved"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a user group using its unique ID."
+        },
+        {
+          "info": {
+            "name": "Replace user group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups/:userGroupId",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the group to be replaced"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Replaces the specified user group. Per the SCIM 2.0 specification, `PUT` replaces the entire group resource, including its membership.\n\nTo add or remove individual members without replacing the full membership list, use the [Update user group](/api/user-groups/update-user-group) endpoint, which performs a partial update via `PATCH`.\n"
+        },
+        {
+          "info": {
+            "name": "Update user group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups/:userGroupId",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the group to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the specified user group by applying a list of [SCIM 2.0 patch operations](https://datatracker.ietf.org/doc/html/rfc7644#section-3.5.2). Use `PATCH` to add or remove individual members, or to rename the group, without affecting other attributes.\n\nTo replace the entire group resource (including the full membership list) in a single request, use the [Replace user group](/api/user-groups/replace-user-group) endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Delete user group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/scim/v2/groups/:userGroupId",
+            "params": [
+              {
+                "name": "userGroupId",
+                "value": "mEhXj6ZI",
+                "type": "path",
+                "description": "The ID of the group to be deleted"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes the specified user group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

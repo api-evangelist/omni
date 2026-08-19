@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Content API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Content",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/content",
+            "params": [
+              {
+                "name": "labels",
+                "value": "",
+                "type": "query",
+                "description": "Filter content by labels. Provide as a comma-separated list (e.g., `finance,marketing`)."
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Content scope filter"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query",
+                "description": "Direction for sorting:\n\n- `asc` - Ascending order (A-Z, 0-9)\n- `desc` - Descending order (Z-A, 9-0)\n"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of additional fields to include in the response:\n- `_count` - Adds count metrics (folders: document and favorite counts; documents: favorite and view counts)\n- `labels` - Includes associated content labels\n"
+              },
+              {
+                "name": "folderId",
+                "value": "",
+                "type": "query",
+                "description": "Returns all content in the specified folder. **Cannot be used with `path`.**"
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Filter content by path. **Cannot be used with `folderId`.** Examples:\n- `/folder/subfolder` - Returns the folder and any content it contains\n- `/folder/*` - Returns all folders and content recursively in the path\n- `/` - Returns all content in the organization\n"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "UUID of organization membership. **Required when `scope` is `restricted`.**"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page (1-100)"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from previous response"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve paginated list of documents and folders"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

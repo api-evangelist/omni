@@ -6,38 +6,48 @@ server:
   name: omni
   transport: http
   url: https://<YOUR-OMNI-INSTANCE>/mcp/https
-  note: >-
-    Per-instance MCP endpoint. The MCP server is hosted by Omni on each customer
-    instance (login-URL host + /mcp/https). OAuth 2.1 callback is brokered at
-    https://callbacks.omniapp.co/callback/mcp.
+  note: Per-instance MCP endpoint. The MCP server is hosted by Omni on each customer instance (login-URL
+    host + /mcp/https). OAuth 2.1 callback is brokered at https://callbacks.omniapp.co/callback/mcp.
 authentication:
-  - method: oauth2.1
-    recommended: true
-    note: Browser flow; Omni auto-creates API keys. Requires Personal Access Tokens (PATs) enabled for the org.
-  - method: api-key
-    note: Manual Organization API Key for centralized/automated use.
+- method: oauth2.1
+  recommended: true
+  note: Browser flow; Omni auto-creates API keys. Requires Personal Access Tokens (PATs) enabled for the
+    org.
+- method: api-key
+  note: Manual Organization API Key for centralized/automated use.
 docs:
   overview: https://docs.omni.co/ai/mcp
   tools: https://docs.omni.co/ai/mcp/tools
   authentication: https://docs.omni.co/ai/mcp/authentication
 clients:
-  - claude-desktop
-  - claude-code
-  - chatgpt
-  - cursor
-  - vscode
-  - codex
-  - microsoft-copilot
+- claude-desktop
+- claude-code
+- chatgpt
+- cursor
+- vscode
+- codex
+- microsoft-copilot
 tools:
-  - name: pickModel
-    description: Returns available models and their IDs so the client can select which model to query.
-  - name: pickTopic
-    description: Returns available topics in the selected model and picks the most relevant topic for the query.
-  - name: getData
-    description: Executes the query against the selected model and topic and returns results (requires single-shot query generation).
-  - name: askOmni
-    description: Natural-language question answered against the scoped Omni semantic model.
-  - name: checkStatus
-    description: Reports MCP server / query execution status.
-  - name: searchDocs
-    description: Searches the official Omni documentation for product and how-to questions.
+- name: pickModel
+  description: Returns available models and their IDs so the client can select which model to query.
+- name: pickTopic
+  description: Returns available topics in the selected model and picks the most relevant topic for the
+    query.
+- name: getData
+  description: Executes the query against the selected model and topic and returns results (requires single-shot
+    query generation).
+- name: askOmni
+  description: Natural-language question answered against the scoped Omni semantic model.
+- name: checkStatus
+  description: Reports MCP server / query execution status.
+- name: searchDocs
+  description: Searches the official Omni documentation for product and how-to questions.
+deployment:
+  mode: none
+  endpoint: https://callbacks.omniapp.co/callback/mcp.
+  verified: probed
+  probe: dead
+  note: the endpoint this manifest claimed did not answer; recorded as none rather than deleted so the
+    claim stays auditable
+  checked: '2026-08-12'
+  source: catalog MCP census

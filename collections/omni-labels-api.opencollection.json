@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Labels API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Labels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List labels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/labels",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve all labels in the organization."
+        },
+        {
+          "info": {
+            "name": "Create label",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/labels",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new label in the organization.\n\nAny user can create basic labels, but **Organization Admin** permissions are required to:\n\n- Create **Verified** labels (`verified: true`)\n- Create **Homepage** labels (`homepage: true`)\n"
+        },
+        {
+          "info": {
+            "name": "Get label",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/labels/:labelName",
+            "params": [
+              {
+                "name": "labelName",
+                "value": "",
+                "type": "path",
+                "description": "The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a single label by name."
+        },
+        {
+          "info": {
+            "name": "Update label",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/labels/:labelName",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update an existing label, including renaming, changing **Verified** status, or adding/removing it from the **Homepage**.\n\nUsers can update basic labels they created. **Organization Admin** permissions are required to modify **Verified** or **Homepage** labels, including making a label `verified` or visible on the `homepage`.\n"
+        },
+        {
+          "info": {
+            "name": "Delete label",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/labels/:labelName",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a label from the organization.\n\nAny user can delete basic labels, but **Organization Admin** permissions are required to delete **Verified** and **Homepage** labels.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

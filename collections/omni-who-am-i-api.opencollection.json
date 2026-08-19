@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Who Am I API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Who Am I",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get current identity and permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/whoami",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "query",
+                "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n"
+              }
+            ]
+          },
+          "docs": "Returns the authenticated caller's own identity, API key scope, organization role, and resolved per-model permissions. \n\nSelf-scoped and available to non-admins: it lets a caller decide whether an action is permitted without attempting it. Pass `modelId` to scope `rolesByModel` to specific models.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

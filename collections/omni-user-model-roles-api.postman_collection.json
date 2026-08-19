@@ -1,0 +1,743 @@
+{
+  "item": [
+    {
+      "id": "3f4c6889-2b7b-45ec-96e2-33591eb41aa3",
+      "name": "User model roles",
+      "description": {
+        "content": "Manage model and connection role assignments for users",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9f452f11-9701-46dd-ab50-85ccf61a23fa",
+          "name": "Assign or update user model role",
+          "request": {
+            "name": "Assign or update user model role",
+            "description": {
+              "content": "Assigns or updates a model role for a user. If the user already has a role for the specified model, this endpoint will update it to the new role.\n\nModel roles control what actions a user can perform on models and connections. To manage users, see the [User APIs](/api/users).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "users",
+                ":userId",
+                "model-roles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "userId",
+                  "description": "(Required) The ID of the user to assign or update a model role for."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b16567f1-2d96-4be5-a185-1ff5dcadf2e0",
+              "name": "Model role assigned or updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to assign or update a model role for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"userId\": \"9e8719d9-276a-4964-9395-a493189a247c\",\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01aebdef-a149-4cfb-8a2a-239e3d13e1d9",
+              "name": "Bad Request. Possible error messages include:\n\n- `Invalid JSON`\n- `Invalid model ID`\n- `Invalid connection ID`\n- `Method not allowed`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to assign or update a model role for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96fb8fb7-f68d-473f-b469-736f4e22a3af",
+              "name": "Not Found. Possible error messages include:\n\n- `User not found in organization`\n- `Model does not exist`\n- `Connection does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to assign or update a model role for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "852879a7-297d-43bb-a82a-b564ad697493",
+              "name": "Unprocessable Entity. Possible error messages include:\n\n- `Invalid role`\n- `Model does not belong to connection`\n- `Only shared and shared_extension models can be assigned model roles`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to assign or update a model role for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e1b8f17-7b91-4fa2-abe7-1257fb60dab5",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to assign or update a model role for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1e34182-d0fa-4712-bc65-932b0ccfdf0e",
+          "name": "Retrieve user model roles",
+          "request": {
+            "name": "Retrieve user model roles",
+            "description": {
+              "content": "Retrieves the model role assignments for a user. This includes both direct role assignments and roles inherited from user group memberships.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "users",
+                ":userId",
+                "model-roles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "modelId",
+                  "value": "<uuid>",
+                  "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user has access to."
+                },
+                {
+                  "disabled": false,
+                  "key": "connectionId",
+                  "value": "<uuid>",
+                  "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "userId",
+                  "description": "(Required) The ID of the user to retrieve model roles for."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3a800032-93f6-44c9-8b54-87455f16e7a5",
+              "name": "User model roles retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to retrieve model roles for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"membershipId\": \"9633bd79-7bdf-4773-8952-8fdd4098e51c\",\n  \"results\": [\n    {\n      \"baseRole\": \"MODELER\",\n      \"from\": {\n        \"type\": \"User Role\"\n      },\n      \"priority\": 350,\n      \"resolved\": true,\n      \"roleName\": \"MODELER\",\n      \"connectionId\": \"8a464dc9-1f0e-4a9e-86fa-e1e6d970157c\",\n      \"modelId\": \"5fb90312-67b1-4cca-823a-9a341d549320\"\n    },\n    {\n      \"baseRole\": \"QUERIER\",\n      \"from\": {\n        \"depth\": 0,\n        \"miniUuid\": \"PgjffoEu\",\n        \"name\": \"Super Group\",\n        \"type\": \"Group Role\"\n      },\n      \"priority\": 250,\n      \"resolved\": false,\n      \"roleName\": \"QUERIER\",\n      \"connectionId\": \"8a464dc9-1f0e-4a9e-86fa-e1e6d970157c\",\n      \"modelId\": \"5fb90312-67b1-4cca-823a-9a341d549320\"\n    },\n    {\n      \"baseRole\": \"VIEWER\",\n      \"from\": {\n        \"type\": \"Connection Base Role\"\n      },\n      \"priority\": 50,\n      \"resolved\": false,\n      \"roleName\": \"VIEWER\",\n      \"connectionId\": \"8a464dc9-1f0e-4a9e-86fa-e1e6d970157c\",\n      \"modelId\": \"5fb90312-67b1-4cca-823a-9a341d549320\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61983c87-9414-4d2e-8338-f75fb33572d8",
+              "name": "User not found in organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to retrieve model roles for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"User not found in organization\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85ef825b-b714-48df-9ac5-487bb5e72b7a",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    ":userId",
+                    "model-roles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "modelId",
+                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
+                    },
+                    {
+                      "key": "connectionId",
+                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "userId",
+                      "description": "(Required) The ID of the user to retrieve model roles for."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c1432214-12f1-4e00-9d61-acce493534f1",
+    "name": "Omni AI User model roles API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

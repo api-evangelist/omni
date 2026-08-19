@@ -1,0 +1,217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Documents v2 API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents v2",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v2/documents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a brand-new document and publish it live in a single call. Accepts creation metadata (`modelId`, `name`, and optional `identifier` / `description` / `folderId`) plus the same content slice as the draft patch body — `queryPresentations`, `controls`, `settings`, and `containers`.\n\nTiles are addressed by their record key in `queryPresentations.data` (e.g. `\"1\"`, `\"2\"`); the server owns internal tile identity, so you never send `miniUuid`. A new document starts with a single empty seed tile a"
+        },
+        {
+          "info": {
+            "name": "Get document state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The document's URL slug (e.g. `abc123`) or its canonical workbook UUID."
+              },
+              {
+                "name": "pretty",
+                "value": "",
+                "type": "query",
+                "description": "Format response with 2-space indentation for readability. Accepts `true`, `1`, or no value (e.g., `?pretty`). Default is compact (single-line) JSON."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Read the document's published state. To read a draft's state, use [Get draft state](/api/documents-v2/get-draft-state) instead.\n\nThe response can be used as-is as the request body in a call to the [Patch draft API](/api/documents-v2/patch-draft).\n\nTiles in `queryPresentations.data` are keyed by a stable record key (e.g. `\"1\"`, `\"2\"`); the server uses that key to identify existing tiles on a later patch, so you never need to track any other identifier. Control IDs and container `instanceKey` / `r"
+        },
+        {
+          "info": {
+            "name": "Create draft and patch document",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/draft",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new draft on the published document and apply the patch in one call. There is no auto-publish — the response includes the new `draftIdentifier` for follow-up calls. Pass an optional `branchId` to attach the draft to a branch; omit it for a draft on the main (unpublished) workspace.\n"
+        },
+        {
+          "info": {
+            "name": "Publish draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/draft/publish",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Publish the document's current main (non-branch) draft, promoting it to the published version. No request body — the draft is consumed, so the response echoes the now-published document's metadata.\n\nOnly the main draft is publishable here. A branch-attached draft is published by [merging its branch](/api/model-branches/merge-a-branch) (`POST /api/v1/models/{modelId}/branch/{branchName}/merge`), so a document with no main draft returns `404`.\n"
+        },
+        {
+          "info": {
+            "name": "Get draft state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/draft/:draftId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID."
+              },
+              {
+                "name": "draftId",
+                "value": "",
+                "type": "path",
+                "description": "The draft workbook identifier (returned by [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document))."
+              },
+              {
+                "name": "pretty",
+                "value": "",
+                "type": "query",
+                "description": "Format response with 2-space indentation for readability. Accepts `true`, `1`, or no value (e.g., `?pretty`). Default is compact (single-line) JSON."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Read the named draft's state. Returns the same `DocumentsV2ReadResponse` shape as [Get document state](/api/documents-v2/get-document-state), and is round-trippable as a `PATCH` body.\n"
+        },
+        {
+          "info": {
+            "name": "Patch draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/draft/:draftId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The published document's URL slug (e.g. `abc123`) or its canonical workbook UUID."
+              },
+              {
+                "name": "draftId",
+                "value": "",
+                "type": "path",
+                "description": "The draft workbook identifier the patch is applied to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Apply a patch to an existing draft addressed by `draftId`. Pure apply — no draft creation, no publish. The request body, content sections, field caps, and tile-addressing rules are identical to [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document); this route does not accept `branchId`.\n"
+        },
+        {
+          "info": {
+            "name": "Rename document identifier",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v2/documents/:documentId/identifier",
+            "params": [
+              {
+                "name": "identifier",
+                "value": "q2-revenue",
+                "type": "path",
+                "description": "Document identifier — either the URL slug (e.g. `abc123`) or the canonical workbook UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Rename a published document's identifier. The change is applied live and immediately. Changes do not go through the draft/publish workflow. The former identifier is recorded in the document's rename history to enable automatic redirects. Only published documents can be renamed.\n\nThe new identifier must be a valid slug and unused by any other document in the organization. If the new value is identical to the existing value (case-sensitive), the API will return a `200` but not write a history reco"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

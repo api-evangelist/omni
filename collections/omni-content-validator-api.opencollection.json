@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Content validator API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Content validator",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Validate content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/content-validator",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model to validate content against."
+              },
+              {
+                "name": "branch_id",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the branch to validate against. If not provided, validates against the main model."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The user ID to act on behalf of. Only valid when using an organization API key.\n\nUser-scoped API keys cannot use this parameter and will receive a 403 error if provided.\n"
+              },
+              {
+                "name": "include_personal_folders",
+                "value": "",
+                "type": "query",
+                "description": "When enabled, include personal folders in the search."
+              },
+              {
+                "name": "find",
+                "value": "",
+                "type": "query",
+                "description": "The name of the model element to find content references for. Must be used together with `find_type`.\n\nFor `FIELD` type, the value must be fully qualified with the view name (e.g., `orders.status`).\n"
+              },
+              {
+                "name": "find_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of model element to search for. Must be used together with `find`.\n\nWhen both parameters are provided, only content that references the specified element will be validated and included in the response.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Validates all content against the model and returns documents with queries and any validation issues.\n\nThis endpoint scans all documents associated with the model and identifies any fields, views, or other model elements referenced in queries that are no longer valid.\n\nYou can optionally scope validation to only content that references a specific model element (view, field, or topic) using the `find` and `find_type` parameters. This is useful when you only need to validate content using a specif"
+        },
+        {
+          "info": {
+            "name": "Find and replace content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/content-validator",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the model to perform find/replace against."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The user ID to act on behalf of. Only valid when using an organization API key.\n\nUser-scoped API keys cannot use this parameter and will receive a 403 error if provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Performs find/replace operations on content using the specified model.\n\nThis endpoint allows you to replace views or fields across all documents associated with the model. This is useful when renaming model elements and need to update all references.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1842 @@
+{
+  "item": [
+    {
+      "id": "dc93bf12-4209-4d4d-9f83-c65e95b56e84",
+      "name": "Schedule recipients",
+      "description": {
+        "content": "Manage schedule recipients",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "826de06d-f799-40a4-9a50-936669bab392",
+          "name": "List schedule recipients",
+          "request": {
+            "name": "List schedule recipients",
+            "description": {
+              "content": "Retrieves the list of recipients for the specified schedule. Successful responses will include the recipients and details about the schedule's destination type.\n\nTo retrieve a schedule's full configuration, use the [List schedules](/api/schedules#list-schedules) endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "recipients"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f475565c-e83b-4acb-b38b-4427adc9a0ab",
+              "name": "Successful requests return a `200 OK` status and response body specific to the schedule's destination type.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"recipients\": [\n    {\n      \"email\": \"blobby@blobsrus.com\",\n      \"emailOnly\": false,\n      \"id\": \"3e7c4152-cdac-42ce-8749-fe3b81d5d8ab\",\n      \"name\": \"blobby@blobsrus.com\"\n    }\n  ],\n  \"type\": \"email\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "535c832c-3bc9-4e2a-aaef-d23fbb29f168",
+              "name": "Bad Request. Possible error messages include:\n\n- `Bad Request: scheduleId: Invalid uuid`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6560d35d-49eb-4f65-a5dd-c9e19d123515",
+              "name": "Not Found. Possible error messages include:\n\n- `Scheduled task with id {scheduleId} does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b8f6d63-ea0b-4ceb-97e3-d08ff60cc039",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fb8a1a8-2776-4544-b6fe-0f6a1e78add1",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f65d1afa-dd15-4261-bace-b64c658e47ac",
+          "name": "Add schedule recipients",
+          "request": {
+            "name": "Add schedule recipients",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "add-recipients"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5c32b7ed-35c6-4ae4-8135-41e52882e737",
+              "name": "Recipients added successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "add-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"addedRecipientsCount\": 2,\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d578f20a-e552-4a63-9c5f-43a675b19a80",
+              "name": "Bad Request. Possible error messages include:\n\n- `userIds: Invalid uuid`\n- `emails: Invalid email address`\n- `Please provide either valid email addresses, valid user IDs, or both`\n- `At least one recipient must be provided`\n- `{parameter}: Array must contain at least 1 element(s)`\n- `Invalid recipient(s): The following members do not exist or do not have access to this organization: {userId}`\n- `Cannot add recipients to destination type {destinationType}`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "add-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d878db2f-66ec-4575-bc2b-335f564c3485",
+              "name": "Not Found. Possible error messages include:\n\n- `Scheduled task with id {scheduleId} does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "add-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77867d09-f3ae-4800-a97f-5f3da1e43a27",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "add-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "91f2a168-2cf7-4e4c-a018-73834db49d84",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "add-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to add recipients to. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf1bf8bc-16cf-47f4-b727-d26c5158dcff",
+          "name": "Remove schedule recipients",
+          "request": {
+            "name": "Remove schedule recipients",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "remove-recipients"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cc1211c1-c31e-4cbc-ac38-33a214594da2",
+              "name": "Recipients removed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "remove-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"removedRecipientsCount\": 2,\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84f20e2e-8de2-4c90-b828-2bcb3e55789d",
+              "name": "Bad Request. Possible error messages include:\n\n- `Bad Request: userIds: Invalid uuid`\n- `Bad Request: emails: Invalid email address`\n- `Please provide either valid email addresses, valid user IDs, or both`\n- `At least one recipient must be provided`\n- `{parameter}: Array must contain at least 1 element(s)`\n- `Invalid recipient(s): The following members do not exist or do not have access to this organization: {userId}`\n- `Cannot change recipients on a scheduled task destination of type {destinationType}`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "remove-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbcb3890-d80d-4285-b1ee-c46d1dd6b6d9",
+              "name": "Not Found. Possible error messages include:\n\n- `Scheduled task with id {scheduleId} does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "remove-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c0edf013-0ecd-4eed-8658-1b3c612eb05e",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "remove-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20ba970a-b0fd-4a48-9e62-5085b37057d6",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "remove-recipients"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule to remove recipients from. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emails\": [\n    \"<email>\",\n    \"<email>\"\n  ],\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "848c9d67-fc02-43d7-b47d-5ad5a8a36bdc",
+          "name": "Manage email-only user",
+          "request": {
+            "name": "Manage email-only user",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "users",
+                "email-only"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\",\n  \"userAttributes\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "457ce9d6-20ad-4754-a14c-169afcecc327",
+              "name": "Email-only user created or updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"iamagoodblob@blobsrus.co\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"email\": \"iamagoodblob@blobsrus.co\",\n  \"userId\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c92f778f-4df9-411c-bc82-d2d85be09340",
+              "name": "Bad Request. Possible error messages include:\n\n- `Invalid JSON`\n- `email: email is required`\n- `email: Invalid email address`\n- `The provided user attributes: \"<attribute>\" do not match the names of existing user attributes.`\n- `User Attribute <attribute> is type number, but passed-in value <value> is not a number.`\n- `The timezone <invalidTimezone> is not supported. Please see the connection page or [user profile page](/administration/users/your-account) for the list of valid timezones. Use e.g. \"America/New_York\" instead of \"EST\"`\n- `User Attribute <attribute> has multiple values enabled, but the passed-in value is not an array. If passing a single value for a user attribute with multiple values enabled, please wrap the value in an array [x].`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"iamagoodblob@blobsrus.co\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c002577-7a86-42b8-9137-68de591edec7",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"iamagoodblob@blobsrus.co\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3ae6072-aaf4-4c01-970f-e571fc95650f",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"iamagoodblob@blobsrus.co\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aff93faa-f381-4ea0-9e28-fd9102b594a1",
+          "name": "Bulk manage email-only users",
+          "request": {
+            "name": "Bulk manage email-only users",
+            "description": {
+              "content": "Creates or updates up to 20 [email-only users](/share/deliveries/email). An email-only user is a recipient of a delivery that isn't associated with an Omni account.\n\nIf Omni matches a provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "users",
+                "email-only",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"users\": [\n    {\n      \"email\": \"<email>\",\n      \"userAttributes\": \"<object>\"\n    },\n    {\n      \"email\": \"<email>\",\n      \"userAttributes\": \"<object>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0a98c9cb-7b74-40c3-a22d-381a854e364b",
+              "name": "Email-only users created or updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"users\": [\n    {\n      \"email\": \"iamagoodblob@blobsrus.co\"\n    },\n    {\n      \"email\": \"blobmanager@blobsrus.co\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"email\": \"iamagoodblob@blobsrus.co\",\n      \"userId\": \"1e23dadc-961b-4a21-b36b-17168130fc3f\"\n    },\n    {\n      \"email\": \"blobmanager@blobsrus.co\",\n      \"userId\": \"e9d19f71-0b59-4f8e-8343-a75d30576d28\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "789bfcd0-0949-405d-94e8-b07dd53746a2",
+              "name": "Bad Request. Possible error messages include:\n\n- `Invalid JSON`\n- `users: Maximum of 20 users can be processed in a single request`\n- `users: users is required`\n- `email: email is required`\n- `email: Invalid email address`\n- `The provided user attributes: \"<attribute>\" do not match the names of existing user attributes.`\n- `User Attribute <attribute> is type number, but passed-in value <value> is not a number.`\n- `The timezone <invalidTimezone> is not supported. Please see the connection page or [user profile page](/administration/users/your-account) for the list of valid timezones. Use e.g. \"America/New_York\" instead of \"EST\"`\n- `User Attribute <attribute> has multiple values enabled, but the passed-in value is not an array. If passing a single value for a user attribute with multiple values enabled, please wrap the value in an array [x].`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"users\": [\n    {\n      \"email\": \"iamagoodblob@blobsrus.co\"\n    },\n    {\n      \"email\": \"blobmanager@blobsrus.co\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca9fbeff-b1e8-4fab-b10e-31188b190b3d",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"users\": [\n    {\n      \"email\": \"iamagoodblob@blobsrus.co\"\n    },\n    {\n      \"email\": \"blobmanager@blobsrus.co\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7abd8351-e1fd-43b7-812f-e897cb88f904",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "users",
+                    "email-only",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"users\": [\n    {\n      \"email\": \"iamagoodblob@blobsrus.co\"\n    },\n    {\n      \"email\": \"blobmanager@blobsrus.co\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5d24774f-ffc3-49b1-a98c-913a514f5659",
+    "name": "Omni AI Schedule recipients API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

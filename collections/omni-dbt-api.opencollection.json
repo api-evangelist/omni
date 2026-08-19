@@ -1,0 +1,268 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI dbt API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "dbt",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get dbt configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves the dbt configuration for the specified connection.\n"
+        },
+        {
+          "info": {
+            "name": "Update dbt configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nUpdates the dbt configuration for the specified connection.\n"
+        },
+        {
+          "info": {
+            "name": "Delete dbt configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRemoves the dbt configuration for the specified connection by removing the link to the dbt repository.\n"
+        },
+        {
+          "info": {
+            "name": "List dbt environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt/environments",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nRetrieves a list of all dbt environments configured for the specified connection.\n"
+        },
+        {
+          "info": {
+            "name": "Create dbt environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt/environments",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nCreates a new dbt environment on the specified connection, enabling programmatic environment management.\n\nA dbt environment allows you to connect Omni to a specific dbt project and manage dbt-related functionality within the connection context.\n"
+        },
+        {
+          "info": {
+            "name": "Update dbt environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt/environments/:environmentId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              },
+              {
+                "name": "environmentId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the dbt environment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nUpdates an existing dbt environment on the specified connection. All fields are optional; only the provided fields will be updated.\n"
+        },
+        {
+          "info": {
+            "name": "Delete dbt environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/connections/:connectionId/dbt/environments/:environmentId",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the connection"
+              },
+              {
+                "name": "environmentId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the dbt environment to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nDeletes an existing dbt environment from the specified connection. This action cannot be undone.\n"
+        },
+        {
+          "info": {
+            "name": "Get dbt exposures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/dbt-exposures",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "ID of the model"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (1-100)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from a previous response's `pageInfo.nextCursor`."
+              },
+              {
+                "name": "branch_id",
+                "value": "",
+                "type": "query",
+                "description": "Branch ID for branch-aware model operations."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves dbt exposures for the specified model. This endpoint computes exposures on-demand by analyzing which dbt models are referenced by dashboards that use the specified model.\n\nThis enables automated retrieval of exposure data previously only available via the manual **Sync exposures** flow in Omni, making it ideal for CI/CD pipelines and automated workflows.\n"
+        },
+        {
+          "info": {
+            "name": "Set dbt environment on model branch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/models/:modelId/branch/:branchName/dbt",
+            "params": [
+              {
+                "name": "modelId",
+                "value": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                "type": "path",
+                "description": "The unique identifier of the model"
+              },
+              {
+                "name": "branchName",
+                "value": "feature/new-models",
+                "type": "path",
+                "description": "The name of the branch to configure"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sets the active dbt environment on a model branch. This endpoint allows you to programmatically configure which dbt environment a branch should use, enabling CI/CD pipelines to automate dbt environment configuration before triggering schema refreshes.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

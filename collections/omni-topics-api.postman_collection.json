@@ -1,0 +1,389 @@
+{
+  "item": [
+    {
+      "id": "cb25901f-964b-48c4-a997-992ff162c9cc",
+      "name": "Topics",
+      "description": {
+        "content": "Retrieve topic information from models",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "33b9ef7f-d899-4a93-bc54-29f2d6f3d497",
+          "name": "Retrieve a topic",
+          "request": {
+            "name": "Retrieve a topic",
+            "description": {
+              "content": "Retrieves a topic in a model by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "models",
+                ":modelId",
+                "topic",
+                ":topicName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "modelId",
+                  "description": "(Required) The unique identifier of the model that contains the topic."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topicName",
+                  "description": "(Required) The name of the topic."
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "46ca5344-c668-4269-9b5a-43f68803d9df",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "topic",
+                    ":topicName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The unique identifier of the model that contains the topic."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"topic\": {\n    \"name\": \"Customers\",\n    \"base_view_name\": \"main__customers\",\n    \"label\": \"Customers\",\n    \"default_filters\": {},\n    \"join_via_map\": {\n      \"main__orders\": [],\n      \"main__order_items\": [\n        \"main__orders\"\n      ]\n    },\n    \"join_via_map_key_order\": [\n      \"main__orders\",\n      \"main__order_items\"\n    ],\n    \"ignored_props\": [],\n    \"always_where_filters\": {},\n    \"extension_model_id\": \"5da4e30e-45e2-4693-b87d-51c39d69963f\",\n    \"has_frozen_join_via_map\": true,\n    \"relationships\": [\n      {\n        \"left_view_name\": \"main__orders\",\n        \"right_view_name\": \"main__customers\",\n        \"join_type\": \"ALWAYS_LEFT\",\n        \"sql\": \"${main__orders.customer_id} = ${main__customers.id}\",\n        \"id\": \"main__orders_main__customers\",\n        \"type\": \"ASSUMED_MANY_TO_ONE\",\n        \"ignored\": false,\n        \"bidirectional\": false\n      }\n    ],\n    \"ide_file_name\": \"Customers.topic\",\n    \"views\": [\n      {\n        \"name\": \"main__customers\",\n        \"label\": \"Customers\",\n        \"table_name\": \"customers\",\n        \"schema\": \"main\",\n        \"schema_label\": \"Main\",\n        \"extension_model_id\": \"5da4e30e-45e2-4693-b87d-51c39d69963f\",\n        \"ide_file_name\": \"main/customers.view\",\n        \"yaml_path\": \"main__customers.view\",\n        \"filter_only_fields\": [],\n        \"is_pseudo_display_view\": false,\n        \"primary_key\": [\n          {\n            \"type\": \"field\",\n            \"field_name\": \"main__customers.id\"\n          }\n        ],\n        \"dimensions\": [\n          {\n            \"field_name\": \"country\",\n            \"view_name\": \"main__customers\",\n            \"data_type\": \"STRING\",\n            \"description\": \"User's country\",\n            \"view_label\": \"Customers\",\n            \"is_dimension\": true,\n            \"fully_qualified_name\": \"main__customers.country\"\n          },\n          {\n            \"field_name\": \"created_date\",\n            \"view_name\": \"main__customers\",\n            \"data_type\": \"TIMESTAMP\",\n            \"time_frames\": [\n              null,\n              \"DATE\",\n              \"WEEK\",\n              \"MONTH\",\n              \"QUARTER\",\n              \"YEAR\"\n            ],\n            \"date_type\": \"DATE\",\n            \"description\": \"Date of user creation\",\n            \"parent_field\": \"created_date\",\n            \"parent_label\": \"Created Date\",\n            \"view_label\": \"Customers\",\n            \"group_label\": \"Created Date\",\n            \"is_dimension\": true,\n            \"is_group_parent_field\": true,\n            \"fully_qualified_name\": \"main__customers.created_date\"\n          }\n        ],\n        \"measures\": [\n          {\n            \"type\": \"aggregation\",\n            \"field_name\": \"count\",\n            \"view_name\": \"main__customers\",\n            \"aggregate_type\": \"COUNT\",\n            \"data_type\": \"NUMBER\",\n            \"ignored\": false,\n            \"label\": \"Customers Count\",\n            \"format\": \"NUMBER_0\",\n            \"view_label\": \"Customers\",\n            \"display_sql\": \"COUNT(*)\",\n            \"dialect_sql\": \"COUNT(*)\",\n            \"fully_qualified_name\": \"main__customers.count\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21d8cb86-4026-4dcb-a49c-8b1988cae7b4",
+              "name": "Bad Request. Possible causes:\n\n- Invalid model UUID\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "topic",
+                    ":topicName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The unique identifier of the model that contains the topic."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Model with id <modelId> does not exist\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76af60bb-85b0-4437-b871-068575f88360",
+              "name": "Not Found. Possible causes:\n\n- Model not found\n- Topic not found or access not permitted\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "topic",
+                    ":topicName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The unique identifier of the model that contains the topic."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Model with id <modelId> does not exist\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15e096c4-1323-43c1-8357-724c4dfa8529",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models",
+                    ":modelId",
+                    "topic",
+                    ":topicName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "modelId",
+                      "description": "(Required) The unique identifier of the model that contains the topic."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic."
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "eae8191d-c964-4bc2-8d88-5599aaa40b61",
+    "name": "Omni AI Topics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}

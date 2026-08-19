@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Omni AI Connection environments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connection environments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create connection environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{instance}.omniapp.co/api/v1/connection-environments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates connection environments by associating environment-specific connections with a base connection"
+        },
+        {
+          "info": {
+            "name": "Update connection environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{instance}.omniapp.co/api/v1/connection-environments/:connectionEnvironmentId",
+            "params": [
+              {
+                "name": "connectionEnvironmentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the connection environment to update"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Associates user attribute values with a specific connection environment, which will determine when it is used.\n"
+        },
+        {
+          "info": {
+            "name": "Delete connection environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{instance}.omniapp.co/api/v1/connection-environments/:connectionEnvironmentId",
+            "params": [
+              {
+                "name": "connectionEnvironmentId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the connection environment to delete"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a connection environment by ID. Requires Connection Admin or Organization Admin permissions.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

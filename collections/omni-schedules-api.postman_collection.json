@@ -1,0 +1,4306 @@
+{
+  "item": [
+    {
+      "id": "959392be-36d3-4242-b800-a8e9246dbeb5",
+      "name": "Schedules",
+      "description": {
+        "content": "Create and manage scheduled tasks",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7073c7f9-1e0b-4b72-9db0-173640f49527",
+          "name": "Create schedule",
+          "request": {
+            "name": "Create schedule",
+            "description": {
+              "content": "Creates a scheduled task for the specified dashboard. Supports applying filters and formatting, creating alert conditions, and triggering test deliveries.\n\nSupports the following destinations:\n\n- [**Email**](/share/deliveries/email)\n- [**Slack**](/share/deliveries/slack) - **Note**: A Slack workspace must already be connected to Omni to use this destination type.\n- [**SFTP**](/share/deliveries/sftp)\n- [**Webhook**](/share/deliveries/webhooks)\n- [**Amazon S3**](/share/deliveries/amazon-s3)\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "**Only supported when using an Organization API key.** The membership ID of the user who should own the schedule. **Note**: This value is the **membership ID**, not the user ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.\n\nWhen using an Organization API key:\n\n- If `userId` is provided, the schedule is owned by the specified user\n- If `userId` is not provided, the schedule is owned by the organization\n\nAttempting to use a Personal Access Token (PAT) with this parameter will result in a `403 Forbidden` error. When using a PAT, the schedule owner will be the creator of the PAT.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"<string>\",\n  \"name\": \"<string>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"format\": \"<string>\",\n  \"destinationType\": \"<string>\",\n  \"filterConfig\": \"<object>\",\n  \"conditionType\": \"<string>\",\n  \"conditionQueryMapKey\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"killJobsOnFailure\": false,\n  \"testNow\": false,\n  \"hideTitle\": false,\n  \"hideHiddenFields\": false,\n  \"enableFormatting\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\",\n  \"showContentLink\": true,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": false,\n  \"paperFormat\": \"<string>\",\n  \"paperOrientation\": \"<string>\",\n  \"singleColumnLayout\": false,\n  \"url\": \"<string>\",\n  \"recipients\": \"<string>\",\n  \"subject\": \"<string>\",\n  \"textBody\": \"<string>\",\n  \"slackRecipientType\": \"<string>\",\n  \"fanOut\": false,\n  \"address\": \"<string>\",\n  \"port\": \"<integer>\",\n  \"username\": \"<string>\",\n  \"path\": \"<string>\",\n  \"passwordUnencrypted\": \"<string>\",\n  \"bucketName\": \"<string>\",\n  \"region\": \"<string>\",\n  \"roleArn\": \"<string>\",\n  \"keyPrefix\": \"<string>\",\n  \"filename\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9ac29e2b-6117-434b-87d0-efe76def2b15",
+              "name": "Schedule created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"12db1a0a\",\n  \"message\": \"Successfully created schedule\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "634a0bb6-3210-447a-8c7f-7059323000ab",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Analyses do not support dashboards.`\n- `Document does not have a dashboard`\n- `schedule: Schedule is an invalid cron expression`\n- `timezone: Time zone must be IANA valid.`\n- `hideTitle can only be used with PDF or PNG formats`\n- `Invalid filter keys found in schedule configuration: <filterKey>. Available dashboard filter keys are: <key1>, <key2>, ....`\n- `Test delivery not supported for condition type RESULTS_CHANGED`\n- `Print options are not supported for this format`\n- `Single column layout and table expansion options are not supported for FIT_PAGE format.`\n- `Must provide both a trigger query and an alert condition type`\n- `slackRecipientType is required for Slack destinations`\n- `Only one Slack channel is supported per schedule`\n- `Organization does not have a Slack credential configured`\n- `Test delivery not supported for S3 destinations`\n- `Invalid bucket name`\n- `Invalid role ARN`\n- `Invalid region`\n- `Key prefix contains invalid path traversal`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8715fa30-a9f2-440c-96c0-b03b00670143",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `Personal access tokens cannot create schedules on behalf of other users`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b75c47a9-6bf5-4891-9f9d-526c0a507ebc",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Document with identifier \"<dashboardId>\" not found`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e24e69d-26f0-45e3-9c67-3d1b80ad5a67",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f699b8b1-51cf-44c9-ac6c-2b494eccc523",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec122521-daaa-4013-85e2-fe0a9ad1f81c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identifier\": \"12db1a0a\",\n  \"name\": \"My Webhook schedule\",\n  \"schedule\": \"0 9 ? * * *\",\n  \"timezone\": \"UTC\",\n  \"format\": \"json\",\n  \"destinationType\": \"webhook\",\n  \"url\": \"https://webhooksrus.com/1234566\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4aa1ffbf-42cd-4068-9656-ab79cb08f798",
+          "name": "List schedules",
+          "request": {
+            "name": "List schedules",
+            "description": {
+              "content": "Retrieves scheduled tasks. This endpoint supports filtering, sorting, and cursor-based pagination.\n\nTo retrieve the recipients for a schedule, use the [List schedule recipients](/api/schedule-recipients/list-schedule-recipients) endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Search term for filtering schedules by name, dashboard name, or owner name (case-insensitive).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter schedules by delivery status."
+                },
+                {
+                  "disabled": false,
+                  "key": "destination",
+                  "value": "<string>",
+                  "description": "Filter schedules by destination type."
+                },
+                {
+                  "disabled": false,
+                  "key": "scheduleType",
+                  "value": "<string>",
+                  "description": "Filter by schedule type."
+                },
+                {
+                  "disabled": false,
+                  "key": "contentType",
+                  "value": "<string>",
+                  "description": "Filter schedules by content type."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortField",
+                  "value": "scheduleName",
+                  "description": "The field to sort results by."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "desc",
+                  "description": "The direction to sort results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "1",
+                  "description": "The page number for offset-based pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "20",
+                  "description": "The number of results to include on each page."
+                },
+                {
+                  "disabled": false,
+                  "key": "ownerId",
+                  "value": "<uuid>",
+                  "description": "Filter schedules by the owner's membership ID. Use the [List users](/api/users/list-users) endpoint to retrieve membership IDs.\n\nAPI results vary by API key type:\n\n- **Organization API keys** - When specified, only schedules for the specified owner are returned. Otherwise, all schedules in the organization are returned.\n- **Personal access token** - When specified, only the token owner's membership ID is allowed. If another user's membership ID is provided, the API will return a `403 Forbidden` error.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "embedEntity",
+                  "value": "<string>",
+                  "description": "Filter schedules by embed entity:\n\n- If used as the only filter, list all schedules in the embed entity\n- If used with `ownerId`, list only schedules for the specified user if they are associated with the `embedEntity`. The response will be empty if the specified `ownerId` doesn't have the entity.\n- Can be combined with other filters for more specific results\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "identifier",
+                  "value": "<string>",
+                  "description": "Filter schedules by dashboard ID. This can be retrieved by:\n\n- **Opening the document settings** - Navigate to **File > Document settings** in the dashboard and then click **Settings**. The **Identifier** field contains the dashboard ID.\n- **Using the dashboard's URL** - The string after `/dashboards` is the dashboard's ID; for example: `https://myorg.omniapp.co/dashboards/12db1a0a`\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1823bcdd-1e2a-4fbb-b9b2-3cea6063ce2e",
+              "name": "Paginated schedule list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": false,\n    \"nextCursor\": \"string\",\n    \"pageSize\": 9506,\n    \"totalRecords\": 9405\n  },\n  \"records\": [\n    {\n      \"id\": \"6240e549-9888-1175-f02f-266a43facfd8\",\n      \"schedule\": \"string\",\n      \"disabledAt\": \"1977-11-29T04:29:48.974Z\",\n      \"name\": \"string\",\n      \"timezone\": \"string\",\n      \"identifier\": \"string\",\n      \"dashboardName\": \"string\",\n      \"ownerId\": \"1e22eafa-14ac-6386-a607-3dae960f60eb\",\n      \"ownerName\": \"string\",\n      \"lastCompletedAt\": \"2000-05-26T23:54:45.449Z\",\n      \"lastStatus\": \"string\",\n      \"destinationType\": \"string\",\n      \"format\": \"string\",\n      \"recipientCount\": 138,\n      \"content\": \"string\",\n      \"slackRecipientType\": \"string\",\n      \"systemDisabledAt\": \"2024-11-29T10:11:45.779Z\",\n      \"systemDisabledReason\": \"string\",\n      \"alert\": \"string\"\n    },\n    {\n      \"id\": \"8e18f646-584d-2f55-d6bc-f7b27003fab6\",\n      \"schedule\": \"string\",\n      \"disabledAt\": \"2005-03-23T18:15:07.473Z\",\n      \"name\": \"string\",\n      \"timezone\": \"string\",\n      \"identifier\": \"string\",\n      \"dashboardName\": \"string\",\n      \"ownerId\": \"884457f8-3c1c-93a6-cf5c-4242b04ae0e2\",\n      \"ownerName\": \"string\",\n      \"lastCompletedAt\": \"1974-12-10T02:29:32.542Z\",\n      \"lastStatus\": \"string\",\n      \"destinationType\": \"string\",\n      \"format\": \"string\",\n      \"recipientCount\": 6313,\n      \"content\": \"string\",\n      \"slackRecipientType\": \"string\",\n      \"systemDisabledAt\": \"2026-02-08T09:48:10.949Z\",\n      \"systemDisabledReason\": \"string\",\n      \"alert\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc779a3c-6833-441c-8d36-3b7f70bc7945",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Invalid enum value`\n- `ownerId: Invalid uuid`\n- `Page size cannot exceed 100`\n- `Invalid page number. The last valid page is <number>.`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e4b2e84-1aed-463a-9d56-52674cf9950e",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `Personal access tokens can only filter by their own ownerId`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "924d77e4-74bf-4b3d-a32d-065a4cd8ae51",
+              "name": "Not Found\n\nPossible error messages:\n\n- `User with id <id> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea7c9081-dbaf-4f20-bb29-6004f1957d17",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64af953e-b3cf-4874-851c-b143c0717b78",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "destination",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scheduleType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "contentType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "scheduleName"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "ownerId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "embedEntity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b08324b-941c-49db-9fbb-afde6f3a62b9",
+          "name": "Get schedule",
+          "request": {
+            "name": "Get schedule",
+            "description": {
+              "content": "Returns the details of a single schedule, including its delivery destinations, recurrence configuration, and current status.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<uuid>",
+                  "description": "Membership ID of the user whose permissions should be checked (org API keys only). When provided, the endpoint verifies the user can view the associated dashboard before returning the schedule.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3bc5f6d3-1385-4d42-92c5-23f13e0340aa",
+              "name": "Schedule retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"name\": \"Weekly Sales Report\",\n  \"organizationId\": \"org-uuid\",\n  \"entityId\": \"dashboard-uuid\",\n  \"ownerId\": \"user-uuid\",\n  \"owner\": {\n    \"name\": \"Jane Smith\"\n  },\n  \"schedule\": \"0 9 ? * MON *\",\n  \"timezone\": \"America/New_York\",\n  \"fanOut\": false,\n  \"killJobsOnFailure\": false,\n  \"filterConfig\": null,\n  \"metadata\": null,\n  \"conditionType\": null,\n  \"conditionQueryMapKey\": null,\n  \"disabledAt\": null,\n  \"systemDisabledAt\": null,\n  \"systemDisabledReason\": null,\n  \"createdAt\": \"2025-01-15T10:00:00.000Z\",\n  \"updatedAt\": \"2025-01-20T08:30:00.000Z\",\n  \"destinations\": [\n    {\n      \"id\": \"dest-uuid\",\n      \"format\": \"pdf\",\n      \"lastStatus\": \"COMPLETE\",\n      \"lastCompletedAt\": \"2025-01-20T09:00:05.000Z\",\n      \"metadata\": {\n        \"type\": \"email\"\n      },\n      \"recipients\": [\n        {\n          \"id\": \"recipient-uuid\",\n          \"membershipId\": \"membership-uuid\",\n          \"membership\": {\n            \"user\": {\n              \"email\": \"alice@example.com\",\n              \"name\": \"Alice\"\n            }\n          }\n        }\n      ],\n      \"userGroupRecipients\": []\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0859be5f-2f8d-43f2-a22f-1122bdee024f",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `scheduleId` is not a valid UUID\n- `userId` is not a valid UUID\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Bad Request: scheduleId: Invalid UUID\",\n  \"status\": 400\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ff482de-2647-40f1-8dc2-3e24543e1a5c",
+              "name": "Missing or invalid authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7807ca5-98b3-44ba-9282-98da3e5215b1",
+              "name": "Forbidden\n\nThe authenticated user does not have permission to view the schedule. Possible scenarios:\n\n- User cannot view the associated dashboard\n- User cannot schedule the associated dashboard\n- User is not the schedule owner\n- User-scoped API key attempted to use `userId` parameter\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"You do not have permission to view this dashboard\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a1ad5c9-550d-4660-89d8-9c7c432efddc",
+              "name": "Not Found\n\nPossible error messages:\n\n- Schedule not found (or belongs to a different organization)\n- `userId` not found in the organization\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Scheduled task with id 123e4567-e89b-12d3-a456-426614174000 does not exist\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b18148a3-3239-458b-b0a2-79e20069fe99",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fcd6839-0ded-46ad-acee-e388638de242",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) UUID of the schedule. Found in the schedule URL after `/schedules/`.\n\nTo find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cecd3556-b63c-4586-b858-ef2137b857d6",
+          "name": "Update schedule",
+          "request": {
+            "name": "Update schedule",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "048ebeb3-f637-4a92-8345-f8fc919b2816",
+              "name": "Schedule updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"scheduledTaskId\": \"775bf871-5129-cf49-86fb-46329027c96f\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe1ada61-038a-4c70-85f8-fac09d7a20c5",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Bad Request: scheduleId: Invalid uuid`\n- `Invalid method`\n- `Bad Request: name: name is required, schedule: schedule is required, timezone: timezone is required, destinationType: Invalid discriminator value. Expected email | webhook | sftp | slack | s3`\n- `schedule: Schedule is an invalid cron expression`\n- `timezone: Time zone must be IANA valid.`\n- `hideTitle can only be used with PDF or PNG formats`\n- `Invalid filter keys found in schedule configuration: <filterKey>. Available dashboard filter keys are: <key1>, <key2>, ....`\n- `Print options are not supported for this format`\n- `Single column layout and table expansion options are not supported for FIT_PAGE format.`\n- `slackRecipientType is required for Slack destinations`\n- `Only one Slack channel is supported per schedule`\n- `Organization does not have a Slack credential configured`\n- `Invalid bucket name`\n- `Invalid role ARN`\n- `Invalid region`\n- `Key prefix contains invalid path traversal`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd651c9e-ec5b-49d8-ac13-e919d9fcf714",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8e9668f-ff52-4d98-b5f6-d866baf229fe",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dbfe65e-517a-421e-af13-dcde880ceb81",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfd6d15e-7080-4af5-a7ab-cb57e0616b4a",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Weekly Sales Report\",\n  \"schedule\": \"0 9 * * MON\",\n  \"timezone\": \"America/New_York\",\n  \"format\": \"pdf\",\n  \"destinationType\": \"email\",\n  \"recipients\": [\n    \"blob.ross@blobsrus.com\"\n  ],\n  \"subject\": \"Weekly Sales Dashboard\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4751b57d-a0e1-4d81-898f-e087b3c544c9",
+          "name": "Delete schedule",
+          "request": {
+            "name": "Delete schedule",
+            "description": {
+              "content": "Deletes a schedule.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "88819e10-031f-4fcd-8af4-fe7a0b3e5c04",
+              "name": "Schedule deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f751e19-ea12-4243-aa3f-2589ffcf7bd1",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `scheduleId: Invalid uuid`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd10f0cf-d92d-4b14-9eb9-d1f4b0052bbf",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8121508-7cd4-4e97-9313-0250b55fe46b",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33809870-8a28-4348-a304-23f2c5b610d2",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a180805e-022c-4753-b375-b0f0586ef8f9",
+          "name": "Trigger schedule",
+          "request": {
+            "name": "Trigger schedule",
+            "description": {
+              "content": "Triggers the execution of a schedule on demand, outside of its regular schedule.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "trigger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5b873c6c-f550-4b82-8345-bb7de6e5bc39",
+              "name": "Schedule triggered successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1b9d62b-f608-4fea-90f9-1b28fcb4e0ff",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Bad Request: scheduleId: Invalid uuid`\n- `Invalid method`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c9e7dd1-3490-425c-b142-e1a50d4c9c3c",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4a07675-bdb5-4ffc-bb88-b578f429e4ff",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f6690be-26a6-4539-b5f9-0ced3d10934f",
+              "name": "409 Conflict\n\nPossible error messages:\n\n- `Cannot trigger schedule while another execution is in progress` - Occurs when an `EMAIL` schedule has more than 50 recipients, has `fanOut: true`, and is currently in progress\n- `Cannot trigger an inactive schedule` - Occurs when the schedule is paused (`disabledAt`) or system-disabled (`systemDisabledAt`)\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "21d50792-3f4d-4483-bb79-e30f19100798",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb00171c-d2f9-452e-8762-f4d78c4722bd",
+              "name": "Internal Server Error\n\nPossible error messages:\n\n- Various error messages related to dispatch failures\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "trigger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7568038d-6e05-491e-97e9-bab2e3b68bfe",
+          "name": "Pause schedule",
+          "request": {
+            "name": "Pause schedule",
+            "description": {
+              "content": "Pauses a schedule.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "pause"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e9622c67-ee41-4105-8b3e-03723acbde96",
+              "name": "Schedule paused successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "595bed78-319a-4538-b7e3-b27a84307791",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Schedule is system disabled`\n- `Schedule is already paused`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "753ebd22-77ad-49f8-b62f-356f5ee3e7ac",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "447d1125-eb5f-4b68-aa98-27279b07c9eb",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e362e399-5371-45a7-b679-c1cc778c29e3",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "pause"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a488216-74e7-471c-b444-706127e1a782",
+          "name": "Resume schedule",
+          "request": {
+            "name": "Resume schedule",
+            "description": {
+              "content": "Resumes a schedule.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "resume"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9c42020a-3ede-40f7-9410-1ef7aca42e70",
+              "name": "Schedule resumed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dbd90746-2ffd-403a-bc57-4ca0de1302d8",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `Schedule is system disabled`\n- `Schedule is already resumed`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17c245a2-407a-4249-9014-d0ea115a3ca4",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "832668ae-0bc7-4eb9-b109-24dbf0335625",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f84d3153-ea9b-4846-9c4f-3561c74cc42e",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae7aef40-2f18-45f1-acf4-297cf139b86d",
+          "name": "Transfer schedule ownership",
+          "request": {
+            "name": "Transfer schedule ownership",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "schedules",
+                ":scheduleId",
+                "transfer-ownership"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "scheduleId",
+                  "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                },
+                {
+                  "description": "Your production Omni instance subdomain",
+                  "type": "any",
+                  "value": "{{instance}}",
+                  "key": "instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c8c14dc-9164-4cfa-b0c9-f094120de40b",
+              "name": "Ownership transferred successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65341fd1-1139-412a-8a10-06115a402626",
+              "name": "Bad Request\n\nPossible error messages:\n\n- `userId: Invalid uuid`\n- `userId is a required field`\n- `User already owns the schedule`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfcf62e5-0559-45f3-96d6-149615c7f5d7",
+              "name": "Forbidden\n\nPossible error messages:\n\n- `New owner does not have permission to view the dashboard`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad50c19a-5f12-45e5-943e-a43584524969",
+              "name": "Not Found\n\nPossible error messages:\n\n- `Scheduled task with id <scheduleId> does not exist`\n- `New owner is not a member of the organization`\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f918821-45bf-4b8e-b4c8-0623f4ed6a1b",
+              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "372749c7-ac8c-4db2-86dd-f5b00aa7b9d2",
+              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "schedules",
+                    ":scheduleId",
+                    "transfer-ownership"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "scheduleId",
+                      "description": "(Required) The ID of the schedule. To find a schedule's ID:\n\n1. Navigate to the dashboard of a document.\n2. Click **File > Deliveries & Alerts**.\n3. Next to a schedule, click **Edit**.\n\nThe schedule's ID is in the page's URL, after `/schedules/`. For example, the schedule ID in this URL is `123e4567-e89b-12d3-a456-426614174000`:\n\n```markdown\nhttps://blobsrus.omniapp.co/dashboards/e23ebaa0/schedules/123e4567-e89b-12d3-a456-426614174000\n```\n"
+                    },
+                    {
+                      "description": "Your production Omni instance subdomain",
+                      "type": "any",
+                      "value": "{{instance}}",
+                      "key": "instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your production Omni instance subdomain",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "blobsrus",
+      "key": "instance"
+    },
+    {
+      "type": "string",
+      "value": "https://{{instance}}.omniapp.co/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "95a22161-8646-4ef1-8229-2249976e9dee",
+    "name": "Omni AI Schedules API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
+      "type": "text/plain"
+    }
+  }
+}
