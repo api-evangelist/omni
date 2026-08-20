@@ -35,6 +35,15 @@ created: '2026-07-17'
 modified: '2026-07-20'
 tags:
 - Company
+- Artificial Intelligence
+- Analytics
+- Business Intelligence
+- Data
+- Embedded Analytics
+- Semantic Layer
+- MCP
+tags_raw:
+- Company
 - Ai
 - Analytics
 - Business Intelligence
@@ -49,6 +58,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Artificial Intelligence
+  tags_raw:
   - AI
   properties:
   - type: OpenAPI
@@ -177,6 +188,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Content Migration
+  tags_raw:
   - Content migration
   properties:
   - type: OpenAPI
@@ -319,6 +332,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Folder Permissions
+  tags_raw:
   - Folder permissions
   properties:
   - type: OpenAPI
@@ -347,6 +362,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -428,6 +445,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Query
+  tags_raw:
   - Queries
   properties:
   - type: OpenAPI
@@ -512,6 +531,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - User Attributes
+  tags_raw:
   - User attributes
   properties:
   - type: OpenAPI
@@ -540,6 +561,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - User Groups
+  tags_raw:
   - User groups
   properties:
   - type: OpenAPI
@@ -568,6 +591,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -582,6 +607,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Whoami
+  tags_raw:
   - Who Am I
   properties:
   - type: OpenAPI
