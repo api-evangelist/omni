@@ -200,7 +200,7 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
-  - Content migration
+  - Content Migration
   tags_raw:
   - Content migration
   properties:
@@ -344,7 +344,7 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
-  - Folder permissions
+  - Folder Permissions
   tags_raw:
   - Folder permissions
   properties:
@@ -543,7 +543,7 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
-  - User attributes
+  - User Attributes
   tags_raw:
   - User attributes
   properties:
@@ -573,7 +573,7 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
-  - User groups
+  - User Groups
   tags_raw:
   - User groups
   properties:
@@ -619,7 +619,7 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
-  - Who Am I
+  - Whoami
   tags_raw:
   - Who Am I
   properties:
