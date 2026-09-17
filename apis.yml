@@ -615,18 +615,16 @@ apis:
     url: https://docs.omni.co/api
   - type: APIReference
     url: https://docs.omni.co/api/api-explorer
-- aid: omni:omni-who-am-i-api
-  name: Omni Who Am I API
+- aid: omni:omni-whoami-api
+  name: Omni Whoami API
   description: Inspect your own user permissions
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
   - Whoami
-  tags_raw:
-  - Who Am I
   properties:
   - type: OpenAPI
-    url: openapi/omni-who-am-i-api-openapi.yml
+    url: openapi/omni-whoami-api-openapi.yml
   - type: Documentation
     url: https://docs.omni.co/api
   - type: APIReference
