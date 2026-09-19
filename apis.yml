@@ -332,6 +332,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Documents V2
+  tags_raw:
   - Documents v2
   properties:
   - type: OpenAPI
@@ -489,6 +491,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Schedule
+  tags_raw:
   - Schedules
   properties:
   - type: OpenAPI
@@ -517,6 +521,8 @@ apis:
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api
   tags:
+  - Topic
+  tags_raw:
   - Topics
   properties:
   - type: OpenAPI
