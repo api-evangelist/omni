@@ -1,0 +1,94 @@
+slug: omni
+provider: Omni
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: Users
+  spec_file: omni-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.82
+  evidence: POST /scim/v2/users createUser 'Create user'; GET /scim/v2/embed/users listEmbeddedUsers;
+    schema 'ScimUser'
+  reason: SCIM-based user provisioning and deprovisioning (including embed users) is joiner-mover-leaver
+    identity administration, not HR record management.
+- tag: User groups
+  spec_file: omni-user-groups-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /scim/v2/groups createUserGroup 'Create user group'; schema 'ScimGroup'
+  reason: SCIM group lifecycle CRUD is directory/group provisioning used to control access — identity
+    and access management, not an industry business function.
+- tag: Documents
+  spec_file: omni-documents-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.75
+  evidence: GET /v1/documents/{documentId}  getDocument  Get dashboard document; POST /v1/documents/{identifier}/upgrade  Upgrade
+    dashboard layout
+  reason: Documents in this BI platform are dashboards/analytical content; create, publish, duplicate
+    and transfer ownership of dashboards is BI content delivery, i.e. Analytics & BI Management. Not generic
+    document management.
+- tag: User group model roles
+  spec_file: omni-user-group-model-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/user-groups/{userGroupId}/model-roles assignUserGroupModelRole 'Assign or update
+    user group model role'
+  reason: Assigning roles on models to user groups is authorisation/entitlement administration, i.e. identity
+    and access management within the platform.
+- tag: User model roles
+  spec_file: omni-user-model-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/users/{userId}/model-roles assignUserModelRole 'Assign or update user model role'
+  reason: Per-user role assignment on models is authorisation administration, mapping to identity and
+    access management.
+- tag: Documents v2
+  spec_file: omni-documents-v2-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: POST /v2/documents/{documentId}/draft/publish  documentsV2PublishDraft  Publish draft; schema
+    DocumentsV2QueryPresentationsRead
+  reason: v2 surface for the same dashboard documents — drafts, publishing and query presentations — which
+    is authoring and publication of BI content.
+- tag: Models
+  spec_file: omni-models-api-openapi.yml
+  capability_id: BC-610.40
+  capability_id_l1: BC-610
+  capability_name: Data Architecture Management
+  confidence: 0.7
+  evidence: GET /v1/models/{modelId}/yaml  getModelYaml  Get model YAML; GET /v1/models/{modelId}/schemas  List
+    model schemas; GET /v1/models/{modelId}/validate  Validate model
+  reason: Creation, YAML definition, schema refresh and validation of the governed semantic model is logical
+    data model management — Data Architecture Management.
+- tag: Queries
+  spec_file: omni-queries-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: POST /v1/query/run  runQuery  Run query; GET /v1/query/wait  waitForQuery  Wait for query
+    results
+  reason: Executing analytical queries against the warehouse via the BI semantic layer delivers reporting/analytics
+    output.
