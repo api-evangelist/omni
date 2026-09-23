@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Labels API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Labels API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -33,9 +33,7 @@ tags:
 
     - **Verified labels**: Indicate curated or officially sanctioned content. Admin-only.
 
-    - **Homepage labels**: Appear on the organization homepage. Admin-only.
-
-    '
+    - **Homepage labels**: Appear on the organization homepage. Admin-only.'
 paths:
   /v1/labels:
     post:
@@ -50,9 +48,7 @@ paths:
 
         - Create **Verified** labels (`verified: true`)
 
-        - Create **Homepage** labels (`homepage: true`)
-
-        '
+        - Create **Homepage** labels (`homepage: true`)'
       security:
       - bearerAuth: []
       operationId: createLabel
@@ -256,9 +252,7 @@ paths:
       description: 'Update an existing label, including renaming, changing **Verified** status, or adding/removing it from the **Homepage**.
 
 
-        Users can update basic labels they created. **Organization Admin** permissions are required to modify **Verified** or **Homepage** labels, including making a label `verified` or visible on the `homepage`.
-
-        '
+        Users can update basic labels they created. **Organization Admin** permissions are required to modify **Verified** or **Homepage** labels, including making a label `verified` or visible on the `homepage`.'
       security:
       - bearerAuth: []
       operationId: updateLabel
@@ -397,9 +391,7 @@ paths:
       description: 'Delete a label from the organization.
 
 
-        Any user can delete basic labels, but **Organization Admin** permissions are required to delete **Verified** and **Homepage** labels.
-
-        '
+        Any user can delete basic labels, but **Organization Admin** permissions are required to delete **Verified** and **Homepage** labels.'
       security:
       - bearerAuth: []
       operationId: deleteLabel
@@ -462,6 +454,17 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     Label:
       type: object
       description: A label for organizing and categorizing documents and folders
@@ -501,17 +504,6 @@ components:
           default: null
           description: Description of the label
           example: Documents based on dev schemas
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)

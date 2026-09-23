@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Queries API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Queries API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -31,9 +31,7 @@ paths:
       tags:
       - Queries
       summary: Run query
-      description: 'Runs the query specified in the request body. Successful requests will return the data as a base64 encoded [Apache Arrow](https://arrow.apache.org/) table, allowing you to extract query results from Omni and use them elsewhere. For example, piping data to Google Sheets or leveraging data in a Python notebook.
-
-        '
+      description: Runs the query specified in the request body. Successful requests will return the data as a base64 encoded Apache Arrow table, allowing you to extract query results from Omni and use them elsewhere. For example, piping data to Google Sheets or leveraging data in a Python notebook.
       x-mint:
         content: '**Encountering timeouts?** If a request takes too long, the API will return a `408 timeout` error with a body that includes a `remaining_job_ids` property. When this occurs, poll the [Wait for query results](/api/queries/wait-for-query-results) endpoint until the `timed_out` property is `false`.
 
@@ -439,12 +437,10 @@ paths:
       tags:
       - Queries
       summary: Wait for query results
-      description: 'Polls for the results of one or more query jobs. Use this endpoint when a request to the [Run query endpoint](/api/queries/run-query) times out and returns `remaining_job_ids` in the response.
+      description: 'Polls for the results of one or more query jobs. Use this endpoint when a request to the Run query endpoint times out and returns `remaining_job_ids` in the response.
 
 
-        This endpoint will wait for the specified jobs to complete and return their results. If the jobs are still processing when the request times out, the response will include the remaining job IDs to poll again.
-
-        '
+        This endpoint will wait for the specified jobs to complete and return their results. If the jobs are still processing when the request times out, the response will include the remaining job IDs to poll again.'
       security:
       - bearerAuth: []
       operationId: waitForQuery

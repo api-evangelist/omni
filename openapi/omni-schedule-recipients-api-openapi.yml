@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Schedule recipients API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Schedule recipients API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -34,9 +34,7 @@ paths:
       description: 'Retrieves the list of recipients for the specified schedule. Successful responses will include the recipients and details about the schedule''s destination type.
 
 
-        To retrieve a schedule''s full configuration, use the [List schedules](/api/schedules#list-schedules) endpoint.
-
-        '
+        To retrieve a schedule''s full configuration, use the List schedules endpoint.'
       security:
       - bearerAuth: []
       operationId: listScheduleRecipients
@@ -503,12 +501,10 @@ paths:
       tags:
       - Schedule recipients
       summary: Bulk manage email-only users
-      description: 'Creates or updates up to 20 [email-only users](/share/deliveries/email). An email-only user is a recipient of a delivery that isn''t associated with an Omni account.
+      description: 'Creates or updates up to 20 email-only users. An email-only user is a recipient of a delivery that isn''t associated with an Omni account.
 
 
-        If Omni matches a provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.
-
-        '
+        If Omni matches a provided email to an existing email-only user, the user will be updated according to the `userAttributes` in the request body.'
       security:
       - orgApiKey: []
       operationId: bulkManageEmailOnlyUsers
@@ -670,35 +666,6 @@ components:
           type: string
           format: uri
           description: The webhook URL.
-    ScheduleRecipientsSftp:
-      type: object
-      description: Response for schedules with SFTP destinations.
-      properties:
-        type:
-          type: string
-          enum:
-          - sftp
-          description: The destination type.
-        address:
-          type: string
-          description: The SFTP server address.
-        port:
-          type: integer
-          description: The SFTP server port.
-        username:
-          type: string
-          description: The SFTP username.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     ScheduleRecipientsEmail:
       type: object
       description: Response for schedules with email destinations.
@@ -727,6 +694,44 @@ components:
               name:
                 type: string
                 description: The recipient's name.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ScheduleRecipientsS3:
+      type: object
+      description: Response for schedules with Amazon S3 destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - s3
+          description: The destination type.
+        bucketName:
+          type: string
+          description: The name of the S3 bucket.
+        region:
+          type: string
+          description: The AWS region of the S3 bucket.
+        roleArn:
+          type: string
+          description: The ARN of the customer's IAM role.
+        externalId:
+          type: string
+          description: The external ID for IAM trust policy configuration.
+        keyPrefix:
+          type: string
+          description: The folder path prefix for uploaded files.
+        filename:
+          type: string
+          description: The filename template using Mustache syntax.
     ScheduleRecipientsSlack:
       type: object
       description: Response for schedules with Slack destinations.
@@ -756,42 +761,33 @@ components:
               slackId:
                 type: string
                 description: The Slack channel or user ID.
-    ScheduleRecipientsS3:
+    ScheduleRecipientsSftp:
       type: object
-      description: Response for schedules with Amazon S3 destinations.
+      description: Response for schedules with SFTP destinations.
       properties:
         type:
           type: string
           enum:
-          - s3
+          - sftp
           description: The destination type.
-        bucketName:
+        address:
           type: string
-          description: The name of the S3 bucket.
-        region:
+          description: The SFTP server address.
+        port:
+          type: integer
+          description: The SFTP server port.
+        username:
           type: string
-          description: The AWS region of the S3 bucket.
-        roleArn:
-          type: string
-          description: The ARN of the customer's IAM role.
-        externalId:
-          type: string
-          description: The external ID for IAM trust policy configuration.
-        keyPrefix:
-          type: string
-          description: The folder path prefix for uploaded files.
-        filename:
-          type: string
-          description: The filename template using Mustache syntax.
+          description: The SFTP username.
   responses:
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:

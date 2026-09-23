@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Document favorites API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Document favorites API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -34,9 +34,7 @@ paths:
       description: 'Add a document to a user''s favorites. Only published documents can be favorited.
 
 
-        **Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user''s favorites.
-
-        '
+        **Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user''s favorites.'
       security:
       - bearerAuth: []
       operationId: favoriteDocument
@@ -98,9 +96,7 @@ paths:
       description: 'Remove a document from a user''s favorites. Only published documents can be unfavorited.
 
 
-        **Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not.
-
-        '
+        **Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not.'
       security:
       - bearerAuth: []
       operationId: unfavoriteDocument
@@ -171,7 +167,13 @@ paths:
       tags:
       - Document favorites
       summary: List document favoriters
-      description: "<Note>\n  This endpoint requires **Manager** or **Owner** permissions on the requested document.\n</Note>\n\nLists users who have favorited a published document, paginated and sorted by `favoritedAt`.\n\nUse this endpoint when you need to know \"who favorited document X\" — for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization.\n"
+      description: 'This endpoint requires **Manager** or **Owner** permissions on the requested document.
+
+
+        Lists users who have favorited a published document, paginated and sorted by `favoritedAt`.
+
+
+        Use this endpoint when you need to know "who favorited document X" — for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization.'
       security:
       - orgApiKey: []
       operationId: listDocumentFavoriters
@@ -368,6 +370,17 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -385,17 +398,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)

@@ -1,0 +1,31 @@
+# Front Door AI Index — omni — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: omni
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: omni.co
+  final_host: omni.co
+  ownership: own
+  owner: omni
+  shares_host_with:
+  - omni-analytics
+  inherited_from: null
+  verdict: scored
+  score: 33
+  host_score: 33
+  density: 35.41
+  words: 932
+  tiers:
+    agentic: 6
+    core: 25
+    model: 2
+  ambiguous: 2
+  top_terms:
+    AI: 25
+    MCP: 5
+    agent: 2
+    ChatGPT: 1
+    Claude: 1
+    embedding: 1

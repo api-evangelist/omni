@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI AI Credit Controls API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni AI Credit Controls API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -28,7 +28,10 @@ tags:
 paths:
   /v1/ai/credit-controls:
     get:
-      description: "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nGet the organization's AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds).\n"
+      description: '**Organization Admin** permissions are required for this endpoint.
+
+
+        Get the organization''s AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds).'
       operationId: aiCreditControlsGet
       summary: Get AI credit controls
       tags:
@@ -57,7 +60,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
-      description: "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nUpdate the organization's AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:\n\n- Omit a field to leave it unchanged\n- Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)\n- Send a non-negative number to set it\n"
+      description: '**Organization Admin** permissions are required for this endpoint.
+
+
+        Update the organization''s AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:
+
+
+        - Omit a field to leave it unchanged
+
+        - Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)
+
+        - Send a non-negative number to set it'
       operationId: aiCreditControlsUpdate
       summary: Update AI credit controls
       tags:
@@ -130,7 +143,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /v1/ai/credit-controls/users:
     get:
-      description: "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nList the organization's active individual user AI credit limits, ordered by `userId` ascending.\n\nOnly users with an individual limit will be returned in the response.\n"
+      description: '**Organization Admin** permissions are required to use this endpoint.
+
+
+        List the organization''s active individual user AI credit limits, ordered by `userId` ascending.
+
+
+        Only users with an individual limit will be returned in the response.'
       operationId: aiCreditControlsUsersList
       summary: List individual users' AI credit limits
       tags:
@@ -222,7 +241,10 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     patch:
-      description: "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nSet individual users' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction.\n"
+      description: '**Organization Admin** permissions are required to use this endpoint.
+
+
+        Set individual users'' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction.'
       operationId: aiCreditControlsUsersUpdate
       summary: Set individual users' AI credit limits
       tags:
@@ -352,7 +374,57 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -370,31 +442,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
     ApiError403:
       type: object
       properties:
@@ -408,16 +455,17 @@ components:
       required:
       - detail
       - status
-    ApiError400:
+    ApiError401:
       type: object
       properties:
         detail:
           type: string
           description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 400
+          example: 401
       required:
       - detail
       - status
@@ -468,32 +516,6 @@ components:
           minimum: 0
           description: Default per-user AI credit limit, or `null` when users are unlimited by default.
           example: 100
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-  responses:
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

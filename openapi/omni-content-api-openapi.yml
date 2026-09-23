@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Content API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Content API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -156,7 +156,42 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    sortDirection:
+      name: sortDirection
+      in: query
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: 'Direction for sorting:
+
+
+        - `asc` - Ascending order (A-Z, 0-9)
+
+        - `desc` - Descending order (Z-A, 9-0)
+
+        '
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     PaginatedResponse:
       type: object
       properties:
@@ -183,41 +218,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-  parameters:
-    sortDirection:
-      name: sortDirection
-      in: query
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-      description: 'Direction for sorting:
-
-
-        - `asc` - Ascending order (A-Z, 0-9)
-
-        - `desc` - Descending order (Z-A, 9-0)
-
-        '
-  responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

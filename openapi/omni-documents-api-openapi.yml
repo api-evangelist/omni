@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Documents API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Documents API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -32,7 +32,10 @@ paths:
       - Documents
       summary: Create document
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nCreate a new document\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        Create a new document'
       security:
       - bearerAuth: []
       operationId: createDocument
@@ -468,9 +471,7 @@ paths:
       tags:
       - Documents
       summary: Move document
-      description: 'Move document to new folder or change scope.
-
-        '
+      description: Move document to new folder or change scope.
       security:
       - bearerAuth: []
       operationId: moveDocument
@@ -711,7 +712,13 @@ paths:
       tags:
       - Documents
       summary: Upgrade dashboard layout
-      description: "Upgrade a document to the advanced dashboard layout — the same action available in the UI under **File > Upgrade layout**.\n\n<Note>\n  This operation is idempotent. If the document already uses the advanced layout, the request is a no-op and returns `upgraded: false`.\n</Note>\n\nFor published documents the upgrade runs through a draft-and-publish workflow automatically. If a draft already exists, the request returns `409` unless `clearExistingDraft` is set to `true`, which discards the existing draft before upgrading.\n"
+      description: 'Upgrade a document to the advanced dashboard layout — the same action available in the UI under **File > Upgrade layout**.
+
+
+        This operation is idempotent. If the document already uses the advanced layout, the request is a no-op and returns `upgraded: false`.
+
+
+        For published documents the upgrade runs through a draft-and-publish workflow automatically. If a draft already exists, the request returns `409` unless `clearExistingDraft` is set to `true`, which discards the existing draft before upgrading.'
       operationId: documentsUpgradeLayout
       parameters:
       - name: identifier
@@ -780,7 +787,30 @@ paths:
       tags:
       - Documents
       summary: Transfer document ownership
-      description: "Transfer ownership of a document to another user in the organization.\n\nTo successfully transfer a document: \n\n- The user performing the transfer must have `MANAGER` permissions or higher on the document\n- The new owner must be a member of the organization AND have explicit access to the document\n\nUpon success, the following occurs: \n\n- Ownership of the document is updated to the new owner\n- The previous owner is granted `MANAGER` permissions on the document\n- Explicit permits for the new owner are revoked, as they now have owner access\n- Content search index is updated\n\n**Note:** Transferring to the current owner is a no-op and returns success.\n"
+      description: 'Transfer ownership of a document to another user in the organization.
+
+
+        To successfully transfer a document:
+
+
+        - The user performing the transfer must have `MANAGER` permissions or higher on the document
+
+        - The new owner must be a member of the organization AND have explicit access to the document
+
+
+        Upon success, the following occurs:
+
+
+        - Ownership of the document is updated to the new owner
+
+        - The previous owner is granted `MANAGER` permissions on the document
+
+        - Explicit permits for the new owner are revoked, as they now have owner access
+
+        - Content search index is updated
+
+
+        **Note:** Transferring to the current owner is a no-op and returns success.'
       security:
       - bearerAuth: []
       operationId: transferDocumentOwnership
@@ -902,7 +932,19 @@ paths:
       - Documents
       summary: Create draft
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Note>\n  This endpoint requires **Editor** permissions or higher on the specified document.\n</Note>\n\nCreates a [draft](/content/develop/drafts) of the specified document. Drafts are isolated copies of a document - including its workbook and dashboard - that can be modified without impacting the published version.\n\nTo create a draft on a [branch](/content/develop/branch-mode), include a `branchId` in the request body. Each branch can have one draft per document.\n\nIf a draft already exists for the document (or branch, if specified), the existing draft is returned instead of creating a new one.\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        This endpoint requires **Editor** permissions or higher on the specified document.
+
+
+        Creates a draft of the specified document. Drafts are isolated copies of a document - including its workbook and dashboard - that can be modified without impacting the published version.
+
+
+        To create a draft on a branch, include a `branchId` in the request body. Each branch can have one draft per document.
+
+
+        If a draft already exists for the document (or branch, if specified), the existing draft is returned instead of creating a new one.'
       security:
       - bearerAuth: []
       operationId: createDraft
@@ -1005,12 +1047,10 @@ paths:
       tags:
       - Documents
       summary: Archive draft
-      description: 'Archives the current draft of the specified document. Archived drafts will be placed in the in the [**Archived** section of the **Drafts** drawer](/content/develop/drafts#archiving-drafts) in the document''s workbook and retained for 30 days.
+      description: 'Archives the current draft of the specified document. Archived drafts will be placed in the in the **Archived** section of the **Drafts** drawer in the document''s workbook and retained for 30 days.
 
 
-        If a branch is specified, the current draft on the branch is archived.
-
-        '
+        If a branch is specified, the current draft on the branch is archived.'
       security:
       - bearerAuth: []
       operationId: archiveDraft
@@ -1066,7 +1106,13 @@ paths:
       tags:
       - Documents
       summary: List document drafts
-      description: "<Note>\n  This endpoint requires **Viewer** permissions or higher on the specified document.\n</Note>\n\nList all drafts attached to a published document. A document in Omni can have up to one draft per branch plus one draft not attached to a branch.\n\nBy default, returns active drafts only. Pass `?include=archived` to include soft-deleted drafts retained for approximately 7 days.\n"
+      description: 'This endpoint requires **Viewer** permissions or higher on the specified document.
+
+
+        List all drafts attached to a published document. A document in Omni can have up to one draft per branch plus one draft not attached to a branch.
+
+
+        By default, returns active drafts only. Pass `?include=archived` to include soft-deleted drafts retained for approximately 7 days.'
       security:
       - bearerAuth: []
       operationId: listDocumentDrafts
@@ -1240,7 +1286,10 @@ paths:
       - Documents
       summary: Get document queries
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves queries associated with a document by its identifier.\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        Retrieves queries associated with a document by its identifier.'
       x-mint:
         content: "<Tip>\n  Check out the [Running document queries with APIs guide](/guides/api/run-document-queries) to learn how to programmatically run the queries you retrieve with this API.\n</Tip>\n"
       security:
@@ -1338,7 +1387,13 @@ paths:
       - Documents
       summary: Get dashboard document
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nRetrieves dashboard document configuration in a format compatible with PUT for round-trip editing. This endpoint returns all fields needed to modify and update a dashboard document.\n\n**Note:** This endpoint only supports dashboard documents. Workbook-only documents are not supported and will return a `400 Bad Request` error.\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        Retrieves dashboard document configuration in a format compatible with PUT for round-trip editing. This endpoint returns all fields needed to modify and update a dashboard document.
+
+
+        **Note:** This endpoint only supports dashboard documents. Workbook-only documents are not supported and will return a `400 Bad Request` error.'
       security:
       - bearerAuth: []
       operationId: getDocument
@@ -1605,7 +1660,26 @@ paths:
       - Documents
       summary: Update document
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\nUpdates the name, description, and/or identifier of a document. **Note**: At least one of `name`, `description`, or `identifier` must be provided or the API will return a `Bad Request` error.\n\nRenaming a document follows the app's draft/publish workflow:\n\n| Document Type | Behavior |\n|---------------|----------|\n| **Draft** | Renamed directly |\n| **Published (no existing draft)** | Creates draft > Renames draft > Publishes draft |\n| **Published (existing draft, `clearExistingDraft: true`)** | Discards existing draft > Creates new draft > Renames > Publishes |\n| **Published (existing draft, `clearExistingDraft` not set)** | Returns `409 Conflict` |\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        Updates the name, description, and/or identifier of a document. **Note**: At least one of `name`, `description`, or `identifier` must be provided or the API will return a `Bad Request` error.
+
+
+        Renaming a document follows the app''s draft/publish workflow:
+
+
+        | Document Type | Behavior |
+
+        |---------------|----------|
+
+        | **Draft** | Renamed directly |
+
+        | **Published (no existing draft)** | Creates draft > Renames draft > Publishes draft |
+
+        | **Published (existing draft, `clearExistingDraft: true`)** | Discards existing draft > Creates new draft > Renames > Publishes |
+
+        | **Published (existing draft, `clearExistingDraft` not set)** | Returns `409 Conflict` |'
       security:
       - bearerAuth: []
       operationId: renameDocument
@@ -1773,7 +1847,13 @@ paths:
       - Documents
       summary: Update dashboard document
       deprecated: true
-      description: "<Warning>\n  **Deprecated** — Removal scheduled for **July 31, 2026**. Use the [Documents v2 API](/api/documents-v2/create-document) instead.\n</Warning>\n\n<Warning>\n  This endpoint only works with dashboard documents. Workbook-only documents are not supported.\n</Warning>\n\nUpdates a document with the specified identifier. This endpoint performs a full resource replacement — all required fields must be provided and existing query presentations are replaced entirely.\n"
+      description: '**Deprecated** — Removal scheduled for **July 31, 2026**. Use the Documents v2 API instead.
+
+
+        This endpoint only works with dashboard documents. Workbook-only documents are not supported.
+
+
+        Updates a document with the specified identifier. This endpoint performs a full resource replacement — all required fields must be provided and existing query presentations are replaced entirely.'
       x-mint:
         content: 'The update operation follows the Omni''s [draft/publish workflow](/content/develop):
 
@@ -2067,7 +2147,7 @@ paths:
       description: 'Remove the dashboard from an existing draft, leaving a workbook-only document. Documents that are already workbook-only will remain unchanged.
 
 
-        Use the [Publish draft endpoint](/api/documents-v2/publish-draft) to apply the changes from this endpoint to the published version of the document. **Note**: Schedules will be removed when the document is published.'
+        Use the Publish draft endpoint to apply the changes from this endpoint to the published version of the document. **Note**: Schedules will be removed when the document is published.'
       operationId: documentsV2RemoveDashboard
       summary: Remove dashboard from document
       tags:
@@ -2132,6 +2212,32 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
     DocumentOwner:
       type: object
       description: Document owner
@@ -2145,6 +2251,12 @@ components:
       required:
       - id
       - name
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     DocumentFolder:
       type:
       - object
@@ -2171,6 +2283,37 @@ components:
       - name
       - path
       - scope
+    ApiError409:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutBody:
+      type: object
+      properties:
+        clearExistingDraft:
+          type: boolean
+          default: false
+          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -2188,6 +2331,86 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
+    DocumentsListResponse:
+      type: object
+      properties:
+        pageInfo:
+          allOf:
+          - $ref: '#/components/schemas/PageInfo'
+          - description: Pagination information
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          description: List of documents
+      required:
+      - pageInfo
+      - records
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutResponse:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: Document identifier
+        upgraded:
+          type: boolean
+          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
+      required:
+      - identifier
+      - upgraded
     Document:
       type: object
       properties:
@@ -2265,158 +2488,15 @@ components:
       - type
       - updatedAt
       - url
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
-    DocumentsV2PatchDraftResponse:
-      type: object
-      required:
-      - description
-      - draftIdentifier
-      - identifier
-      - name
-      properties:
-        identifier:
-          type: string
-          description: Published document identifier the draft targets.
-          example: def456
-        draftIdentifier:
-          type: string
-          description: Identifier of the draft the patch was applied to.
-          example: abc123
-        name:
-          type: string
-          description: Document name.
-          example: Blob Sales
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-          example: Overview of daily Blobs R Us Sales
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    DocumentsListResponse:
-      type: object
-      properties:
-        pageInfo:
-          allOf:
-          - $ref: '#/components/schemas/PageInfo'
-          - description: Pagination information
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document'
-          description: List of documents
-      required:
-      - pageInfo
-      - records
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    DocumentsUpgradeLayoutBody:
-      type: object
-      properties:
-        clearExistingDraft:
-          type: boolean
-          default: false
-          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
-    DocumentsUpgradeLayoutResponse:
-      type: object
-      properties:
-        identifier:
-          type: string
-          description: Document identifier
-        upgraded:
-          type: boolean
-          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
-      required:
-      - identifier
-      - upgraded
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-    ApiError409:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 409
-      required:
-      - detail
-      - status
   responses:
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:

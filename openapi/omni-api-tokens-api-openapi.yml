@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI API Tokens API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni API Tokens API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -31,7 +31,10 @@ paths:
       tags:
       - API Tokens
       summary: List API tokens
-      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nList API token in the organization - including Organization API keys, Personal Access Tokens, and MCP OAuth grants - with optional filtering by type. Only metadata - not actual secret values - are returned.\n"
+      description: 'This endpoint requires **Organization Admin** permissions.
+
+
+        List API token in the organization - including Organization API keys, Personal Access Tokens, and MCP OAuth grants - with optional filtering by type. Only metadata - not actual secret values - are returned.'
       security:
       - bearerAuth: []
       operationId: listApiKeys
@@ -194,7 +197,10 @@ paths:
       tags:
       - API Tokens
       summary: Retrieve an API token
-      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\n  description: Token id. Must be a valid UUID — malformed values return `400`.\n"
+      description: 'This endpoint requires **Organization Admin** permissions.
+
+
+        description: Token id. Must be a valid UUID — malformed values return `400`.'
       responses:
         '200':
           description: Token found successfully.
@@ -314,11 +320,19 @@ paths:
           $ref: '#/components/responses/MethodNotAllowed'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+      operationId: getV1ApiKeysById
+      x-operation-id-source: derived
     delete:
       tags:
       - API Tokens
       summary: Delete API token
-      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nPermanently delete an API token. Works for all token types — Organization API keys, Personal Access Tokens (PATs), and MCP OAuth grants. This is the same as revoking a token in the Omni app.\n\nConcurrent deletes are safe — the first caller receives `200` and the second receives `404` consistently. An Organization Admin can delete the token they authenticated with, which is useful for self-service rotation.\n"
+      description: 'This endpoint requires **Organization Admin** permissions.
+
+
+        Permanently delete an API token. Works for all token types — Organization API keys, Personal Access Tokens (PATs), and MCP OAuth grants. This is the same as revoking a token in the Omni app.
+
+
+        Concurrent deletes are safe — the first caller receives `200` and the second receives `404` consistently. An Organization Admin can delete the token they authenticated with, which is useful for self-service rotation.'
       security:
       - bearerAuth: []
       operationId: deleteApiKey
@@ -419,7 +433,13 @@ paths:
       tags:
       - API Tokens
       summary: Enable or disable API token
-      description: "<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n\nDisable or re-enable an API token. To permanently revoke a token, use the [Delete API token](/api/api-tokens/delete-api-token) endpoint.\n\nThis operation is **idempotent**: calling it twice with the same body produces the same result.\n"
+      description: 'This endpoint requires **Organization Admin** permissions.
+
+
+        Disable or re-enable an API token. To permanently revoke a token, use the Delete API token endpoint.
+
+
+        This operation is **idempotent**: calling it twice with the same body produces the same result.'
       security:
       - bearerAuth: []
       operationId: updateApiKey
@@ -554,7 +574,57 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -572,6 +642,19 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
     ApiError401:
       type: object
       properties:
@@ -586,69 +669,6 @@ components:
       required:
       - detail
       - status
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-  responses:
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

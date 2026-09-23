@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Content migration API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Content migration API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -89,9 +89,7 @@ paths:
       tags:
       - Content migration
       summary: Import dashboard
-      description: 'Import dashboard to Omni instance.
-
-        '
+      description: Import dashboard to Omni instance.
       x-mint:
         content: "<Warning>\n  This API is in beta and may have future breaking changes.\n</Warning>\n"
       security:
@@ -185,6 +183,18 @@ paths:
 
             '
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
   responses:
     BadRequest:
       description: Bad Request - Invalid parameters or request body
@@ -198,18 +208,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Content validator API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Content validator API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -37,9 +37,7 @@ paths:
         This endpoint scans all documents associated with the model and identifies any fields, views, or other model elements referenced in queries that are no longer valid.
 
 
-        You can optionally scope validation to only content that references a specific model element (view, field, or topic) using the `find` and `find_type` parameters. This is useful when you only need to validate content using a specific element, avoiding the overhead of validating all documents.
-
-        '
+        You can optionally scope validation to only content that references a specific model element (view, field, or topic) using the `find` and `find_type` parameters. This is useful when you only need to validate content using a specific element, avoiding the overhead of validating all documents.'
       security:
       - bearerAuth: []
       operationId: validateContent
@@ -310,9 +308,7 @@ paths:
       description: 'Performs find/replace operations on content using the specified model.
 
 
-        This endpoint allows you to replace views or fields across all documents associated with the model. This is useful when renaming model elements and need to update all references.
-
-        '
+        This endpoint allows you to replace views or fields across all documents associated with the model. This is useful when renaming model elements and need to update all references.'
       security:
       - bearerAuth: []
       operationId: findReplaceContent

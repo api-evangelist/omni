@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Uploads API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Uploads API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -31,12 +31,10 @@ paths:
       tags:
       - Uploads
       summary: List uploads
-      description: 'List all uploads ([CSV files and spreadsheets](/analyze-explore/data-input-csvs)) in the organization with metadata and optional filtering.
+      description: 'List all uploads (CSV files and spreadsheets) in the organization with metadata and optional filtering.
 
 
-        This endpoint requires **Organization Admin** permissions.
-
-        '
+        This endpoint requires **Organization Admin** permissions.'
       security:
       - bearerAuth: []
       operationId: listUploads
@@ -223,7 +221,23 @@ paths:
       tags:
       - Uploads
       summary: Upload a CSV file
-      description: "<Note>\n  To use this endpoint:\n  \n  - The **Upload data** setting in **Settings > Content permissions** must enabled by an **Organization Admin**\n  - The authenticating user must have **Restricted Querier** permissions or higher on the model the file will be uploaded to\n</Note>\n\nUpload a CSV file to create a new [data input table](/analyze-explore/data-input-csvs). The file is parsed, converted to Arrow format, uploaded to storage, written to the connection's table upload (scratch) schema, and a view is created in the specified model.\n\nUploaded files:\n\n- Must be a CSV file with `.csv` extension\n- Can have a maximum of 500,000 rows. Files will be truncated if this limit is exceeded.\n"
+      description: 'To use this endpoint:
+
+
+        - The **Upload data** setting in **Settings > Content permissions** must enabled by an **Organization Admin**
+
+        - The authenticating user must have **Restricted Querier** permissions or higher on the model the file will be uploaded to
+
+
+        Upload a CSV file to create a new data input table. The file is parsed, converted to Arrow format, uploaded to storage, written to the connection''s table upload (scratch) schema, and a view is created in the specified model.
+
+
+        Uploaded files:
+
+
+        - Must be a CSV file with `.csv` extension
+
+        - Can have a maximum of 500,000 rows. Files will be truncated if this limit is exceeded.'
       security:
       - bearerAuth: []
       operationId: uploadCsvFile
@@ -368,7 +382,10 @@ paths:
       tags:
       - Uploads
       summary: Delete an upload
-      description: "Delete a CSV upload by its ID. This removes the file from storage and marks the record as deleted.\n\n<Note>\n  This endpoint requires **Organization Admin** permissions.\n</Note>\n"
+      description: 'Delete a CSV upload by its ID. This removes the file from storage and marks the record as deleted.
+
+
+        This endpoint requires **Organization Admin** permissions.'
       security:
       - bearerAuth: []
       operationId: deleteUpload
@@ -426,6 +443,17 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     SuccessResponse:
       type: object
       properties:
@@ -449,17 +477,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)

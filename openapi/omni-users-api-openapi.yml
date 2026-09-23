@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Users API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Users API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -137,7 +137,7 @@ paths:
       tags:
       - Users
       summary: Create user
-      description: Creates a user. To manage model and connection role assignments for users, see the [User model role APIs](/api/user-model-roles).
+      description: Creates a user. To manage model and connection role assignments for users, see the User model role APIs.
       security:
       - orgApiKey: []
       operationId: createUser
@@ -197,9 +197,7 @@ paths:
       tags:
       - Users
       summary: List users
-      description: 'Returns a list of users, sorted by creation time. Use the [List embed users](/api/users/list-embed-users) endpoint to retrieve embed users.
-
-        '
+      description: Returns a list of users, sorted by creation time. Use the List embed users endpoint to retrieve embed users.
       security:
       - orgApiKey: []
       operationId: listUsers
@@ -356,9 +354,7 @@ paths:
       description: 'Replaces the specified user. Per the SCIM 2.0 specification, `PUT` replaces the entire user resource: any optional attribute omitted from the request body is reset to its default value.
 
 
-        To update individual attributes without affecting others, use the [Update user](/api/users/update-user) endpoint, which performs a partial update via `PATCH`.
-
-        '
+        To update individual attributes without affecting others, use the Update user endpoint, which performs a partial update via `PATCH`.'
       security:
       - orgApiKey: []
       operationId: replaceUser
@@ -432,12 +428,10 @@ paths:
       tags:
       - Users
       summary: Update user
-      description: 'Updates the specified user by applying a list of [SCIM 2.0 patch operations](https://datatracker.ietf.org/doc/html/rfc7644#section-3.5.2). Attributes not referenced in the request are left unchanged.
+      description: 'Updates the specified user by applying a list of SCIM 2.0 patch operations. Attributes not referenced in the request are left unchanged.
 
 
-        To replace the entire user resource in a single request, use the [Replace user](/api/users/replace-user) endpoint.
-
-        '
+        To replace the entire user resource in a single request, use the Replace user endpoint.'
       security:
       - orgApiKey: []
       operationId: updateUser
@@ -560,7 +554,7 @@ paths:
       tags:
       - Users
       summary: Delete user
-      description: Deletes the specified user. Use the [Delete embed user](/api/users/delete-embed-user) endpoint to delete embed users.
+      description: Deletes the specified user. Use the Delete embed user endpoint to delete embed users.
       security:
       - orgApiKey: []
       operationId: deleteUser
@@ -582,9 +576,7 @@ paths:
       tags:
       - Users
       summary: List embed users
-      description: 'Returns a list of embed users, sorted by creation time. Use the [List users](/api/users/list-users) endpoint to retrieve standard users.
-
-        '
+      description: Returns a list of embed users, sorted by creation time. Use the List users endpoint to retrieve standard users.
       security:
       - orgApiKey: []
       operationId: listEmbeddedUsers
@@ -697,7 +689,7 @@ paths:
       tags:
       - Users
       summary: Retrieve embed user
-      description: Retrieves an embed user using their unique ID. Use the [Retrieve user](/api/users/retrieve-user) endpoint to retrieve standard users.
+      description: Retrieves an embed user using their unique ID. Use the Retrieve user endpoint to retrieve standard users.
       security:
       - orgApiKey: []
       operationId: getEmbeddedUser
@@ -746,7 +738,7 @@ paths:
       tags:
       - Users
       summary: Delete embed user
-      description: Deletes the specified embed user. Use the [Delete user](/api/users/delete-user) endpoint to delete standard users.
+      description: Deletes the specified embed user. Use the Delete user endpoint to delete standard users.
       security:
       - orgApiKey: []
       operationId: deleteEmbeddedUser
@@ -765,6 +757,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden - Insufficient permissions
       content:
@@ -777,25 +775,30 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request - Invalid parameters or request body
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -813,17 +816,78 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
+    ScimEmbedUser:
       type: object
+      description: An embed user object (SCIM 2.0)
       properties:
-        error:
+        id:
           type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
+          description: Unique identifier for the user
+        userName:
           type: string
-          description: Detailed error description
-          example: <error_reason>
+          description: The user's email address
+        displayName:
+          type: string
+          description: The user's display name
+        active:
+          type: boolean
+          description: Whether the user is active
+        emails:
+          type: array
+          description: The user's email addresses
+          items:
+            type: object
+            properties:
+              primary:
+                type: boolean
+                description: Whether this is the user's primary email
+              value:
+                type: string
+                description: The email address
+        groups:
+          type: array
+          description: User groups that the user belongs to
+          items:
+            type: object
+            properties:
+              display:
+                type: string
+                description: The group's display name
+              value:
+                type: string
+                description: The group's unique identifier
+        meta:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: User
+              description: The type of resource. This will be `User`.
+            created:
+              type: string
+              format: date-time
+              description: The time the user was created
+            lastModified:
+              type: string
+              format: date-time
+              description: The time the user was last uodated
+        schemas:
+          type: array
+          items:
+            type: string
+          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
+
+            '
+        embedEmail:
+          type: string
+          nullable: true
+          description: The embed user's email address
+        embedEntity:
+          type: string
+          description: The embed entity identifier
+        embedExternalId:
+          type: string
+          description: The external ID for the embed user
     ScimUser:
       type: object
       properties:
@@ -899,78 +963,6 @@ components:
               format: date-time
               nullable: true
               description: The timestamp of the user's last login. Will be `null` if the user has never logged in.
-    ScimEmbedUser:
-      type: object
-      description: An embed user object (SCIM 2.0)
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the user
-        userName:
-          type: string
-          description: The user's email address
-        displayName:
-          type: string
-          description: The user's display name
-        active:
-          type: boolean
-          description: Whether the user is active
-        emails:
-          type: array
-          description: The user's email addresses
-          items:
-            type: object
-            properties:
-              primary:
-                type: boolean
-                description: Whether this is the user's primary email
-              value:
-                type: string
-                description: The email address
-        groups:
-          type: array
-          description: User groups that the user belongs to
-          items:
-            type: object
-            properties:
-              display:
-                type: string
-                description: The group's display name
-              value:
-                type: string
-                description: The group's unique identifier
-        meta:
-          type: object
-          properties:
-            resourceType:
-              type: string
-              example: User
-              description: The type of resource. This will be `User`.
-            created:
-              type: string
-              format: date-time
-              description: The time the user was created
-            lastModified:
-              type: string
-              format: date-time
-              description: The time the user was last uodated
-        schemas:
-          type: array
-          items:
-            type: string
-          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
-
-            '
-        embedEmail:
-          type: string
-          nullable: true
-          description: The embed user's email address
-        embedEntity:
-          type: string
-          description: The embed entity identifier
-        embedExternalId:
-          type: string
-          description: The external ID for the embed user
   securitySchemes:
     bearerAuth:
       type: http

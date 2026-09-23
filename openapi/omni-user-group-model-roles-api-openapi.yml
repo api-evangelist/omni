@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI User group model roles API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni User group model roles API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -34,9 +34,7 @@ paths:
       description: 'Assigns or updates a model role for a user group. If the user group already has a role for the specified model, this endpoint will update it to the new role. All members of the user group will inherit this role.
 
 
-        Model roles control what actions user group members can perform on models and connections. To manage user groups, see the [User group APIs](/api/user-groups).
-
-        '
+        Model roles control what actions user group members can perform on models and connections. To manage user groups, see the User group APIs.'
       security:
       - bearerAuth: []
       operationId: assignUserGroupModelRole
@@ -183,9 +181,7 @@ paths:
       tags:
       - User group model roles
       summary: Retrieve user group model roles
-      description: 'Retrieves the model role assignments for a user group.
-
-        '
+      description: Retrieves the model role assignments for a user group.
       security:
       - bearerAuth: []
       operationId: getUserGroupModelRoles

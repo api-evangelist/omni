@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI dbt API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Dbt API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -23,16 +23,19 @@ security:
 - bearerAuth: []
 - orgApiKey: []
 tags:
-- name: dbt
+- name: DBT
   description: Manage dbt configuration for connections
 paths:
   /v1/connections/{connectionId}/dbt:
     get:
       operationId: getDbtConfiguration
       summary: Get dbt configuration
-      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves the dbt configuration for the specified connection.\n"
+      description: '**Connection Admin** permissions are required to use this endpoint.
+
+
+        Retrieves the dbt configuration for the specified connection.'
       tags:
-      - dbt
+      - DBT
       parameters:
       - name: connectionId
         in: path
@@ -139,9 +142,12 @@ paths:
     put:
       operationId: updateDbtConfiguration
       summary: Update dbt configuration
-      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nUpdates the dbt configuration for the specified connection.\n"
+      description: '**Connection Admin** permissions are required to use this endpoint.
+
+
+        Updates the dbt configuration for the specified connection.'
       tags:
-      - dbt
+      - DBT
       parameters:
       - name: connectionId
         in: path
@@ -260,9 +266,12 @@ paths:
     delete:
       operationId: connectionsDbtDelete
       summary: Delete dbt configuration
-      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRemoves the dbt configuration for the specified connection by removing the link to the dbt repository.\n"
+      description: '**Connection Admin** permissions are required to use this endpoint.
+
+
+        Removes the dbt configuration for the specified connection by removing the link to the dbt repository.'
       tags:
-      - dbt
+      - DBT
       parameters:
       - name: connectionId
         in: path
@@ -314,9 +323,15 @@ paths:
   /v1/connections/{connectionId}/dbt/environments:
     post:
       tags:
-      - dbt
+      - DBT
       summary: Create dbt environment
-      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nCreates a new dbt environment on the specified connection, enabling programmatic environment management.\n\nA dbt environment allows you to connect Omni to a specific dbt project and manage dbt-related functionality within the connection context.\n"
+      description: 'This endpoint requires **Connection Admin** permissions for the connection.
+
+
+        Creates a new dbt environment on the specified connection, enabling programmatic environment management.
+
+
+        A dbt environment allows you to connect Omni to a specific dbt project and manage dbt-related functionality within the connection context.'
       security:
       - bearerAuth: []
       operationId: createDbtEnvironment
@@ -501,9 +516,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
     get:
       tags:
-      - dbt
+      - DBT
       summary: List dbt environments
-      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nRetrieves a list of all dbt environments configured for the specified connection.\n"
+      description: 'This endpoint requires **Connection Admin** permissions for the connection.
+
+
+        Retrieves a list of all dbt environments configured for the specified connection.'
       security:
       - bearerAuth: []
       operationId: listDbtEnvironments
@@ -589,9 +607,12 @@ paths:
   /v1/connections/{connectionId}/dbt/environments/{environmentId}:
     put:
       tags:
-      - dbt
+      - DBT
       summary: Update dbt environment
-      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nUpdates an existing dbt environment on the specified connection. All fields are optional; only the provided fields will be updated.\n"
+      description: 'This endpoint requires **Connection Admin** permissions for the connection.
+
+
+        Updates an existing dbt environment on the specified connection. All fields are optional; only the provided fields will be updated.'
       security:
       - bearerAuth: []
       operationId: updateDbtEnvironment
@@ -778,9 +799,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
     delete:
       tags:
-      - dbt
+      - DBT
       summary: Delete dbt environment
-      description: "<Note>\n  This endpoint requires **Connection Admin** permissions for the connection.\n</Note>\n\nDeletes an existing dbt environment from the specified connection. This action cannot be undone.\n"
+      description: 'This endpoint requires **Connection Admin** permissions for the connection.
+
+
+        Deletes an existing dbt environment from the specified connection. This action cannot be undone.'
       security:
       - bearerAuth: []
       operationId: deleteDbtEnvironment
@@ -845,9 +869,15 @@ paths:
     get:
       operationId: getDbtExposures
       summary: Get dbt exposures
-      description: "<Note>\n  **Connection Admin** permissions are required to use this endpoint.\n</Note>\n\nRetrieves dbt exposures for the specified model. This endpoint computes exposures on-demand by analyzing which dbt models are referenced by dashboards that use the specified model.\n\nThis enables automated retrieval of exposure data previously only available via the manual **Sync exposures** flow in Omni, making it ideal for CI/CD pipelines and automated workflows.\n"
+      description: '**Connection Admin** permissions are required to use this endpoint.
+
+
+        Retrieves dbt exposures for the specified model. This endpoint computes exposures on-demand by analyzing which dbt models are referenced by dashboards that use the specified model.
+
+
+        This enables automated retrieval of exposure data previously only available via the manual **Sync exposures** flow in Omni, making it ideal for CI/CD pipelines and automated workflows.'
       tags:
-      - dbt
+      - DBT
       security:
       - bearerAuth: []
       parameters:
@@ -1028,11 +1058,9 @@ paths:
   /v1/models/{modelId}/branch/{branchName}/dbt:
     post:
       tags:
-      - dbt
+      - DBT
       summary: Set dbt environment on model branch
-      description: 'Sets the active dbt environment on a model branch. This endpoint allows you to programmatically configure which dbt environment a branch should use, enabling CI/CD pipelines to automate dbt environment configuration before triggering schema refreshes.
-
-        '
+      description: Sets the active dbt environment on a model branch. This endpoint allows you to programmatically configure which dbt environment a branch should use, enabling CI/CD pipelines to automate dbt environment configuration before triggering schema refreshes.
       security:
       - bearerAuth: []
       operationId: setModelBranchDbtEnvironment
@@ -1186,6 +1214,23 @@ components:
                 description: 'Whether the variable value is secret.
 
                   '
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -1203,24 +1248,13 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
   responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden - Insufficient permissions
       content:
@@ -1229,12 +1263,6 @@ components:
             $ref: '#/components/schemas/Error'
     MethodNotAllowed:
       description: Method Not Allowed - Invalid HTTP method for this endpoint
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI AI Routines API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni AI Routines API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -29,7 +29,13 @@ paths:
   /v1/ai/routines:
     get:
       summary: List AI Routines
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nList AI Routines for the calling user, newest first. Includes routines paused by the owner or disabled by Omni, but excludes deleted routines. \n\nUse `pageInfo.nextCursor` from one response as the `cursor` query parameter on the next request. \n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        List AI Routines for the calling user, newest first. Includes routines paused by the owner or disabled by Omni, but excludes deleted routines.
+
+
+        Use `pageInfo.nextCursor` from one response as the `cursor` query parameter on the next request.'
       operationId: aiRoutinesList
       tags:
       - AI Routines
@@ -143,7 +149,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       summary: Create an AI Routine
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nCreate a new AI Routine that will run on the specified schedule.\n\nEach scheduled run executes once using the routine owner's permissions, and every recipient receives the same result.\n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        Create a new AI Routine that will run on the specified schedule.
+
+
+        Each scheduled run executes once using the routine owner''s permissions, and every recipient receives the same result.'
       operationId: routineCreate
       tags:
       - AI Routines
@@ -255,7 +267,10 @@ paths:
   /v1/ai/routines/{routineId}:
     get:
       summary: Get an AI Routine
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRetrieve details for a specific AI Routine by ID, including the status of its most recent completed run.\n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        Retrieve details for a specific AI Routine by ID, including the status of its most recent completed run.'
       operationId: routineGet
       tags:
       - AI Routines
@@ -317,7 +332,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       summary: Update an AI Routine
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nUpdate an existing AI Routine. All request fields are optional, and only supplied fields are changed. Supplying `destination` replaces the full recipient configuration.\n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        Update an existing AI Routine. All request fields are optional, and only supplied fields are changed. Supplying `destination` replaces the full recipient configuration.'
       operationId: routineUpdate
       tags:
       - AI Routines
@@ -421,7 +439,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       summary: Delete an AI Routine
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nDelete an AI Routine. This action cannot be undone.\n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        Delete an AI Routine. This action cannot be undone.'
       operationId: routineDelete
       tags:
       - AI Routines
@@ -496,7 +517,16 @@ paths:
       tags:
       - AI Routines
       summary: Run AI routine now
-      description: "<Note>\n  AI routines must be enabled for your organization to use this endpoint.\n</Note>\n\nRun an existing routine immediately, in addition to its schedule — e.g. to get an off-cycle result or verify a routine produces the email you expect.\n\nExecutes once using the routine owner's permissions and delivers the AI response to every recipient configured on the routine. Returns as soon as the run has started; the result arrives asynchronously via the routine's normal email delivery.\n\nIf a run is already in progress, the endpoint returns `409` rather than starting a second one. Manual runs that hit broken configuration will return `400` but not pause the schedule.\n"
+      description: 'AI routines must be enabled for your organization to use this endpoint.
+
+
+        Run an existing routine immediately, in addition to its schedule — e.g. to get an off-cycle result or verify a routine produces the email you expect.
+
+
+        Executes once using the routine owner''s permissions and delivers the AI response to every recipient configured on the routine. Returns as soon as the run has started; the result arrives asynchronously via the routine''s normal email delivery.
+
+
+        If a run is already in progress, the endpoint returns `409` rather than starting a second one. Manual runs that hit broken configuration will return `400` but not pause the schedule.'
       security:
       - bearerAuth: []
       operationId: triggerAIRoutine
@@ -569,62 +599,19 @@ paths:
                 $ref: '#/components/schemas/ApiError409'
 components:
   schemas:
-    RoutineLastRun:
-      type: object
-      nullable: true
-      required:
-      - completedAt
-      - label
-      - state
-      description: Most recent completed run, or null if the routine has never completed a run.
-      properties:
-        completedAt:
-          type: string
-          nullable: true
-          description: ISO 8601 timestamp the last completed run finished.
-        label:
-          type: string
-          description: User-visible status of the last completed run.
-          example: Delivered
-        state:
-          type: string
-          description: Machine-readable status of the last completed run.
-          example: COMPLETE
-    RoutineDestination:
-      oneOf:
-      - $ref: '#/components/schemas/RoutineEmailDestination'
-      - $ref: '#/components/schemas/RoutineSlackDestination'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/RoutineEmailDestination'
-          slack: '#/components/schemas/RoutineSlackDestination'
-      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
-    ApiError401:
+    ApiError429:
       type: object
       properties:
         detail:
           type: string
           description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 401
+          example: 429
       required:
       - detail
       - status
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     Routine:
       type: object
       properties:
@@ -702,89 +689,6 @@ components:
       - timezone
       - topicName
       - updatedAt
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    ApiError429:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 429
-      required:
-      - detail
-      - status
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    RoutineSlackDestination:
-      type: object
-      required:
-      - recipientId
-      - slackRecipientType
-      - type
-      additionalProperties: false
-      description: Slack delivery configuration for the routine. Requires a Slack workspace connected to Omni; to deliver to a private channel, invite the Omni Slackbot to it first.
-      properties:
-        recipientId:
-          type: string
-          minLength: 1
-          description: The Slack channel ID (e.g. `C01234567`) or user ID (e.g. `U01234567`) that receives each scheduled run. Exactly one recipient per Slack routine.
-          example: C01234567
-        slackRecipientType:
-          type: string
-          enum:
-          - channel
-          - users
-          description: Whether `recipientId` is a Slack channel or a user (delivered as a direct message).
-          example: channel
-        type:
-          type: string
-          enum:
-          - slack
-          description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
-          example: slack
     RoutineEmailDestination:
       type: object
       required:
@@ -819,19 +723,6 @@ components:
           description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
           example:
           - 550e8400-e29b-41d4-a716-446655440000
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
     ApiError409:
       type: object
       properties:
@@ -845,15 +736,154 @@ components:
       required:
       - detail
       - status
+    RoutineDestination:
+      oneOf:
+      - $ref: '#/components/schemas/RoutineEmailDestination'
+      - $ref: '#/components/schemas/RoutineSlackDestination'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/RoutineEmailDestination'
+          slack: '#/components/schemas/RoutineSlackDestination'
+      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
+    RoutineLastRun:
+      type: object
+      nullable: true
+      required:
+      - completedAt
+      - label
+      - state
+      description: Most recent completed run, or null if the routine has never completed a run.
+      properties:
+        completedAt:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp the last completed run finished.
+        label:
+          type: string
+          description: User-visible status of the last completed run.
+          example: Delivered
+        state:
+          type: string
+          description: Machine-readable status of the last completed run.
+          example: COMPLETE
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    RoutineSlackDestination:
+      type: object
+      required:
+      - recipientId
+      - slackRecipientType
+      - type
+      additionalProperties: false
+      description: Slack delivery configuration for the routine. Requires a Slack workspace connected to Omni; to deliver to a private channel, invite the Omni Slackbot to it first.
+      properties:
+        recipientId:
+          type: string
+          minLength: 1
+          description: The Slack channel ID (e.g. `C01234567`) or user ID (e.g. `U01234567`) that receives each scheduled run. Exactly one recipient per Slack routine.
+          example: C01234567
+        slackRecipientType:
+          type: string
+          enum:
+          - channel
+          - users
+          description: Whether `recipientId` is a Slack channel or a user (delivered as a direct message).
+          example: channel
+        type:
+          type: string
+          enum:
+          - slack
+          description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
+          example: slack
   responses:
-    InternalServerError:
-      description: Internal Server Error
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:

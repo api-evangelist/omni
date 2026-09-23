@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Omni AI API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -31,9 +31,7 @@ paths:
       tags:
       - AI
       summary: Get AI Agent branding
-      description: 'Return the organization''s AI Agent''s [branding configuration](/ai/settings/branding), including display name, custom logo URL, and copy for AI Agent landing surfaces. Falls back to Omni''s default values when custom branding hasn''t been configured.
-
-        '
+      description: Return the organization's AI Agent's branding configuration, including display name, custom logo URL, and copy for AI Agent landing surfaces. Falls back to Omni's default values when custom branding hasn't been configured.
       security:
       - bearerAuth: []
       operationId: getAiBranding
@@ -345,7 +343,10 @@ paths:
       tags:
       - AI
       summary: Pick topic
-      description: "Analyze a natural language prompt and determines which topic in the model is the best fit for answering the question. \n\nUseful as a preprocessing step before calling the [Generate AI query](/api/ai/generate-a-query) or [Create AI job](/api/ai/create-ai-job) endpoints, especially when the user's question could relate to multiple topics.\n"
+      description: 'Analyze a natural language prompt and determines which topic in the model is the best fit for answering the question.
+
+
+        Useful as a preprocessing step before calling the Generate AI query or Create AI job endpoints, especially when the user''s question could relate to multiple topics.'
       security:
       - bearerAuth: []
       operationId: aiPickTopic
@@ -395,12 +396,10 @@ paths:
       tags:
       - AI
       summary: List AI conversations
-      description: 'List a user''s recent AI conversations, ordered by most-recent activity. Each conversation includes an ID that can be passed as `conversationId` to subsequent [Create AI job](/api/ai/create-ai-job) requests to continue the thread.
+      description: 'List a user''s recent AI conversations, ordered by most-recent activity. Each conversation includes an ID that can be passed as `conversationId` to subsequent Create AI job requests to continue the thread.
 
 
-        Returns a paginated list with conversation metadata including optional names and the most recent user prompt for display purposes.
-
-        '
+        Returns a paginated list with conversation metadata including optional names and the most recent user prompt for display purposes.'
       security:
       - bearerAuth: []
       operationId: listAIConversations
@@ -555,9 +554,7 @@ paths:
 
         - Organization API keys can access any conversation in the organization
 
-        - Personal Access Tokens can only access the authenticating user''s conversations
-
-        '
+        - Personal Access Tokens can only access the authenticating user''s conversations'
       security:
       - bearerAuth: []
       operationId: getConversation
@@ -752,7 +749,48 @@ paths:
       tags:
       - AI
       summary: Create AI job
-      description: "Submit a new AI job for asynchronous execution. The AI will analyze the prompt, generate and execute queries against the specified model, and produce a summarized answer. \n\nJobs are processed by a background worker and typically complete within 15–60 seconds. Use [Get AI job status](/api/ai/get-ai-job-status) to poll for status, or configure a `webhookUrl` to receive a notification when the job completes. Optionally continue an existing conversation by providing a `conversationId`.\n\n#### Webhook notifications\n\nIf a `webhookUrl` is configured, it will receive a `POST` with the following body when the job reaches a terminal state:\n\n```json\n{\n  \"event_id\": \"evt_550e8400_COMPLETE_1706123456\",\n  \"jobId\": \"550e8400-...\",\n  \"status\": \"COMPLETE\",\n  \"result_summary\": \"Generated revenue report showing $1.2M total revenue\",\n  \"metadata\": { \"slack_channel\": \"C123456\" },\n  \"completed_at\": \"2025-01-24T10:30:00Z\"\n}\n```\n\nThe request will also include the following signature headers:\n\n- `X-Omni-Signature-Timestamp` - `unix`\n- `X-Omni-Signature` - (`sha256=HMAC(timestamp.body, secret)`)\n\n<Note>\n  The webhook payload includes `result_summary` which can contain actual data values from query results. Full result detail (CSV data, query definitions, actions) requires calling the [Stream AI job results endpoint](/api/ai/stream-ai-job-results) with credentials.\n</Note>\n"
+      description: 'Submit a new AI job for asynchronous execution. The AI will analyze the prompt, generate and execute queries against the specified model, and produce a summarized answer.
+
+
+        Jobs are processed by a background worker and typically complete within 15–60 seconds. Use Get AI job status to poll for status, or configure a `webhookUrl` to receive a notification when the job completes. Optionally continue an existing conversation by providing a `conversationId`.
+
+
+        #### Webhook notifications
+
+
+        If a `webhookUrl` is configured, it will receive a `POST` with the following body when the job reaches a terminal state:
+
+
+        ```json
+
+        {
+
+        "event_id": "evt_550e8400_COMPLETE_1706123456",
+
+        "jobId": "550e8400-...",
+
+        "status": "COMPLETE",
+
+        "result_summary": "Generated revenue report showing $1.2M total revenue",
+
+        "metadata": { "slack_channel": "C123456" },
+
+        "completed_at": "2025-01-24T10:30:00Z"
+
+        }
+
+        ```
+
+
+        The request will also include the following signature headers:
+
+
+        - `X-Omni-Signature-Timestamp` - `unix`
+
+        - `X-Omni-Signature` - (`sha256=HMAC(timestamp.body, secret)`)
+
+
+        The webhook payload includes `result_summary` which can contain actual data values from query results. Full result detail (CSV data, query definitions, actions) requires calling the Stream AI job results endpoint with credentials.'
       security:
       - bearerAuth: []
       operationId: createAIJob
@@ -927,9 +965,7 @@ paths:
         The response fields vary by `state` — for example, `progress` is only present during `EXECUTING`, and `resultSummary` is only present when `COMPLETE`.
 
 
-        Poll this endpoint every 2–5 seconds until the job reaches a terminal state (`COMPLETE`, `FAILED`, or `CANCELLED`).
-
-        '
+        Poll this endpoint every 2–5 seconds until the job reaches a terminal state (`COMPLETE`, `FAILED`, or `CANCELLED`).'
       security:
       - bearerAuth: []
       operationId: getAIJobStatus
@@ -1238,7 +1274,14 @@ paths:
       tags:
       - AI
       summary: Cancel AI job
-      description: "Request cancellation of an AI job. This endpoint is idempotent — calling it on an already-cancelled or completed job returns success with the current state. \n\n- For `QUEUED` jobs, cancellation is immediate\n- For `EXECUTING` jobs, the worker will stop after completing its current iteration\n- Jobs in a `DELIVERING` state cannot be cancelled as they are already finalizing results. **Only the job owner or organization admins can cancel jobs.**\n"
+      description: 'Request cancellation of an AI job. This endpoint is idempotent — calling it on an already-cancelled or completed job returns success with the current state.
+
+
+        - For `QUEUED` jobs, cancellation is immediate
+
+        - For `EXECUTING` jobs, the worker will stop after completing its current iteration
+
+        - Jobs in a `DELIVERING` state cannot be cancelled as they are already finalizing results. **Only the job owner or organization admins can cancel jobs.**'
       security:
       - bearerAuth: []
       operationId: cancelAIJob
@@ -1324,7 +1367,10 @@ paths:
       tags:
       - AI
       summary: Stream AI job results
-      description: "Retrieve the full result of a completed AI job, including all actions taken by the AI (queries generated, data retrieved) and the final summarized answer. \n\nResults are only available for jobs in `COMPLETE` state and are retained for 14 days after completion. The response is streamed directly from storage.\n"
+      description: 'Retrieve the full result of a completed AI job, including all actions taken by the AI (queries generated, data retrieved) and the final summarized answer.
+
+
+        Results are only available for jobs in `COMPLETE` state and are retained for 14 days after completion. The response is streamed directly from storage.'
       security:
       - bearerAuth: []
       operationId: getAIJobResult
@@ -1492,34 +1538,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     AiPickTopicBody:
       type: object
       required:
@@ -1587,6 +1605,34 @@ components:
             **Note:** Users with topic-locked permissions cannot use this parameter, even if the model setting is enabled.
 
             '
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
     AiPickTopicResponse:
       type: object
       required:
@@ -1602,14 +1648,14 @@ components:
             '
           example: order_items
   responses:
-    InternalServerError:
-      description: Internal Server Error
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:

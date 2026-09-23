@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Omni AI Documents v2 API
-  description: "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n"
+  title: Omni Documents v2 API
+  description: The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.
   version: 1.0.0
   contact:
     name: Omni Support
@@ -23,15 +23,13 @@ security:
 - bearerAuth: []
 - orgApiKey: []
 tags:
-- name: Documents v2
-  description: 'A draft-based workflow for creating and editing documents: create a document, patch a draft, then publish. Replaces the one-shot `PUT`/`PATCH` v1 document write endpoints.
-
-    '
+- name: Documents V2
+  description: 'A draft-based workflow for creating and editing documents: create a document, patch a draft, then publish. Replaces the one-shot `PUT`/`PATCH` v1 document write endpoints.'
 paths:
   /v2/documents:
     post:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Create document
       description: 'Create a brand-new document and publish it live in a single call. Accepts creation metadata (`modelId`, `name`, and optional `identifier` / `description` / `folderId`) plus the same content slice as the draft patch body — `queryPresentations`, `controls`, `settings`, and `containers`.
 
@@ -39,9 +37,7 @@ paths:
         Tiles are addressed by their record key in `queryPresentations.data` (e.g. `"1"`, `"2"`); the server owns internal tile identity, so you never send `miniUuid`. A new document starts with a single empty seed tile at key `"1"` — write to `"1"` (or send it as `null`) to replace the seed.
 
 
-        Because this is the first publish of brand-new content, it is not subject to the organization''s `requirePullRequestToPublish` policy (which gates edits to existing content).
-
-        '
+        Because this is the first publish of brand-new content, it is not subject to the organization''s `requirePullRequestToPublish` policy (which gates edits to existing content).'
       x-mint:
         content: '## Content sections
 
@@ -166,20 +162,18 @@ paths:
   /v2/documents/{documentId}:
     get:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Get document state
-      description: 'Read the document''s published state. To read a draft''s state, use [Get draft state](/api/documents-v2/get-draft-state) instead.
+      description: 'Read the document''s published state. To read a draft''s state, use Get draft state instead.
 
 
-        The response can be used as-is as the request body in a call to the [Patch draft API](/api/documents-v2/patch-draft).
+        The response can be used as-is as the request body in a call to the Patch draft API.
 
 
         Tiles in `queryPresentations.data` are keyed by a stable record key (e.g. `"1"`, `"2"`); the server uses that key to identify existing tiles on a later patch, so you never need to track any other identifier. Control IDs and container `instanceKey` / `referenceKey` values also round-trip unchanged.
 
 
-        A workbook-only document (no dashboard layout yet) returns only the workbook-scoped fields (`name`, `description`, `queryPresentations`); the dashboard-scoped `containers`, `controls`, and `settings` are omitted until a layout exists.
-
-        '
+        A workbook-only document (no dashboard layout yet) returns only the workbook-scoped fields (`name`, `description`, `queryPresentations`); the dashboard-scoped `containers`, `controls`, and `settings` are omitted until a layout exists.'
       security:
       - bearerAuth: []
       operationId: documentsV2Get
@@ -232,11 +226,9 @@ paths:
   /v2/documents/{documentId}/draft:
     patch:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Create draft and patch document
-      description: 'Create a new draft on the published document and apply the patch in one call. There is no auto-publish — the response includes the new `draftIdentifier` for follow-up calls. Pass an optional `branchId` to attach the draft to a branch; omit it for a draft on the main (unpublished) workspace.
-
-        '
+      description: Create a new draft on the published document and apply the patch in one call. There is no auto-publish — the response includes the new `draftIdentifier` for follow-up calls. Pass an optional `branchId` to attach the draft to a branch; omit it for a draft on the main (unpublished) workspace.
       x-mint:
         content: "## Draft → publish workflow\n\nEditing an existing document is a three-step flow:\n\n1. **`PATCH /api/v2/documents/{documentId}/draft`** *(this endpoint)* — creates a new draft on the published document and applies your patch. Returns the new `draftIdentifier`.\n2. *(optional)* [**`PATCH /api/v2/documents/{documentId}/draft/{draftId}`**](/api/documents-v2/patch-draft) — apply further patches to that draft.\n3. [**`POST /api/v2/documents/{documentId}/draft/publish`**](/api/documents-v2/publish-draft) — publish the main draft live.\n\nA document may have only one main draft at a time. If one already exists, this endpoint returns `409` — patch the existing draft (step 2) or publish/discard it first. This replaces v1's `clearExistingDraft` flag, which **does not exist** in v2.\n\nA `GET` response is a valid `PATCH` body — [read the current state](/api/documents-v2/get-document-state), edit it, and submit it back verbatim.\n\n## Field constraints\n\n| Field | Limit | Error (`400`) |\n|-------|-------|---------------|\n| `name` (document) | 1–254 characters | `name cannot be empty` · `name must be 254 characters or fewer` |\n| `summary` | 1–255 characters, optional | `summary cannot be empty` · `summary must be 255 characters or fewer` |\n| `queryPresentations.data.{key}.name` | 1–144 characters | `name must be 144 characters or fewer` |\n| `queryPresentations.data.{key}.subTitle` | ≤ 250 characters | `subTitle must be 250 characters or fewer` |\n| `queryPresentations.data.{key}.description` | ≤ 500 characters | `description must be 500 characters or fewer` |\n| `queryPresentations.data` | ≤ 48 non-null entries per patch | `A single patch may carry at most 48 query presentations.` |\n\n`summary` is an audit-trail note describing the change (never returned by reads); when omitted the server generates one from the touched sections. Null `queryPresentations.data` entries (deletions) do not count toward the 48-entry cap.\n\n## Addressing tiles (no `miniUuid`)\n\nTiles are addressed by their record key in `queryPresentations.data` (e.g. `\"2\"`). The server owns internal tile identity, so you never send or manage `miniUuid`:\n\n- **New key** → a new tile is created.\n- **Existing key, identical content** (a verbatim round-trip of a `GET`) → treated as a **no-op** and dropped from the patch.\n- **Existing key, changed content** → the tile is updated (the server regenerates its internal identifier).\n- **`linked`-type tabs** always re-resolve — they are excluded from no-op detection.\n- Query presentations are immutable server-side: replace a tile by key, don't mutate it in place.\n\n`data` is **shallow-merged** by key — omitted keys are untouched; `data.{key}: null` deletes that tile. `order`, when present, replaces the tab order. `controls` and `settings` are likewise shallow-merged; `containers`, when present, fully replaces the layout.\n\n## AI summaries via linked tiles\n\nThere is no `narrative` field. To attach an AI-style summary that reuses another tile's query, add a `linked`-type query presentation whose `sourceQueryPresentationKey` points at the source tile's record key (a string such as `\"2\"` — **not** a positional index into `order`):\n\n```json\n{\n  \"queryPresentations\": {\n    \"data\": {\n      \"3\": {\n        \"type\": \"linked\",\n        \"name\": \"Summary\",\n        \"sourceQueryPresentationKey\": \"2\"\n      }\n    }\n  }\n}\n```\n"
       security:
@@ -350,14 +342,12 @@ paths:
   /v2/documents/{documentId}/draft/publish:
     post:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Publish draft
       description: 'Publish the document''s current main (non-branch) draft, promoting it to the published version. No request body — the draft is consumed, so the response echoes the now-published document''s metadata.
 
 
-        Only the main draft is publishable here. A branch-attached draft is published by [merging its branch](/api/model-branches/merge-a-branch) (`POST /api/v1/models/{modelId}/branch/{branchName}/merge`), so a document with no main draft returns `404`.
-
-        '
+        Only the main draft is publishable here. A branch-attached draft is published by merging its branch (`POST /api/v1/models/{modelId}/branch/{branchName}/merge`), so a document with no main draft returns `404`.'
       security:
       - bearerAuth: []
       operationId: documentsV2PublishDraft
@@ -418,11 +408,9 @@ paths:
   /v2/documents/{documentId}/draft/{draftId}:
     get:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Get draft state
-      description: 'Read the named draft''s state. Returns the same `DocumentsV2ReadResponse` shape as [Get document state](/api/documents-v2/get-document-state), and is round-trippable as a `PATCH` body.
-
-        '
+      description: Read the named draft's state. Returns the same `DocumentsV2ReadResponse` shape as Get document state, and is round-trippable as a `PATCH` body.
       security:
       - bearerAuth: []
       operationId: documentsV2GetDraft
@@ -480,11 +468,9 @@ paths:
                 $ref: '#/components/schemas/Error'
     patch:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Patch draft
-      description: 'Apply a patch to an existing draft addressed by `draftId`. Pure apply — no draft creation, no publish. The request body, content sections, field caps, and tile-addressing rules are identical to [Create draft and patch document](/api/documents-v2/create-draft-and-patch-document); this route does not accept `branchId`.
-
-        '
+      description: Apply a patch to an existing draft addressed by `draftId`. Pure apply — no draft creation, no publish. The request body, content sections, field caps, and tile-addressing rules are identical to Create draft and patch document; this route does not accept `branchId`.
       security:
       - bearerAuth: []
       operationId: documentsV2PatchDraftByIdentifier
@@ -576,7 +562,7 @@ paths:
   /v2/documents/{documentId}/identifier:
     put:
       tags:
-      - Documents v2
+      - Documents V2
       summary: Rename document identifier
       description: 'Rename a published document''s identifier. The change is applied live and immediately. Changes do not go through the draft/publish workflow. The former identifier is recorded in the document''s rename history to enable automatic redirects. Only published documents can be renamed.
 
@@ -704,6 +690,95 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    DocumentsV2SettingsPatch:
+      type: object
+      description: Document settings. Shallow-merged with the existing settings.
+      properties:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+              description: Custom text shown when a query errors, replacing the default error text.
+            queryNoResults:
+              type: string
+              description: Custom text shown when a query returns no results, replacing the default empty state.
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
+          type:
+          - string
+          - 'null'
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
+    DocumentsV2PublishDraftResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2CreateResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Identifier of the newly created document.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2QueryPresentationsRead:
+      type: object
+      required:
+      - data
+      - order
+      properties:
+        data:
+          type: object
+          description: Tabs keyed by record key (a positive-integer string).
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentsV2QueryPresentation'
+        order:
+          type: array
+          description: Tab display order.
+          items:
+            type: string
+            pattern: ^[1-9][0-9]*$
     DocumentsV2ReadResponse:
       type: object
       required:
@@ -743,291 +818,6 @@ components:
           $ref: '#/components/schemas/DocumentsV2SettingsRead'
         containers:
           $ref: '#/components/schemas/DocumentsV2Containers'
-    DocumentsV2SettingsRead:
-      type: object
-      required:
-      - crossfilterEnabled
-      - customText
-      - facetFilters
-      - refreshInterval
-      - runQueriesOn
-      properties:
-        crossfilterEnabled:
-          type: boolean
-          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
-        customText:
-          type:
-          - object
-          - 'null'
-          description: Custom text replacing default UI strings on the dashboard.
-          properties:
-            queryError:
-              type: string
-            queryNoResults:
-              type: string
-        facetFilters:
-          type: boolean
-          description: When true, dashboard filters are applied per-facet when faceting is active.
-        refreshInterval:
-          type:
-          - number
-          - 'null'
-          description: Auto-refresh interval in seconds. Null disables auto-refresh.
-        runQueriesOn:
-          type:
-          - string
-          - 'null'
-          enum:
-          - current-page
-          - all-pages
-          - null
-          description: Controls whether dashboard queries execute on the visible page or across all pages.
-    DocumentsV2Control:
-      type: object
-      additionalProperties: true
-      description: 'A dashboard control (filter). The full config grammar — control type, field bindings, filter values, and (for multi-field filters) the recursive composite-filter grammar — is validated by the server on apply. See the dashboard filters & controls reference for the complete structure.
-
-        '
-    DocumentsV2QueryPresentationsRead:
-      type: object
-      required:
-      - data
-      - order
-      properties:
-        data:
-          type: object
-          description: Tabs keyed by record key (a positive-integer string).
-          additionalProperties:
-            $ref: '#/components/schemas/DocumentsV2QueryPresentation'
-        order:
-          type: array
-          description: Tab display order.
-          items:
-            type: string
-            pattern: ^[1-9][0-9]*$
-    DocumentsV2CreateDraftBody:
-      type: object
-      additionalProperties: false
-      description: The draft-route patch body plus an optional `branchId` selecting the branch the new draft is attached to.
-      properties:
-        branchId:
-          type: string
-          format: uuid
-          description: Branch the draft is created on. Omit for a draft on the main (unpublished) workspace.
-        modelId:
-          type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
-        workbookModelId:
-          type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
-        name:
-          type: string
-          minLength: 1
-          maxLength: 254
-          description: Document name.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-        summary:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
-        queryPresentations:
-          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
-        controls:
-          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
-        settings:
-          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
-        containers:
-          allOf:
-          - $ref: '#/components/schemas/DocumentsV2Containers'
-          - description: Container layout. When present, fully replaces the existing layout.
-    DocumentsV2SettingsPatch:
-      type: object
-      description: Document settings. Shallow-merged with the existing settings.
-      properties:
-        crossfilterEnabled:
-          type: boolean
-          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
-        customText:
-          type:
-          - object
-          - 'null'
-          description: Custom text replacing default UI strings on the dashboard.
-          properties:
-            queryError:
-              type: string
-              description: Custom text shown when a query errors, replacing the default error text.
-            queryNoResults:
-              type: string
-              description: Custom text shown when a query returns no results, replacing the default empty state.
-        facetFilters:
-          type: boolean
-          description: When true, dashboard filters are applied per-facet when faceting is active.
-        refreshInterval:
-          type:
-          - number
-          - 'null'
-          description: Auto-refresh interval in seconds. Null disables auto-refresh.
-        runQueriesOn:
-          type:
-          - string
-          - 'null'
-          enum:
-          - current-page
-          - all-pages
-          - null
-          description: Controls whether dashboard queries execute on the visible page or across all pages.
-    DocumentsV2Containers:
-      type: array
-      description: 'Container layout array (grid / stack / page / reference containers, recursively nested). On a patch, when present this **fully replaces** the existing layout. The server validates the full structure on apply; container `instanceKey` / `referenceKey` values round-trip unchanged. See the dashboard layout reference for the complete grammar.
-
-        '
-      items:
-        type: object
-        additionalProperties: true
-    DocumentsV2PatchDraftBody:
-      type: object
-      additionalProperties: false
-      description: The content/metadata diff applied to a draft. All fields optional — only the sections present are changed.
-      properties:
-        modelId:
-          type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
-        workbookModelId:
-          type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
-        name:
-          type: string
-          minLength: 1
-          maxLength: 254
-          description: Document name.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-        summary:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
-        queryPresentations:
-          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
-        controls:
-          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
-        settings:
-          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
-        containers:
-          allOf:
-          - $ref: '#/components/schemas/DocumentsV2Containers'
-          - description: Container layout. When present, fully replaces the existing layout.
-    DocumentsV2QueryPresentationsPatch:
-      type: object
-      description: Query presentations (tabs/tiles) keyed by record key.
-      properties:
-        data:
-          type: object
-          description: 'Tabs keyed by record key (a positive-integer string, e.g. `"1"`, `"2"`). Shallow-merged by key — omitted keys are untouched; set a key to `null` to delete that tab. Capped at 48 non-null entries per patch.
-
-            '
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/DocumentsV2QueryPresentation'
-            - type: 'null'
-        order:
-          type: array
-          description: Tab display order. When present, replaces the existing order.
-          items:
-            type: string
-            pattern: ^[1-9][0-9]*$
-    DocumentsV2PublishDraftResponse:
-      type: object
-      required:
-      - description
-      - identifier
-      - name
-      properties:
-        identifier:
-          type: string
-          description: Published document identifier.
-        name:
-          type: string
-          description: Document name.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-    DocumentsV2CreateBody:
-      type: object
-      required:
-      - modelId
-      - name
-      additionalProperties: false
-      properties:
-        modelId:
-          type: string
-          format: uuid
-          description: Base workbook model the document is built on — a SHARED model, or a SHARED_EXTENSION with `allowAsWorkbookBase = true`.
-        name:
-          type: string
-          minLength: 1
-          maxLength: 254
-          description: Document name.
-        identifier:
-          type: string
-          pattern: ^[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$
-          description: 'Identifier (URL slug) for the new document. Must be unique within the organization; auto-generated when omitted. Lowercase letters, numbers, hyphens, and underscores only; cannot start or end with a hyphen or underscore.
-
-            '
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-        folderId:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Folder to create the document in. When omitted, defaults to the caller's personal "My documents" (requires permission to save personal content — otherwise the request is rejected).
-        summary:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Caller-supplied note describing the create, written to the history audit trail. When omitted, Omni auto-fills it with `"Created document"`.
-        queryPresentations:
-          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
-        controls:
-          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
-        settings:
-          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
-        containers:
-          $ref: '#/components/schemas/DocumentsV2Containers'
-    DocumentsV2ControlsPatch:
-      type: object
-      description: Dashboard filters/controls keyed by control ID.
-      properties:
-        data:
-          type: object
-          description: Controls keyed by control ID. Shallow-merged by key — omitted keys are untouched; set to `null` to delete.
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/DocumentsV2Control'
-            - type: 'null'
-        order:
-          type: array
-          description: Display order for controls. When present, replaces the existing order.
-          items:
-            type: string
     Error:
       type: object
       properties:
@@ -1039,50 +829,22 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    DocumentsV2CreateResponse:
+    DocumentsV2ControlsRead:
       type: object
       required:
-      - description
-      - identifier
-      - name
+      - data
+      - order
       properties:
-        identifier:
-          type: string
-          description: Identifier of the newly created document.
-        name:
-          type: string
-          description: Document name.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-    DocumentsV2PatchDraftResponse:
-      type: object
-      required:
-      - description
-      - draftIdentifier
-      - identifier
-      - name
-      properties:
-        identifier:
-          type: string
-          description: Published document identifier the draft targets.
-          example: def456
-        draftIdentifier:
-          type: string
-          description: Identifier of the draft the patch was applied to.
-          example: abc123
-        name:
-          type: string
-          description: Document name.
-          example: Blob Sales
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-          example: Overview of daily Blobs R Us Sales
+        data:
+          type: object
+          description: Controls keyed by control ID.
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentsV2Control'
+        order:
+          type: array
+          description: Display order for controls.
+          items:
+            type: string
     DocumentsV2QueryPresentation:
       type: object
       required:
@@ -1185,31 +947,255 @@ components:
           - 'null'
           additionalProperties: true
           description: AI-generated metadata config (subtitle/description auto-generation settings).
-    DocumentsV2ControlsRead:
+    DocumentsV2CreateDraftBody:
       type: object
-      required:
-      - data
-      - order
+      additionalProperties: false
+      description: The draft-route patch body plus an optional `branchId` selecting the branch the new draft is attached to.
+      properties:
+        branchId:
+          type: string
+          format: uuid
+          description: Branch the draft is created on. Omit for a draft on the main (unpublished) workspace.
+        modelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
+        workbookModelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          allOf:
+          - $ref: '#/components/schemas/DocumentsV2Containers'
+          - description: Container layout. When present, fully replaces the existing layout.
+    DocumentsV2ControlsPatch:
+      type: object
+      description: Dashboard filters/controls keyed by control ID.
       properties:
         data:
           type: object
-          description: Controls keyed by control ID.
+          description: Controls keyed by control ID. Shallow-merged by key — omitted keys are untouched; set to `null` to delete.
           additionalProperties:
-            $ref: '#/components/schemas/DocumentsV2Control'
+            oneOf:
+            - $ref: '#/components/schemas/DocumentsV2Control'
+            - type: 'null'
         order:
           type: array
-          description: Display order for controls.
+          description: Display order for controls. When present, replaces the existing order.
           items:
             type: string
+    DocumentsV2Containers:
+      type: array
+      description: 'Container layout array (grid / stack / page / reference containers, recursively nested). On a patch, when present this **fully replaces** the existing layout. The server validates the full structure on apply; container `instanceKey` / `referenceKey` values round-trip unchanged. See the dashboard layout reference for the complete grammar.
+
+        '
+      items:
+        type: object
+        additionalProperties: true
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
+    DocumentsV2QueryPresentationsPatch:
+      type: object
+      description: Query presentations (tabs/tiles) keyed by record key.
+      properties:
+        data:
+          type: object
+          description: 'Tabs keyed by record key (a positive-integer string, e.g. `"1"`, `"2"`). Shallow-merged by key — omitted keys are untouched; set a key to `null` to delete that tab. Capped at 48 non-null entries per patch.
+
+            '
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentsV2QueryPresentation'
+            - type: 'null'
+        order:
+          type: array
+          description: Tab display order. When present, replaces the existing order.
+          items:
+            type: string
+            pattern: ^[1-9][0-9]*$
+    DocumentsV2Control:
+      type: object
+      additionalProperties: true
+      description: 'A dashboard control (filter). The full config grammar — control type, field bindings, filter values, and (for multi-field filters) the recursive composite-filter grammar — is validated by the server on apply. See the dashboard filters & controls reference for the complete structure.
+
+        '
+    DocumentsV2CreateBody:
+      type: object
+      required:
+      - modelId
+      - name
+      additionalProperties: false
+      properties:
+        modelId:
+          type: string
+          format: uuid
+          description: Base workbook model the document is built on — a SHARED model, or a SHARED_EXTENSION with `allowAsWorkbookBase = true`.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        identifier:
+          type: string
+          pattern: ^[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$
+          description: 'Identifier (URL slug) for the new document. Must be unique within the organization; auto-generated when omitted. Lowercase letters, numbers, hyphens, and underscores only; cannot start or end with a hyphen or underscore.
+
+            '
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        folderId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Folder to create the document in. When omitted, defaults to the caller's personal "My documents" (requires permission to save personal content — otherwise the request is rejected).
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied note describing the create, written to the history audit trail. When omitted, Omni auto-fills it with `"Created document"`.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          $ref: '#/components/schemas/DocumentsV2Containers'
+    DocumentsV2PatchDraftBody:
+      type: object
+      additionalProperties: false
+      description: The content/metadata diff applied to a draft. All fields optional — only the sections present are changed.
+      properties:
+        modelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
+        workbookModelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          allOf:
+          - $ref: '#/components/schemas/DocumentsV2Containers'
+          - description: Container layout. When present, fully replaces the existing layout.
+    DocumentsV2SettingsRead:
+      type: object
+      required:
+      - crossfilterEnabled
+      - customText
+      - facetFilters
+      - refreshInterval
+      - runQueriesOn
+      properties:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+            queryNoResults:
+              type: string
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
+          type:
+          - string
+          - 'null'
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
