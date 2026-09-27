@@ -454,18 +454,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)
@@ -479,6 +467,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
   securitySchemes:
     bearerAuth:
       type: http

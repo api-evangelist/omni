@@ -106,6 +106,33 @@ paths:
                 $ref: '#/components/schemas/ApiError403'
 components:
   schemas:
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
     WhoamiModelRole:
       type: object
       required:
@@ -148,19 +175,6 @@ components:
           type: string
           description: The resolved role name; may be a custom role. Use `permissions` to decide capability.
           example: QUERIER
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
     WhoamiUser:
       type: object
       required:
@@ -173,20 +187,6 @@ components:
         membershipId:
           type: string
           description: The caller's own membership ID within this organization. This is the ID accepted by the [Get model roles endpoint](/api/user-model-roles/retrieve-user-model-roles) and is distinct from the user ID.
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
   securitySchemes:
     bearerAuth:
       type: http

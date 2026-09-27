@@ -2212,6 +2212,45 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutResponse:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: Document identifier
+        upgraded:
+          type: boolean
+          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
+      required:
+      - identifier
+      - upgraded
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
     DocumentsV2PatchDraftResponse:
       type: object
       required:
@@ -2238,51 +2277,6 @@ components:
           - 'null'
           description: Document description.
           example: Overview of daily Blobs R Us Sales
-    DocumentOwner:
-      type: object
-      description: Document owner
-      properties:
-        id:
-          type: string
-          description: Owner membership ID
-        name:
-          type: string
-          description: Owner display name
-      required:
-      - id
-      - name
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-    DocumentFolder:
-      type:
-      - object
-      - 'null'
-      description: Folder containing the document
-      properties:
-        id:
-          type: string
-          description: Folder ID
-        name:
-          type: string
-          description: Folder name
-        path:
-          type: string
-          description: Folder path
-        scope:
-          type: string
-          enum:
-          - restricted
-          - organization
-          description: Folder access scope
-      required:
-      - id
-      - name
-      - path
-      - scope
     ApiError409:
       type: object
       properties:
@@ -2296,13 +2290,6 @@ components:
       required:
       - detail
       - status
-    DocumentsUpgradeLayoutBody:
-      type: object
-      properties:
-        clearExistingDraft:
-          type: boolean
-          default: false
-          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
     Error:
       type: object
       properties:
@@ -2314,103 +2301,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
-    DocumentsListResponse:
-      type: object
-      properties:
-        pageInfo:
-          allOf:
-          - $ref: '#/components/schemas/PageInfo'
-          - description: Pagination information
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document'
-          description: List of documents
-      required:
-      - pageInfo
-      - records
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-    DocumentsUpgradeLayoutResponse:
-      type: object
-      properties:
-        identifier:
-          type: string
-          description: Document identifier
-        upgraded:
-          type: boolean
-          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
-      required:
-      - identifier
-      - upgraded
     Document:
       type: object
       properties:
@@ -2488,15 +2378,125 @@ components:
       - type
       - updatedAt
       - url
+    DocumentFolder:
+      type:
+      - object
+      - 'null'
+      description: Folder containing the document
+      properties:
+        id:
+          type: string
+          description: Folder ID
+        name:
+          type: string
+          description: Folder name
+        path:
+          type: string
+          description: Folder path
+        scope:
+          type: string
+          enum:
+          - restricted
+          - organization
+          description: Folder access scope
+      required:
+      - id
+      - name
+      - path
+      - scope
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    DocumentOwner:
+      type: object
+      description: Document owner
+      properties:
+        id:
+          type: string
+          description: Owner membership ID
+        name:
+          type: string
+          description: Owner display name
+      required:
+      - id
+      - name
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutBody:
+      type: object
+      properties:
+        clearExistingDraft:
+          type: boolean
+          default: false
+          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
+    DocumentsListResponse:
+      type: object
+      properties:
+        pageInfo:
+          allOf:
+          - $ref: '#/components/schemas/PageInfo'
+          - description: Pagination information
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          description: List of documents
+      required:
+      - pageInfo
+      - records
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

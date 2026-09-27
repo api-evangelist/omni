@@ -255,7 +255,7 @@ apis:
   - type: APIReference
     url: https://docs.omni.co/api/api-explorer
 - aid: omni:omni-dbt-api
-  name: Omni dbt API
+  name: Omni Dbt API
   description: Manage dbt configuration for connections
   humanURL: https://docs.omni.co/api
   baseURL: https://blobsrus.omniapp.co/api

@@ -1847,12 +1847,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
     Error:
       type: object
       properties:
@@ -1864,6 +1858,12 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -1882,8 +1882,8 @@ components:
           type: integer
           description: Total number of records matching the query.
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
@@ -1894,8 +1894,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

@@ -666,6 +666,17 @@ components:
           type: string
           format: uri
           description: The webhook URL.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     ScheduleRecipientsEmail:
       type: object
       description: Response for schedules with email destinations.
@@ -694,17 +705,6 @@ components:
               name:
                 type: string
                 description: The recipient's name.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     ScheduleRecipientsS3:
       type: object
       description: Response for schedules with Amazon S3 destinations.
@@ -780,14 +780,14 @@ components:
           type: string
           description: The SFTP username.
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

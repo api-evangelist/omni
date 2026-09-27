@@ -156,31 +156,16 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    sortDirection:
-      name: sortDirection
-      in: query
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-      description: 'Direction for sorting:
-
-
-        - `asc` - Ascending order (A-Z, 0-9)
-
-        - `desc` - Descending order (Z-A, 9-0)
-
-        '
   schemas:
+    PaginatedResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            type: object
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
     Error:
       type: object
       properties:
@@ -192,15 +177,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    PaginatedResponse:
-      type: object
-      properties:
-        records:
-          type: array
-          items:
-            type: object
-        pageInfo:
-          $ref: '#/components/schemas/PageInfo'
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -218,6 +194,30 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
+  parameters:
+    sortDirection:
+      name: sortDirection
+      in: query
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: 'Direction for sorting:
+
+
+        - `asc` - Ascending order (A-Z, 0-9)
+
+        - `desc` - Descending order (Z-A, 9-0)
+
+        '
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

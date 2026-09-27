@@ -599,16 +599,17 @@ paths:
                 $ref: '#/components/schemas/ApiError409'
 components:
   schemas:
-    ApiError429:
+    ApiError401:
       type: object
       properties:
         detail:
           type: string
           description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 429
+          example: 401
       required:
       - detail
       - status
@@ -689,6 +690,40 @@ components:
       - timezone
       - topicName
       - updatedAt
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    RoutineLastRun:
+      type: object
+      nullable: true
+      required:
+      - completedAt
+      - label
+      - state
+      description: Most recent completed run, or null if the routine has never completed a run.
+      properties:
+        completedAt:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp the last completed run finished.
+        label:
+          type: string
+          description: User-visible status of the last completed run.
+          example: Delivered
+        state:
+          type: string
+          description: Machine-readable status of the last completed run.
+          example: COMPLETE
     RoutineEmailDestination:
       type: object
       required:
@@ -736,37 +771,6 @@ components:
       required:
       - detail
       - status
-    RoutineDestination:
-      oneOf:
-      - $ref: '#/components/schemas/RoutineEmailDestination'
-      - $ref: '#/components/schemas/RoutineSlackDestination'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/RoutineEmailDestination'
-          slack: '#/components/schemas/RoutineSlackDestination'
-      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
-    RoutineLastRun:
-      type: object
-      nullable: true
-      required:
-      - completedAt
-      - label
-      - state
-      description: Most recent completed run, or null if the routine has never completed a run.
-      properties:
-        completedAt:
-          type: string
-          nullable: true
-          description: ISO 8601 timestamp the last completed run finished.
-        label:
-          type: string
-          description: User-visible status of the last completed run.
-          example: Delivered
-        state:
-          type: string
-          description: Machine-readable status of the last completed run.
-          example: COMPLETE
     Error:
       type: object
       properties:
@@ -778,32 +782,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -821,33 +799,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
     RoutineSlackDestination:
       type: object
       required:
@@ -875,15 +826,64 @@ components:
           - slack
           description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
           example: slack
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    RoutineDestination:
+      oneOf:
+      - $ref: '#/components/schemas/RoutineEmailDestination'
+      - $ref: '#/components/schemas/RoutineSlackDestination'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/RoutineEmailDestination'
+          slack: '#/components/schemas/RoutineSlackDestination'
+      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
+    ApiError429:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 429
+      required:
+      - detail
+      - status
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

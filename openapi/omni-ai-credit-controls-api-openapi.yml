@@ -374,20 +374,34 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
     Error:
       type: object
       properties:
@@ -399,32 +413,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -442,33 +430,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    ApiError403:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
     AiCreditControlsResponse:
       type: object
       required:
@@ -516,6 +477,45 @@ components:
           minimum: 0
           description: Default per-user AI credit limit, or `null` when users are unlimited by default.
           example: 100
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+  responses:
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

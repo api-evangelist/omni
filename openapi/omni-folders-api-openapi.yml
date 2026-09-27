@@ -704,12 +704,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
     Error:
       type: object
       properties:
@@ -721,6 +715,12 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
