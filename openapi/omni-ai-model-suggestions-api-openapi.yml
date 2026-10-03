@@ -988,6 +988,94 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    SuggestionContextEdit:
+      type: object
+      required:
+      - field
+      - target
+      - value
+      properties:
+        field:
+          type: string
+          description: The model field being edited (e.g. `ai_context`).
+          example: ai_context
+        target:
+          type: string
+          description: Dot-path identifying what the edit applies to, e.g. `views.orders.fields.status`.
+          example: views.orders
+        value:
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+          description: The proposed value for the field.
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    SuggestionEvidenceItem:
+      type: object
+      required:
+      - type
+      - chatAiSessionId
+      - capturedAt
+      properties:
+        type:
+          type: string
+          enum:
+          - ai_chat
+          description: The kind of evidence. Currently always `ai_chat`.
+        chatAiSessionId:
+          type: string
+          format: uuid
+          description: Chat session that motivated the suggestion.
+        capturedAt:
+          type: string
+          description: ISO 8601 timestamp of when the evidence was captured.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
     ApiError401:
       type: object
       properties:
@@ -1002,7 +1090,7 @@ components:
       required:
       - detail
       - status
-    ApiError403:
+    ApiError400:
       type: object
       properties:
         detail:
@@ -1011,20 +1099,7 @@ components:
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    ApiError409:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 409
+          example: 400
       required:
       - detail
       - status
@@ -1099,23 +1174,6 @@ components:
           type: string
           format: date-time
           description: ISO 8601 timestamp of the last write of any kind, including dismiss/restore.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
     SuggestionRun:
       type: object
       description: Represents a single AI model suggestion generation run.
@@ -1190,90 +1248,6 @@ components:
           nullable: true
           additionalProperties: {}
           description: Failure details when `status` is `failed`; `null` otherwise.
-    SuggestionEvidenceItem:
-      type: object
-      required:
-      - type
-      - chatAiSessionId
-      - capturedAt
-      properties:
-        type:
-          type: string
-          enum:
-          - ai_chat
-          description: The kind of evidence. Currently always `ai_chat`.
-        chatAiSessionId:
-          type: string
-          format: uuid
-          description: Chat session that motivated the suggestion.
-        capturedAt:
-          type: string
-          description: ISO 8601 timestamp of when the evidence was captured.
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    SuggestionContextEdit:
-      type: object
-      required:
-      - field
-      - target
-      - value
-      properties:
-        field:
-          type: string
-          description: The model field being edited (e.g. `ai_context`).
-          example: ai_context
-        target:
-          type: string
-          description: Dot-path identifying what the edit applies to, e.g. `views.orders.fields.status`.
-          example: views.orders
-        value:
-          anyOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-          description: The proposed value for the field.
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
     SuggestionProposedChanges:
       type: object
       description: The change(s) the suggestion would apply to the model.
@@ -1290,6 +1264,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SuggestionContextEdit'
+    ApiError409:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
   responses:
     InternalServerError:
       description: Internal Server Error

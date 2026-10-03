@@ -584,20 +584,18 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    QueryTimeoutError:
-      description: Timeout
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/QueryTimeoutResponse'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     QueryTimeoutResponse:
       type: object
       properties:
@@ -614,17 +612,19 @@ components:
         timed_out:
           type: boolean
           description: Indicates that the request timed out. Will be `true` for 408 responses.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
+  responses:
+    QueryTimeoutError:
+      description: Timeout
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QueryTimeoutResponse'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

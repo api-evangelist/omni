@@ -756,38 +756,107 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    NotFound:
-      description: Not Found - Resource does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden - Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request - Invalid parameters or request body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    ScimEmbedUser:
+      type: object
+      description: An embed user object (SCIM 2.0)
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        userName:
+          type: string
+          description: The user's email address
+        displayName:
+          type: string
+          description: The user's display name
+        active:
+          type: boolean
+          description: Whether the user is active
+        emails:
+          type: array
+          description: The user's email addresses
+          items:
+            type: object
+            properties:
+              primary:
+                type: boolean
+                description: Whether this is the user's primary email
+              value:
+                type: string
+                description: The email address
+        groups:
+          type: array
+          description: User groups that the user belongs to
+          items:
+            type: object
+            properties:
+              display:
+                type: string
+                description: The group's display name
+              value:
+                type: string
+                description: The group's unique identifier
+        meta:
+          type: object
+          properties:
+            resourceType:
+              type: string
+              example: User
+              description: The type of resource. This will be `User`.
+            created:
+              type: string
+              format: date-time
+              description: The time the user was created
+            lastModified:
+              type: string
+              format: date-time
+              description: The time the user was last uodated
+        schemas:
+          type: array
+          items:
+            type: string
+          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
+
+            '
+        embedEmail:
+          type: string
+          nullable: true
+          description: The embed user's email address
+        embedEntity:
+          type: string
+          description: The embed entity identifier
+        embedExternalId:
+          type: string
+          description: The external ID for the embed user
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     ScimUser:
       type: object
       properties:
@@ -863,106 +932,37 @@ components:
               format: date-time
               nullable: true
               description: The timestamp of the user's last login. Will be `null` if the user has never logged in.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    ScimEmbedUser:
-      type: object
-      description: An embed user object (SCIM 2.0)
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the user
-        userName:
-          type: string
-          description: The user's email address
-        displayName:
-          type: string
-          description: The user's display name
-        active:
-          type: boolean
-          description: Whether the user is active
-        emails:
-          type: array
-          description: The user's email addresses
-          items:
-            type: object
-            properties:
-              primary:
-                type: boolean
-                description: Whether this is the user's primary email
-              value:
-                type: string
-                description: The email address
-        groups:
-          type: array
-          description: User groups that the user belongs to
-          items:
-            type: object
-            properties:
-              display:
-                type: string
-                description: The group's display name
-              value:
-                type: string
-                description: The group's unique identifier
-        meta:
-          type: object
-          properties:
-            resourceType:
-              type: string
-              example: User
-              description: The type of resource. This will be `User`.
-            created:
-              type: string
-              format: date-time
-              description: The time the user was created
-            lastModified:
-              type: string
-              format: date-time
-              description: The time the user was last uodated
-        schemas:
-          type: array
-          items:
-            type: string
-          description: 'SCIM information about the type of schemas used in the API. For example, `urn:ietf:params:scim:schemas:core:2.0:User`
-
-            '
-        embedEmail:
-          type: string
-          nullable: true
-          description: The embed user's email address
-        embedEntity:
-          type: string
-          description: The embed entity identifier
-        embedExternalId:
-          type: string
-          description: The external ID for the embed user
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

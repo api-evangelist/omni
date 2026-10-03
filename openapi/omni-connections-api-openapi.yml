@@ -713,72 +713,13 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    NotFound:
-      description: Not Found - Resource does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden - Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request - Invalid parameters or request body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     SuccessResponse:
       type: object
       properties:
         success:
           type: boolean
           example: true
-    Dialect:
-      type: string
-      description: 'The database dialect.
-
-        '
-      enum:
-      - athena
-      - bigquery
-      - clickhouse
-      - databricks
-      - databricks_lakebase
-      - exasol
-      - mariadb
-      - motherduck
-      - mssql
-      - mysql
-      - oracle
-      - postgres
-      - redshift
-      - sap_hana
-      - snowflake
-      - starrocks
-      - trino
     Connection:
       type: object
       properties:
@@ -833,6 +774,65 @@ components:
           type: string
           example: public
           description: The default schema to use.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    Dialect:
+      type: string
+      description: 'The database dialect.
+
+        '
+      enum:
+      - athena
+      - bigquery
+      - clickhouse
+      - databricks
+      - databricks_lakebase
+      - exasol
+      - mariadb
+      - motherduck
+      - mssql
+      - mysql
+      - oracle
+      - postgres
+      - redshift
+      - sap_hana
+      - snowflake
+      - starrocks
+      - trino
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     sortDirection:
       name: sortDirection

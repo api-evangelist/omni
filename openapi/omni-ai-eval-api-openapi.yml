@@ -800,20 +800,48 @@ paths:
                 status: 404
 components:
   schemas:
-    EvalPromptSetsCreateResponse:
+    EvalRunsCancelResponse:
       type: object
       properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
+        cancelled:
+          type: integer
+          description: Number of per-prompt agentic jobs that were cancelled by this request.
+          example: 4
+        run:
+          allOf:
+          - $ref: '#/components/schemas/EvalRunDetail'
+          - description: 'The cancelled run. `status: CANCELLED` and `is_archived: true` after this call.'
+        total:
+          type: integer
+          description: Total number of per-prompt jobs in the run.
+          example: 12
       required:
-      - prompt_set
-    EvalPromptSetsUnarchiveResponse:
+      - cancelled
+      - run
+      - total
+    EvalRunsListResponse:
       type: object
       properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalRunListItem'
+          description: Runs for the prompt set, newest first, filtered to those whose model the caller can access.
       required:
-      - prompt_set
+      - runs
+    EvalApiError:
+      type: object
+      description: Error response returned by the AI Eval endpoints.
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+      required:
+      - detail
+      - status
     EvalRunDetail:
       type: object
       properties:
@@ -898,37 +926,52 @@ components:
       - run_number
       - status
       description: The newly created run with its initial results.
-    EvalRunsCancelResponse:
+    EvalRunStats:
       type: object
       properties:
-        cancelled:
+        terminal:
           type: integer
-          description: Number of per-prompt agentic jobs that were cancelled by this request.
-          example: 4
-        run:
-          allOf:
-          - $ref: '#/components/schemas/EvalRunDetail'
-          - description: 'The cancelled run. `status: CANCELLED` and `is_archived: true` after this call.'
+          description: Number of per-prompt jobs that have reached a terminal state (COMPLETE, FAILED, or CANCELLED).
+          example: 8
         total:
           type: integer
           description: Total number of per-prompt jobs in the run.
           example: 12
       required:
-      - cancelled
-      - run
+      - terminal
       - total
-    EvalRunsCreateResponse:
+    EvalPromptSetsDeleteResponse:
       type: object
       properties:
-        job_count:
+        cancelled_job_count:
           type: integer
-          description: Number of per-prompt agentic jobs created for this run (one per prompt that fanned out successfully). Enqueue onto the work queue happens after creation and is best-effort, so this count reflects jobs created, not necessarily those successfully enqueued.
-          example: 12
-        run:
-          $ref: '#/components/schemas/EvalRunDetail'
+          description: Number of in-flight agentic jobs associated with this prompt set that were cancelled as part of the archive.
+          example: 0
+        is_archived:
+          type: boolean
+          enum:
+          - true
+          description: Always `true` on success — archives the prompt set.
       required:
-      - job_count
-      - run
+      - cancelled_job_count
+      - is_archived
+    EvalPromptSetsCreateResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalPromptSetsListResponse:
+      type: object
+      properties:
+        prompt_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalPromptSetListItem'
+          description: Prompt sets matching the query, sorted alphabetically by name.
+      required:
+      - prompt_sets
     EvalRunResultAgenticJob:
       type: object
       properties:
@@ -959,73 +1002,232 @@ components:
       - conversation_id
       - id
       - state
-    EvalRunResult:
+    EvalRunListItem:
       type: object
       properties:
-        agentic_job:
-          $ref: '#/components/schemas/EvalRunResultAgenticJob'
-        cost:
-          type:
-          - number
-          - 'null'
-          description: Total LLM cost (USD) for this prompt, if available.
-          example: 0.0021
-        error_reason:
+        branch_id:
           type:
           - string
           - 'null'
-          description: Failure reason string for prompts whose underlying job failed.
+          format: uuid
+          description: Optional branch ID the run was executed against. Null when run against the main shared model.
+          example: null
+        branch_name:
+          type:
+          - string
+          - 'null'
+          description: Display name for the branch, if `branch_id` is set.
+          example: null
+        completed_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run reached a terminal state.
+          example: null
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the run was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description for the run.
           example: null
         id:
           type: string
           format: uuid
-          description: Unique identifier for the run result row.
-          example: aa0e8400-e29b-41d4-a716-446655440005
-        prompt:
+          description: Unique identifier for the run.
+          example: 660e8400-e29b-41d4-a716-446655440001
+        is_archived:
+          type: boolean
+          description: Whether the run has been archived.
+          example: false
+        model_id:
           type: string
-          description: The prompt text that was evaluated.
-          example: What are the top 5 products by revenue?
-        score:
-          type:
-          - number
-          - 'null'
-          description: Numeric judge score for this prompt result, if scoring ran.
-          example: 0.9
-        scoring_cost:
-          type:
-          - number
-          - 'null'
-          description: Total LLM cost (USD) for scoring this prompt result.
-          example: 0.0004
-        timing_ms:
-          type:
-          - integer
-          - 'null'
-          description: Wall-clock duration of the underlying job in milliseconds.
-          example: 4321
+          format: uuid
+          description: The shared model this run was executed against.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        prompt_set_id:
+          type: string
+          format: uuid
+          description: The prompt set this run was created from.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        run_number:
+          type: integer
+          description: Sequential, per-prompt-set run number.
+          example: 3
+        stats:
+          $ref: '#/components/schemas/EvalRunStats'
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - COMPLETE
+          - CANCELLED
+          description: Run-level lifecycle. Flips to a terminal state (COMPLETE or CANCELLED) exactly once.
+          example: RUNNING
       required:
-      - agentic_job
-      - cost
-      - error_reason
+      - branch_id
+      - branch_name
+      - completed_at
+      - created_at
+      - description
       - id
-      - prompt
-      - score
-      - scoring_cost
-      - timing_ms
-    EvalPromptSetsDeleteResponse:
+      - is_archived
+      - model_id
+      - prompt_set_id
+      - run_number
+      - stats
+      - status
+    EvalPromptSetsCreateBody:
       type: object
       properties:
-        cancelled_job_count:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 1024
+          description: Optional human-readable description of the prompt set. Max 1024 characters.
+          example: Regression suite for the orders topic
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Human-readable name for the prompt set. 255 characters or fewer.
+          example: Orders regression
+        prompts:
+          type: array
+          items:
+            type: object
+            properties:
+              expectation:
+                type:
+                - string
+                - 'null'
+                maxLength: 16000
+                description: Optional expectation the analysis judge scores the analysis against. Max 16000 characters.
+                example: The top product by revenue should be Aniseed Syrup.
+              prompt_text:
+                type: string
+                minLength: 1
+                maxLength: 8000
+                description: The natural language prompt text. Max 8000 characters.
+                example: What are the top 5 products by revenue?
+            required:
+            - prompt_text
+          maxItems: 25
+          default: []
+          description: Initial prompts for the set. Defaults to an empty list. At most 25 prompts.
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[a-z][a-z0-9-]*$
+          description: URL-safe identifier for the prompt set. Must be unique per `model_id` and match `^[a-z][a-z0-9-]*$`. Max 255 characters.
+          example: orders-regression
+      required:
+      - model_id
+      - name
+      - slug
+    EvalPromptSetListItem:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was created.
+          example: '2025-01-15T10:00:00.000Z'
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional human-readable description of the prompt set.
+          example: Regression suite for the orders topic
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the prompt set.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        is_archived:
+          type: boolean
+          description: Whether the prompt set has been archived.
+          example: false
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
+        name:
+          type: string
+          description: Human-readable name for the prompt set.
+          example: Orders regression
+        slug:
+          type: string
+          description: URL-safe identifier for the prompt set. Unique per `model_id`.
+          example: orders-regression
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt set was last updated.
+          example: '2025-01-15T10:00:00.000Z'
+        latest_run_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp of the most recent run on this prompt set, if any.
+          example: '2025-01-15T10:05:00.000Z'
+        prompt_count:
           type: integer
-          description: Number of in-flight agentic jobs associated with this prompt set that were cancelled as part of the archive.
-          example: 0
+          description: Number of prompts in the set.
+          example: 12
+      required:
+      - created_at
+      - description
+      - id
+      - is_archived
+      - model_id
+      - name
+      - slug
+      - updated_at
+      - latest_run_at
+      - prompt_count
+    EvalRunsCreateResponse:
+      type: object
+      properties:
+        job_count:
+          type: integer
+          description: Number of per-prompt agentic jobs created for this run (one per prompt that fanned out successfully). Enqueue onto the work queue happens after creation and is best-effort, so this count reflects jobs created, not necessarily those successfully enqueued.
+          example: 12
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - job_count
+      - run
+    EvalPromptSetsUpdateResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalRunsDeleteResponse:
+      type: object
+      properties:
         is_archived:
           type: boolean
           enum:
           - true
-          description: Always `true` on success — archives the prompt set.
+          description: Always `true` on success — the run has been archived.
       required:
-      - cancelled_job_count
       - is_archived
     EvalPrompt:
       type: object
@@ -1121,131 +1323,6 @@ components:
       - prompts
       - slug
       - updated_at
-    EvalPromptSetListItem:
-      type: object
-      properties:
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the prompt set was created.
-          example: '2025-01-15T10:00:00.000Z'
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional human-readable description of the prompt set.
-          example: Regression suite for the orders topic
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the prompt set.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        is_archived:
-          type: boolean
-          description: Whether the prompt set has been archived.
-          example: false
-        model_id:
-          type: string
-          format: uuid
-          description: The shared model this prompt set is bound to.
-          example: 880e8400-e29b-41d4-a716-446655440003
-        name:
-          type: string
-          description: Human-readable name for the prompt set.
-          example: Orders regression
-        slug:
-          type: string
-          description: URL-safe identifier for the prompt set. Unique per `model_id`.
-          example: orders-regression
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the prompt set was last updated.
-          example: '2025-01-15T10:00:00.000Z'
-        latest_run_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp of the most recent run on this prompt set, if any.
-          example: '2025-01-15T10:05:00.000Z'
-        prompt_count:
-          type: integer
-          description: Number of prompts in the set.
-          example: 12
-      required:
-      - created_at
-      - description
-      - id
-      - is_archived
-      - model_id
-      - name
-      - slug
-      - updated_at
-      - latest_run_at
-      - prompt_count
-    EvalRunsGetResponse:
-      type: object
-      properties:
-        run:
-          $ref: '#/components/schemas/EvalRunDetail'
-      required:
-      - run
-    EvalPromptSetsUpdateResponse:
-      type: object
-      properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
-      required:
-      - prompt_set
-    EvalRunsUnarchiveResponse:
-      type: object
-      properties:
-        is_archived:
-          type: boolean
-          enum:
-          - false
-          description: Always `false` on success — the run has been unarchived.
-      required:
-      - is_archived
-    EvalApiError:
-      type: object
-      description: Error response returned by the AI Eval endpoints.
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-      required:
-      - detail
-      - status
-    EvalPromptSetsListResponse:
-      type: object
-      properties:
-        prompt_sets:
-          type: array
-          items:
-            $ref: '#/components/schemas/EvalPromptSetListItem'
-          description: Prompt sets matching the query, sorted alphabetically by name.
-      required:
-      - prompt_sets
-    EvalRunStats:
-      type: object
-      properties:
-        terminal:
-          type: integer
-          description: Number of per-prompt jobs that have reached a terminal state (COMPLETE, FAILED, or CANCELLED).
-          example: 8
-        total:
-          type: integer
-          description: Total number of per-prompt jobs in the run.
-          example: 12
-      required:
-      - terminal
-      - total
     EvalPromptSetsUpdateBody:
       type: object
       properties:
@@ -1286,6 +1363,59 @@ components:
             - prompt_text
           maxItems: 25
           description: Full desired set of prompts after the update. Prompts omitted from this list are deleted; new prompts (no `id`) are appended in body order. Existing prompts retain their original position — reordering is not supported on this endpoint. At most 25 prompts total.
+    EvalRunResult:
+      type: object
+      properties:
+        agentic_job:
+          $ref: '#/components/schemas/EvalRunResultAgenticJob'
+        cost:
+          type:
+          - number
+          - 'null'
+          description: Total LLM cost (USD) for this prompt, if available.
+          example: 0.0021
+        error_reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason string for prompts whose underlying job failed.
+          example: null
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the run result row.
+          example: aa0e8400-e29b-41d4-a716-446655440005
+        prompt:
+          type: string
+          description: The prompt text that was evaluated.
+          example: What are the top 5 products by revenue?
+        score:
+          type:
+          - number
+          - 'null'
+          description: Numeric judge score for this prompt result, if scoring ran.
+          example: 0.9
+        scoring_cost:
+          type:
+          - number
+          - 'null'
+          description: Total LLM cost (USD) for scoring this prompt result.
+          example: 0.0004
+        timing_ms:
+          type:
+          - integer
+          - 'null'
+          description: Wall-clock duration of the underlying job in milliseconds.
+          example: 4321
+      required:
+      - agentic_job
+      - cost
+      - error_reason
+      - id
+      - prompt
+      - score
+      - scoring_cost
+      - timing_ms
     EvalRunsCreateBody:
       type: object
       properties:
@@ -1312,160 +1442,6 @@ components:
           description: Per-run configuration. Optional — omit if no overrides.
       required:
       - prompt_set_id
-    EvalRunListItem:
-      type: object
-      properties:
-        branch_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Optional branch ID the run was executed against. Null when run against the main shared model.
-          example: null
-        branch_name:
-          type:
-          - string
-          - 'null'
-          description: Display name for the branch, if `branch_id` is set.
-          example: null
-        completed_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the run reached a terminal state.
-          example: null
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the run was created.
-          example: '2025-01-15T10:00:00.000Z'
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional human-readable description for the run.
-          example: null
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the run.
-          example: 660e8400-e29b-41d4-a716-446655440001
-        is_archived:
-          type: boolean
-          description: Whether the run has been archived.
-          example: false
-        model_id:
-          type: string
-          format: uuid
-          description: The shared model this run was executed against.
-          example: 880e8400-e29b-41d4-a716-446655440003
-        prompt_set_id:
-          type: string
-          format: uuid
-          description: The prompt set this run was created from.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        run_number:
-          type: integer
-          description: Sequential, per-prompt-set run number.
-          example: 3
-        stats:
-          $ref: '#/components/schemas/EvalRunStats'
-        status:
-          type: string
-          enum:
-          - RUNNING
-          - COMPLETE
-          - CANCELLED
-          description: Run-level lifecycle. Flips to a terminal state (COMPLETE or CANCELLED) exactly once.
-          example: RUNNING
-      required:
-      - branch_id
-      - branch_name
-      - completed_at
-      - created_at
-      - description
-      - id
-      - is_archived
-      - model_id
-      - prompt_set_id
-      - run_number
-      - stats
-      - status
-    EvalRunsDeleteResponse:
-      type: object
-      properties:
-        is_archived:
-          type: boolean
-          enum:
-          - true
-          description: Always `true` on success — the run has been archived.
-      required:
-      - is_archived
-    EvalRunsListResponse:
-      type: object
-      properties:
-        runs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EvalRunListItem'
-          description: Runs for the prompt set, newest first, filtered to those whose model the caller can access.
-      required:
-      - runs
-    EvalPromptSetsCreateBody:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 1024
-          description: Optional human-readable description of the prompt set. Max 1024 characters.
-          example: Regression suite for the orders topic
-        model_id:
-          type: string
-          format: uuid
-          description: The shared model this prompt set is bound to.
-          example: 880e8400-e29b-41d4-a716-446655440003
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Human-readable name for the prompt set. 255 characters or fewer.
-          example: Orders regression
-        prompts:
-          type: array
-          items:
-            type: object
-            properties:
-              expectation:
-                type:
-                - string
-                - 'null'
-                maxLength: 16000
-                description: Optional expectation the analysis judge scores the analysis against. Max 16000 characters.
-                example: The top product by revenue should be Aniseed Syrup.
-              prompt_text:
-                type: string
-                minLength: 1
-                maxLength: 8000
-                description: The natural language prompt text. Max 8000 characters.
-                example: What are the top 5 products by revenue?
-            required:
-            - prompt_text
-          maxItems: 25
-          default: []
-          description: Initial prompts for the set. Defaults to an empty list. At most 25 prompts.
-        slug:
-          type: string
-          maxLength: 255
-          pattern: ^[a-z][a-z0-9-]*$
-          description: URL-safe identifier for the prompt set. Must be unique per `model_id` and match `^[a-z][a-z0-9-]*$`. Max 255 characters.
-          example: orders-regression
-      required:
-      - model_id
-      - name
-      - slug
     EvalPromptSetsGetResponse:
       type: object
       properties:
@@ -1473,6 +1449,30 @@ components:
           $ref: '#/components/schemas/EvalPromptSet'
       required:
       - prompt_set
+    EvalRunsUnarchiveResponse:
+      type: object
+      properties:
+        is_archived:
+          type: boolean
+          enum:
+          - false
+          description: Always `false` on success — the run has been unarchived.
+      required:
+      - is_archived
+    EvalPromptSetsUnarchiveResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalRunsGetResponse:
+      type: object
+      properties:
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - run
   securitySchemes:
     bearerAuth:
       type: http

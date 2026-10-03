@@ -599,6 +599,47 @@ paths:
                 $ref: '#/components/schemas/ApiError409'
 components:
   schemas:
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
     ApiError401:
       type: object
       properties:
@@ -610,6 +651,103 @@ components:
           type: integer
           description: HTTP status code of the error.
           example: 401
+      required:
+      - detail
+      - status
+    RoutineSlackDestination:
+      type: object
+      required:
+      - recipientId
+      - slackRecipientType
+      - type
+      additionalProperties: false
+      description: Slack delivery configuration for the routine. Requires a Slack workspace connected to Omni; to deliver to a private channel, invite the Omni Slackbot to it first.
+      properties:
+        recipientId:
+          type: string
+          minLength: 1
+          description: The Slack channel ID (e.g. `C01234567`) or user ID (e.g. `U01234567`) that receives each scheduled run. Exactly one recipient per Slack routine.
+          example: C01234567
+        slackRecipientType:
+          type: string
+          enum:
+          - channel
+          - users
+          description: Whether `recipientId` is a Slack channel or a user (delivered as a direct message).
+          example: channel
+        type:
+          type: string
+          enum:
+          - slack
+          description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
+          example: slack
+    ApiError404:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 404
+      required:
+      - detail
+      - status
+    RoutineDestination:
+      oneOf:
+      - $ref: '#/components/schemas/RoutineEmailDestination'
+      - $ref: '#/components/schemas/RoutineSlackDestination'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/RoutineEmailDestination'
+          slack: '#/components/schemas/RoutineSlackDestination'
+      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
+    RoutineEmailDestination:
+      type: object
+      required:
+      - type
+      additionalProperties: false
+      description: Email delivery configuration for the routine.
+      properties:
+        recipientEmails:
+          type: array
+          items:
+            type: string
+            format: email
+          maxItems: 100
+          default: []
+          description: Email addresses that receive each scheduled run of the routine.
+          example:
+          - blob.ross@blobsrus.com
+          - blob.the.builder@blobsrus.com
+        type:
+          type: string
+          enum:
+          - email
+          description: Selects email delivery — each scheduled run is sent to the listed email recipients and user groups.
+          example: email
+        userGroupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          maxItems: 100
+          default: []
+          description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
+          example:
+          - 550e8400-e29b-41d4-a716-446655440000
+    ApiError429:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 429
       required:
       - detail
       - status
@@ -690,7 +828,7 @@ components:
       - timezone
       - topicName
       - updatedAt
-    ApiError403:
+    ApiError409:
       type: object
       properties:
         detail:
@@ -699,7 +837,7 @@ components:
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 403
+          example: 409
       required:
       - detail
       - status
@@ -724,41 +862,7 @@ components:
           type: string
           description: Machine-readable status of the last completed run.
           example: COMPLETE
-    RoutineEmailDestination:
-      type: object
-      required:
-      - type
-      additionalProperties: false
-      description: Email delivery configuration for the routine.
-      properties:
-        recipientEmails:
-          type: array
-          items:
-            type: string
-            format: email
-          maxItems: 100
-          default: []
-          description: Email addresses that receive each scheduled run of the routine.
-          example:
-          - blob.ross@blobsrus.com
-          - blob.the.builder@blobsrus.com
-        type:
-          type: string
-          enum:
-          - email
-          description: Selects email delivery — each scheduled run is sent to the listed email recipients and user groups.
-          example: email
-        userGroupIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-          maxItems: 100
-          default: []
-          description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
-          example:
-          - 550e8400-e29b-41d4-a716-446655440000
-    ApiError409:
+    ApiError403:
       type: object
       properties:
         detail:
@@ -767,111 +871,7 @@ components:
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 409
-      required:
-      - detail
-      - status
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
-    RoutineSlackDestination:
-      type: object
-      required:
-      - recipientId
-      - slackRecipientType
-      - type
-      additionalProperties: false
-      description: Slack delivery configuration for the routine. Requires a Slack workspace connected to Omni; to deliver to a private channel, invite the Omni Slackbot to it first.
-      properties:
-        recipientId:
-          type: string
-          minLength: 1
-          description: The Slack channel ID (e.g. `C01234567`) or user ID (e.g. `U01234567`) that receives each scheduled run. Exactly one recipient per Slack routine.
-          example: C01234567
-        slackRecipientType:
-          type: string
-          enum:
-          - channel
-          - users
-          description: Whether `recipientId` is a Slack channel or a user (delivered as a direct message).
-          example: channel
-        type:
-          type: string
-          enum:
-          - slack
-          description: Selects Slack delivery — each scheduled run is posted to one Slack channel or sent as a direct message to one user.
-          example: slack
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    ApiError404:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 404
-      required:
-      - detail
-      - status
-    RoutineDestination:
-      oneOf:
-      - $ref: '#/components/schemas/RoutineEmailDestination'
-      - $ref: '#/components/schemas/RoutineSlackDestination'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/RoutineEmailDestination'
-          slack: '#/components/schemas/RoutineSlackDestination'
-      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
-    ApiError429:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 429
+          example: 403
       required:
       - detail
       - status
