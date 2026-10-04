@@ -392,17 +392,19 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
+    ApiError400:
       type: object
       properties:
-        error:
+        detail:
           type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
     ApiError404:
       type: object
       properties:
@@ -413,20 +415,6 @@ components:
           type: integer
           description: HTTP status code of the error.
           example: 404
-      required:
-      - detail
-      - status
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
       required:
       - detail
       - status
@@ -477,19 +465,17 @@ components:
           minimum: 0
           description: Default per-user AI credit limit, or `null` when users are unlimited by default.
           example: 100
-    ApiError400:
+    Error:
       type: object
       properties:
-        detail:
+        error:
           type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
     ApiError403:
       type: object
       properties:
@@ -500,6 +486,20 @@ components:
           type: integer
           description: HTTP status code of the error.
           example: 403
+      required:
+      - detail
+      - status
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
       required:
       - detail
       - status

@@ -1555,31 +1555,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    AiPickTopicResponse:
-      type: object
-      required:
-      - topicId
-      properties:
-        topicId:
-          type: string
-          description: 'The name of the topic that best matches the prompt.
-
-
-            Use this as the `topicName` parameter when calling the [Generate a query](/api/ai/generate-a-query) or the [Create AI job](/api/ai/create-ai-job) endpoints.
-
-            '
-          example: order_items
     AiPickTopicBody:
       type: object
       required:
@@ -1647,6 +1622,31 @@ components:
             **Note:** Users with topic-locked permissions cannot use this parameter, even if the model setting is enabled.
 
             '
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    AiPickTopicResponse:
+      type: object
+      required:
+      - topicId
+      properties:
+        topicId:
+          type: string
+          description: 'The name of the topic that best matches the prompt.
+
+
+            Use this as the `topicName` parameter when calling the [Generate a query](/api/ai/generate-a-query) or the [Create AI job](/api/ai/create-ai-job) endpoints.
+
+            '
+          example: order_items
   responses:
     InternalServerError:
       description: Internal Server Error

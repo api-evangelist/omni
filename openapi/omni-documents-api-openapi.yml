@@ -2212,6 +2212,53 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+    ApiError400:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 400
+      required:
+      - detail
+      - status
+    DocumentsListResponse:
+      type: object
+      properties:
+        pageInfo:
+          allOf:
+          - $ref: '#/components/schemas/PageInfo'
+          - description: Pagination information
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          description: List of documents
+      required:
+      - pageInfo
+      - records
+    DocumentOwner:
+      type: object
+      description: Document owner
+      properties:
+        id:
+          type: string
+          description: Owner membership ID
+        name:
+          type: string
+          description: Owner display name
+      required:
+      - id
+      - name
     PageInfo:
       type: object
       description: Pagination information for paginated responses.
@@ -2229,55 +2276,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    DocumentsUpgradeLayoutBody:
-      type: object
-      properties:
-        clearExistingDraft:
-          type: boolean
-          default: false
-          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
-    DocumentsUpgradeLayoutResponse:
-      type: object
-      properties:
-        identifier:
-          type: string
-          description: Document identifier
-        upgraded:
-          type: boolean
-          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
-      required:
-      - identifier
-      - upgraded
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
-    DocumentOwner:
-      type: object
-      description: Document owner
-      properties:
-        id:
-          type: string
-          description: Owner membership ID
-        name:
-          type: string
-          description: Owner display name
-      required:
-      - id
-      - name
     ApiError404:
       type: object
       properties:
@@ -2291,100 +2289,25 @@ components:
       required:
       - detail
       - status
-    ApiError401:
+    DocumentsUpgradeLayoutResponse:
       type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
-    ApiError400:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 400
-      required:
-      - detail
-      - status
-    DocumentsV2PatchDraftResponse:
-      type: object
-      required:
-      - description
-      - draftIdentifier
-      - identifier
-      - name
       properties:
         identifier:
           type: string
-          description: Published document identifier the draft targets.
-          example: def456
-        draftIdentifier:
-          type: string
-          description: Identifier of the draft the patch was applied to.
-          example: abc123
-        name:
-          type: string
-          description: Document name.
-          example: Blob Sales
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-          example: Overview of daily Blobs R Us Sales
-    DocumentFolder:
-      type:
-      - object
-      - 'null'
-      description: Folder containing the document
-      properties:
-        id:
-          type: string
-          description: Folder ID
-        name:
-          type: string
-          description: Folder name
-        path:
-          type: string
-          description: Folder path
-        scope:
-          type: string
-          enum:
-          - restricted
-          - organization
-          description: Folder access scope
+          description: Document identifier
+        upgraded:
+          type: boolean
+          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
       required:
-      - id
-      - name
-      - path
-      - scope
-    DocumentsListResponse:
+      - identifier
+      - upgraded
+    DocumentsUpgradeLayoutBody:
       type: object
       properties:
-        pageInfo:
-          allOf:
-          - $ref: '#/components/schemas/PageInfo'
-          - description: Pagination information
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document'
-          description: List of documents
-      required:
-      - pageInfo
-      - records
+        clearExistingDraft:
+          type: boolean
+          default: false
+          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
     Document:
       type: object
       properties:
@@ -2462,6 +2385,82 @@ components:
       - type
       - updatedAt
       - url
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    DocumentFolder:
+      type:
+      - object
+      - 'null'
+      description: Folder containing the document
+      properties:
+        id:
+          type: string
+          description: Folder ID
+        name:
+          type: string
+          description: Folder name
+        path:
+          type: string
+          description: Folder path
+        scope:
+          type: string
+          enum:
+          - restricted
+          - organization
+          description: Folder access scope
+      required:
+      - id
+      - name
+      - path
+      - scope
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
     ApiError409:
       type: object
       properties:
@@ -2475,16 +2474,17 @@ components:
       required:
       - detail
       - status
-    ApiError403:
+    ApiError401:
       type: object
       properties:
         detail:
           type: string
           description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
         status:
           type: integer
           description: HTTP status code of the error.
-          example: 403
+          example: 401
       required:
       - detail
       - status

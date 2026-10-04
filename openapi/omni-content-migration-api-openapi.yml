@@ -196,14 +196,14 @@ components:
           description: Detailed error description
           example: <error_reason>
   responses:
-    BadRequest:
-      description: Bad Request - Invalid parameters or request body
+    NotFound:
+      description: Not Found - Resource does not exist
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found - Resource does not exist
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
       content:
         application/json:
           schema:

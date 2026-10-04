@@ -484,17 +484,6 @@ components:
         success:
           type: boolean
           example: true
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     SchemaRefreshSchedule:
       type: object
       properties:
@@ -537,6 +526,17 @@ components:
           format: date-time
           nullable: true
           description: The timestamp when the schedule was disabled, or `null` if active
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
   responses:
     NotFound:
       description: Not Found - Resource does not exist

@@ -106,18 +106,6 @@ paths:
                 $ref: '#/components/schemas/ApiError403'
 components:
   schemas:
-    WhoamiUser:
-      type: object
-      required:
-      - id
-      - membershipId
-      properties:
-        id:
-          type: string
-          description: The caller's user ID
-        membershipId:
-          type: string
-          description: The caller's own membership ID within this organization. This is the ID accepted by the [Get model roles endpoint](/api/user-model-roles/retrieve-user-model-roles) and is distinct from the user ID.
     ApiError401:
       type: object
       properties:
@@ -145,6 +133,18 @@ components:
       required:
       - detail
       - status
+    WhoamiUser:
+      type: object
+      required:
+      - id
+      - membershipId
+      properties:
+        id:
+          type: string
+          description: The caller's user ID
+        membershipId:
+          type: string
+          description: The caller's own membership ID within this organization. This is the ID accepted by the [Get model roles endpoint](/api/user-model-roles/retrieve-user-model-roles) and is distinct from the user ID.
     WhoamiModelRole:
       type: object
       required:

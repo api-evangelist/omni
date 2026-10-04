@@ -174,15 +174,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    PaginatedResponse:
-      type: object
-      properties:
-        records:
-          type: array
-          items:
-            type: object
-        pageInfo:
-          $ref: '#/components/schemas/PageInfo'
     Error:
       type: object
       properties:
@@ -194,6 +185,15 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
+    PaginatedResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            type: object
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
   parameters:
     sortDirection:
       name: sortDirection

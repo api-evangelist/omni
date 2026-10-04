@@ -527,14 +527,14 @@ components:
           description: Detailed error description
           example: <error_reason>
   responses:
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:

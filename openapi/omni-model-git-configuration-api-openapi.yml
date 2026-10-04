@@ -994,6 +994,12 @@ components:
           type: string
           description: Webhook URL to configure in your git provider.
           example: https://app.omni.co/api/webhooks/model/...
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     Error:
       type: object
       properties:
@@ -1005,12 +1011,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)

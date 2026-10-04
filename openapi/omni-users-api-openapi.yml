@@ -756,24 +756,38 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
     ScimEmbedUser:
       type: object
       description: An embed user object (SCIM 2.0)
@@ -846,17 +860,23 @@ components:
         embedExternalId:
           type: string
           description: The external ID for the embed user
-    Error:
+    PageInfo:
       type: object
+      description: Pagination information for paginated responses.
       properties:
-        error:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
           type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
     ScimUser:
       type: object
       properties:
@@ -932,37 +952,17 @@ components:
               format: date-time
               nullable: true
               description: The timestamp of the user's last login. Will be `null` if the user has never logged in.
-  responses:
-    BadRequest:
-      description: Bad Request - Invalid parameters or request body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found - Resource does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden - Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
   securitySchemes:
     bearerAuth:
       type: http

@@ -613,18 +613,18 @@ components:
           type: boolean
           description: Indicates that the request timed out. Will be `true` for 408 responses.
   responses:
-    QueryTimeoutError:
-      description: Timeout
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/QueryTimeoutResponse'
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    QueryTimeoutError:
+      description: Timeout
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QueryTimeoutResponse'
   securitySchemes:
     bearerAuth:
       type: http

@@ -666,46 +666,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    ScheduleRecipientsSlack:
-      type: object
-      description: Response for schedules with Slack destinations.
-      properties:
-        type:
-          type: string
-          enum:
-          - slack
-          description: The destination type.
-        recipients:
-          type: array
-          items:
-            type: object
-            properties:
-              recipientType:
-                type: string
-                enum:
-                - channel
-                - users
-                description: 'The type of Slack recipient:
-
-                  - `channel` - A Slack channel
-
-                  - `users` - A Slack user
-
-                  '
-              slackId:
-                type: string
-                description: The Slack channel or user ID.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     ScheduleRecipientsSftp:
       type: object
       description: Response for schedules with SFTP destinations.
@@ -724,34 +684,6 @@ components:
         username:
           type: string
           description: The SFTP username.
-    ScheduleRecipientsEmail:
-      type: object
-      description: Response for schedules with email destinations.
-      properties:
-        type:
-          type: string
-          enum:
-          - email
-          description: The destination type.
-        recipients:
-          type: array
-          items:
-            type: object
-            properties:
-              email:
-                type: string
-                format: email
-                description: The recipient's email address.
-              emailOnly:
-                type: boolean
-                description: Indicates whether the recipient is an email-only user.
-              id:
-                type: string
-                format: uuid
-                description: The recipient's unique identifier.
-              name:
-                type: string
-                description: The recipient's name.
     ScheduleRecipientsWebhook:
       type: object
       description: Response for schedules with webhook destinations.
@@ -792,6 +724,74 @@ components:
         filename:
           type: string
           description: The filename template using Mustache syntax.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+    ScheduleRecipientsEmail:
+      type: object
+      description: Response for schedules with email destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - email
+          description: The destination type.
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: The recipient's email address.
+              emailOnly:
+                type: boolean
+                description: Indicates whether the recipient is an email-only user.
+              id:
+                type: string
+                format: uuid
+                description: The recipient's unique identifier.
+              name:
+                type: string
+                description: The recipient's name.
+    ScheduleRecipientsSlack:
+      type: object
+      description: Response for schedules with Slack destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - slack
+          description: The destination type.
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              recipientType:
+                type: string
+                enum:
+                - channel
+                - users
+                description: 'The type of Slack recipient:
+
+                  - `channel` - A Slack channel
+
+                  - `users` - A Slack user
+
+                  '
+              slackId:
+                type: string
+                description: The Slack channel or user ID.
   securitySchemes:
     bearerAuth:
       type: http

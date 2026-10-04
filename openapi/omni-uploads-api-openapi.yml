@@ -443,6 +443,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
     Error:
       type: object
       properties:
@@ -471,12 +477,6 @@ components:
         totalRecords:
           type: integer
           description: Total number of records matching the query.
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)
