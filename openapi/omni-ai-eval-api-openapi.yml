@@ -800,34 +800,7 @@ paths:
                 status: 404
 components:
   schemas:
-    EvalPromptSetsUpdateResponse:
-      type: object
-      properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
-      required:
-      - prompt_set
-    EvalRunsListResponse:
-      type: object
-      properties:
-        runs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EvalRunListItem'
-          description: Runs for the prompt set, newest first, filtered to those whose model the caller can access.
-      required:
-      - runs
-    EvalRunsDeleteResponse:
-      type: object
-      properties:
-        is_archived:
-          type: boolean
-          enum:
-          - true
-          description: Always `true` on success — the run has been archived.
-      required:
-      - is_archived
-    EvalPromptSet:
+    EvalPromptSetListItem:
       type: object
       properties:
         created_at:
@@ -860,11 +833,6 @@ components:
           type: string
           description: Human-readable name for the prompt set.
           example: Orders regression
-        prompts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EvalPrompt'
-          description: Prompts that make up the set.
         slug:
           type: string
           description: URL-safe identifier for the prompt set. Unique per `model_id`.
@@ -875,6 +843,16 @@ components:
           - 'null'
           description: ISO 8601 timestamp when the prompt set was last updated.
           example: '2025-01-15T10:00:00.000Z'
+        latest_run_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp of the most recent run on this prompt set, if any.
+          example: '2025-01-15T10:05:00.000Z'
+        prompt_count:
+          type: integer
+          description: Number of prompts in the set.
+          example: 12
       required:
       - created_at
       - description
@@ -882,9 +860,42 @@ components:
       - is_archived
       - model_id
       - name
-      - prompts
       - slug
       - updated_at
+      - latest_run_at
+      - prompt_count
+    EvalPromptSetsDeleteResponse:
+      type: object
+      properties:
+        cancelled_job_count:
+          type: integer
+          description: Number of in-flight agentic jobs associated with this prompt set that were cancelled as part of the archive.
+          example: 0
+        is_archived:
+          type: boolean
+          enum:
+          - true
+          description: Always `true` on success — archives the prompt set.
+      required:
+      - cancelled_job_count
+      - is_archived
+    EvalRunsUnarchiveResponse:
+      type: object
+      properties:
+        is_archived:
+          type: boolean
+          enum:
+          - false
+          description: Always `false` on success — the run has been unarchived.
+      required:
+      - is_archived
+    EvalPromptSetsUnarchiveResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
     EvalRunStats:
       type: object
       properties:
@@ -899,7 +910,52 @@ components:
       required:
       - terminal
       - total
-    EvalRunsCreateBody:
+    EvalRunsCancelResponse:
+      type: object
+      properties:
+        cancelled:
+          type: integer
+          description: Number of per-prompt agentic jobs that were cancelled by this request.
+          example: 4
+        run:
+          allOf:
+          - $ref: '#/components/schemas/EvalRunDetail'
+          - description: 'The cancelled run. `status: CANCELLED` and `is_archived: true` after this call.'
+        total:
+          type: integer
+          description: Total number of per-prompt jobs in the run.
+          example: 12
+      required:
+      - cancelled
+      - run
+      - total
+    EvalRunsGetResponse:
+      type: object
+      properties:
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - run
+    EvalPromptSetsCreateResponse:
+      type: object
+      properties:
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
+      required:
+      - prompt_set
+    EvalRunsCreateResponse:
+      type: object
+      properties:
+        job_count:
+          type: integer
+          description: Number of per-prompt agentic jobs created for this run (one per prompt that fanned out successfully). Enqueue onto the work queue happens after creation and is best-effort, so this count reflects jobs created, not necessarily those successfully enqueued.
+          example: 12
+        run:
+          $ref: '#/components/schemas/EvalRunDetail'
+      required:
+      - job_count
+      - run
+    EvalPromptSetsUpdateBody:
       type: object
       properties:
         description:
@@ -907,54 +963,45 @@ components:
           - string
           - 'null'
           maxLength: 1024
-          description: Optional human-readable description for the run. Omit or pass `null` to leave it unset. Max 1024 characters.
-          example: Re-running after switching to gpt-4o for query generation
-        prompt_set_id:
+          description: New description for the prompt set. Pass `null` to clear. Max 1024 characters.
+        name:
           type: string
-          format: uuid
-          description: The prompt set to execute.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        run_config:
-          type: object
-          properties:
-            branch_id:
-              type: string
-              format: uuid
-              description: Optional branch ID to run against. Must be a branch of the prompt set's model.
-              example: 440e8400-e29b-41d4-a716-446655440006
-          description: Per-run configuration. Optional — omit if no overrides.
-      required:
-      - prompt_set_id
-    EvalRunResultAgenticJob:
+          minLength: 1
+          maxLength: 255
+          description: New human-readable name for the prompt set. 255 characters or fewer.
+        prompts:
+          type: array
+          items:
+            type: object
+            properties:
+              expectation:
+                type:
+                - string
+                - 'null'
+                maxLength: 16000
+                description: Optional expectation the analysis judge scores the analysis against. Pass `null` to clear. Max 16000 characters.
+                example: The top product by revenue should be Aniseed Syrup.
+              id:
+                type: string
+                format: uuid
+                description: Existing prompt id. When provided, updates that prompt; when omitted, a new prompt is created. Prompts not included in this list are removed.
+              prompt_text:
+                type: string
+                minLength: 1
+                maxLength: 8000
+                description: Updated or new prompt text. Max 8000 characters.
+                example: What are the top 10 products by revenue this quarter?
+            required:
+            - prompt_text
+          maxItems: 25
+          description: Full desired set of prompts after the update. Prompts omitted from this list are deleted; new prompts (no `id`) are appended in body order. Existing prompts retain their original position — reordering is not supported on this endpoint. At most 25 prompts total.
+    EvalPromptSetsUpdateResponse:
       type: object
       properties:
-        conversation_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Conversation the agentic job belongs to.
-          example: 770e8400-e29b-41d4-a716-446655440002
-        id:
-          type: string
-          format: uuid
-          description: Agentic job identifier.
-          example: 990e8400-e29b-41d4-a716-446655440004
-        state:
-          type: string
-          enum:
-          - CANCELLED
-          - COMPLETE
-          - DELIVERING
-          - EXECUTING
-          - FAILED
-          - QUEUED
-          description: Current state of the agentic job that ran this prompt.
-          example: COMPLETE
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
       required:
-      - conversation_id
-      - id
-      - state
+      - prompt_set
     EvalRunDetail:
       type: object
       properties:
@@ -1039,73 +1086,19 @@ components:
       - run_number
       - status
       description: The newly created run with its initial results.
-    EvalPromptSetsGetResponse:
+    EvalApiError:
       type: object
+      description: Error response returned by the AI Eval endpoints.
       properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
-      required:
-      - prompt_set
-    EvalRunsUnarchiveResponse:
-      type: object
-      properties:
-        is_archived:
-          type: boolean
-          enum:
-          - false
-          description: Always `false` on success — the run has been unarchived.
-      required:
-      - is_archived
-    EvalPromptSetsCreateResponse:
-      type: object
-      properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
-      required:
-      - prompt_set
-    EvalPromptSetsUnarchiveResponse:
-      type: object
-      properties:
-        prompt_set:
-          $ref: '#/components/schemas/EvalPromptSet'
-      required:
-      - prompt_set
-    EvalPrompt:
-      type: object
-      properties:
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the prompt was created.
-          example: '2025-01-15T10:00:00.000Z'
-        expectation:
-          type:
-          - string
-          - 'null'
-          description: The expectation the analysis judge scores the analysis against, or null when none was set.
-          example: The top product by revenue should be Aniseed Syrup.
-        id:
+        detail:
           type: string
-          format: uuid
-          description: Unique identifier for the prompt.
-          example: 770e8400-e29b-41d4-a716-446655440002
-        prompt_text:
-          type: string
-          description: The natural language prompt text the AI is evaluated on.
-          example: What are the top 5 products by revenue?
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp when the prompt was last updated.
-          example: '2025-01-15T10:00:00.000Z'
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
       required:
-      - created_at
-      - expectation
-      - id
-      - prompt_text
-      - updated_at
+      - detail
+      - status
     EvalRunResult:
       type: object
       properties:
@@ -1159,29 +1152,103 @@ components:
       - score
       - scoring_cost
       - timing_ms
-    EvalPromptSetsDeleteResponse:
+    EvalRunResultAgenticJob:
       type: object
       properties:
-        cancelled_job_count:
-          type: integer
-          description: Number of in-flight agentic jobs associated with this prompt set that were cancelled as part of the archive.
-          example: 0
+        conversation_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Conversation the agentic job belongs to.
+          example: 770e8400-e29b-41d4-a716-446655440002
+        id:
+          type: string
+          format: uuid
+          description: Agentic job identifier.
+          example: 990e8400-e29b-41d4-a716-446655440004
+        state:
+          type: string
+          enum:
+          - CANCELLED
+          - COMPLETE
+          - DELIVERING
+          - EXECUTING
+          - FAILED
+          - QUEUED
+          description: Current state of the agentic job that ran this prompt.
+          example: COMPLETE
+      required:
+      - conversation_id
+      - id
+      - state
+    EvalRunsDeleteResponse:
+      type: object
+      properties:
         is_archived:
           type: boolean
           enum:
           - true
-          description: Always `true` on success — archives the prompt set.
+          description: Always `true` on success — the run has been archived.
       required:
-      - cancelled_job_count
       - is_archived
-    EvalRunsGetResponse:
+    EvalPrompt:
       type: object
       properties:
-        run:
-          $ref: '#/components/schemas/EvalRunDetail'
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt was created.
+          example: '2025-01-15T10:00:00.000Z'
+        expectation:
+          type:
+          - string
+          - 'null'
+          description: The expectation the analysis judge scores the analysis against, or null when none was set.
+          example: The top product by revenue should be Aniseed Syrup.
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the prompt.
+          example: 770e8400-e29b-41d4-a716-446655440002
+        prompt_text:
+          type: string
+          description: The natural language prompt text the AI is evaluated on.
+          example: What are the top 5 products by revenue?
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: ISO 8601 timestamp when the prompt was last updated.
+          example: '2025-01-15T10:00:00.000Z'
       required:
-      - run
-    EvalPromptSetsUpdateBody:
+      - created_at
+      - expectation
+      - id
+      - prompt_text
+      - updated_at
+    EvalRunsListResponse:
+      type: object
+      properties:
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalRunListItem'
+          description: Runs for the prompt set, newest first, filtered to those whose model the caller can access.
+      required:
+      - runs
+    EvalPromptSetsListResponse:
+      type: object
+      properties:
+        prompt_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalPromptSetListItem'
+          description: Prompt sets matching the query, sorted alphabetically by name.
+      required:
+      - prompt_sets
+    EvalPromptSetsCreateBody:
       type: object
       properties:
         description:
@@ -1189,12 +1256,19 @@ components:
           - string
           - 'null'
           maxLength: 1024
-          description: New description for the prompt set. Pass `null` to clear. Max 1024 characters.
+          description: Optional human-readable description of the prompt set. Max 1024 characters.
+          example: Regression suite for the orders topic
+        model_id:
+          type: string
+          format: uuid
+          description: The shared model this prompt set is bound to.
+          example: 880e8400-e29b-41d4-a716-446655440003
         name:
           type: string
           minLength: 1
           maxLength: 255
-          description: New human-readable name for the prompt set. 255 characters or fewer.
+          description: Human-readable name for the prompt set. 255 characters or fewer.
+          example: Orders regression
         prompts:
           type: array
           items:
@@ -1205,41 +1279,29 @@ components:
                 - string
                 - 'null'
                 maxLength: 16000
-                description: Optional expectation the analysis judge scores the analysis against. Pass `null` to clear. Max 16000 characters.
+                description: Optional expectation the analysis judge scores the analysis against. Max 16000 characters.
                 example: The top product by revenue should be Aniseed Syrup.
-              id:
-                type: string
-                format: uuid
-                description: Existing prompt id. When provided, updates that prompt; when omitted, a new prompt is created. Prompts not included in this list are removed.
               prompt_text:
                 type: string
                 minLength: 1
                 maxLength: 8000
-                description: Updated or new prompt text. Max 8000 characters.
-                example: What are the top 10 products by revenue this quarter?
+                description: The natural language prompt text. Max 8000 characters.
+                example: What are the top 5 products by revenue?
             required:
             - prompt_text
           maxItems: 25
-          description: Full desired set of prompts after the update. Prompts omitted from this list are deleted; new prompts (no `id`) are appended in body order. Existing prompts retain their original position — reordering is not supported on this endpoint. At most 25 prompts total.
-    EvalRunsCancelResponse:
-      type: object
-      properties:
-        cancelled:
-          type: integer
-          description: Number of per-prompt agentic jobs that were cancelled by this request.
-          example: 4
-        run:
-          allOf:
-          - $ref: '#/components/schemas/EvalRunDetail'
-          - description: 'The cancelled run. `status: CANCELLED` and `is_archived: true` after this call.'
-        total:
-          type: integer
-          description: Total number of per-prompt jobs in the run.
-          example: 12
+          default: []
+          description: Initial prompts for the set. Defaults to an empty list. At most 25 prompts.
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[a-z][a-z0-9-]*$
+          description: URL-safe identifier for the prompt set. Must be unique per `model_id` and match `^[a-z][a-z0-9-]*$`. Max 255 characters.
+          example: orders-regression
       required:
-      - cancelled
-      - run
-      - total
+      - model_id
+      - name
+      - slug
     EvalRunListItem:
       type: object
       properties:
@@ -1320,83 +1382,7 @@ components:
       - run_number
       - stats
       - status
-    EvalPromptSetsListResponse:
-      type: object
-      properties:
-        prompt_sets:
-          type: array
-          items:
-            $ref: '#/components/schemas/EvalPromptSetListItem'
-          description: Prompt sets matching the query, sorted alphabetically by name.
-      required:
-      - prompt_sets
-    EvalRunsCreateResponse:
-      type: object
-      properties:
-        job_count:
-          type: integer
-          description: Number of per-prompt agentic jobs created for this run (one per prompt that fanned out successfully). Enqueue onto the work queue happens after creation and is best-effort, so this count reflects jobs created, not necessarily those successfully enqueued.
-          example: 12
-        run:
-          $ref: '#/components/schemas/EvalRunDetail'
-      required:
-      - job_count
-      - run
-    EvalPromptSetsCreateBody:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 1024
-          description: Optional human-readable description of the prompt set. Max 1024 characters.
-          example: Regression suite for the orders topic
-        model_id:
-          type: string
-          format: uuid
-          description: The shared model this prompt set is bound to.
-          example: 880e8400-e29b-41d4-a716-446655440003
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Human-readable name for the prompt set. 255 characters or fewer.
-          example: Orders regression
-        prompts:
-          type: array
-          items:
-            type: object
-            properties:
-              expectation:
-                type:
-                - string
-                - 'null'
-                maxLength: 16000
-                description: Optional expectation the analysis judge scores the analysis against. Max 16000 characters.
-                example: The top product by revenue should be Aniseed Syrup.
-              prompt_text:
-                type: string
-                minLength: 1
-                maxLength: 8000
-                description: The natural language prompt text. Max 8000 characters.
-                example: What are the top 5 products by revenue?
-            required:
-            - prompt_text
-          maxItems: 25
-          default: []
-          description: Initial prompts for the set. Defaults to an empty list. At most 25 prompts.
-        slug:
-          type: string
-          maxLength: 255
-          pattern: ^[a-z][a-z0-9-]*$
-          description: URL-safe identifier for the prompt set. Must be unique per `model_id` and match `^[a-z][a-z0-9-]*$`. Max 255 characters.
-          example: orders-regression
-      required:
-      - model_id
-      - name
-      - slug
-    EvalPromptSetListItem:
+    EvalPromptSet:
       type: object
       properties:
         created_at:
@@ -1429,6 +1415,11 @@ components:
           type: string
           description: Human-readable name for the prompt set.
           example: Orders regression
+        prompts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvalPrompt'
+          description: Prompts that make up the set.
         slug:
           type: string
           description: URL-safe identifier for the prompt set. Unique per `model_id`.
@@ -1439,16 +1430,6 @@ components:
           - 'null'
           description: ISO 8601 timestamp when the prompt set was last updated.
           example: '2025-01-15T10:00:00.000Z'
-        latest_run_at:
-          type:
-          - string
-          - 'null'
-          description: ISO 8601 timestamp of the most recent run on this prompt set, if any.
-          example: '2025-01-15T10:05:00.000Z'
-        prompt_count:
-          type: integer
-          description: Number of prompts in the set.
-          example: 12
       required:
       - created_at
       - description
@@ -1456,23 +1437,42 @@ components:
       - is_archived
       - model_id
       - name
+      - prompts
       - slug
       - updated_at
-      - latest_run_at
-      - prompt_count
-    EvalApiError:
+    EvalPromptSetsGetResponse:
       type: object
-      description: Error response returned by the AI Eval endpoints.
       properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
+        prompt_set:
+          $ref: '#/components/schemas/EvalPromptSet'
       required:
-      - detail
-      - status
+      - prompt_set
+    EvalRunsCreateBody:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 1024
+          description: Optional human-readable description for the run. Omit or pass `null` to leave it unset. Max 1024 characters.
+          example: Re-running after switching to gpt-4o for query generation
+        prompt_set_id:
+          type: string
+          format: uuid
+          description: The prompt set to execute.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        run_config:
+          type: object
+          properties:
+            branch_id:
+              type: string
+              format: uuid
+              description: Optional branch ID to run against. Must be a branch of the prompt set's model.
+              example: 440e8400-e29b-41d4-a716-446655440006
+          description: Per-run configuration. Optional — omit if no overrides.
+      required:
+      - prompt_set_id
   securitySchemes:
     bearerAuth:
       type: http

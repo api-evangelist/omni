@@ -690,79 +690,22 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    DocumentsV2PatchDraftResponse:
+    DocumentsV2ControlsRead:
       type: object
       required:
-      - description
-      - draftIdentifier
-      - identifier
-      - name
+      - data
+      - order
       properties:
-        identifier:
-          type: string
-          description: Published document identifier the draft targets.
-          example: def456
-        draftIdentifier:
-          type: string
-          description: Identifier of the draft the patch was applied to.
-          example: abc123
-        name:
-          type: string
-          description: Document name.
-          example: Blob Sales
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-          example: Overview of daily Blobs R Us Sales
-    DocumentsV2SettingsRead:
-      type: object
-      required:
-      - crossfilterEnabled
-      - customText
-      - facetFilters
-      - refreshInterval
-      - runQueriesOn
-      properties:
-        crossfilterEnabled:
-          type: boolean
-          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
-        customText:
-          type:
-          - object
-          - 'null'
-          description: Custom text replacing default UI strings on the dashboard.
-          properties:
-            queryError:
-              type: string
-            queryNoResults:
-              type: string
-        facetFilters:
-          type: boolean
-          description: When true, dashboard filters are applied per-facet when faceting is active.
-        refreshInterval:
-          type:
-          - number
-          - 'null'
-          description: Auto-refresh interval in seconds. Null disables auto-refresh.
-        runQueriesOn:
-          type:
-          - string
-          - 'null'
-          enum:
-          - current-page
-          - all-pages
-          - null
-          description: Controls whether dashboard queries execute on the visible page or across all pages.
-    DocumentsV2Containers:
-      type: array
-      description: 'Container layout array (grid / stack / page / reference containers, recursively nested). On a patch, when present this **fully replaces** the existing layout. The server validates the full structure on apply; container `instanceKey` / `referenceKey` values round-trip unchanged. See the dashboard layout reference for the complete grammar.
-
-        '
-      items:
-        type: object
-        additionalProperties: true
+        data:
+          type: object
+          description: Controls keyed by control ID.
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentsV2Control'
+        order:
+          type: array
+          description: Display order for controls.
+          items:
+            type: string
     DocumentsV2CreateDraftBody:
       type: object
       additionalProperties: false
@@ -805,40 +748,90 @@ components:
           allOf:
           - $ref: '#/components/schemas/DocumentsV2Containers'
           - description: Container layout. When present, fully replaces the existing layout.
-    DocumentsV2ControlsPatch:
-      type: object
-      description: Dashboard filters/controls keyed by control ID.
-      properties:
-        data:
-          type: object
-          description: Controls keyed by control ID. Shallow-merged by key — omitted keys are untouched; set to `null` to delete.
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/DocumentsV2Control'
-            - type: 'null'
-        order:
-          type: array
-          description: Display order for controls. When present, replaces the existing order.
-          items:
-            type: string
-    DocumentsV2CreateResponse:
+    DocumentsV2ReadResponse:
       type: object
       required:
       - description
-      - identifier
       - name
+      - queryPresentations
+      description: 'Current document (or draft) state. Round-trippable: submit this verbatim as a draft `PATCH` body. `containers`, `controls`, and `settings` are dashboard-scoped and omitted for workbook-only documents with no layout yet.
+
+        '
       properties:
-        identifier:
-          type: string
-          description: Identifier of the newly created document.
         name:
           type: string
+          maxLength: 254
           description: Document name.
         description:
           type:
           - string
           - 'null'
           description: Document description.
+        modelId:
+          type: string
+          format: uuid
+          description: 'The `SHARED` or `SHARED_EXTENSION` model the workbook is built on.
+
+            '
+        workbookModelId:
+          type: string
+          format: uuid
+          description: 'The workbook-layer model ID. Each document has its own workbook model for document-specific fields and calculations. For drafts, this returns the draft''s workbook model ID, not the published document''s.
+
+            '
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsRead'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsRead'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsRead'
+        containers:
+          $ref: '#/components/schemas/DocumentsV2Containers'
+    DocumentsV2Control:
+      type: object
+      additionalProperties: true
+      description: 'A dashboard control (filter). The full config grammar — control type, field bindings, filter values, and (for multi-field filters) the recursive composite-filter grammar — is validated by the server on apply. See the dashboard filters & controls reference for the complete structure.
+
+        '
+    DocumentsV2SettingsRead:
+      type: object
+      required:
+      - crossfilterEnabled
+      - customText
+      - facetFilters
+      - refreshInterval
+      - runQueriesOn
+      properties:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+            queryNoResults:
+              type: string
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
+          type:
+          - string
+          - 'null'
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
     DocumentsV2QueryPresentationsRead:
       type: object
       required:
@@ -856,44 +849,32 @@ components:
           items:
             type: string
             pattern: ^[1-9][0-9]*$
-    DocumentsV2PatchDraftBody:
+    DocumentsV2PatchDraftResponse:
       type: object
-      additionalProperties: false
-      description: The content/metadata diff applied to a draft. All fields optional — only the sections present are changed.
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
       properties:
-        modelId:
+        identifier:
           type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
-        workbookModelId:
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
           type: string
-          format: uuid
-          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
         name:
           type: string
-          minLength: 1
-          maxLength: 254
           description: Document name.
+          example: Blob Sales
         description:
           type:
           - string
           - 'null'
           description: Document description.
-        summary:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
-        queryPresentations:
-          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
-        controls:
-          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
-        settings:
-          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
-        containers:
-          allOf:
-          - $ref: '#/components/schemas/DocumentsV2Containers'
-          - description: Container layout. When present, fully replaces the existing layout.
+          example: Overview of daily Blobs R Us Sales
     DocumentsV2CreateBody:
       type: object
       required:
@@ -940,30 +921,42 @@ components:
           $ref: '#/components/schemas/DocumentsV2SettingsPatch'
         containers:
           $ref: '#/components/schemas/DocumentsV2Containers'
-    DocumentsV2PublishDraftResponse:
+    DocumentsV2SettingsPatch:
       type: object
-      required:
-      - description
-      - identifier
-      - name
+      description: Document settings. Shallow-merged with the existing settings.
       properties:
-        identifier:
-          type: string
-          description: Published document identifier.
-        name:
-          type: string
-          description: Document name.
-        description:
+        crossfilterEnabled:
+          type: boolean
+          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
+        customText:
+          type:
+          - object
+          - 'null'
+          description: Custom text replacing default UI strings on the dashboard.
+          properties:
+            queryError:
+              type: string
+              description: Custom text shown when a query errors, replacing the default error text.
+            queryNoResults:
+              type: string
+              description: Custom text shown when a query returns no results, replacing the default empty state.
+        facetFilters:
+          type: boolean
+          description: When true, dashboard filters are applied per-facet when faceting is active.
+        refreshInterval:
+          type:
+          - number
+          - 'null'
+          description: Auto-refresh interval in seconds. Null disables auto-refresh.
+        runQueriesOn:
           type:
           - string
           - 'null'
-          description: Document description.
-    DocumentsV2Control:
-      type: object
-      additionalProperties: true
-      description: 'A dashboard control (filter). The full config grammar — control type, field bindings, filter values, and (for multi-field filters) the recursive composite-filter grammar — is validated by the server on apply. See the dashboard filters & controls reference for the complete structure.
-
-        '
+          enum:
+          - current-page
+          - all-pages
+          - null
+          description: Controls whether dashboard queries execute on the visible page or across all pages.
     DocumentsV2QueryPresentationsPatch:
       type: object
       description: Query presentations (tabs/tiles) keyed by record key.
@@ -983,6 +976,104 @@ components:
           items:
             type: string
             pattern: ^[1-9][0-9]*$
+    DocumentsV2PublishDraftResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2CreateResponse:
+      type: object
+      required:
+      - description
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Identifier of the newly created document.
+        name:
+          type: string
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+    DocumentsV2ControlsPatch:
+      type: object
+      description: Dashboard filters/controls keyed by control ID.
+      properties:
+        data:
+          type: object
+          description: Controls keyed by control ID. Shallow-merged by key — omitted keys are untouched; set to `null` to delete.
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentsV2Control'
+            - type: 'null'
+        order:
+          type: array
+          description: Display order for controls. When present, replaces the existing order.
+          items:
+            type: string
+    DocumentsV2Containers:
+      type: array
+      description: 'Container layout array (grid / stack / page / reference containers, recursively nested). On a patch, when present this **fully replaces** the existing layout. The server validates the full structure on apply; container `instanceKey` / `referenceKey` values round-trip unchanged. See the dashboard layout reference for the complete grammar.
+
+        '
+      items:
+        type: object
+        additionalProperties: true
+    DocumentsV2PatchDraftBody:
+      type: object
+      additionalProperties: false
+      description: The content/metadata diff applied to a draft. All fields optional — only the sections present are changed.
+      properties:
+        modelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current base model or the API will return a 400 error.
+        workbookModelId:
+          type: string
+          format: uuid
+          description: Immutable model identifier. Must match the document's current workbook model or the API will return a 400 error.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 254
+          description: Document name.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Caller-supplied description of what this patch changes, written to the history audit trail. When omitted, Omni auto-generates one from the updated sections.
+        queryPresentations:
+          $ref: '#/components/schemas/DocumentsV2QueryPresentationsPatch'
+        controls:
+          $ref: '#/components/schemas/DocumentsV2ControlsPatch'
+        settings:
+          $ref: '#/components/schemas/DocumentsV2SettingsPatch'
+        containers:
+          allOf:
+          - $ref: '#/components/schemas/DocumentsV2Containers'
+          - description: Container layout. When present, fully replaces the existing layout.
     DocumentsV2QueryPresentation:
       type: object
       required:
@@ -1085,81 +1176,6 @@ components:
           - 'null'
           additionalProperties: true
           description: AI-generated metadata config (subtitle/description auto-generation settings).
-    DocumentsV2ReadResponse:
-      type: object
-      required:
-      - description
-      - name
-      - queryPresentations
-      description: 'Current document (or draft) state. Round-trippable: submit this verbatim as a draft `PATCH` body. `containers`, `controls`, and `settings` are dashboard-scoped and omitted for workbook-only documents with no layout yet.
-
-        '
-      properties:
-        name:
-          type: string
-          maxLength: 254
-          description: Document name.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-        modelId:
-          type: string
-          format: uuid
-          description: 'The `SHARED` or `SHARED_EXTENSION` model the workbook is built on.
-
-            '
-        workbookModelId:
-          type: string
-          format: uuid
-          description: 'The workbook-layer model ID. Each document has its own workbook model for document-specific fields and calculations. For drafts, this returns the draft''s workbook model ID, not the published document''s.
-
-            '
-        queryPresentations:
-          $ref: '#/components/schemas/DocumentsV2QueryPresentationsRead'
-        controls:
-          $ref: '#/components/schemas/DocumentsV2ControlsRead'
-        settings:
-          $ref: '#/components/schemas/DocumentsV2SettingsRead'
-        containers:
-          $ref: '#/components/schemas/DocumentsV2Containers'
-    DocumentsV2SettingsPatch:
-      type: object
-      description: Document settings. Shallow-merged with the existing settings.
-      properties:
-        crossfilterEnabled:
-          type: boolean
-          description: When true, clicking a value in one tile filters all other tiles on the dashboard.
-        customText:
-          type:
-          - object
-          - 'null'
-          description: Custom text replacing default UI strings on the dashboard.
-          properties:
-            queryError:
-              type: string
-              description: Custom text shown when a query errors, replacing the default error text.
-            queryNoResults:
-              type: string
-              description: Custom text shown when a query returns no results, replacing the default empty state.
-        facetFilters:
-          type: boolean
-          description: When true, dashboard filters are applied per-facet when faceting is active.
-        refreshInterval:
-          type:
-          - number
-          - 'null'
-          description: Auto-refresh interval in seconds. Null disables auto-refresh.
-        runQueriesOn:
-          type:
-          - string
-          - 'null'
-          enum:
-          - current-page
-          - all-pages
-          - null
-          description: Controls whether dashboard queries execute on the visible page or across all pages.
     Error:
       type: object
       properties:
@@ -1171,22 +1187,6 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    DocumentsV2ControlsRead:
-      type: object
-      required:
-      - data
-      - order
-      properties:
-        data:
-          type: object
-          description: Controls keyed by control ID.
-          additionalProperties:
-            $ref: '#/components/schemas/DocumentsV2Control'
-        order:
-          type: array
-          description: Display order for controls.
-          items:
-            type: string
   responses:
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)

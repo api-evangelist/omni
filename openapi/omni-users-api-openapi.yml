@@ -757,18 +757,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    Forbidden:
-      description: Forbidden - Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Not Found - Resource does not exist
       content:
@@ -783,6 +771,18 @@ components:
             $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request - Invalid parameters or request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:
@@ -860,23 +860,6 @@ components:
         embedExternalId:
           type: string
           description: The external ID for the embed user
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
     ScimUser:
       type: object
       properties:
@@ -963,6 +946,23 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
+    PageInfo:
+      type: object
+      description: Pagination information for paginated responses.
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
+          type: integer
+          description: Number of records per page.
+        totalRecords:
+          type: integer
+          description: Total number of records matching the query.
   securitySchemes:
     bearerAuth:
       type: http

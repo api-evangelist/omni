@@ -652,51 +652,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ScheduleRecipientsSftp:
-      type: object
-      description: Response for schedules with SFTP destinations.
-      properties:
-        type:
-          type: string
-          enum:
-          - sftp
-          description: The destination type.
-        address:
-          type: string
-          description: The SFTP server address.
-        port:
-          type: integer
-          description: The SFTP server port.
-        username:
-          type: string
-          description: The SFTP username.
-    ScheduleRecipientsWebhook:
-      type: object
-      description: Response for schedules with webhook destinations.
-      properties:
-        type:
-          type: string
-          enum:
-          - webhook
-          description: The destination type.
-        url:
-          type: string
-          format: uri
-          description: The webhook URL.
     ScheduleRecipientsS3:
       type: object
       description: Response for schedules with Amazon S3 destinations.
@@ -724,17 +680,6 @@ components:
         filename:
           type: string
           description: The filename template using Mustache syntax.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: HTTP response code for the error
-          example: <response_code>
-        message:
-          type: string
-          description: Detailed error description
-          example: <error_reason>
     ScheduleRecipientsEmail:
       type: object
       description: Response for schedules with email destinations.
@@ -763,6 +708,24 @@ components:
               name:
                 type: string
                 description: The recipient's name.
+    ScheduleRecipientsSftp:
+      type: object
+      description: Response for schedules with SFTP destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - sftp
+          description: The destination type.
+        address:
+          type: string
+          description: The SFTP server address.
+        port:
+          type: integer
+          description: The SFTP server port.
+        username:
+          type: string
+          description: The SFTP username.
     ScheduleRecipientsSlack:
       type: object
       description: Response for schedules with Slack destinations.
@@ -792,6 +755,43 @@ components:
               slackId:
                 type: string
                 description: The Slack channel or user ID.
+    ScheduleRecipientsWebhook:
+      type: object
+      description: Response for schedules with webhook destinations.
+      properties:
+        type:
+          type: string
+          enum:
+          - webhook
+          description: The destination type.
+        url:
+          type: string
+          format: uri
+          description: The webhook URL.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: HTTP response code for the error
+          example: <response_code>
+        message:
+          type: string
+          description: Detailed error description
+          example: <error_reason>
+  responses:
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

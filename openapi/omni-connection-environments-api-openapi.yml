@@ -257,25 +257,19 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
-    Forbidden:
-      description: Forbidden - Insufficient permissions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
     Error:
       type: object
       properties:
@@ -287,6 +281,12 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
   securitySchemes:
     bearerAuth:
       type: http

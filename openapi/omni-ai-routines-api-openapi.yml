@@ -599,19 +599,6 @@ paths:
                 $ref: '#/components/schemas/ApiError409'
 components:
   schemas:
-    ApiError429:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 429
-      required:
-      - detail
-      - status
     ApiError400:
       type: object
       properties:
@@ -625,23 +612,61 @@ components:
       required:
       - detail
       - status
-    PageInfo:
+    RoutineLastRun:
       type: object
-      description: Pagination information for paginated responses.
+      nullable: true
+      required:
+      - completedAt
+      - label
+      - state
+      description: Most recent completed run, or null if the routine has never completed a run.
       properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
+        completedAt:
           type: string
           nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
+          description: ISO 8601 timestamp the last completed run finished.
+        label:
+          type: string
+          description: User-visible status of the last completed run.
+          example: Delivered
+        state:
+          type: string
+          description: Machine-readable status of the last completed run.
+          example: COMPLETE
+    RoutineEmailDestination:
+      type: object
+      required:
+      - type
+      additionalProperties: false
+      description: Email delivery configuration for the routine.
+      properties:
+        recipientEmails:
+          type: array
+          items:
+            type: string
+            format: email
+          maxItems: 100
+          default: []
+          description: Email addresses that receive each scheduled run of the routine.
+          example:
+          - blob.ross@blobsrus.com
+          - blob.the.builder@blobsrus.com
+        type:
+          type: string
+          enum:
+          - email
+          description: Selects email delivery — each scheduled run is sent to the listed email recipients and user groups.
+          example: email
+        userGroupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          maxItems: 100
+          default: []
+          description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
+          example:
+          - 550e8400-e29b-41d4-a716-446655440000
     Routine:
       type: object
       properties:
@@ -732,27 +757,69 @@ components:
       required:
       - detail
       - status
-    RoutineLastRun:
+    ApiError429:
       type: object
-      nullable: true
-      required:
-      - completedAt
-      - label
-      - state
-      description: Most recent completed run, or null if the routine has never completed a run.
       properties:
-        completedAt:
+        detail:
           type: string
-          nullable: true
-          description: ISO 8601 timestamp the last completed run finished.
-        label:
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 429
+      required:
+      - detail
+      - status
+    ApiError409:
+      type: object
+      properties:
+        detail:
           type: string
-          description: User-visible status of the last completed run.
-          example: Delivered
-        state:
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
+    ApiError401:
+      type: object
+      properties:
+        detail:
           type: string
-          description: Machine-readable status of the last completed run.
-          example: COMPLETE
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    RoutineDestination:
+      oneOf:
+      - $ref: '#/components/schemas/RoutineEmailDestination'
+      - $ref: '#/components/schemas/RoutineSlackDestination'
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/RoutineEmailDestination'
+          slack: '#/components/schemas/RoutineSlackDestination'
+      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
     RoutineSlackDestination:
       type: object
       required:
@@ -791,99 +858,32 @@ components:
           type: string
           description: Detailed error description
           example: <error_reason>
-    ApiError403:
+    PageInfo:
       type: object
+      description: Pagination information for paginated responses.
       properties:
-        detail:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
           type: string
-          description: Human-readable error message describing what went wrong.
-        status:
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
           type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    RoutineDestination:
-      oneOf:
-      - $ref: '#/components/schemas/RoutineEmailDestination'
-      - $ref: '#/components/schemas/RoutineSlackDestination'
-      discriminator:
-        propertyName: type
-        mapping:
-          email: '#/components/schemas/RoutineEmailDestination'
-          slack: '#/components/schemas/RoutineSlackDestination'
-      description: Single delivery destination for the routine — email or Slack. To send results to multiple destinations, create one routine per destination.
-    RoutineEmailDestination:
-      type: object
-      required:
-      - type
-      additionalProperties: false
-      description: Email delivery configuration for the routine.
-      properties:
-        recipientEmails:
-          type: array
-          items:
-            type: string
-            format: email
-          maxItems: 100
-          default: []
-          description: Email addresses that receive each scheduled run of the routine.
-          example:
-          - blob.ross@blobsrus.com
-          - blob.the.builder@blobsrus.com
-        type:
-          type: string
-          enum:
-          - email
-          description: Selects email delivery — each scheduled run is sent to the listed email recipients and user groups.
-          example: email
-        userGroupIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-          maxItems: 100
-          default: []
-          description: User group IDs whose active members receive each scheduled run. Omni expands each group to the members' current email addresses when the routine runs.
-          example:
-          - 550e8400-e29b-41d4-a716-446655440000
-    ApiError409:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
+          description: Number of records per page.
+        totalRecords:
           type: integer
-          description: HTTP status code of the error.
-          example: 409
-      required:
-      - detail
-      - status
-    ApiError401:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
+          description: Total number of records matching the query.
   responses:
-    InternalServerError:
-      description: Internal Server Error
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    InternalServerError:
+      description: Internal Server Error
       content:
         application/json:
           schema:

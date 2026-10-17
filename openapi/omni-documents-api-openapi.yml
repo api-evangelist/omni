@@ -2212,12 +2212,44 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    SuccessResponse:
+    DocumentsV2PatchDraftResponse:
+      type: object
+      required:
+      - description
+      - draftIdentifier
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: string
+          description: Published document identifier the draft targets.
+          example: def456
+        draftIdentifier:
+          type: string
+          description: Identifier of the draft the patch was applied to.
+          example: abc123
+        name:
+          type: string
+          description: Document name.
+          example: Blob Sales
+        description:
+          type:
+          - string
+          - 'null'
+          description: Document description.
+          example: Overview of daily Blobs R Us Sales
+    DocumentsUpgradeLayoutResponse:
       type: object
       properties:
-        success:
+        identifier:
+          type: string
+          description: Document identifier
+        upgraded:
           type: boolean
-          example: true
+          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
+      required:
+      - identifier
+      - upgraded
     ApiError400:
       type: object
       properties:
@@ -2246,36 +2278,6 @@ components:
       required:
       - pageInfo
       - records
-    DocumentOwner:
-      type: object
-      description: Document owner
-      properties:
-        id:
-          type: string
-          description: Owner membership ID
-        name:
-          type: string
-          description: Owner display name
-      required:
-      - id
-      - name
-    PageInfo:
-      type: object
-      description: Pagination information for paginated responses.
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Indicates if there are more records available.
-        nextCursor:
-          type: string
-          nullable: true
-          description: Cursor for the next page of results. `null` if no more results.
-        pageSize:
-          type: integer
-          description: Number of records per page.
-        totalRecords:
-          type: integer
-          description: Total number of records matching the query.
     ApiError404:
       type: object
       properties:
@@ -2289,25 +2291,32 @@ components:
       required:
       - detail
       - status
-    DocumentsUpgradeLayoutResponse:
+    DocumentOwner:
       type: object
+      description: Document owner
       properties:
-        identifier:
+        id:
           type: string
-          description: Document identifier
-        upgraded:
-          type: boolean
-          description: True when the layout was upgraded, false when the document already had advanced layout (no-op).
+          description: Owner membership ID
+        name:
+          type: string
+          description: Owner display name
       required:
-      - identifier
-      - upgraded
-    DocumentsUpgradeLayoutBody:
+      - id
+      - name
+    ApiError409:
       type: object
       properties:
-        clearExistingDraft:
-          type: boolean
-          default: false
-          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 409
+      required:
+      - detail
+      - status
     Document:
       type: object
       properties:
@@ -2385,6 +2394,40 @@ components:
       - type
       - updatedAt
       - url
+    ApiError401:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+          example: 'Unauthorized: Missing or invalid API key'
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 401
+      required:
+      - detail
+      - status
+    ApiError403:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message describing what went wrong.
+        status:
+          type: integer
+          description: HTTP status code of the error.
+          example: 403
+      required:
+      - detail
+      - status
+    DocumentsUpgradeLayoutBody:
+      type: object
+      properties:
+        clearExistingDraft:
+          type: boolean
+          default: false
+          description: When upgrading a published document, discard any existing draft instead of failing with a conflict.
     Error:
       type: object
       properties:
@@ -2422,81 +2465,38 @@ components:
       - name
       - path
       - scope
-    ApiError403:
+    PageInfo:
       type: object
+      description: Pagination information for paginated responses.
       properties:
-        detail:
+        hasNextPage:
+          type: boolean
+          description: Indicates if there are more records available.
+        nextCursor:
           type: string
-          description: Human-readable error message describing what went wrong.
-        status:
+          nullable: true
+          description: Cursor for the next page of results. `null` if no more results.
+        pageSize:
           type: integer
-          description: HTTP status code of the error.
-          example: 403
-      required:
-      - detail
-      - status
-    DocumentsV2PatchDraftResponse:
-      type: object
-      required:
-      - description
-      - draftIdentifier
-      - identifier
-      - name
-      properties:
-        identifier:
-          type: string
-          description: Published document identifier the draft targets.
-          example: def456
-        draftIdentifier:
-          type: string
-          description: Identifier of the draft the patch was applied to.
-          example: abc123
-        name:
-          type: string
-          description: Document name.
-          example: Blob Sales
-        description:
-          type:
-          - string
-          - 'null'
-          description: Document description.
-          example: Overview of daily Blobs R Us Sales
-    ApiError409:
-      type: object
-      properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-        status:
+          description: Number of records per page.
+        totalRecords:
           type: integer
-          description: HTTP status code of the error.
-          example: 409
-      required:
-      - detail
-      - status
-    ApiError401:
+          description: Total number of records matching the query.
+    SuccessResponse:
       type: object
       properties:
-        detail:
-          type: string
-          description: Human-readable error message describing what went wrong.
-          example: 'Unauthorized: Missing or invalid API key'
-        status:
-          type: integer
-          description: HTTP status code of the error.
-          example: 401
-      required:
-      - detail
-      - status
+        success:
+          type: boolean
+          example: true
   responses:
-    MethodNotAllowed:
-      description: Method Not Allowed - Invalid HTTP method for this endpoint
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests - Rate limit exceeded (60 requests/minute)
+    MethodNotAllowed:
+      description: Method Not Allowed - Invalid HTTP method for this endpoint
       content:
         application/json:
           schema:
