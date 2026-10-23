@@ -641,6 +641,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/omni/overview
 - url: https://omni.co/blog/rss.xml
   type: BlogRSS
 - type: CapabilityMap
