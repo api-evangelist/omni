@@ -1,1463 +1,1333 @@
 {
+  "info": {
+    "_postman_id": "a6add939-e8b2-4f0d-b84d-aa3945e2a54f",
+    "name": "Omni Document favorites API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:41:55.000Z",
+    "updatedAt": "2026-10-21T20:41:55.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a6add939-e8b2-4f0d-b84d-aa3945e2a54f"
+  },
   "item": [
     {
-      "id": "d9f979f0-6639-4d89-b376-e36322778d32",
-      "name": "Document favorites",
-      "description": {
-        "content": "Favorite and unfavorite documents",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "9e9d13c0-364b-482a-ae62-73d3ceedcc4d",
-          "name": "Favorite document",
-          "request": {
-            "name": "Favorite document",
-            "description": {
-              "content": "Add a document to a user's favorites. Only published documents can be favorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user's favorites.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "documents",
-                ":documentId",
-                "favorite"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "documentId",
-                  "description": "(Required) The document identifier"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "documents",
+          "item": [
             {
-              "id": "61ad6a57-fb63-4311-ae17-fcaade299ba8",
-              "name": "Document favorited successfully. No response body.\n\nThis response is returned whether the document was newly favorited or already in favorites.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "PUT",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
+              "name": "{documentId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "name": "favorite",
+                  "item": [
+                    {
+                      "name": "Favorite document",
+                      "id": "4d64e730-4ec3-4267-9ab8-9355a78ff799",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "documents",
+                            ":documentId",
+                            "favorite"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "e8408263-3f12-4578-8442-8f3e03d770d7",
+                              "key": "documentId",
+                              "value": "<string>",
+                              "description": "(Required) The document identifier"
+                            }
+                          ]
+                        },
+                        "description": "Add a document to a user's favorites. Only published documents can be favorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document is newly favorited or already in the user's favorites."
+                      },
+                      "response": [
+                        {
+                          "id": "971f139b-d307-4615-89ad-5d31bf3abbe5",
+                          "name": "Document favorited successfully. No response body.\n\nThis response is returned whether the document was newly favorited or already in favorites.\n",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-971f139b-d307-4615-89ad-5d31bf3abbe5"
+                        },
+                        {
+                          "id": "9e126895-0ac7-4c06-9f17-96873feae151",
+                          "name": "Forbidden. Possible causes:\n\n- Personal Access Token attempted to act on behalf of another user. PATs cannot use the `userId` parameter.\n",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-9e126895-0ac7-4c06-9f17-96873feae151"
+                        },
+                        {
+                          "id": "24f81fc0-964e-43dc-a7ab-aa9112ace12e",
+                          "name": "Not Found. Possible causes:\n\n- Document does not exist\n- Document is not published\n- Specified `userId` not found\n",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-24f81fc0-964e-43dc-a7ab-aa9112ace12e"
+                        },
+                        {
+                          "id": "c18ee3a9-640c-4720-8663-b901f1f589d5",
+                          "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Method Not Allowed",
+                          "code": 405,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-c18ee3a9-640c-4720-8663-b901f1f589d5"
+                        },
+                        {
+                          "id": "2466302a-6b5d-414b-9787-ff0f31b226ad",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to favorite the document on behalf of. \n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-2466302a-6b5d-414b-9787-ff0f31b226ad"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:41:55.000Z",
+                      "updatedAt": "2026-10-21T20:41:55.000Z",
+                      "uid": "35240-4d64e730-4ec3-4267-9ab8-9355a78ff799"
+                    },
+                    {
+                      "name": "Unfavorite document",
+                      "id": "41fdb68d-7f1f-4190-9e98-4257c80744f7",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "documents",
+                            ":documentId",
+                            "favorite"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "a713ee22-028e-4216-bcb9-b1172aa7c71e",
+                              "key": "documentId",
+                              "value": "<string>",
+                              "description": "(Required) The document identifier"
+                            }
+                          ]
+                        },
+                        "description": "Remove a document from a user's favorites. Only published documents can be unfavorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not."
+                      },
+                      "response": [
+                        {
+                          "id": "5b1d5af8-4758-43f5-b0c7-a2b352da0fb1",
+                          "name": "Document unfavorited successfully. No response body.\n\nThis response is returned whether the document was previously favorited or not.\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-5b1d5af8-4758-43f5-b0c7-a2b352da0fb1"
+                        },
+                        {
+                          "id": "723d80cc-41a4-4261-9fc8-cc6ef559a1b4",
+                          "name": "Invalid HTTP method",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-723d80cc-41a4-4261-9fc8-cc6ef559a1b4"
+                        },
+                        {
+                          "id": "07327fe3-7f42-4dad-bf90-391ce4c02cea",
+                          "name": "Forbidden. Possible causes:\n\n- Personal Access Token attempted to act on behalf of another user\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-07327fe3-7f42-4dad-bf90-391ce4c02cea"
+                        },
+                        {
+                          "id": "1529124c-d4dc-4599-87a2-04b02ab76e3e",
+                          "name": "Not Found. Possible causes:\n\n- Document does not exist\n- Document is not published\n- Specified `userId` not found\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-1529124c-d4dc-4599-87a2-04b02ab76e3e"
+                        },
+                        {
+                          "id": "c7e66a47-34f0-4995-a6c6-6a9c9a13e77f",
+                          "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Method Not Allowed",
+                          "code": 405,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-c7e66a47-34f0-4995-a6c6-6a9c9a13e77f"
+                        },
+                        {
+                          "id": "aa4f076f-c767-4607-981e-732212f5c222",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:documentId/favorite?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":documentId",
+                                "favorite"
+                              ],
+                              "query": [
+                                {
+                                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "documentId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-aa4f076f-c767-4607-981e-732212f5c222"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:41:55.000Z",
+                      "updatedAt": "2026-10-21T20:41:55.000Z",
+                      "uid": "35240-41fdb68d-7f1f-4190-9e98-4257c80744f7"
+                    }
+                  ],
+                  "id": "47346dee-ad31-4d18-93af-9af694279dc0",
+                  "createdAt": "2026-10-21T20:41:55.000Z",
+                  "updatedAt": "2026-10-21T20:41:55.000Z",
+                  "uid": "35240-47346dee-ad31-4d18-93af-9af694279dc0"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "0eb40083-4811-4d09-936d-a949e3045a18",
-              "name": "Forbidden. Possible causes:\n\n- Personal Access Token attempted to act on behalf of another user. PATs cannot use the `userId` parameter.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b38e457a-d9be-41ae-b177-5e849a6ab694",
-              "name": "Not Found. Possible causes:\n\n- Document does not exist\n- Document is not published\n- Specified `userId` not found\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e873c38f-862e-4780-83f6-efc0fbec8ad7",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a9c87e35-9564-402f-b652-fedb10a0b3a5",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "afafd869-5b42-4ddd-a5b5-e11654ade959",
-          "name": "Unfavorite document",
-          "request": {
-            "name": "Unfavorite document",
-            "description": {
-              "content": "Remove a document from a user's favorites. Only published documents can be unfavorited.\n\n**Note**: Successful requests will return `204` regardless of whether the document was previously favorited or not.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "documents",
-                ":documentId",
-                "favorite"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "**Requires an Organization API key**. Membership ID of the user to unfavorite the document on behalf of.\n\nPersonal Access Tokens (PATs) cannot use this parameter to act on behalf of other users.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "documentId",
-                  "description": "(Required) The document identifier"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "6ea6a1e6-8a82-44bc-abc4-cf29d5cd61a6",
-              "name": "Document unfavorited successfully. No response body.\n\nThis response is returned whether the document was previously favorited or not.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "88d8881c-9f23-4406-90f3-2521061a5319",
-              "name": "Invalid HTTP method",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b498a2cf-ff7f-40f5-a980-588d0920e9c0",
-              "name": "Forbidden. Possible causes:\n\n- Personal Access Token attempted to act on behalf of another user\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e582aed6-90d8-4132-8954-d7386b9ec977",
-              "name": "Not Found. Possible causes:\n\n- Document does not exist\n- Document is not published\n- Specified `userId` not found\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0827adf6-640d-4393-99b2-7a7d3835d30c",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "16edf8fc-dec1-4830-8469-f2ce683324eb",
+              "createdAt": "2026-10-21T20:41:55.000Z",
+              "updatedAt": "2026-10-21T20:41:55.000Z",
+              "uid": "35240-16edf8fc-dec1-4830-8469-f2ce683324eb"
             },
             {
-              "id": "a3916e4a-3afc-499c-a943-e1807ef424a5",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":documentId",
-                    "favorite"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "documentId",
-                      "description": "(Required) The document identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
+              "name": "{identifier}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "favorites",
+                  "item": [
+                    {
+                      "name": "List document favoriters",
+                      "id": "3ab884e2-7281-45e9-8971-31c8aaf5c927",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "documents",
+                            ":identifier",
+                            "favorites"
+                          ],
+                          "query": [
+                            {
+                              "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Number of items per page (min 1, max 100).",
+                              "key": "pageSize",
+                              "value": "20"
+                            },
+                            {
+                              "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                              "key": "sortDirection",
+                              "value": "asc"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "579c4024-9ead-4a61-aa19-ca1b923f1d45",
+                              "key": "identifier",
+                              "value": "<string>",
+                              "description": "(Required) Document identifier (either document ID or slug)."
+                            }
+                          ]
+                        },
+                        "description": "This endpoint requires **Manager** or **Owner** permissions on the requested document.\n\nLists users who have favorited a published document, paginated and sorted by `favoritedAt`.\n\nUse this endpoint when you need to know \"who favorited document X\" \u2014 for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization."
+                      },
+                      "response": [
+                        {
+                          "id": "1cca871a-dc73-4830-80f7-dbea40b0ba51",
+                          "name": "Successfully retrieved list of users who favorited the document",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": \"<boolean>\",\n    \"nextCursor\": \"<string>\",\n    \"pageSize\": \"<integer>\",\n    \"totalRecords\": \"<integer>\"\n  },\n  \"records\": [\n    {\n      \"userId\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"favoritedAt\": \"<dateTime>\"\n    },\n    {\n      \"userId\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"favoritedAt\": \"<dateTime>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-1cca871a-dc73-4830-80f7-dbea40b0ba51"
+                        },
+                        {
+                          "id": "7e911714-c031-4264-91b2-9aade51e0c1f",
+                          "name": "Bad Request. Invalid query parameters.\n\nPossible causes:\n- Unparseable cursor\n- Out-of-range `pageSize` (must be 1-100)\n- Invalid `sortDirection` (must be `asc` or `desc`)\n- Unknown query parameter\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-7e911714-c031-4264-91b2-9aade51e0c1f"
+                        },
+                        {
+                          "id": "39144c4a-12ef-4a2a-80cb-ae6a28b57655",
+                          "name": "Missing authentication",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-39144c4a-12ef-4a2a-80cb-ae6a28b57655"
+                        },
+                        {
+                          "id": "d6f51267-ce72-46fc-9421-95facd767308",
+                          "name": "Forbidden. Possible causes:\n- Caller lacks `MANAGER` permission on the document\n- Used a user-scoped (personal access token) API key\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-d6f51267-ce72-46fc-9421-95facd767308"
+                        },
+                        {
+                          "id": "81029772-aad5-4a94-a4d9-a5095b578438",
+                          "name": "Document not found (or unpublished)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-81029772-aad5-4a94-a4d9-a5095b578438"
+                        },
+                        {
+                          "id": "24ae51ba-d460-46cd-849b-8ec1d90956da",
+                          "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Method Not Allowed",
+                          "code": 405,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-24ae51ba-d460-46cd-849b-8ec1d90956da"
+                        },
+                        {
+                          "id": "a74bcffd-9a62-43ea-931e-58969272df43",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/documents/:identifier/favorites?cursor=<string>&pageSize=20&sortDirection=asc",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "documents",
+                                ":identifier",
+                                "favorites"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page.",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of items per page (min 1, max 100).",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                },
+                                {
+                                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first.",
+                                  "key": "sortDirection",
+                                  "value": "asc"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "identifier"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:55.000Z",
+                          "updatedAt": "2026-10-21T20:41:55.000Z",
+                          "uid": "35240-a74bcffd-9a62-43ea-931e-58969272df43"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:41:55.000Z",
+                      "updatedAt": "2026-10-21T20:41:55.000Z",
+                      "uid": "35240-3ab884e2-7281-45e9-8971-31c8aaf5c927"
+                    }
+                  ],
+                  "id": "b9554a73-97d2-448f-aed0-70255e1386b6",
+                  "createdAt": "2026-10-21T20:41:55.000Z",
+                  "updatedAt": "2026-10-21T20:41:55.000Z",
+                  "uid": "35240-b9554a73-97d2-448f-aed0-70255e1386b6"
                 }
               ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f4b6dfd6-9794-4ef2-b76c-34a09dbcc585",
-          "name": "List document favoriters",
-          "request": {
-            "name": "List document favoriters",
-            "description": {
-              "content": "<Note>\n  This endpoint requires **Manager** or **Owner** permissions on the requested document.\n</Note>\n\nLists users who have favorited a published document, paginated and sorted by `favoritedAt`.\n\nUse this endpoint when you need to know \"who favorited document X\" — for example, a content-migration script that preserves favorites when replacing a document needs to call this once per document, rather than iterating every user in the organization.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "documents",
-                ":identifier",
-                "favorites"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "cursor",
-                  "value": "<string>",
-                  "description": "Page cursor from a previous response's `nextCursor`. Omit for the first page."
-                },
-                {
-                  "disabled": false,
-                  "key": "pageSize",
-                  "value": "20",
-                  "description": "Number of items per page (min 1, max 100)."
-                },
-                {
-                  "disabled": false,
-                  "key": "sortDirection",
-                  "value": "asc",
-                  "description": "Sort direction by `favoritedAt`. `asc` returns oldest favorites first; `desc` returns newest first."
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "identifier",
-                  "description": "(Required) Document identifier (either document ID or slug)."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "8aa4ab20-77b2-4379-82a4-41524f57d3ec",
-              "name": "Successfully retrieved list of users who favorited the document",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": false,\n    \"nextCursor\": null,\n    \"pageSize\": 20,\n    \"totalRecords\": 2\n  },\n  \"records\": [\n    {\n      \"userId\": \"f1c2a3e4-1111-1111-1111-111111111111\",\n      \"name\": \"Blob Ross\",\n      \"email\": \"blob.ross@eblobsrus.com\",\n      \"favoritedAt\": \"2026-04-12T10:14:02.000Z\"\n    },\n    {\n      \"userId\": \"f1c2a3e4-2222-2222-2222-222222222222\",\n      \"name\": \"Blob the Builder\",\n      \"email\": \"blob.the.builder@blobsrus.com\",\n      \"favoritedAt\": \"2026-05-01T17:33:21.000Z\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "60773622-e23d-4a20-8c43-a57429f11ed4",
-              "name": "Bad Request. Invalid query parameters.\n\nPossible causes:\n- Unparseable cursor\n- Out-of-range `pageSize` (must be 1-100)\n- Invalid `sortDirection` (must be `asc` or `desc`)\n- Unknown query parameter\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Invalid cursor: not-a-number\",\n  \"status\": 400\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "df4432ed-9d76-46ac-b833-54aa16743cb6",
-              "name": "Missing authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "826fbdbf-c002-49dd-ba55-2b531f298bf2",
-              "name": "Forbidden. Possible causes:\n- Caller lacks `MANAGER` permission on the document\n- Used a user-scoped (personal access token) API key\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"You do not have permission to manage document access.\",\n  \"status\": 403\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6eda3ba7-5fae-49ef-933a-829a40f63e40",
-              "name": "Document not found (or unpublished)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Document with identifier \\\"does-not-exist\\\" not found\",\n  \"status\": 404\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7f043d26-878f-452f-848f-31f87aafc146",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4df3b8dc-02c7-4b5c-b146-4bc50ee1e393",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "documents",
-                    ":identifier",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    },
-                    {
-                      "key": "sortDirection",
-                      "value": "asc"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "identifier",
-                      "description": "(Required) Document identifier (either document ID or slug)."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "e495abcf-ea28-46a0-9b9c-98466b1a02c2",
+              "createdAt": "2026-10-21T20:41:55.000Z",
+              "updatedAt": "2026-10-21T20:41:55.000Z",
+              "uid": "35240-e495abcf-ea28-46a0-9b9c-98466b1a02c2"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "00e9db9e-44ae-4207-8ae9-970d4a422342",
+          "createdAt": "2026-10-21T20:41:55.000Z",
+          "updatedAt": "2026-10-21T20:41:55.000Z",
+          "uid": "35240-00e9db9e-44ae-4207-8ae9-970d4a422342"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "894b0b06-e0b3-4445-9511-2e4b03b9f154",
+      "createdAt": "2026-10-21T20:41:55.000Z",
+      "updatedAt": "2026-10-21T20:41:55.000Z",
+      "uid": "35240-894b0b06-e0b3-4445-9511-2e4b03b9f154"
     }
   ],
   "auth": {
@@ -1465,17 +1335,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "e3169551-911b-4bbd-bfc4-08fa9d5022b8",
-    "name": "Omni AI Document favorites API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

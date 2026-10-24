@@ -1,452 +1,402 @@
 {
+  "info": {
+    "_postman_id": "aa3e5033-d0d5-44f7-951d-e97d1c7df089",
+    "name": "Omni Jobs API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:42:39.000Z",
+    "updatedAt": "2026-10-21T20:42:40.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-aa3e5033-d0d5-44f7-951d-e97d1c7df089"
+  },
   "item": [
     {
-      "id": "c575262a-57b1-4bf1-a632-866b745f32a7",
-      "name": "Jobs",
-      "description": {
-        "content": "Check status of asynchronous jobs",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "70cdbc4a-3bba-4507-b472-4a300dad3966",
-          "name": "Get job status",
-          "request": {
-            "name": "Get job status",
-            "description": {
-              "content": "<Note>\n  Currently, this endpoint only supports schema refresh jobs. Job IDs from other job types will return an error.\n</Note>\n\nRetrieves the current status of an asynchronous job. The user authenticating the request must have **read** permissions on the connection.\n\nThis endpoint is used to check the status of jobs initiated by other API calls, such as schema refreshes. Poll this endpoint to determine when the job has completed.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "jobs",
-                ":jobId",
-                "status"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "jobId",
-                  "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "jobs",
+          "item": [
             {
-              "id": "01bebaba-ba92-4e77-8861-8c4e685f5eb3",
-              "name": "Job status retrieved successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{jobId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "status",
+                  "item": [
+                    {
+                      "name": "Get job status",
+                      "id": "4b518f7a-2280-456a-a3c7-a18c57a4cb19",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "jobs",
+                            ":jobId",
+                            "status"
+                          ],
+                          "variable": [
+                            {
+                              "id": "c24f723f-cbfb-4c71-bbe9-4a62989ca94c",
+                              "key": "jobId",
+                              "value": "<uuid>",
+                              "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
+                            }
+                          ]
+                        },
+                        "description": "Currently, this endpoint only supports schema refresh jobs. Job IDs from other job types will return an error.\n\nRetrieves the current status of an asynchronous job. The user authenticating the request must have **read** permissions on the connection.\n\nThis endpoint is used to check the status of jobs initiated by other API calls, such as schema refreshes. Poll this endpoint to determine when the job has completed."
+                      },
+                      "response": [
+                        {
+                          "id": "86c18740-d974-4717-a4d5-ceec407026e0",
+                          "name": "Job status retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"job_type\": \"<string>\",\n  \"job_id\": \"<uuid>\",\n  \"status\": \"COMPLETED\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-86c18740-d974-4717-a4d5-ceec407026e0"
+                        },
+                        {
+                          "id": "29fa050d-cd83-42cc-bf48-7d174748dc64",
+                          "name": "Bad Request\n\nPossible error messages:\n\n- `Bad Request: jobId: Invalid uuid`\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-29fa050d-cd83-42cc-bf48-7d174748dc64"
+                        },
+                        {
+                          "id": "05c526cf-5d49-4ed1-ad28-71849961df77",
+                          "name": "Unauthorized - Invalid or missing API key",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-05c526cf-5d49-4ed1-ad28-71849961df77"
+                        },
+                        {
+                          "id": "2d9dec9c-ef73-485e-9061-00860761b7cf",
+                          "name": "Forbidden\n\nPossible error messages:\n\n- `Job type not supported for status checks`\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-2d9dec9c-ef73-485e-9061-00860761b7cf"
+                        },
+                        {
+                          "id": "3992dcaa-225e-4580-baa8-81e0de219fc5",
+                          "name": "Job not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-3992dcaa-225e-4580-baa8-81e0de219fc5"
+                        },
+                        {
+                          "id": "d2898ba2-8f9a-4c96-b299-4fcfd014be32",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/jobs/:jobId/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "jobs",
+                                ":jobId",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "jobId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:40.000Z",
+                          "updatedAt": "2026-10-21T20:42:40.000Z",
+                          "uid": "35240-d2898ba2-8f9a-4c96-b299-4fcfd014be32"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:42:40.000Z",
+                      "updatedAt": "2026-10-21T20:42:40.000Z",
+                      "uid": "35240-4b518f7a-2280-456a-a3c7-a18c57a4cb19"
+                    }
+                  ],
+                  "id": "5bad32d5-d5fd-4c2a-8590-40834d945ae0",
+                  "createdAt": "2026-10-21T20:42:40.000Z",
+                  "updatedAt": "2026-10-21T20:42:40.000Z",
+                  "uid": "35240-5bad32d5-d5fd-4c2a-8590-40834d945ae0"
                 }
               ],
-              "body": "{\n  \"job_type\": \"refresh_schema\",\n  \"job_id\": \"4e6953a9-a71b-4c0b-8b63-a9ea308f6aaf\",\n  \"status\": \"RUNNING\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "12407381-63a3-4975-9b54-eb6b7f50c838",
-              "name": "Bad Request\n\nPossible error messages:\n\n- `Bad Request: jobId: Invalid uuid`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "290d5ca2-cc9c-4dc2-9d6f-d8559983f75a",
-              "name": "Unauthorized - Invalid or missing API key",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "41dcf73e-8afa-4595-a480-91eb99bdb61c",
-              "name": "Forbidden\n\nPossible error messages:\n\n- `Job type not supported for status checks`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c2062e43-350b-4961-a19a-576288a4f142",
-              "name": "Job not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e63215e2-208c-4921-903e-142ebedaecc9",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "jobs",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from an asynchronous operation such as [Refresh schema](/api/models/refresh-schema)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "a46201bf-bb9d-49a1-aad3-7751e0a5ca6e",
+              "createdAt": "2026-10-21T20:42:40.000Z",
+              "updatedAt": "2026-10-21T20:42:40.000Z",
+              "uid": "35240-a46201bf-bb9d-49a1-aad3-7751e0a5ca6e"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "55fa23bf-fa4b-4af2-9dc1-90721d1226a7",
+          "createdAt": "2026-10-21T20:42:40.000Z",
+          "updatedAt": "2026-10-21T20:42:40.000Z",
+          "uid": "35240-55fa23bf-fa4b-4af2-9dc1-90721d1226a7"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "e7422986-6bdf-481d-978e-9487aa775943",
+      "createdAt": "2026-10-21T20:42:40.000Z",
+      "updatedAt": "2026-10-21T20:42:40.000Z",
+      "uid": "35240-e7422986-6bdf-481d-978e-9487aa775943"
     }
   ],
   "auth": {
@@ -454,17 +404,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "f1600948-525b-47de-9bff-1948e6a2a96f",
-    "name": "Omni AI Jobs API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

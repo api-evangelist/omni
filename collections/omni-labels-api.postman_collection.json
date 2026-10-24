@@ -1,1705 +1,1579 @@
 {
+  "info": {
+    "_postman_id": "7d32a31f-69cd-4313-af80-efc7a85ff64f",
+    "name": "Omni Labels API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:42:44.000Z",
+    "updatedAt": "2026-10-21T20:42:44.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-7d32a31f-69cd-4313-af80-efc7a85ff64f"
+  },
   "item": [
     {
-      "id": "1900635e-5831-46f4-85c0-84d6004ad56d",
-      "name": "Labels",
-      "description": {
-        "content": "Manage labels in an organization. Labels can be applied to documents and folders to help organize and categorize content.\n\n**Label types:**\n- **Basic labels**: Can be created and managed by any user\n- **Verified labels**: Indicate curated or officially sanctioned content. Admin-only.\n- **Homepage labels**: Appear on the organization homepage. Admin-only.\n",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "c7d66d58-3de7-4d80-abc4-062a35047679",
-          "name": "Create label",
-          "request": {
-            "name": "Create label",
-            "description": {
-              "content": "Create a new label in the organization.\n\nAny user can create basic labels, but **Organization Admin** permissions are required to:\n\n- Create **Verified** labels (`verified: true`)\n- Create **Homepage** labels (`homepage: true`)\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "labels"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "labels",
+          "item": [
             {
-              "id": "38661a64-8765-40ed-b23c-3201254d3330",
-              "name": "Label created successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{labelName}",
+              "item": [
+                {
+                  "name": "Get label",
+                  "id": "f9c5a214-5f89-48de-8dc1-f536fefc7d31",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels/:labelName",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels",
+                        ":labelName"
+                      ],
+                      "variable": [
+                        {
+                          "id": "c79b651f-d0f3-4500-b224-400c6d1bf92a",
+                          "key": "labelName",
+                          "value": "<string>",
+                          "description": "(Required) The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
+                        }
+                      ]
+                    },
+                    "description": "Retrieve a single label by name."
+                  },
+                  "response": [
                     {
-                      "key": "userId",
-                      "value": "<string>"
+                      "id": "69546d01-970b-445e-9b8a-4f0c86be62c5",
+                      "name": "Label details",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"usage_count\": \"<integer>\",\n  \"color\": null,\n  \"description\": null\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-69546d01-970b-445e-9b8a-4f0c86be62c5"
+                    },
+                    {
+                      "id": "e7af644c-4410-4163-97ae-0bfbc5d4f1d5",
+                      "name": "Label not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-e7af644c-4410-4163-97ae-0bfbc5d4f1d5"
+                    },
+                    {
+                      "id": "2a182d16-8306-4140-afdf-eb147c89ba48",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-2a182d16-8306-4140-afdf-eb147c89ba48"
                     }
                   ],
-                  "variable": [
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-f9c5a214-5f89-48de-8dc1-f536fefc7d31"
+                },
+                {
+                  "name": "Update label",
+                  "id": "a07fe65a-5a39-4dc6-9346-c8950ff31225",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels",
+                        ":labelName"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "027c96c5-6cc9-4f8d-802e-5b934fb9d28c",
+                          "key": "labelName"
+                        },
+                        {
+                          "id": "515b1c2d-7f43-4569-96c6-b5723bada017",
+                          "key": "name",
+                          "value": "<string>",
+                          "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
+                        }
+                      ]
+                    },
+                    "description": "Update an existing label, including renaming, changing **Verified** status, or adding/removing it from the **Homepage**.\n\nUsers can update basic labels they created. **Organization Admin** permissions are required to modify **Verified** or **Homepage** labels, including making a label `verified` or visible on the `homepage`."
+                  },
+                  "response": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
+                      "id": "d45dce78-7a52-4684-815c-eb1f5efa2d6b",
+                      "name": "Label updated successfully",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"usage_count\": \"<integer>\",\n  \"color\": null,\n  \"description\": null\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-d45dce78-7a52-4684-815c-eb1f5efa2d6b"
+                    },
+                    {
+                      "id": "ee6656ac-4890-473c-bacc-20c81132878b",
+                      "name": "Bad Request. Possible causes:\n\n- Name too short or too long\n",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-ee6656ac-4890-473c-bacc-20c81132878b"
+                    },
+                    {
+                      "id": "1927787a-ad96-4c44-9e32-e462213072b8",
+                      "name": "Forbidden. Possible causes:\n\n- User lacks permission to manage labels\n- User lacks **Organization Admin** permissions, which are required to modify **Verified** labels\n- User lacks **Organization Admin** permissions, which are required to modify **Homepag",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-1927787a-ad96-4c44-9e32-e462213072b8"
+                    },
+                    {
+                      "id": "cc7cd7f9-c3b9-4f85-9631-3fe8fed139aa",
+                      "name": "Label not found",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-cc7cd7f9-c3b9-4f85-9631-3fe8fed139aa"
+                    },
+                    {
+                      "id": "fc3894b9-c581-48e4-baa4-a20abf53716e",
+                      "name": "Conflict. The new label name already exists (case-insensitive).\n",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-fc3894b9-c581-48e4-baa4-a20abf53716e"
+                    },
+                    {
+                      "id": "4b690046-93da-448c-bb13-cf18cddbf29c",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-4b690046-93da-448c-bb13-cf18cddbf29c"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-a07fe65a-5a39-4dc6-9346-c8950ff31225"
+                },
+                {
+                  "name": "Delete label",
+                  "id": "9bd1a3ed-ee42-47e7-a2e3-cbe6050de321",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels",
+                        ":labelName"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "b3c4aaa9-e356-4430-a1b8-c700cf59af3e",
+                          "key": "labelName"
+                        },
+                        {
+                          "id": "a2f2f4fd-8722-42f4-b6a2-d301ef616298",
+                          "key": "name",
+                          "value": "<string>",
+                          "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
+                        }
+                      ]
+                    },
+                    "description": "Delete a label from the organization.\n\nAny user can delete basic labels, but **Organization Admin** permissions are required to delete **Verified** and **Homepage** labels."
+                  },
+                  "response": [
+                    {
+                      "id": "86c93888-3425-48c1-b843-f0a4b3db2b28",
+                      "name": "Label deleted successfully. No response body.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "No Content",
+                      "code": 204,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-86c93888-3425-48c1-b843-f0a4b3db2b28"
+                    },
+                    {
+                      "id": "f5ebb922-d977-48a5-9cc1-9a993d531737",
+                      "name": "Forbidden. Possible causes:\n\n- User lacks permission to manage labels\n- User lacks **Organization Admin** permissions, which are required to delete **Verified** labels\n- User lacks **Organization Admin** permissions, which are required to delete **Homepag",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-f5ebb922-d977-48a5-9cc1-9a993d531737"
+                    },
+                    {
+                      "id": "c042ec5d-6c36-4700-8ddf-e28ae89926a0",
+                      "name": "Label not found",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-c042ec5d-6c36-4700-8ddf-e28ae89926a0"
+                    },
+                    {
+                      "id": "7bad7e2b-d798-40fa-8668-fcdf4b356b79",
+                      "name": "Conflict. The label is currently applied to documents and cannot be deleted.\n\nRemove the label from all documents first.\n",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-7bad7e2b-d798-40fa-8668-fcdf4b356b79"
+                    },
+                    {
+                      "id": "98cffc36-5080-4f21-943d-53194cb8cb68",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/labels/:labelName?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "labels",
+                            ":labelName"
+                          ],
+                          "query": [
+                            {
+                              "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "labelName"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:42:44.000Z",
+                      "updatedAt": "2026-10-21T20:42:44.000Z",
+                      "uid": "35240-98cffc36-5080-4f21-943d-53194cb8cb68"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-9bd1a3ed-ee42-47e7-a2e3-cbe6050de321"
+                }
+              ],
+              "id": "dab00483-3ffb-4b6d-9c5e-da726fcc8691",
+              "createdAt": "2026-10-21T20:42:44.000Z",
+              "updatedAt": "2026-10-21T20:42:44.000Z",
+              "uid": "35240-dab00483-3ffb-4b6d-9c5e-da726fcc8691"
+            },
+            {
+              "name": "Create label",
+              "id": "e822d780-ae4d-4514-80ad-ee5ece046cc2",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
                     }
                   ]
                 },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Dev\",\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"name\": \"Dev\",\n  \"verified\": true,\n  \"homepage\": true,\n  \"usage_count\": 0,\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b3d6bc99-df09-4c7a-b3ab-c26504fb52e5",
-              "name": "Bad Request. Possible causes:\n\n- Label name too short (less than 2 characters)\n- Label name too long (more than 25 characters)\n",
-              "originalRequest": {
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "v1",
                     "labels"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
                       "key": "userId",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": [
+                  ]
+                },
+                "description": "Create a new label in the organization.\n\nAny user can create basic labels, but **Organization Admin** permissions are required to:\n\n- Create **Verified** labels (`verified: true`)\n- Create **Homepage** labels (`homepage: true`)"
+              },
+              "response": [
+                {
+                  "id": "66c95bdc-8388-4d5d-831b-3f669083ecc7",
+                  "name": "Label created successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"usage_count\": \"<integer>\",\n  \"color\": null,\n  \"description\": null\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-66c95bdc-8388-4d5d-831b-3f669083ecc7"
+                },
+                {
+                  "id": "a8df541c-23fd-4955-bc9b-f737fac0232f",
+                  "name": "Bad Request. Possible causes:\n\n- Label name too short (less than 2 characters)\n- Label name too long (more than 25 characters)\n",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-a8df541c-23fd-4955-bc9b-f737fac0232f"
+                },
+                {
+                  "id": "9647217a-ad83-43c5-a31b-50378f896292",
+                  "name": "Forbidden. Possible causes:\n\n- User lacks **Organization Admin** permissions, which are required to create Verified and Homepage labels\n- User lacks the permissions required to manage labels\n",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-9647217a-ad83-43c5-a31b-50378f896292"
+                },
+                {
+                  "id": "5093ad8c-d385-46bb-8858-6c8184c8601c",
+                  "name": "Conflict. A label with this name already exists (case-insensitive).\n",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-5093ad8c-d385-46bb-8858-6c8184c8601c"
+                },
+                {
+                  "id": "7bf86cc6-2a77-4e72-92e9-0f421f890711",
+                  "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"color\": null,\n  \"description\": null,\n  \"verified\": false,\n  \"homepage\": false\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels?userId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ],
+                      "query": [
+                        {
+                          "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n",
+                          "key": "userId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-7bf86cc6-2a77-4e72-92e9-0f421f890711"
+                }
+              ],
+              "createdAt": "2026-10-21T20:42:44.000Z",
+              "updatedAt": "2026-10-21T20:42:44.000Z",
+              "uid": "35240-e822d780-ae4d-4514-80ad-ee5ece046cc2"
+            },
+            {
+              "name": "List labels",
+              "id": "36962433-b04a-4d5a-9fec-f5fc2014429d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
                     }
                   ]
                 },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Dev\",\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1293ee21-6382-4e6d-ba3e-b100644dadd8",
-              "name": "Forbidden. Possible causes:\n\n- User lacks **Organization Admin** permissions, which are required to create Verified and Homepage labels\n- User lacks the permissions required to manage labels\n",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "v1",
-                    "labels"
-                  ],
+                  "raw": "{{baseUrl}}/v1/labels",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Dev\",\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4f5250e4-8729-4506-bf83-337e34342c01",
-              "name": "Conflict. A label with this name already exists (case-insensitive).\n",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "v1",
                     "labels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
                   ]
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Dev\",\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Retrieve all labels in the organization."
               },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6f0dfdbf-e515-4601-bcd6-e19cd469e98f",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "8c0fb633-bc44-4ea1-91cc-3ee13af1f7ec",
+                  "name": "List of all labels in the organization",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "userId",
-                      "value": "<string>"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"labels\": [\n    {\n      \"name\": \"<string>\",\n      \"verified\": \"<boolean>\",\n      \"homepage\": \"<boolean>\",\n      \"usage_count\": \"<integer>\",\n      \"color\": null,\n      \"description\": null\n    },\n    {\n      \"name\": \"<string>\",\n      \"verified\": \"<boolean>\",\n      \"homepage\": \"<boolean>\",\n      \"usage_count\": \"<integer>\",\n      \"color\": null,\n      \"description\": null\n    }\n  ]\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-8c0fb633-bc44-4ea1-91cc-3ee13af1f7ec"
                 },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Dev\",\n  \"color\": \"#0366d6\",\n  \"description\": \"Documents based on dev schemas\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "9727c829-341a-4f8f-a8d1-361e904127e9",
+                  "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/labels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "labels"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:42:44.000Z",
+                  "updatedAt": "2026-10-21T20:42:44.000Z",
+                  "uid": "35240-9727c829-341a-4f8f-a8d1-361e904127e9"
                 }
               ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T20:42:44.000Z",
+              "updatedAt": "2026-10-21T20:42:44.000Z",
+              "uid": "35240-36962433-b04a-4d5a-9fec-f5fc2014429d"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "10cb35f0-ce50-48b5-b85b-24c1570633a3",
-          "name": "List labels",
-          "request": {
-            "name": "List labels",
-            "description": {
-              "content": "Retrieve all labels in the organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "labels"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "2332ef48-5aeb-4765-822f-6ee65c2291b9",
-              "name": "List of all labels in the organization",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"labels\": [\n    {\n      \"name\": \"Production\",\n      \"verified\": true,\n      \"homepage\": true,\n      \"usage_count\": 12,\n      \"color\": \"#000000\",\n      \"description\": \"Documents verified and in prod\"\n    },\n    {\n      \"name\": \"In Review\",\n      \"verified\": true,\n      \"homepage\": false,\n      \"usage_count\": 5,\n      \"color\": \"#CCCCCC\",\n      \"description\": \"Documents in review\"\n    },\n    {\n      \"name\": \"Draft\",\n      \"verified\": false,\n      \"homepage\": false,\n      \"usage_count\": 3,\n      \"color\": \"#EEEEEE\",\n      \"description\": \"Drafts that need review\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "25100980-234d-4465-99d6-a9f5939158e5",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "63eb6a98-8605-4f00-9283-e996ad2289c3",
-          "name": "Get label",
-          "request": {
-            "name": "Get label",
-            "description": {
-              "content": "Retrieve a single label by name.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "labels",
-                ":labelName"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "labelName",
-                  "description": "(Required) The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "06526b1b-b7bc-4cd3-b1b6-fbe10843a06b",
-              "name": "Label details",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "labelName",
-                      "description": "(Required) The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"name\": \"Production\",\n  \"verified\": true,\n  \"homepage\": true,\n  \"usage_count\": 12,\n  \"color\": \"#000000\",\n  \"description\": \"Documents verified and in prod\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8736c9f6-372f-47fb-97e8-51710394d824",
-              "name": "Label not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "labelName",
-                      "description": "(Required) The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bc0adbda-6e4a-411e-a353-9eb5deb0ecc6",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "labelName",
-                      "description": "(Required) The label name. Lookup is case-insensitive.\n\nURL-encode special characters (e.g., `In%20Review` for \"In Review\").\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "066c6c53-4570-4306-b25d-9b2801003d94",
-          "name": "Update label",
-          "request": {
-            "name": "Update label",
-            "description": {
-              "content": "Update an existing label, including renaming, changing **Verified** status, or adding/removing it from the **Homepage**.\n\nUsers can update basic labels they created. **Organization Admin** permissions are required to modify **Verified** or **Homepage** labels, including making a label `verified` or visible on the `homepage`.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "labels",
-                ":labelName"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "name",
-                  "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"<string>\",\n  \"verified\": \"<boolean>\",\n  \"homepage\": \"<boolean>\",\n  \"color\": null,\n  \"description\": null\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "5c450e3b-db12-4b63-b173-7c5ba6332210",
-              "name": "Label updated successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"name\": \"Ready for Review\",\n  \"verified\": true,\n  \"homepage\": false,\n  \"usage_count\": 3,\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e2a98478-d936-47dc-8fac-b7529b205d4c",
-              "name": "Bad Request. Possible causes:\n\n- Name too short or too long\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "eff44de7-19f2-4d99-a4e4-3a32b55430fb",
-              "name": "Forbidden. Possible causes:\n\n- User lacks permission to manage labels\n- User lacks **Organization Admin** permissions, which are required to modify **Verified** labels\n- User lacks **Organization Admin** permissions, which are required to modify **Homepage** labels\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1cc7f79b-0825-42f0-81f6-b234b4a1e566",
-              "name": "Label not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "775708a3-6baa-413c-9158-5f84fcb6d5c7",
-              "name": "Conflict. The new label name already exists (case-insensitive).\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f4d70b44-f7c9-4dc2-9f56-d3fcd5fcddf5",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to update. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"Ready for Review\",\n  \"color\": \"#DDDDDD\",\n  \"description\": \"Documents that are ready for review\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "44eee9be-79cf-4ff4-aa6d-4ff39d0ad040",
-          "name": "Delete label",
-          "request": {
-            "name": "Delete label",
-            "description": {
-              "content": "Delete a label from the organization.\n\nAny user can delete basic labels, but **Organization Admin** permissions are required to delete **Verified** and **Homepage** labels.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "labels",
-                ":labelName"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "**Requires an Organization API key**. Optional user ID that attributes the action to the specified user.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "name",
-                  "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "1a8a67a0-f7c3-4495-8b64-cea5fc84f074",
-              "name": "Label deleted successfully. No response body.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "6cca60e3-de3c-44e0-9348-062fb0416329",
-              "name": "Forbidden. Possible causes:\n\n- User lacks permission to manage labels\n- User lacks **Organization Admin** permissions, which are required to delete **Verified** labels\n- User lacks **Organization Admin** permissions, which are required to delete **Homepage** labels\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "489c9e79-debe-4786-b9dc-f2dfef0880e6",
-              "name": "Label not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3751b87a-0640-4b52-bd60-27ed4b4ddabe",
-              "name": "Conflict. The label is currently applied to documents and cannot be deleted.\n\nRemove the label from all documents first.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b3d788f6-566b-4895-bbc7-de71c4980b10",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "labels",
-                    ":labelName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "name",
-                      "description": "(Required) The name of the label to delete. Lookup is case-insensitive.\n\nURL-encode special characters.\n"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "d0fd00c1-4500-482f-ba27-0d2dd699998a",
+          "createdAt": "2026-10-21T20:42:44.000Z",
+          "updatedAt": "2026-10-21T20:42:44.000Z",
+          "uid": "35240-d0fd00c1-4500-482f-ba27-0d2dd699998a"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "b8006cce-5639-4631-8f21-5d43196b85a7",
+      "createdAt": "2026-10-21T20:42:44.000Z",
+      "updatedAt": "2026-10-21T20:42:44.000Z",
+      "uid": "35240-b8006cce-5639-4631-8f21-5d43196b85a7"
     }
   ],
   "auth": {
@@ -1707,17 +1581,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "fb506c1f-7adc-4b19-ae26-c6abfe7070f6",
-    "name": "Omni AI Labels API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

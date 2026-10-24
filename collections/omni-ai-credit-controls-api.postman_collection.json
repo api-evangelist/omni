@@ -1,1668 +1,1547 @@
 {
+  "info": {
+    "_postman_id": "6ce62711-4118-4bce-bf5b-7ead3b163738",
+    "name": "Omni AI Credit Controls API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:40:34.000Z",
+    "updatedAt": "2026-10-21T20:40:34.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6ce62711-4118-4bce-bf5b-7ead3b163738"
+  },
   "item": [
     {
-      "id": "6e811a9f-2c03-40eb-a150-ef0fcc473981",
-      "name": "AI Credit Controls",
-      "description": {
-        "content": "Manage organization-level AI credit usage",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "f108bef3-8e27-400f-b762-931aa05f6ad3",
-          "name": "Get AI credit controls",
-          "request": {
-            "name": "Get AI credit controls",
-            "description": {
-              "content": "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nGet the organization's AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "ai",
-                "credit-controls"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "ai",
+          "item": [
             {
-              "id": "c010e307-2244-4964-a4b6-f3817b986a63",
-              "name": "Current credit controls. Thresholds are `null` when the corresponding control is off.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "credit-controls",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "users",
+                  "item": [
+                    {
+                      "name": "List individual users' AI credit limits",
+                      "id": "ab7386b5-d667-497d-a7b8-64b581b2b5ee",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls",
+                            "users"
+                          ],
+                          "query": [
+                            {
+                              "description": "Cursor for pagination from previous response `nextCursor`",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Number of results per page",
+                              "key": "pageSize",
+                              "value": "20"
+                            }
+                          ]
+                        },
+                        "description": "**Organization Admin** permissions are required to use this endpoint.\n\nList the organization's active individual user AI credit limits, ordered by `userId` ascending.\n\nOnly users with an individual limit will be returned in the response."
+                      },
+                      "response": [
+                        {
+                          "id": "629bc013-2c1e-4019-9395-7bfb2cd6b9b8",
+                          "name": "One page of users' individual AI credit limits.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"pageInfo\": {\n    \"hasNextPage\": \"<boolean>\",\n    \"nextCursor\": \"<string>\",\n    \"pageSize\": \"<integer>\",\n    \"totalRecords\": \"<integer>\"\n  },\n  \"records\": [\n    {\n      \"creditLimit\": \"<number>\",\n      \"userId\": \"<string>\"\n    },\n    {\n      \"creditLimit\": \"<number>\",\n      \"userId\": \"<string>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-629bc013-2c1e-4019-9395-7bfb2cd6b9b8"
+                        },
+                        {
+                          "id": "ebd26a14-9968-485f-a0b9-a960673fbf6e",
+                          "name": "Invalid cursor or pageSize.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-ebd26a14-9968-485f-a0b9-a960673fbf6e"
+                        },
+                        {
+                          "id": "0b832b80-d01d-4c2f-9591-fab6a089d56d",
+                          "name": "Missing or invalid API key.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-0b832b80-d01d-4c2f-9591-fab6a089d56d"
+                        },
+                        {
+                          "id": "77606983-1147-4d5a-b3a7-8bb6024870c7",
+                          "name": "Insufficient permissions, or per-user AI credit limits are not enabled for the organization.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-77606983-1147-4d5a-b3a7-8bb6024870c7"
+                        },
+                        {
+                          "id": "4ebcfab1-715c-4083-90cd-3038fbc13b4a",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-4ebcfab1-715c-4083-90cd-3038fbc13b4a"
+                        },
+                        {
+                          "id": "79f1e3c4-4040-4d98-9762-8f48479f330e",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users?cursor=<string>&pageSize=20",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Cursor for pagination from previous response `nextCursor`",
+                                  "key": "cursor",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "description": "Number of results per page",
+                                  "key": "pageSize",
+                                  "value": "20"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-79f1e3c4-4040-4d98-9762-8f48479f330e"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-ab7386b5-d667-497d-a7b8-64b581b2b5ee"
+                    },
+                    {
+                      "name": "Set individual users' AI credit limits",
+                      "id": "8b5ca3ec-2185-4f89-87c8-dd2875bd2c4a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls",
+                            "users"
+                          ]
+                        },
+                        "description": "**Organization Admin** permissions are required to use this endpoint.\n\nSet individual users' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction."
+                      },
+                      "response": [
+                        {
+                          "id": "bb7cd117-8c7a-4a6f-85ce-1eb0499c2681",
+                          "name": "All entries applied. Returns each user's effective limit, in request order.",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"users\": [\n    {\n      \"creditLimit\": \"<number>\",\n      \"userId\": \"<string>\",\n      \"usesDefaultLimit\": \"<boolean>\"\n    },\n    {\n      \"creditLimit\": \"<number>\",\n      \"userId\": \"<string>\",\n      \"usesDefaultLimit\": \"<boolean>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-bb7cd117-8c7a-4a6f-85ce-1eb0499c2681"
+                        },
+                        {
+                          "id": "0ef1b91f-2941-48cd-bd9a-0ee45fa8be7c",
+                          "name": "Invalid request. Common causes:\n\n- An empty users array\n- More than 1000 entries\n- An entry with both `creditLimit` and `useDefaultLimit` (or neither)\n- A negative `creditLimit`\n- A duplicated `userId`\n",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-0ef1b91f-2941-48cd-bd9a-0ee45fa8be7c"
+                        },
+                        {
+                          "id": "72de75bc-b616-4212-8c3a-bc8d51936642",
+                          "name": "Missing or invalid API key.",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-72de75bc-b616-4212-8c3a-bc8d51936642"
+                        },
+                        {
+                          "id": "c93e7987-dc5d-40e4-943b-9d1ab0e7b6b9",
+                          "name": "Insufficient permissions, per-user AI credit limits are not enabled, or credit controls editing is disabled for the organization.",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-c93e7987-dc5d-40e4-943b-9d1ab0e7b6b9"
+                        },
+                        {
+                          "id": "5425d12d-3adb-42cb-a497-50459567df16",
+                          "name": "Specified `userId` is not a member of the organization; the response names the first invalid id. No limits are changed.",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-5425d12d-3adb-42cb-a497-50459567df16"
+                        },
+                        {
+                          "id": "65db0208-917e-4e83-85c9-6771edbb7ffb",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-65db0208-917e-4e83-85c9-6771edbb7ffb"
+                        },
+                        {
+                          "id": "b60da66a-400e-4fe1-9393-0967460b2d31",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": true\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/ai/credit-controls/users",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "ai",
+                                "credit-controls",
+                                "users"
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:40:35.000Z",
+                          "updatedAt": "2026-10-21T20:40:35.000Z",
+                          "uid": "35240-b60da66a-400e-4fe1-9393-0967460b2d31"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-8b5ca3ec-2185-4f89-87c8-dd2875bd2c4a"
+                    }
+                  ],
+                  "id": "6aad5558-a538-4597-bca1-bf6d623ff8de",
+                  "createdAt": "2026-10-21T20:40:35.000Z",
+                  "updatedAt": "2026-10-21T20:40:35.000Z",
+                  "uid": "35240-6aad5558-a538-4597-bca1-bf6d623ff8de"
+                },
+                {
+                  "name": "Get AI credit controls",
+                  "id": "b37dd778-55ee-4094-8bfa-2e6233da8849",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "ai",
+                        "credit-controls"
+                      ]
+                    },
+                    "description": "**Organization Admin** permissions are required for this endpoint.\n\nGet the organization's AI credit controls: the downgrade and shutoff thresholds, the default per-user credit limit, plus read-only context (the credit limit, usage for the current billing period, and the period bounds)."
+                  },
+                  "response": [
+                    {
+                      "id": "cd5cb874-596f-4518-8a0e-22a7e296e462",
+                      "name": "Current credit controls. Thresholds are `null` when the corresponding control is off.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"accountCreditLimit\": \"<number>\",\n  \"creditsUsed\": \"<number>\",\n  \"downgradeCredits\": \"<number>\",\n  \"periodEnd\": \"<integer>\",\n  \"periodStart\": \"<integer>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-cd5cb874-596f-4518-8a0e-22a7e296e462"
+                    },
+                    {
+                      "id": "27330fa6-cd2f-4e8a-ac2e-05b06e9b9e6e",
+                      "name": "Missing or invalid API key.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-27330fa6-cd2f-4e8a-ac2e-05b06e9b9e6e"
+                    },
+                    {
+                      "id": "d46d2726-5cfd-4860-8255-e859e7e97502",
+                      "name": "Insufficient permissions or AI credit controls are not enabled for the organization.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-d46d2726-5cfd-4860-8255-e859e7e97502"
+                    },
+                    {
+                      "id": "3079527e-2c91-4b04-9a26-6dd8db21b05b",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-3079527e-2c91-4b04-9a26-6dd8db21b05b"
+                    },
+                    {
+                      "id": "f9ec31b8-c768-4276-b33d-09debf964f92",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-f9ec31b8-c768-4276-b33d-09debf964f92"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:40:35.000Z",
+                  "updatedAt": "2026-10-21T20:40:35.000Z",
+                  "uid": "35240-b37dd778-55ee-4094-8bfa-2e6233da8849"
+                },
+                {
+                  "name": "Update AI credit controls",
+                  "id": "55fa8c18-b71d-4678-8181-08ebe2dff7f0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "ai",
+                        "credit-controls"
+                      ]
+                    },
+                    "description": "**Organization Admin** permissions are required for this endpoint.\n\nUpdate the organization's AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:\n\n- Omit a field to leave it unchanged\n- Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)\n- Send a non-negative number to set it"
+                  },
+                  "response": [
+                    {
+                      "id": "7a9a9c02-0bec-446d-bfbe-5b73630df0c0",
+                      "name": "Thresholds updated. Returns the full current state.",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"accountCreditLimit\": \"<number>\",\n  \"creditsUsed\": \"<number>\",\n  \"downgradeCredits\": \"<number>\",\n  \"periodEnd\": \"<integer>\",\n  \"periodStart\": \"<integer>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-7a9a9c02-0bec-446d-bfbe-5b73630df0c0"
+                    },
+                    {
+                      "id": "cff1352a-8ac4-4dd8-ac6b-f5e4bf271c42",
+                      "name": "Invalid request. Common causes:\n\n- Empty body\n- A negative value\n- An unknown field\n- `downgradeCredits` greater than `shutoffCredits`\n",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-cff1352a-8ac4-4dd8-ac6b-f5e4bf271c42"
+                    },
+                    {
+                      "id": "44f80fe7-bb0b-4e75-bcbd-a03f399abff3",
+                      "name": "Missing or invalid API key.",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-44f80fe7-bb0b-4e75-bcbd-a03f399abff3"
+                    },
+                    {
+                      "id": "fd48020a-5ed4-4e79-bcdc-3ea95551616e",
+                      "name": "Insufficient permissions or AI credit controls are not enabled.",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-fd48020a-5ed4-4e79-bcdc-3ea95551616e"
+                    },
+                    {
+                      "id": "d48d2067-c5ed-4d52-88fc-49068b5ca437",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-d48d2067-c5ed-4d52-88fc-49068b5ca437"
+                    },
+                    {
+                      "id": "df872c97-debb-46dc-a98b-0f5e3bbee2e4",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/ai/credit-controls",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "ai",
+                            "credit-controls"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:40:35.000Z",
+                      "updatedAt": "2026-10-21T20:40:35.000Z",
+                      "uid": "35240-df872c97-debb-46dc-a98b-0f5e3bbee2e4"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:40:35.000Z",
+                  "updatedAt": "2026-10-21T20:40:35.000Z",
+                  "uid": "35240-55fa8c18-b71d-4678-8181-08ebe2dff7f0"
                 }
               ],
-              "body": "{\n  \"accountCreditLimit\": 2000,\n  \"creditsUsed\": 450,\n  \"downgradeCredits\": 800,\n  \"periodEnd\": 5101,\n  \"periodStart\": 7903,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4601a609-03f7-44f7-b3bb-2e8e43a698b1",
-              "name": "Missing or invalid API key.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "70a33085-aaee-47b4-ba6d-e49ec21d560b",
-              "name": "Insufficient permissions or AI credit controls are not enabled for the organization.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fe332e3f-6fd2-43da-a356-61ea82940f4b",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8454f4be-ec83-41ac-a985-134520cac04e",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "9fb229fc-f08b-424a-a734-809d0d53c1fe",
+              "createdAt": "2026-10-21T20:40:35.000Z",
+              "updatedAt": "2026-10-21T20:40:35.000Z",
+              "uid": "35240-9fb229fc-f08b-424a-a734-809d0d53c1fe"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "744e04d3-88ac-4f60-8451-c5d5310a21be",
-          "name": "Update AI credit controls",
-          "request": {
-            "name": "Update AI credit controls",
-            "description": {
-              "content": "<Note>\n  **Organization Admin** permissions are required for this endpoint.\n</Note>\n\nUpdate the organization's AI credit controls: the downgrade and shutoff thresholds and the default per-user credit limit. All fields are optional, but at least one must be provided:\n\n- Omit a field to leave it unchanged\n- Send `null` to turn that control off (for `userDefaultCredits`: unlimited by default)\n- Send a non-negative number to set it\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "ai",
-                "credit-controls"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"downgradeCredits\": \"<number>\",\n  \"shutoffCredits\": \"<number>\",\n  \"userDefaultCredits\": \"<number>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "63d35be5-f859-4c63-b422-e1ea4c148b5b",
-              "name": "Thresholds updated. Returns the full current state.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"accountCreditLimit\": 2000,\n  \"creditsUsed\": 450,\n  \"downgradeCredits\": 800,\n  \"periodEnd\": 5101,\n  \"periodStart\": 7903,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0367d9d9-edbe-4733-aaea-7ecc091cd3b6",
-              "name": "Invalid request. Common causes:\n\n- Empty body\n- A negative value\n- An unknown field\n- `downgradeCredits` greater than `shutoffCredits`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "db186dd4-aa7b-4733-b305-70399b607aff",
-              "name": "Missing or invalid API key.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7e3afa88-1aba-4e4f-b4b9-fe7617c039c4",
-              "name": "Insufficient permissions or AI credit controls are not enabled.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1caed5c4-213e-45e7-a269-363bade5fb45",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "9ddd829d-13a2-4d30-bcac-534836cc2b96",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"downgradeCredits\": 800,\n  \"shutoffCredits\": 1200,\n  \"userDefaultCredits\": 100\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "9005b238-bfbf-482a-8d40-a011c3f5a3fe",
-          "name": "List individual users' AI credit limits",
-          "request": {
-            "name": "List individual users' AI credit limits",
-            "description": {
-              "content": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nList the organization's active individual user AI credit limits, ordered by `userId` ascending.\n\nOnly users with an individual limit will be returned in the response.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "ai",
-                "credit-controls",
-                "users"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "cursor",
-                  "value": "<string>",
-                  "description": "Cursor for pagination from previous response `nextCursor`"
-                },
-                {
-                  "disabled": false,
-                  "key": "pageSize",
-                  "value": "20",
-                  "description": "Number of results per page"
-                }
-              ],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "344ed074-921f-42e0-a9ef-cb6777530314",
-              "name": "One page of users' individual AI credit limits.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"pageInfo\": {\n    \"nextCursor\": \"eyJpZCI6IjEyMzQ1In0\",\n    \"hasNextPage\": true\n  },\n  \"records\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7fb9fa08-b545-41bd-9611-c7433bd60b33",
-              "name": "Invalid cursor or pageSize.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "80bb44cb-492f-4fbc-9b42-6382d6f79195",
-              "name": "Missing or invalid API key.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "9f437beb-24f9-4924-aaa7-cc5020fe98fa",
-              "name": "Insufficient permissions, or per-user AI credit limits are not enabled for the organization.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "51c6354a-4b57-4af1-90fd-768aba59bdce",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3f2c702f-fd2d-48e3-81e2-2951a525468d",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "cursor",
-                      "value": "eyJpZCI6IjEyMzQ1In0"
-                    },
-                    {
-                      "key": "pageSize",
-                      "value": "20"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "e94967b5-e7ed-4a8c-95fd-a242596c8e43",
-          "name": "Set individual users' AI credit limits",
-          "request": {
-            "name": "Set individual users' AI credit limits",
-            "description": {
-              "content": "<Note>\n  **Organization Admin** permissions are required to use this endpoint.\n</Note>\n\nSet individual users' AI credit limits in bulk. Each entry names a user and either sets an individual limit or removes one so the user follows the organization default. All entries are applied in a single transaction.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "ai",
-                "credit-controls",
-                "users"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"<string>\",\n      \"creditLimit\": \"<number>\",\n      \"useDefaultLimit\": \"<boolean>\"\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "dac5a9a6-3860-4706-bc97-31a115c2655d",
-              "name": "All entries applied. Returns each user's effective limit, in request order.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"users\": [\n    {\n      \"creditLimit\": 50,\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"usesDefaultLimit\": false\n    },\n    {\n      \"creditLimit\": 50,\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"usesDefaultLimit\": false\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "84ecf783-628d-4d51-b78b-7abaea4c5ce1",
-              "name": "Invalid request. Common causes:\n\n- An empty users array\n- More than 1000 entries\n- An entry with both `creditLimit` and `useDefaultLimit` (or neither)\n- A negative `creditLimit`\n- A duplicated `userId`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 400\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "cbf1ec75-f042-41e1-9dc6-9167d53a1ac5",
-              "name": "Missing or invalid API key.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Unauthorized: Missing or invalid API key\",\n  \"status\": 401\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6c532bfc-d8e9-480e-9105-08943eb3bb1a",
-              "name": "Insufficient permissions, per-user AI credit limits are not enabled, or credit controls editing is disabled for the organization.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 403\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6b154623-8b93-4bb5-86a9-59140ab19315",
-              "name": "Specified `userId` is not a member of the organization; the response names the first invalid id. No limits are changed.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"string\",\n  \"status\": 404\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "90cde3b9-11c6-4430-b00c-8f8a17290f28",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "650a9aeb-09ec-4812-8642-c42e37abd1bb",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "ai",
-                    "credit-controls",
-                    "users"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"users\": [\n    {\n      \"userId\": \"f4a2b3c8-0d1e-4f5a-9b6c-7d8e9f0a1b2c\",\n      \"creditLimit\": 50\n    },\n    {\n      \"userId\": \"a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d\",\n      \"creditLimit\": null\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "908ede6d-ddd2-40bb-8125-b8cea21ac0b7",
+          "createdAt": "2026-10-21T20:40:35.000Z",
+          "updatedAt": "2026-10-21T20:40:35.000Z",
+          "uid": "35240-908ede6d-ddd2-40bb-8125-b8cea21ac0b7"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "73acd69e-47e6-4778-87ec-29944d876a70",
+      "createdAt": "2026-10-21T20:40:35.000Z",
+      "updatedAt": "2026-10-21T20:40:35.000Z",
+      "uid": "35240-73acd69e-47e6-4778-87ec-29944d876a70"
     }
   ],
   "auth": {
@@ -1670,17 +1549,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "1f37c354-8891-43e6-8b29-10ad756b9630",
-    "name": "Omni AI AI Credit Controls API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

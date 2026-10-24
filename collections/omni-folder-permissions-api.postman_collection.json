@@ -1,1663 +1,1552 @@
 {
+  "info": {
+    "_postman_id": "c286bb36-3c74-4659-a1b6-cad3709a99e3",
+    "name": "Omni Folder permissions API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:42:29.000Z",
+    "updatedAt": "2026-10-21T20:42:30.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-c286bb36-3c74-4659-a1b6-cad3709a99e3"
+  },
   "item": [
     {
-      "id": "94b10eb5-650a-43cf-ba52-4936b024ab49",
-      "name": "Folder permissions",
-      "description": {
-        "content": "Manage folder-level access",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "5fc17b3e-53f5-4807-afe9-78c3b2b407f4",
-          "name": "Grant folder permissions",
-          "request": {
-            "name": "Grant folder permissions",
-            "description": {
-              "content": "Grant folder permissions to users or groups",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "folders",
-                ":folderId",
-                "permissions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "folderId",
-                  "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "folders",
+          "item": [
             {
-              "id": "7893cb88-0337-4c09-869f-7c5cd2f46fad",
-              "name": "Permissions granted successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{folderId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "permissions",
+                  "item": [
+                    {
+                      "name": "Grant folder permissions",
+                      "id": "2b82db59-89df-4d7e-b981-f917ae6d7a5b",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "folders",
+                            ":folderId",
+                            "permissions"
+                          ],
+                          "variable": [
+                            {
+                              "id": "0bb57efb-6c01-4634-bf69-a5d44180db60",
+                              "key": "folderId",
+                              "value": "<uuid>",
+                              "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+                            }
+                          ]
+                        },
+                        "description": "Grant folder permissions to users or groups"
+                      },
+                      "response": [
+                        {
+                          "id": "bfc78c1d-811a-4997-ae6f-050c4ea39a00",
+                          "name": "Permissions granted successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": \"<boolean>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-bfc78c1d-811a-4997-ae6f-050c4ea39a00"
+                        },
+                        {
+                          "id": "98e1a840-eace-494a-8490-2edca3ffc3ad",
+                          "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-98e1a840-eace-494a-8490-2edca3ffc3ad"
+                        },
+                        {
+                          "id": "e7d10667-fb20-4481-90dc-88ee87a12893",
+                          "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-e7d10667-fb20-4481-90dc-88ee87a12893"
+                        },
+                        {
+                          "id": "df5cb10f-fda4-4e05-b192-b64a37733a62",
+                          "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-df5cb10f-fda4-4e05-b192-b64a37733a62"
+                        },
+                        {
+                          "id": "8bc00a87-296f-457a-839e-ac2a0c03ceef",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"VIEWER\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-8bc00a87-296f-457a-839e-ac2a0c03ceef"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:42:30.000Z",
+                      "updatedAt": "2026-10-21T20:42:30.000Z",
+                      "uid": "35240-2b82db59-89df-4d7e-b981-f917ae6d7a5b"
+                    },
+                    {
+                      "name": "Update folder permissions",
+                      "id": "7510e55f-732a-496b-bd5f-b21cf20e7545",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "folders",
+                            ":folderId",
+                            "permissions"
+                          ],
+                          "variable": [
+                            {
+                              "id": "3c1674c3-f3bc-4274-ab66-2aee014979b2",
+                              "key": "folderId",
+                              "value": "<uuid>",
+                              "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+                            }
+                          ]
+                        },
+                        "description": "Update existing folder permissions for users or groups"
+                      },
+                      "response": [
+                        {
+                          "id": "25e53bc9-a61d-49a4-9ac5-8fea6c49e9b0",
+                          "name": "Permissions updated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": \"<boolean>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-25e53bc9-a61d-49a4-9ac5-8fea6c49e9b0"
+                        },
+                        {
+                          "id": "0ccde64d-1a4d-4fa4-969e-56e46d7d01a7",
+                          "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-0ccde64d-1a4d-4fa4-969e-56e46d7d01a7"
+                        },
+                        {
+                          "id": "6bef8239-2d2f-4a5e-acae-3a4efcc2baed",
+                          "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-6bef8239-2d2f-4a5e-acae-3a4efcc2baed"
+                        },
+                        {
+                          "id": "5b1410b9-d34b-42f6-8238-21266aa10154",
+                          "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-5b1410b9-d34b-42f6-8238-21266aa10154"
+                        },
+                        {
+                          "id": "b52ff9c7-0ff5-4a82-9bd4-a73438f8e89f",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"NO_ACCESS\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-b52ff9c7-0ff5-4a82-9bd4-a73438f8e89f"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:42:30.000Z",
+                      "updatedAt": "2026-10-21T20:42:30.000Z",
+                      "uid": "35240-7510e55f-732a-496b-bd5f-b21cf20e7545"
+                    },
+                    {
+                      "name": "Get folder permissions",
+                      "id": "54d79c2f-ed28-42b5-9678-a40017e70179",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "folders",
+                            ":folderId",
+                            "permissions"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                              "key": "userId",
+                              "value": "<uuid>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "3a21465b-d734-41c0-81d8-095eb61e1c7f",
+                              "key": "folderId",
+                              "value": "<uuid>",
+                              "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+                            }
+                          ]
+                        },
+                        "description": "Retrieve folder permissions for a user"
+                      },
+                      "response": [
+                        {
+                          "id": "4e0e8b82-3f47-4872-92f0-07180a2e37fa",
+                          "name": "Folder permissions object",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                                  "key": "userId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"permits\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"type\": \"user\",\n      \"direct\": {\n        \"accessBoost\": \"<boolean>\",\n        \"isOwner\": \"<boolean>\",\n        \"role\": \"MANAGER\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"type\": \"userGroup\",\n      \"direct\": {\n        \"accessBoost\": \"<boolean>\",\n        \"isOwner\": \"<boolean>\",\n        \"role\": \"EDITOR\"\n      }\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-4e0e8b82-3f47-4872-92f0-07180a2e37fa"
+                        },
+                        {
+                          "id": "1337c0c2-e624-42d1-997d-d2a434bc755a",
+                          "name": "Bad Request\n\nPossible error messages:\n\n- `userId: userId must be provided`\n- `userId: Invalid userId`\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                                  "key": "userId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-1337c0c2-e624-42d1-997d-d2a434bc755a"
+                        },
+                        {
+                          "id": "117c3842-c277-422e-9af1-cf6d59f156f6",
+                          "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                                  "key": "userId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-117c3842-c277-422e-9af1-cf6d59f156f6"
+                        },
+                        {
+                          "id": "24251b34-9710-4ce9-8a40-39b4c6ed9f0c",
+                          "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                                  "key": "userId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-24251b34-9710-4ce9-8a40-39b4c6ed9f0c"
+                        },
+                        {
+                          "id": "a6d4ff00-8627-4669-8701-636541a016cb",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions?userId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.",
+                                  "key": "userId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-a6d4ff00-8627-4669-8701-636541a016cb"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:42:30.000Z",
+                      "updatedAt": "2026-10-21T20:42:30.000Z",
+                      "uid": "35240-54d79c2f-ed28-42b5-9678-a40017e70179"
+                    },
+                    {
+                      "name": "Revoke folder permissions",
+                      "id": "f9126b8e-d539-4d08-a6cf-277289fef593",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "folders",
+                            ":folderId",
+                            "permissions"
+                          ],
+                          "variable": [
+                            {
+                              "id": "db0ebba7-8a93-4c7b-872f-b084f6f5ac1e",
+                              "key": "folderId",
+                              "value": "<uuid>",
+                              "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
+                            }
+                          ]
+                        },
+                        "description": "Revoke folder permissions from users or groups"
+                      },
+                      "response": [
+                        {
+                          "id": "57bd10a9-31e5-4ee5-be48-cd0b61862a29",
+                          "name": "Permissions revoked successfully",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"success\": \"<boolean>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-57bd10a9-31e5-4ee5-be48-cd0b61862a29"
+                        },
+                        {
+                          "id": "c68e0ea8-6c28-4125-8be6-cb4c211fc981",
+                          "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-c68e0ea8-6c28-4125-8be6-cb4c211fc981"
+                        },
+                        {
+                          "id": "aae3d793-dfcc-4afc-b8fb-612642e94a3f",
+                          "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-aae3d793-dfcc-4afc-b8fb-612642e94a3f"
+                        },
+                        {
+                          "id": "2bb10e81-1d2c-4d29-9e4f-dd9f7dedaacc",
+                          "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-2bb10e81-1d2c-4d29-9e4f-dd9f7dedaacc"
+                        },
+                        {
+                          "id": "d6412d78-8b75-4374-a05a-cf3e0ca4a99d",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/folders/:folderId/permissions",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "folders",
+                                ":folderId",
+                                "permissions"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "folderId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:42:30.000Z",
+                          "updatedAt": "2026-10-21T20:42:30.000Z",
+                          "uid": "35240-d6412d78-8b75-4374-a05a-cf3e0ca4a99d"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:42:30.000Z",
+                      "updatedAt": "2026-10-21T20:42:30.000Z",
+                      "uid": "35240-f9126b8e-d539-4d08-a6cf-277289fef593"
+                    }
+                  ],
+                  "id": "416035c4-ab14-4b89-a5f3-d3253d22ed10",
+                  "createdAt": "2026-10-21T20:42:30.000Z",
+                  "updatedAt": "2026-10-21T20:42:30.000Z",
+                  "uid": "35240-416035c4-ab14-4b89-a5f3-d3253d22ed10"
                 }
               ],
-              "body": "{\n  \"success\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c911f411-132a-404e-944a-0f8d78ffd467",
-              "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ca2b7ce7-3bc5-4011-ab73-b71a6310abb1",
-              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f5b1cb7d-5aa0-4f67-838d-7b37e91f83cf",
-              "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "04ac8f23-b9c9-4465-98a1-b76376dac3d9",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "c979304b-0bbf-45d4-9605-fcf7bd468802",
-          "name": "Update folder permissions",
-          "request": {
-            "name": "Update folder permissions",
-            "description": {
-              "content": "Update existing folder permissions for users or groups",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "folders",
-                ":folderId",
-                "permissions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "folderId",
-                  "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "210afaf7-f975-46b6-84d1-6a1170a88971",
-              "name": "Permissions updated successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"success\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "913827c4-f560-4109-85be-4a1e59e2076c",
-              "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d9661d99-9e0d-4db8-ace0-801395dd6861",
-              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ef1f1c8b-15fe-4efa-9017-9f6d6c6b63a4",
-              "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ebbcd5ac-3eee-46c2-9cee-4d91402031cc",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"role\": \"<string>\",\n  \"accessBoost\": false,\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "edb0d2d1-26b5-4087-9d94-d4ef28d5e50f",
-          "name": "Get folder permissions",
-          "request": {
-            "name": "Get folder permissions",
-            "description": {
-              "content": "Retrieve folder permissions for a user",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "folders",
-                ":folderId",
-                "permissions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<uuid>",
-                  "description": "(Required) The ID of the user to retrieve folder permissions for. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs."
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "folderId",
-                  "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "cc591906-8d81-4e91-8624-a3f6b265b6e3",
-              "name": "Folder permissions object",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<uuid>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"permits\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"type\": \"user\",\n      \"direct\": {\n        \"accessBoost\": false,\n        \"isOwner\": false,\n        \"role\": \"VIEWER\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"type\": \"userGroup\",\n      \"direct\": {\n        \"accessBoost\": false,\n        \"isOwner\": true,\n        \"role\": \"VIEWER\"\n      }\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b4635efe-c4a0-430c-9b79-5ca637b8a530",
-              "name": "Bad Request\n\nPossible error messages:\n\n- `userId: userId must be provided`\n- `userId: Invalid userId`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<uuid>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "540b380c-e1aa-41b1-8d50-3545abfc3a91",
-              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<uuid>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "dcea57df-7ee5-4f8c-86c2-dc7d7c5922f8",
-              "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<uuid>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e132b205-1352-4827-83d8-69e9b2183311",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<uuid>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "387ff407-0510-48da-aa43-30ac960bedb0",
-          "name": "Revoke folder permissions",
-          "request": {
-            "name": "Revoke folder permissions",
-            "description": {
-              "content": "Revoke folder permissions from users or groups",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "folders",
-                ":folderId",
-                "permissions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "folderId",
-                  "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "d4bb3f69-23df-4bc1-960d-1b051f244521",
-              "name": "Permissions revoked successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"success\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e54635d3-299f-4eca-b988-0edb55a12c01",
-              "name": "Bad Request\n\nPossible error messages:\n\n- `userIds.userGroupIds: userIds or userGroupIds must be provided`\n- `userIds.0: Invalid uuid`\n- `userGroupIds.0: Invalid uuid`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "54d62b5e-f905-4539-b3d5-e6348b61182f",
-              "name": "Forbidden\n\nPossible error messages:\n\n- `User does not have permission to manage folder permissions` - The user sending the API request must have **Manager** permissions for the folder.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d4171ce0-edd0-4a28-bde1-8144d773fe42",
-              "name": "Not Found\n\nPossible error messages:\n\n- `Folder with identifier \"<folderId>\" not found`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f875026c-89fd-4661-88c9-a341c3f4caf7",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "folders",
-                    ":folderId",
-                    "permissions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "folderId",
-                      "description": "(Required) The UUID of the folder. Use the [List folders](/api/folders/list-folders) endpoint to retrieve folder IDs."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"userIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"userGroupIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "8cc5160a-20a3-4d8b-b27e-a0579bbba5e2",
+              "createdAt": "2026-10-21T20:42:30.000Z",
+              "updatedAt": "2026-10-21T20:42:30.000Z",
+              "uid": "35240-8cc5160a-20a3-4d8b-b27e-a0579bbba5e2"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "6e50ddca-3dc8-4fcf-8d79-ba96e32c6382",
+          "createdAt": "2026-10-21T20:42:30.000Z",
+          "updatedAt": "2026-10-21T20:42:30.000Z",
+          "uid": "35240-6e50ddca-3dc8-4fcf-8d79-ba96e32c6382"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "760c7083-bed9-4fd8-a0e0-06c6d07dc315",
+      "createdAt": "2026-10-21T20:42:30.000Z",
+      "updatedAt": "2026-10-21T20:42:30.000Z",
+      "uid": "35240-760c7083-bed9-4fd8-a0e0-06c6d07dc315"
     }
   ],
   "auth": {
@@ -1665,17 +1554,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "283e149d-2b7b-415d-ad09-300c129dc448",
-    "name": "Omni AI Folder permissions API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

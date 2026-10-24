@@ -1,371 +1,334 @@
 {
+  "info": {
+    "_postman_id": "bc583c62-9570-41d6-8a98-f344011fc51e",
+    "name": "Omni Topics API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:43:38.000Z",
+    "updatedAt": "2026-10-21T20:43:39.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-bc583c62-9570-41d6-8a98-f344011fc51e"
+  },
   "item": [
     {
-      "id": "cb25901f-964b-48c4-a997-992ff162c9cc",
-      "name": "Topics",
-      "description": {
-        "content": "Retrieve topic information from models",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "33b9ef7f-d899-4a93-bc54-29f2d6f3d497",
-          "name": "Retrieve a topic",
-          "request": {
-            "name": "Retrieve a topic",
-            "description": {
-              "content": "Retrieves a topic in a model by name.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "models",
-                ":modelId",
-                "topic",
-                ":topicName"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "modelId",
-                  "description": "(Required) The unique identifier of the model that contains the topic."
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "topicName",
-                  "description": "(Required) The name of the topic."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "models",
+          "item": [
             {
-              "id": "46ca5344-c668-4269-9b5a-43f68803d9df",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "topic",
-                    ":topicName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model that contains the topic."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "topicName",
-                      "description": "(Required) The name of the topic."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{modelId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "topic",
+                  "item": [
+                    {
+                      "name": "{topicName}",
+                      "item": [
+                        {
+                          "name": "Retrieve a topic",
+                          "id": "bb1612aa-83ea-4886-be71-57133e2dd50b",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/models/:modelId/topic/:topicName",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "models",
+                                ":modelId",
+                                "topic",
+                                ":topicName"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "bc646d23-267f-4969-82b4-0897aed42965",
+                                  "key": "modelId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the model that contains the topic."
+                                },
+                                {
+                                  "id": "0e5eacb0-5d9f-4b15-84a3-164c8f28b4e1",
+                                  "key": "topicName",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the topic."
+                                }
+                              ]
+                            },
+                            "description": "Retrieves a topic in a model by name."
+                          },
+                          "response": [
+                            {
+                              "id": "5a3205f9-326b-47b9-97b8-9ef07e86fca1",
+                              "name": "New Response",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/models/:modelId/topic/:topicName",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "models",
+                                    ":modelId",
+                                    "topic",
+                                    ":topicName"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "modelId"
+                                    },
+                                    {
+                                      "key": "topicName"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": \"<boolean>\",\n  \"topic\": {\n    \"name\": \"<string>\",\n    \"base_view_name\": \"<string>\",\n    \"label\": \"<string>\",\n    \"default_filters\": {},\n    \"join_via_map\": {\n      \"sint63\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"consequat_d\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"join_via_map_key_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"ignored_props\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"always_where_filters\": {},\n    \"extension_model_id\": \"<uuid>\",\n    \"has_frozen_join_via_map\": \"<boolean>\",\n    \"relationships\": [\n      {\n        \"left_view_name\": \"<string>\",\n        \"right_view_name\": \"<string>\",\n        \"join_type\": \"<string>\",\n        \"on\": {\n          \"type\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"distinct\": \"<boolean>\"\n        },\n        \"sql\": \"<string>\",\n        \"id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"ignored\": \"<boolean>\",\n        \"bidirectional\": \"<boolean>\",\n        \"original_on_sql\": \"<string>\",\n        \"yaml_path_prefix\": \"<string>\"\n      },\n      {\n        \"left_view_name\": \"<string>\",\n        \"right_view_name\": \"<string>\",\n        \"join_type\": \"<string>\",\n        \"on\": {\n          \"type\": \"<string>\",\n          \"operator\": \"<string>\",\n          \"distinct\": \"<boolean>\"\n        },\n        \"sql\": \"<string>\",\n        \"id\": \"<string>\",\n        \"type\": \"<string>\",\n        \"ignored\": \"<boolean>\",\n        \"bidirectional\": \"<boolean>\",\n        \"original_on_sql\": \"<string>\",\n        \"yaml_path_prefix\": \"<string>\"\n      }\n    ],\n    \"ide_file_name\": \"<string>\",\n    \"views\": [\n      {\n        \"name\": \"<string>\",\n        \"label\": \"<string>\",\n        \"table_name\": \"<string>\",\n        \"schema\": \"<string>\",\n        \"schema_label\": \"<string>\",\n        \"extension_model_id\": \"<uuid>\",\n        \"ide_file_name\": \"<string>\",\n        \"yaml_path\": \"<string>\",\n        \"filter_only_fields\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"is_pseudo_display_view\": \"<boolean>\",\n        \"primary_key\": [\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\"\n          },\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\"\n          }\n        ],\n        \"dimensions\": [\n          {\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"format\": \"<string>\",\n            \"label\": \"<string>\",\n            \"description\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"extension_model_id\": \"<uuid>\",\n            \"is_dimension\": \"<boolean>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"time_frames\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"date_type\": \"<string>\",\n            \"drill_fields\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"parent_field\": \"<string>\",\n            \"parent_label\": \"<string>\",\n            \"group_label\": \"<string>\",\n            \"is_group_parent_field\": \"<boolean>\",\n            \"data_type_metadata\": {\n              \"is_date_type\": \"<boolean>\"\n            },\n            \"ai_context\": \"<string>\"\n          },\n          {\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"format\": \"<string>\",\n            \"label\": \"<string>\",\n            \"description\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"extension_model_id\": \"<uuid>\",\n            \"is_dimension\": \"<boolean>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"time_frames\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"date_type\": \"<string>\",\n            \"drill_fields\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"parent_field\": \"<string>\",\n            \"parent_label\": \"<string>\",\n            \"group_label\": \"<string>\",\n            \"is_group_parent_field\": \"<boolean>\",\n            \"data_type_metadata\": {\n              \"is_date_type\": \"<boolean>\"\n            },\n            \"ai_context\": \"<string>\"\n          }\n        ],\n        \"measures\": [\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"aggregate_type\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"label\": \"<string>\",\n            \"format\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"ignored\": \"<boolean>\",\n            \"display_sql\": \"<string>\",\n            \"dialect_sql\": \"<string>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"filters\": {}\n          },\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"aggregate_type\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"label\": \"<string>\",\n            \"format\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"ignored\": \"<boolean>\",\n            \"display_sql\": \"<string>\",\n            \"dialect_sql\": \"<string>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"filters\": {}\n          }\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"label\": \"<string>\",\n        \"table_name\": \"<string>\",\n        \"schema\": \"<string>\",\n        \"schema_label\": \"<string>\",\n        \"extension_model_id\": \"<uuid>\",\n        \"ide_file_name\": \"<string>\",\n        \"yaml_path\": \"<string>\",\n        \"filter_only_fields\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"is_pseudo_display_view\": \"<boolean>\",\n        \"primary_key\": [\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\"\n          },\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\"\n          }\n        ],\n        \"dimensions\": [\n          {\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"format\": \"<string>\",\n            \"label\": \"<string>\",\n            \"description\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"extension_model_id\": \"<uuid>\",\n            \"is_dimension\": \"<boolean>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"time_frames\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"date_type\": \"<string>\",\n            \"drill_fields\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"parent_field\": \"<string>\",\n            \"parent_label\": \"<string>\",\n            \"group_label\": \"<string>\",\n            \"is_group_parent_field\": \"<boolean>\",\n            \"data_type_metadata\": {\n              \"is_date_type\": \"<boolean>\"\n            },\n            \"ai_context\": \"<string>\"\n          },\n          {\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"format\": \"<string>\",\n            \"label\": \"<string>\",\n            \"description\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"extension_model_id\": \"<uuid>\",\n            \"is_dimension\": \"<boolean>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"time_frames\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"date_type\": \"<string>\",\n            \"drill_fields\": [\n              \"<string>\",\n              \"<string>\"\n            ],\n            \"parent_field\": \"<string>\",\n            \"parent_label\": \"<string>\",\n            \"group_label\": \"<string>\",\n            \"is_group_parent_field\": \"<boolean>\",\n            \"data_type_metadata\": {\n              \"is_date_type\": \"<boolean>\"\n            },\n            \"ai_context\": \"<string>\"\n          }\n        ],\n        \"measures\": [\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"aggregate_type\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"label\": \"<string>\",\n            \"format\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"ignored\": \"<boolean>\",\n            \"display_sql\": \"<string>\",\n            \"dialect_sql\": \"<string>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"filters\": {}\n          },\n          {\n            \"type\": \"<string>\",\n            \"field_name\": \"<string>\",\n            \"view_name\": \"<string>\",\n            \"aggregate_type\": \"<string>\",\n            \"data_type\": \"<string>\",\n            \"label\": \"<string>\",\n            \"format\": \"<string>\",\n            \"view_label\": \"<string>\",\n            \"ignored\": \"<boolean>\",\n            \"display_sql\": \"<string>\",\n            \"dialect_sql\": \"<string>\",\n            \"fully_qualified_name\": \"<string>\",\n            \"filters\": {}\n          }\n        ]\n      }\n    ]\n  }\n}",
+                              "createdAt": "2026-10-21T20:43:39.000Z",
+                              "updatedAt": "2026-10-21T20:43:39.000Z",
+                              "uid": "35240-5a3205f9-326b-47b9-97b8-9ef07e86fca1"
+                            },
+                            {
+                              "id": "e3f361f8-78d8-4f6c-851a-7cfb6c06361d",
+                              "name": "Bad Request. Possible causes:\n\n- Invalid model UUID\n",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/models/:modelId/topic/:topicName",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "models",
+                                    ":modelId",
+                                    "topic",
+                                    ":topicName"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "modelId"
+                                    },
+                                    {
+                                      "key": "topicName"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:39.000Z",
+                              "updatedAt": "2026-10-21T20:43:39.000Z",
+                              "uid": "35240-e3f361f8-78d8-4f6c-851a-7cfb6c06361d"
+                            },
+                            {
+                              "id": "629d2ca2-d8f9-44b5-9a08-f90e98341b6c",
+                              "name": "Not Found. Possible causes:\n\n- Model not found\n- Topic not found or access not permitted\n",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/models/:modelId/topic/:topicName",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "models",
+                                    ":modelId",
+                                    "topic",
+                                    ":topicName"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "modelId"
+                                    },
+                                    {
+                                      "key": "topicName"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:39.000Z",
+                              "updatedAt": "2026-10-21T20:43:39.000Z",
+                              "uid": "35240-629d2ca2-d8f9-44b5-9a08-f90e98341b6c"
+                            },
+                            {
+                              "id": "cff07971-5708-4384-aedd-87321ee9b3d9",
+                              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/models/:modelId/topic/:topicName",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "models",
+                                    ":modelId",
+                                    "topic",
+                                    ":topicName"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "modelId"
+                                    },
+                                    {
+                                      "key": "topicName"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:39.000Z",
+                              "updatedAt": "2026-10-21T20:43:39.000Z",
+                              "uid": "35240-cff07971-5708-4384-aedd-87321ee9b3d9"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T20:43:39.000Z",
+                          "updatedAt": "2026-10-21T20:43:39.000Z",
+                          "uid": "35240-bb1612aa-83ea-4886-be71-57133e2dd50b"
+                        }
+                      ],
+                      "id": "55c0e2d0-10a3-4cf0-b834-680753290f42",
+                      "createdAt": "2026-10-21T20:43:39.000Z",
+                      "updatedAt": "2026-10-21T20:43:39.000Z",
+                      "uid": "35240-55c0e2d0-10a3-4cf0-b834-680753290f42"
+                    }
+                  ],
+                  "id": "794e91f6-1b58-4a21-b06b-b5cdb894e7c2",
+                  "createdAt": "2026-10-21T20:43:39.000Z",
+                  "updatedAt": "2026-10-21T20:43:39.000Z",
+                  "uid": "35240-794e91f6-1b58-4a21-b06b-b5cdb894e7c2"
                 }
               ],
-              "body": "{\n  \"success\": true,\n  \"topic\": {\n    \"name\": \"Customers\",\n    \"base_view_name\": \"main__customers\",\n    \"label\": \"Customers\",\n    \"default_filters\": {},\n    \"join_via_map\": {\n      \"main__orders\": [],\n      \"main__order_items\": [\n        \"main__orders\"\n      ]\n    },\n    \"join_via_map_key_order\": [\n      \"main__orders\",\n      \"main__order_items\"\n    ],\n    \"ignored_props\": [],\n    \"always_where_filters\": {},\n    \"extension_model_id\": \"5da4e30e-45e2-4693-b87d-51c39d69963f\",\n    \"has_frozen_join_via_map\": true,\n    \"relationships\": [\n      {\n        \"left_view_name\": \"main__orders\",\n        \"right_view_name\": \"main__customers\",\n        \"join_type\": \"ALWAYS_LEFT\",\n        \"sql\": \"${main__orders.customer_id} = ${main__customers.id}\",\n        \"id\": \"main__orders_main__customers\",\n        \"type\": \"ASSUMED_MANY_TO_ONE\",\n        \"ignored\": false,\n        \"bidirectional\": false\n      }\n    ],\n    \"ide_file_name\": \"Customers.topic\",\n    \"views\": [\n      {\n        \"name\": \"main__customers\",\n        \"label\": \"Customers\",\n        \"table_name\": \"customers\",\n        \"schema\": \"main\",\n        \"schema_label\": \"Main\",\n        \"extension_model_id\": \"5da4e30e-45e2-4693-b87d-51c39d69963f\",\n        \"ide_file_name\": \"main/customers.view\",\n        \"yaml_path\": \"main__customers.view\",\n        \"filter_only_fields\": [],\n        \"is_pseudo_display_view\": false,\n        \"primary_key\": [\n          {\n            \"type\": \"field\",\n            \"field_name\": \"main__customers.id\"\n          }\n        ],\n        \"dimensions\": [\n          {\n            \"field_name\": \"country\",\n            \"view_name\": \"main__customers\",\n            \"data_type\": \"STRING\",\n            \"description\": \"User's country\",\n            \"view_label\": \"Customers\",\n            \"is_dimension\": true,\n            \"fully_qualified_name\": \"main__customers.country\"\n          },\n          {\n            \"field_name\": \"created_date\",\n            \"view_name\": \"main__customers\",\n            \"data_type\": \"TIMESTAMP\",\n            \"time_frames\": [\n              null,\n              \"DATE\",\n              \"WEEK\",\n              \"MONTH\",\n              \"QUARTER\",\n              \"YEAR\"\n            ],\n            \"date_type\": \"DATE\",\n            \"description\": \"Date of user creation\",\n            \"parent_field\": \"created_date\",\n            \"parent_label\": \"Created Date\",\n            \"view_label\": \"Customers\",\n            \"group_label\": \"Created Date\",\n            \"is_dimension\": true,\n            \"is_group_parent_field\": true,\n            \"fully_qualified_name\": \"main__customers.created_date\"\n          }\n        ],\n        \"measures\": [\n          {\n            \"type\": \"aggregation\",\n            \"field_name\": \"count\",\n            \"view_name\": \"main__customers\",\n            \"aggregate_type\": \"COUNT\",\n            \"data_type\": \"NUMBER\",\n            \"ignored\": false,\n            \"label\": \"Customers Count\",\n            \"format\": \"NUMBER_0\",\n            \"view_label\": \"Customers\",\n            \"display_sql\": \"COUNT(*)\",\n            \"dialect_sql\": \"COUNT(*)\",\n            \"fully_qualified_name\": \"main__customers.count\"\n          }\n        ]\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "21d8cb86-4026-4dcb-a49c-8b1988cae7b4",
-              "name": "Bad Request. Possible causes:\n\n- Invalid model UUID\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "topic",
-                    ":topicName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model that contains the topic."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "topicName",
-                      "description": "(Required) The name of the topic."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Model with id <modelId> does not exist\",\n  \"status\": 400\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "76af60bb-85b0-4437-b871-068575f88360",
-              "name": "Not Found. Possible causes:\n\n- Model not found\n- Topic not found or access not permitted\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "topic",
-                    ":topicName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model that contains the topic."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "topicName",
-                      "description": "(Required) The name of the topic."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"Model with id <modelId> does not exist\",\n  \"status\": 404\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "15e096c4-1323-43c1-8357-724c4dfa8529",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "topic",
-                    ":topicName"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model that contains the topic."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "topicName",
-                      "description": "(Required) The name of the topic."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "8e30b22d-2654-4736-8cca-7a22b265087a",
+              "createdAt": "2026-10-21T20:43:39.000Z",
+              "updatedAt": "2026-10-21T20:43:39.000Z",
+              "uid": "35240-8e30b22d-2654-4736-8cca-7a22b265087a"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "27ad4f50-69aa-4142-9f75-33193aa15b8c",
+          "createdAt": "2026-10-21T20:43:39.000Z",
+          "updatedAt": "2026-10-21T20:43:39.000Z",
+          "uid": "35240-27ad4f50-69aa-4142-9f75-33193aa15b8c"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "d34850ac-72f8-4d39-b8bb-dca83ec4e999",
+      "createdAt": "2026-10-21T20:43:39.000Z",
+      "updatedAt": "2026-10-21T20:43:39.000Z",
+      "uid": "35240-d34850ac-72f8-4d39-b8bb-dca83ec4e999"
     }
   ],
   "auth": {
@@ -373,17 +336,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "eae8191d-c964-4bc2-8d88-5599aaa40b61",
-    "name": "Omni AI Topics API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

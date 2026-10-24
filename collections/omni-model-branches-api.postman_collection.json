@@ -1,653 +1,625 @@
 {
+  "info": {
+    "_postman_id": "7658e4fb-362d-4e83-87e2-83c4bbae2444",
+    "name": "Omni Model branches API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:42:50.000Z",
+    "updatedAt": "2026-10-21T20:42:51.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-7658e4fb-362d-4e83-87e2-83c4bbae2444"
+  },
   "item": [
     {
-      "id": "e96c653b-bf5c-416f-bb0e-c6963b4c23e8",
-      "name": "Model branches",
-      "description": {
-        "content": "Manage model branches and merge changes",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "5bbe4cac-94db-4b6d-95ec-d8b1d060408b",
-          "name": "Merge a branch",
-          "request": {
-            "name": "Merge a branch",
-            "description": {
-              "content": "Merges a model branch into the shared model.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "models",
-                ":modelId",
-                "branch",
-                ":branchName",
-                "merge"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "modelId",
-                  "description": "(Required) The unique identifier of the model"
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "branchName",
-                  "description": "(Required) The name of the branch to merge"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "models",
+          "item": [
             {
-              "id": "a11c8ca2-f5ec-4d3a-aeb2-cf4cc8ed955f",
-              "name": "Branch merged successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{modelId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "branch",
+                  "item": [
+                    {
+                      "name": "{branchName}",
+                      "item": [
+                        {
+                          "name": "merge",
+                          "item": [
+                            {
+                              "name": "Merge a branch",
+                              "id": "46ceef6b-511f-49bf-9f46-100c20afc0bd",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "auth": {
+                                  "type": "bearer",
+                                  "bearer": [
+                                    {
+                                      "key": "token",
+                                      "value": "{{bearerToken}}",
+                                      "type": "string"
+                                    }
+                                  ]
+                                },
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "models",
+                                    ":modelId",
+                                    "branch",
+                                    ":branchName",
+                                    "merge"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "9253a019-c38d-43d3-91a6-30624bbd7d29",
+                                      "key": "modelId",
+                                      "value": "<uuid>",
+                                      "description": "(Required) The unique identifier of the model"
+                                    },
+                                    {
+                                      "id": "78aea122-807f-4825-be52-afd0486e45d0",
+                                      "key": "branchName",
+                                      "value": "<string>",
+                                      "description": "(Required) The name of the branch to merge"
+                                    }
+                                  ]
+                                },
+                                "description": "Merges a model branch into the shared model."
+                              },
+                              "response": [
+                                {
+                                  "id": "cbd5ac08-4213-4ec6-b44b-44237da60b10",
+                                  "name": "Branch merged successfully",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"success\": \"<boolean>\",\n  \"published_drafts_count\": \"<integer>\",\n  \"failed_drafts_count\": \"<integer>\",\n  \"git_synced\": \"<boolean>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-cbd5ac08-4213-4ec6-b44b-44237da60b10"
+                                },
+                                {
+                                  "id": "f6e617e9-af63-4603-833f-448467747fc2",
+                                  "name": "Bad Request - Merge not allowed for this model configuration",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Bad Request",
+                                  "code": 400,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-f6e617e9-af63-4603-833f-448467747fc2"
+                                },
+                                {
+                                  "id": "c6398d00-294a-4497-b82c-9aabaf0f4ddb",
+                                  "name": "Forbidden - Insufficient permissions",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Forbidden",
+                                  "code": 403,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-c6398d00-294a-4497-b82c-9aabaf0f4ddb"
+                                },
+                                {
+                                  "id": "c5104758-430b-47c1-b28f-3a7b282cba15",
+                                  "name": "Not Found - Resource does not exist",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-c5104758-430b-47c1-b28f-3a7b282cba15"
+                                },
+                                {
+                                  "id": "cbc0076d-68bb-4a08-8b8a-690e457eaea1",
+                                  "name": "Invalid HTTP method",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Method Not Allowed",
+                                  "code": 405,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-cbc0076d-68bb-4a08-8b8a-690e457eaea1"
+                                },
+                                {
+                                  "id": "02482dae-c8bd-474c-96f3-b14c888f30be",
+                                  "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Too Many Requests",
+                                  "code": 429,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-02482dae-c8bd-474c-96f3-b14c888f30be"
+                                },
+                                {
+                                  "id": "3d096342-fbe5-47f3-a8c3-f68941c25481",
+                                  "name": "Internal Server Error",
+                                  "originalRequest": {
+                                    "method": "POST",
+                                    "header": [
+                                      {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "body": {
+                                      "mode": "raw",
+                                      "raw": "{\n  \"delete_branch\": false,\n  \"publish_drafts\": true,\n  \"commit_message\": \"<string>\",\n  \"force_override_git_settings\": false\n}",
+                                      "options": {
+                                        "raw": {
+                                          "headerFamily": "json",
+                                          "language": "json"
+                                        }
+                                      }
+                                    },
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/models/:modelId/branch/:branchName/merge",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "models",
+                                        ":modelId",
+                                        "branch",
+                                        ":branchName",
+                                        "merge"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "modelId"
+                                        },
+                                        {
+                                          "key": "branchName"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Internal Server Error",
+                                  "code": 500,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:42:51.000Z",
+                                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                                  "uid": "35240-3d096342-fbe5-47f3-a8c3-f68941c25481"
+                                }
+                              ],
+                              "createdAt": "2026-10-21T20:42:51.000Z",
+                              "updatedAt": "2026-10-21T20:42:51.000Z",
+                              "uid": "35240-46ceef6b-511f-49bf-9f46-100c20afc0bd"
+                            }
+                          ],
+                          "id": "00318f0f-0bcb-434c-a5ec-2d95f1b8c883",
+                          "createdAt": "2026-10-21T20:42:51.000Z",
+                          "updatedAt": "2026-10-21T20:42:51.000Z",
+                          "uid": "35240-00318f0f-0bcb-434c-a5ec-2d95f1b8c883"
+                        }
+                      ],
+                      "id": "838c8771-a6e3-4fe0-a2b7-9bbe138158ca",
+                      "createdAt": "2026-10-21T20:42:51.000Z",
+                      "updatedAt": "2026-10-21T20:42:51.000Z",
+                      "uid": "35240-838c8771-a6e3-4fe0-a2b7-9bbe138158ca"
+                    }
+                  ],
+                  "id": "6bdf0d62-b5e6-4382-b918-cb976b68ce13",
+                  "createdAt": "2026-10-21T20:42:51.000Z",
+                  "updatedAt": "2026-10-21T20:42:51.000Z",
+                  "uid": "35240-6bdf0d62-b5e6-4382-b918-cb976b68ce13"
                 }
               ],
-              "body": "{\n  \"success\": true,\n  \"published_drafts_count\": 2,\n  \"failed_drafts_count\": 0,\n  \"git_synced\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5c58ec6b-3adb-4316-a0c0-ef8f3b739138",
-              "name": "Bad Request - Merge not allowed for this model configuration",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"Cannot merge branch directly. This model requires pull requests for changes. Use force_override_git_settings: true to bypass.\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "103505d5-97e2-4d2d-9add-7c86507728e3",
-              "name": "Forbidden - Insufficient permissions",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"Insufficient permissions. The force_override_git_settings flag requires Connection Admin or higher permissions.\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d707e1ae-51ed-4f3c-b99c-0c9fda079cf5",
-              "name": "Not Found - Resource does not exist",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3c59cefb-b64b-4175-b06e-dd0d166722ee",
-              "name": "Invalid HTTP method",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ab247b40-7b8b-4c81-b531-0e8827d4da75",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0edacdef-5f3f-4ac3-8669-13d8e4e15cdc",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "models",
-                    ":modelId",
-                    "branch",
-                    ":branchName",
-                    "merge"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "modelId",
-                      "description": "(Required) The unique identifier of the model"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "branchName",
-                      "description": "(Required) The name of the branch to merge"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"delete_branch\": true,\n  \"publish_drafts\": true,\n  \"commit_message\": \"Merged revenue metrics branch via CI/CD pipeline\",\n  \"force_override_git_settings\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "21c00b54-b84c-43e3-b42f-0e33b0a65a8f",
+              "createdAt": "2026-10-21T20:42:51.000Z",
+              "updatedAt": "2026-10-21T20:42:51.000Z",
+              "uid": "35240-21c00b54-b84c-43e3-b42f-0e33b0a65a8f"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "a3b78f98-249b-4b3c-93bb-a154444a3612",
+          "createdAt": "2026-10-21T20:42:51.000Z",
+          "updatedAt": "2026-10-21T20:42:51.000Z",
+          "uid": "35240-a3b78f98-249b-4b3c-93bb-a154444a3612"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "22472e26-44e5-41af-bff1-dbacff85bbf8",
+      "createdAt": "2026-10-21T20:42:51.000Z",
+      "updatedAt": "2026-10-21T20:42:51.000Z",
+      "uid": "35240-22472e26-44e5-41af-bff1-dbacff85bbf8"
     }
   ],
   "auth": {
@@ -655,17 +627,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "927538df-eb88-4e72-8104-c95e5a64457b",
-    "name": "Omni AI Model branches API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

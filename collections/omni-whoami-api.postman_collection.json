@@ -1,0 +1,241 @@
+{
+  "info": {
+    "_postman_id": "9072227c-faa6-401c-a6c9-23f0e2061594",
+    "name": "Omni Who Am I API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:44:17.000Z",
+    "updatedAt": "2026-10-21T20:44:17.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-9072227c-faa6-401c-a6c9-23f0e2061594"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "whoami",
+          "item": [
+            {
+              "name": "Get current identity and permissions",
+              "id": "99c4409f-af64-4688-9fca-2a0170fd6090",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/whoami?modelId=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "whoami"
+                  ],
+                  "query": [
+                    {
+                      "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n",
+                      "key": "modelId",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns the authenticated caller's own identity, API key scope, organization role, and resolved per-model permissions.\n\nSelf-scoped and available to non-admins: it lets a caller decide whether an action is permitted without attempting it. Pass `modelId` to scope `rolesByModel` to specific models."
+              },
+              "response": [
+                {
+                  "id": "94d79327-2d89-4995-9be6-5862e7976e5b",
+                  "name": "Caller's identity, key scope, org role, and per-model permissions",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/whoami?modelId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "whoami"
+                      ],
+                      "query": [
+                        {
+                          "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n",
+                          "key": "modelId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"keyScope\": \"user\",\n  \"orgRole\": \"ORG_ADMIN\",\n  \"rolesByModel\": {\n    \"cillum4bd\": {\n      \"baseRole\": \"<string>\",\n      \"connectionId\": \"<string>\",\n      \"permissions\": [\n        \"QUERY_SQL\",\n        \"QUERY_SQL\"\n      ],\n      \"roleName\": \"<string>\"\n    }\n  },\n  \"user\": {\n    \"id\": \"<string>\",\n    \"membershipId\": \"<string>\"\n  },\n  \"rolesByModelTruncated\": \"<boolean>\"\n}",
+                  "createdAt": "2026-10-21T20:44:18.000Z",
+                  "updatedAt": "2026-10-21T20:44:18.000Z",
+                  "uid": "35240-94d79327-2d89-4995-9be6-5862e7976e5b"
+                },
+                {
+                  "id": "2459f948-bde5-4870-86e8-aaabf6e3627e",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/whoami?modelId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "whoami"
+                      ],
+                      "query": [
+                        {
+                          "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n",
+                          "key": "modelId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                  "createdAt": "2026-10-21T20:44:18.000Z",
+                  "updatedAt": "2026-10-21T20:44:18.000Z",
+                  "uid": "35240-2459f948-bde5-4870-86e8-aaabf6e3627e"
+                },
+                {
+                  "id": "3c1814c3-89be-43a0-941d-2a390b3e570c",
+                  "name": "One or more requested `modelId`s do not exist or are not accessible to the caller",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/whoami?modelId=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "whoami"
+                      ],
+                      "query": [
+                        {
+                          "description": "Optional model filter. A single model ID or a comma-separated list.\n\nWhen provided, `rolesByModel` in the response will contain only these models. When omitted, models the caller can access are returned up to a limit; see `rolesByModelTruncated`.\n",
+                          "key": "modelId",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"detail\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+                  "createdAt": "2026-10-21T20:44:18.000Z",
+                  "updatedAt": "2026-10-21T20:44:18.000Z",
+                  "uid": "35240-3c1814c3-89be-43a0-941d-2a390b3e570c"
+                }
+              ],
+              "createdAt": "2026-10-21T20:44:18.000Z",
+              "updatedAt": "2026-10-21T20:44:18.000Z",
+              "uid": "35240-99c4409f-af64-4688-9fca-2a0170fd6090"
+            }
+          ],
+          "id": "582c27ac-c063-47e7-97c3-d206c51051c6",
+          "createdAt": "2026-10-21T20:44:18.000Z",
+          "updatedAt": "2026-10-21T20:44:18.000Z",
+          "uid": "35240-582c27ac-c063-47e7-97c3-d206c51051c6"
+        }
+      ],
+      "id": "601af2ad-173f-4157-8220-ec436ac72ea3",
+      "createdAt": "2026-10-21T20:44:18.000Z",
+      "updatedAt": "2026-10-21T20:44:18.000Z",
+      "uid": "35240-601af2ad-173f-4157-8220-ec436ac72ea3"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
+    }
+  ]
+}

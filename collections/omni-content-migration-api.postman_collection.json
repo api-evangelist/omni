@@ -1,453 +1,433 @@
 {
+  "info": {
+    "_postman_id": "25273585-c273-46e4-be60-ca0c5d44f430",
+    "name": "Omni Content migration API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:41:29.000Z",
+    "updatedAt": "2026-10-21T20:41:29.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-25273585-c273-46e4-be60-ca0c5d44f430"
+  },
   "item": [
     {
-      "id": "888ad214-17d1-4db8-875e-e21a88a4480e",
-      "name": "Content migration",
-      "description": {
-        "content": "Export and import dashboards",
-        "type": "text/plain"
-      },
+      "name": "unstable",
       "item": [
         {
-          "id": "40635d09-a8ee-4227-8881-aa960087edf2",
-          "name": "Export dashboard",
-          "request": {
-            "name": "Export dashboard",
-            "description": {
-              "content": "Export dashboard for migration between Omni instances",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "unstable",
-                "documents",
-                ":dashboardId",
-                "export"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "dashboardId",
-                  "description": "(Required) Dashboard identifier"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "documents",
+          "item": [
             {
-              "id": "9aefa787-2037-44d8-bd67-c56b1b216966",
-              "name": "Dashboard export data",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "unstable",
-                    "documents",
-                    ":dashboardId",
-                    "export"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "{dashboardId}",
+              "item": [
+                {
+                  "name": "export",
+                  "item": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) Dashboard identifier"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
+                      "name": "Export dashboard",
+                      "id": "6d10f175-2e78-4b1d-9bf2-7cb79e448e73",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/unstable/documents/:dashboardId/export",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "unstable",
+                            "documents",
+                            ":dashboardId",
+                            "export"
+                          ],
+                          "variable": [
+                            {
+                              "id": "41565b5e-795d-472d-a3a3-53a5c82e1283",
+                              "key": "dashboardId",
+                              "value": "<string>",
+                              "description": "(Required) Dashboard identifier"
+                            }
+                          ]
+                        },
+                        "description": "Export dashboard for migration between Omni instances"
+                      },
+                      "response": [
+                        {
+                          "id": "d9fc5780-f94a-4ce1-a2a7-0f529ed6dbd5",
+                          "name": "Dashboard export data",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/unstable/documents/:dashboardId/export",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "unstable",
+                                "documents",
+                                ":dashboardId",
+                                "export"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"dashboard\": {},\n  \"document\": {},\n  \"exportVersion\": \"<string>\",\n  \"workbookModel\": {},\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:41:29.000Z",
+                          "updatedAt": "2026-10-21T20:41:29.000Z",
+                          "uid": "35240-d9fc5780-f94a-4ce1-a2a7-0f529ed6dbd5"
+                        },
+                        {
+                          "id": "843d8815-20dd-4b61-8570-9e488287df8e",
+                          "name": "Not Found - Resource does not exist",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/unstable/documents/:dashboardId/export",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "unstable",
+                                "documents",
+                                ":dashboardId",
+                                "export"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:29.000Z",
+                          "updatedAt": "2026-10-21T20:41:29.000Z",
+                          "uid": "35240-843d8815-20dd-4b61-8570-9e488287df8e"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:41:29.000Z",
+                      "updatedAt": "2026-10-21T20:41:29.000Z",
+                      "uid": "35240-6d10f175-2e78-4b1d-9bf2-7cb79e448e73"
                     }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                  ],
+                  "id": "e0648609-59bf-45f2-8387-6afb1b8d5e04",
+                  "createdAt": "2026-10-21T20:41:29.000Z",
+                  "updatedAt": "2026-10-21T20:41:29.000Z",
+                  "uid": "35240-e0648609-59bf-45f2-8387-6afb1b8d5e04"
+                }
+              ],
+              "id": "8bc7a992-89eb-4919-8cd0-3dda8eb87e86",
+              "createdAt": "2026-10-21T20:41:29.000Z",
+              "updatedAt": "2026-10-21T20:41:29.000Z",
+              "uid": "35240-8bc7a992-89eb-4919-8cd0-3dda8eb87e86"
+            },
+            {
+              "name": "import",
+              "item": [
+                {
+                  "name": "Import dashboard",
+                  "id": "49ff39b6-bd59-4ef3-9759-b9700595b8f5",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
                   },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"dashboard\": {},\n  \"document\": {},\n  \"exportVersion\": \"0.1\",\n  \"workbookModel\": {},\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"string\",\n      \"fileName\": \"string\",\n      \"contentType\": \"string\",\n      \"data\": \"string\"\n    },\n    {\n      \"fileUploadId\": \"string\",\n      \"fileName\": \"string\",\n      \"contentType\": \"string\",\n      \"data\": \"string\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "488812a8-aa54-4ec7-8d40-9df4472cbdf7",
-              "name": "Not Found - Resource does not exist",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "unstable",
-                    "documents",
-                    ":dashboardId",
-                    "export"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) Dashboard identifier"
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
                     },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": {},\n  \"document\": {},\n  \"workbookModel\": {},\n  \"exportVersion\": \"0.1\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
                     },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "url": {
+                      "raw": "{{baseUrl}}/unstable/documents/import",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "unstable",
+                        "documents",
+                        "import"
+                      ]
+                    },
+                    "description": "Import dashboard to Omni instance."
                   },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "3ce1438d-22cf-4eb2-986f-c1426f874df9",
-          "name": "Import dashboard",
-          "request": {
-            "name": "Import dashboard",
-            "description": {
-              "content": "Import dashboard to Omni instance.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "unstable",
-                "documents",
-                "import"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": \"<object>\",\n  \"document\": \"<object>\",\n  \"workbookModel\": \"<object>\",\n  \"exportVersion\": \"<string>\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "7009be34-ec41-4805-b6e3-406de0e6397c",
-              "name": "Dashboard imported successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "unstable",
-                    "documents",
-                    "import"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+                  "response": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
+                      "id": "d7534be3-ca14-4154-a11b-523369fda9b4",
+                      "name": "Dashboard imported successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": {},\n  \"document\": {},\n  \"workbookModel\": {},\n  \"exportVersion\": \"0.1\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/unstable/documents/import",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "unstable",
+                            "documents",
+                            "import"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"dashboard\": {\n    \"dashboardId\": \"<uuid>\"\n  },\n  \"miniUuidMap\": {},\n  \"workbook\": {}\n}",
+                      "createdAt": "2026-10-21T20:41:29.000Z",
+                      "updatedAt": "2026-10-21T20:41:29.000Z",
+                      "uid": "35240-d7534be3-ca14-4154-a11b-523369fda9b4"
                     },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": \"<object>\",\n  \"document\": \"<object>\",\n  \"workbookModel\": \"<object>\",\n  \"exportVersion\": \"<string>\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"dashboard\": {\n    \"dashboardId\": \"ef474172-51b4-a653-a051-f24e86832b76\"\n  },\n  \"miniUuidMap\": {},\n  \"workbook\": {}\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0f185438-1fdd-45e9-90b0-88e857fa63b5",
-              "name": "Bad Request - Invalid parameters or request body",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "unstable",
-                    "documents",
-                    "import"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
+                      "id": "d3b33756-df90-4864-a7d0-d0c5dba1b122",
+                      "name": "Bad Request - Invalid parameters or request body",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": {},\n  \"document\": {},\n  \"workbookModel\": {},\n  \"exportVersion\": \"0.1\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/unstable/documents/import",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "unstable",
+                            "documents",
+                            "import"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:41:29.000Z",
+                      "updatedAt": "2026-10-21T20:41:29.000Z",
+                      "uid": "35240-d3b33756-df90-4864-a7d0-d0c5dba1b122"
                     },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": \"<object>\",\n  \"document\": \"<object>\",\n  \"workbookModel\": \"<object>\",\n  \"exportVersion\": \"<string>\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "aac62d0e-93c4-496a-b4ee-6026b6973b5c",
-              "name": "Forbidden\n\nPossible error messages/causes:\n\n- `User-scoped API keys cannot act on behalf of other users`\n- Operations targeting personal/restricted scope require the user's **Personal content access** setting (`omni_allows_personal_content` system attribute) to be enabled for the user. If not enabled, the API will respond with `403 Forbidden`.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "unstable",
-                    "documents",
-                    "import"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
+                      "id": "942ad977-2c31-4d0d-9527-9c91ffdf65c0",
+                      "name": "Forbidden\n\nPossible error messages/causes:\n\n- `User-scoped API keys cannot act on behalf of other users`\n- Operations targeting personal/restricted scope require the user's **Personal content access** setting (`omni_allows_personal_content` system attribu",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": {},\n  \"document\": {},\n  \"workbookModel\": {},\n  \"exportVersion\": \"0.1\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/unstable/documents/import",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "unstable",
+                            "documents",
+                            "import"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T20:41:29.000Z",
+                      "updatedAt": "2026-10-21T20:41:29.000Z",
+                      "uid": "35240-942ad977-2c31-4d0d-9527-9c91ffdf65c0"
                     }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"baseModelId\": \"<uuid>\",\n  \"dashboard\": \"<object>\",\n  \"document\": \"<object>\",\n  \"workbookModel\": \"<object>\",\n  \"exportVersion\": \"<string>\",\n  \"identifier\": \"<string>\",\n  \"folderPath\": \"<string>\",\n  \"fileUploads\": [\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    },\n    {\n      \"fileUploadId\": \"<string>\",\n      \"fileName\": \"<string>\",\n      \"contentType\": \"<string>\",\n      \"data\": \"<string>\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  ],
+                  "createdAt": "2026-10-21T20:41:29.000Z",
+                  "updatedAt": "2026-10-21T20:41:29.000Z",
+                  "uid": "35240-49ff39b6-bd59-4ef3-9759-b9700595b8f5"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
+              "id": "49949f0b-fd31-4ab8-9e36-2ba381901533",
+              "createdAt": "2026-10-21T20:41:29.000Z",
+              "updatedAt": "2026-10-21T20:41:29.000Z",
+              "uid": "35240-49949f0b-fd31-4ab8-9e36-2ba381901533"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "62a84e04-73a5-4067-9c31-94b4a395bef3",
+          "createdAt": "2026-10-21T20:41:29.000Z",
+          "updatedAt": "2026-10-21T20:41:29.000Z",
+          "uid": "35240-62a84e04-73a5-4067-9c31-94b4a395bef3"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "cdf7d71f-2cdd-4670-a12b-90fe36afc64b",
+      "createdAt": "2026-10-21T20:41:29.000Z",
+      "updatedAt": "2026-10-21T20:41:29.000Z",
+      "uid": "35240-cdf7d71f-2cdd-4670-a12b-90fe36afc64b"
     }
   ],
   "auth": {
@@ -455,17 +435,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "6e46a8ea-9990-4759-aaf3-c8ae5a37a5c0",
-    "name": "Omni AI Content migration API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

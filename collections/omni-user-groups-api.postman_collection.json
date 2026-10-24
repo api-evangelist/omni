@@ -1,1306 +1,1183 @@
 {
+  "info": {
+    "_postman_id": "33486b9a-9fbc-4b84-867d-42fdfef38436",
+    "name": "Omni User groups API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:44:01.000Z",
+    "updatedAt": "2026-10-21T20:44:01.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-33486b9a-9fbc-4b84-867d-42fdfef38436"
+  },
   "item": [
     {
-      "id": "905ca381-d3b4-4acc-8855-d2461d01dff2",
-      "name": "User groups",
-      "description": {
-        "content": "Manage user groups",
-        "type": "text/plain"
-      },
+      "name": "scim",
       "item": [
         {
-          "id": "fedefd45-08cf-489b-94a7-0f4981abc2de",
-          "name": "Create user group",
-          "request": {
-            "name": "Create user group",
-            "description": {
-              "content": "Creates a [user group](/administration/users/groups). To manage model and connection role assignments for user groups, see the [User group model role APIs](/api/user-group-model-roles).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\"\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "v2",
+          "item": [
             {
-              "id": "649fb4bd-f802-479f-accc-dced2c58aac9",
-              "name": "Group created successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"displayName\": \"Blob Sales\",\n  \"members\": [\n    {\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
+              "name": "groups",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "{userGroupId}",
+                  "item": [
+                    {
+                      "name": "Retrieve user group",
+                      "id": "2ff2deb4-08b8-427f-8187-646f49eae544",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups",
+                            ":userGroupId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "09268df3-0f95-4623-966f-37cbbf746fa8",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the group to be retrieved"
+                            }
+                          ]
+                        },
+                        "description": "Retrieves a user group using its unique ID."
+                      },
+                      "response": [
+                        {
+                          "id": "b4f69e59-5faa-4bc3-89c2-78ec0b440ed5",
+                          "name": "User group details",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    }\n  ],\n  \"meta\": {\n    \"resourceType\": \"<string>\",\n    \"created\": \"<dateTime>\",\n    \"lastModified\": \"<dateTime>\"\n  },\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-b4f69e59-5faa-4bc3-89c2-78ec0b440ed5"
+                        },
+                        {
+                          "id": "25e563f2-6d58-4c59-8233-b66d8c4fec59",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-25e563f2-6d58-4c59-8233-b66d8c4fec59"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-2ff2deb4-08b8-427f-8187-646f49eae544"
+                    },
+                    {
+                      "name": "Replace user group",
+                      "id": "aec6a9b7-d2bf-47ea-a29d-c8f1ee7a61e9",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups",
+                            ":userGroupId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "b6d33bd0-0090-47a8-bbf7-76a92486368c",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the group to be replaced"
+                            }
+                          ]
+                        },
+                        "description": "Replaces the specified user group. Per the SCIM 2.0 specification, `PUT` replaces the entire group resource, including its membership.\n\nTo add or remove individual members without replacing the full membership list, use the Update user group endpoint, which performs a partial update via `PATCH`."
+                      },
+                      "response": [
+                        {
+                          "id": "6063851c-70a7-4a63-9c89-0eb594ecff33",
+                          "name": "Group replaced successfully",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    }\n  ],\n  \"meta\": {\n    \"resourceType\": \"<string>\",\n    \"created\": \"<dateTime>\",\n    \"lastModified\": \"<dateTime>\"\n  },\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-6063851c-70a7-4a63-9c89-0eb594ecff33"
+                        },
+                        {
+                          "id": "dbdc8c11-86aa-424b-b226-d44c9de572c2",
+                          "name": "Invalid request body",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-dbdc8c11-86aa-424b-b226-d44c9de572c2"
+                        },
+                        {
+                          "id": "0ae5c98a-77c1-4842-984b-0a6b56110a81",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-0ae5c98a-77c1-4842-984b-0a6b56110a81"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-aec6a9b7-d2bf-47ea-a29d-c8f1ee7a61e9"
+                    },
+                    {
+                      "name": "Update user group",
+                      "id": "475e5594-ac95-41e8-8a5f-d013e0d8d243",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"Operations\": [\n    {\n      \"op\": \"remove\",\n      \"path\": \"<string>\",\n      \"value\": {\n        \"description\": \"The value to apply for the operation. Required for `add` and `replace` operations.\"\n      }\n    }\n  ],\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\",\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups",
+                            ":userGroupId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "0ee55cb2-892c-4de2-8e40-da043869b79b",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the group to be updated"
+                            }
+                          ]
+                        },
+                        "description": "Updates the specified user group by applying a list of SCIM 2.0 patch operations. Use `PATCH` to add or remove individual members, or to rename the group, without affecting other attributes.\n\nTo replace the entire group resource (including the full membership list) in a single request, use the Replace user group endpoint."
+                      },
+                      "response": [
+                        {
+                          "id": "a9d32c9b-6386-4b1d-960f-0bedcf3155c2",
+                          "name": "Group updated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"Operations\": [\n    {\n      \"op\": \"remove\",\n      \"path\": \"<string>\",\n      \"value\": {\n        \"description\": \"The value to apply for the operation. Required for `add` and `replace` operations.\"\n      }\n    }\n  ],\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\",\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    }\n  ],\n  \"meta\": {\n    \"resourceType\": \"<string>\",\n    \"created\": \"<dateTime>\",\n    \"lastModified\": \"<dateTime>\"\n  },\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-a9d32c9b-6386-4b1d-960f-0bedcf3155c2"
+                        },
+                        {
+                          "id": "37fad3b5-faef-4fee-8034-30813687ef54",
+                          "name": "Invalid patch operations",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"Operations\": [\n    {\n      \"op\": \"remove\",\n      \"path\": \"<string>\",\n      \"value\": {\n        \"description\": \"The value to apply for the operation. Required for `add` and `replace` operations.\"\n      }\n    }\n  ],\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\",\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-37fad3b5-faef-4fee-8034-30813687ef54"
+                        },
+                        {
+                          "id": "c1fd3d54-7824-4521-95bc-055bf0071d8c",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"Operations\": [\n    {\n      \"op\": \"remove\",\n      \"path\": \"<string>\",\n      \"value\": {\n        \"description\": \"The value to apply for the operation. Required for `add` and `replace` operations.\"\n      }\n    }\n  ],\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\",\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-c1fd3d54-7824-4521-95bc-055bf0071d8c"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-475e5594-ac95-41e8-8a5f-d013e0d8d243"
+                    },
+                    {
+                      "name": "Delete user group",
+                      "id": "847f5fe0-09e9-46fb-8d13-b080cd5ae390",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups",
+                            ":userGroupId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "24f5b0f3-d54e-4ca2-9177-d0e4aa409c75",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the group to be deleted"
+                            }
+                          ]
+                        },
+                        "description": "Deletes the specified user group."
+                      },
+                      "response": [
+                        {
+                          "id": "f0b66ab3-e47c-44df-a28a-8f71d0e093e4",
+                          "name": "Group deleted successfully",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-f0b66ab3-e47c-44df-a28a-8f71d0e093e4"
+                        },
+                        {
+                          "id": "cfa7c7ff-8bc2-43f9-9513-82d6ed3e792a",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/scim/v2/groups/:userGroupId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "scim",
+                                "v2",
+                                "groups",
+                                ":userGroupId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:44:02.000Z",
+                          "updatedAt": "2026-10-21T20:44:02.000Z",
+                          "uid": "35240-cfa7c7ff-8bc2-43f9-9513-82d6ed3e792a"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-847f5fe0-09e9-46fb-8d13-b080cd5ae390"
+                    }
+                  ],
+                  "id": "ebf7a875-9bc7-4603-87d0-67628a9c30d1",
+                  "createdAt": "2026-10-21T20:44:02.000Z",
+                  "updatedAt": "2026-10-21T20:44:02.000Z",
+                  "uid": "35240-ebf7a875-9bc7-4603-87d0-67628a9c30d1"
+                },
+                {
+                  "name": "Create user group",
+                  "id": "70d027e9-39b0-4b6d-8c6d-f21d28fa20d4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/scim/v2/groups",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scim",
+                        "v2",
+                        "groups"
+                      ]
+                    },
+                    "description": "Creates a user group. To manage model and connection role assignments for user groups, see the User group model role APIs."
+                  },
+                  "response": [
+                    {
+                      "id": "52cecd56-d079-4e83-8652-5ef3d64880b5",
+                      "name": "Group created successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\",\n      \"display\": \"<string>\"\n    }\n  ],\n  \"meta\": {\n    \"resourceType\": \"<string>\",\n    \"created\": \"<dateTime>\",\n    \"lastModified\": \"<dateTime>\"\n  },\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-52cecd56-d079-4e83-8652-5ef3d64880b5"
+                    },
+                    {
+                      "id": "a2fc9098-be06-47b5-a7f3-b9ce174aa536",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"value\": \"<string>\"\n    },\n    {\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups"
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-a2fc9098-be06-47b5-a7f3-b9ce174aa536"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:44:02.000Z",
+                  "updatedAt": "2026-10-21T20:44:02.000Z",
+                  "uid": "35240-70d027e9-39b0-4b6d-8c6d-f21d28fa20d4"
+                },
+                {
+                  "name": "List user groups",
+                  "id": "a65cfc7d-557f-4940-aac1-1382b8b8b1f2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/scim/v2/groups?count=100&startIndex=1",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "scim",
+                        "v2",
+                        "groups"
+                      ],
+                      "query": [
+                        {
+                          "description": "The number of groups to return",
+                          "key": "count",
+                          "value": "100"
+                        },
+                        {
+                          "description": "An integer index that determines the starting point of the sorted result list",
+                          "key": "startIndex",
+                          "value": "1"
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of user groups, sorted by creation time."
+                  },
+                  "response": [
+                    {
+                      "id": "1c7fb3ab-0649-4839-be1d-dffdfb9aaee8",
+                      "name": "List of user groups",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups?count=100&startIndex=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of groups to return",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An integer index that determines the starting point of the sorted result list",
+                              "key": "startIndex",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"Resources\": [\n    {\n      \"id\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"members\": [\n        {\n          \"value\": \"<string>\",\n          \"display\": \"<string>\"\n        },\n        {\n          \"value\": \"<string>\",\n          \"display\": \"<string>\"\n        }\n      ],\n      \"meta\": {\n        \"resourceType\": \"<string>\",\n        \"created\": \"<dateTime>\",\n        \"lastModified\": \"<dateTime>\"\n      },\n      \"schemas\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"id\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"members\": [\n        {\n          \"value\": \"<string>\",\n          \"display\": \"<string>\"\n        },\n        {\n          \"value\": \"<string>\",\n          \"display\": \"<string>\"\n        }\n      ],\n      \"meta\": {\n        \"resourceType\": \"<string>\",\n        \"created\": \"<dateTime>\",\n        \"lastModified\": \"<dateTime>\"\n      },\n      \"schemas\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"itemsPerPage\": \"<integer>\",\n  \"startIndex\": \"<integer>\",\n  \"totalResults\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-1c7fb3ab-0649-4839-be1d-dffdfb9aaee8"
+                    },
+                    {
+                      "id": "ff411117-7645-4238-a64b-d0611c53899a",
+                      "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/scim/v2/groups?count=100&startIndex=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "scim",
+                            "v2",
+                            "groups"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of groups to return",
+                              "key": "count",
+                              "value": "100"
+                            },
+                            {
+                              "description": "An integer index that determines the starting point of the sorted result list",
+                              "key": "startIndex",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T20:44:02.000Z",
+                      "updatedAt": "2026-10-21T20:44:02.000Z",
+                      "uid": "35240-ff411117-7645-4238-a64b-d0611c53899a"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T20:44:02.000Z",
+                  "updatedAt": "2026-10-21T20:44:02.000Z",
+                  "uid": "35240-a65cfc7d-557f-4940-aac1-1382b8b8b1f2"
                 }
               ],
-              "body": "{\n  \"displayName\": \"Blob Sales\",\n  \"id\": \"mEhXj6ZI\",\n  \"meta\": {\n    \"created\": \"2024-12-04T00:08:03.250Z\",\n    \"lastModified\": \"2024-12-04T00:08:03.250Z\",\n    \"resourceType\": \"Group\"\n  },\n  \"schemas\": [\n    \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n  ],\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5d044c97-846c-4d39-85f3-5fc8888fa575",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"displayName\": \"Blob Sales\",\n  \"members\": [\n    {\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "cf6b4e4d-ba13-4fb4-ab60-8e94056b462b",
+              "createdAt": "2026-10-21T20:44:02.000Z",
+              "updatedAt": "2026-10-21T20:44:02.000Z",
+              "uid": "35240-cf6b4e4d-ba13-4fb4-ab60-8e94056b462b"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "ebcfcb63-663d-453c-91aa-c6b2c153d6eb",
-          "name": "List user groups",
-          "request": {
-            "name": "List user groups",
-            "description": {
-              "content": "Returns a list of user groups, sorted by creation time.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "count",
-                  "value": "100",
-                  "description": "The number of groups to return"
-                },
-                {
-                  "disabled": false,
-                  "key": "startIndex",
-                  "value": "1",
-                  "description": "An integer index that determines the starting point of the sorted result list"
-                }
-              ],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "41422c4b-3aba-4d56-883c-1d7e8f82a723",
-              "name": "List of user groups",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "count",
-                      "value": "50"
-                    },
-                    {
-                      "key": "startIndex",
-                      "value": "1"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"Resources\": [\n    {\n      \"displayName\": \"Blob Sales\",\n      \"id\": \"mEhXj6ZI\",\n      \"meta\": {\n        \"created\": \"2024-08-29T20:33:36.626Z\",\n        \"lastModified\": \"2024-08-29T20:33:36.626Z\",\n        \"resourceType\": \"Group\"\n      },\n      \"schemas\": [\n        \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n      ],\n      \"members\": [\n        {\n          \"display\": \"blob.ross@blobsrus.co\",\n          \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n        }\n      ]\n    }\n  ],\n  \"itemsPerPage\": 1,\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:ListResponse\"\n  ],\n  \"startIndex\": 1,\n  \"totalResults\": 1\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "dd595792-ffae-4f81-aefa-b61e82d1b186",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "count",
-                      "value": "50"
-                    },
-                    {
-                      "key": "startIndex",
-                      "value": "1"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "a19250cf-ac32-4e37-beec-839643e292a5",
-          "name": "Retrieve user group",
-          "request": {
-            "name": "Retrieve user group",
-            "description": {
-              "content": "Retrieves a user group using its unique ID.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups",
-                ":userGroupId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the group to be retrieved"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "b377b0cd-d573-404d-a860-1ca09728ce0e",
-              "name": "User group details",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be retrieved"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"displayName\": \"Blob Sales\",\n  \"id\": \"mEhXj6ZI\",\n  \"meta\": {\n    \"created\": \"2024-08-29T20:33:36.626Z\",\n    \"lastModified\": \"2024-08-29T20:33:36.626Z\",\n    \"resourceType\": \"Group\"\n  },\n  \"schemas\": [\n    \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n  ],\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5b945d82-2535-47e4-9b45-38ec54b8f049",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be retrieved"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "1ecf4562-0792-40da-8449-e720890c6b92",
-          "name": "Replace user group",
-          "request": {
-            "name": "Replace user group",
-            "description": {
-              "content": "Replaces the specified user group. Per the SCIM 2.0 specification, `PUT` replaces the entire group resource, including its membership.\n\nTo add or remove individual members without replacing the full membership list, use the [Update user group](/api/user-groups/update-user-group) endpoint, which performs a partial update via `PATCH`.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups",
-                ":userGroupId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the group to be replaced"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"displayName\": \"<string>\",\n  \"members\": [\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"display\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "bbb4de56-deea-4c79-9a8f-f92e3bebf019",
-              "name": "Group replaced successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be replaced"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"displayName\": \"Blob SEs\",\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"displayName\": \"Blob SEs\",\n  \"id\": \"mEhXj6ZI\",\n  \"meta\": {\n    \"created\": \"2024-12-04T00:08:03.250Z\",\n    \"lastModified\": \"2024-12-04T00:20:47.346Z\",\n    \"resourceType\": \"Group\"\n  },\n  \"schemas\": [\n    \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n  ],\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "32b84b2d-cc4f-4888-8004-9268eb5296e4",
-              "name": "Invalid request body",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be replaced"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"displayName\": \"Blob SEs\",\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "ca6cef65-3189-49e5-9b69-a7e4f0b25647",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be replaced"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"displayName\": \"Blob SEs\",\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "bfe168d1-689b-4405-b211-cd3ce278de03",
-          "name": "Update user group",
-          "request": {
-            "name": "Update user group",
-            "description": {
-              "content": "Updates the specified user group by applying a list of [SCIM 2.0 patch operations](https://datatracker.ietf.org/doc/html/rfc7644#section-3.5.2). Use `PATCH` to add or remove individual members, or to rename the group, without affecting other attributes.\n\nTo replace the entire group resource (including the full membership list) in a single request, use the [Replace user group](/api/user-groups/replace-user-group) endpoint.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups",
-                ":userGroupId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the group to be updated"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"Operations\": [\n    {\n      \"op\": \"<string>\",\n      \"path\": \"<string>\",\n      \"value\": {}\n    }\n  ],\n  \"schemas\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "6298d252-1acc-4179-95c7-7295f4deef01",
-              "name": "Group updated successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be updated"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ],\n  \"Operations\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"members\",\n      \"value\": [\n        {\n          \"display\": \"blob.ross@blobsrus.co\",\n          \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n        }\n      ]\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"displayName\": \"Blob SEs\",\n  \"id\": \"mEhXj6ZI\",\n  \"meta\": {\n    \"created\": \"2024-12-04T00:08:03.250Z\",\n    \"lastModified\": \"2024-12-04T00:20:47.346Z\",\n    \"resourceType\": \"Group\"\n  },\n  \"schemas\": [\n    \"urn:ietf:params:scim:schemas:core:2.0:Group\"\n  ],\n  \"members\": [\n    {\n      \"display\": \"blob.ross@blobsrus.co\",\n      \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "55e56730-724b-4e7b-b1a2-d9da2569563c",
-              "name": "Invalid patch operations",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be updated"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ],\n  \"Operations\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"members\",\n      \"value\": [\n        {\n          \"display\": \"blob.ross@blobsrus.co\",\n          \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n        }\n      ]\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "6202e69c-777f-4fdd-8471-47f450740280",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be updated"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schemas\": [\n    \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n  ],\n  \"Operations\": [\n    {\n      \"op\": \"add\",\n      \"path\": \"members\",\n      \"value\": [\n        {\n          \"display\": \"blob.ross@blobsrus.co\",\n          \"value\": \"9e8719d9-276a-4964-9395-a493189a247c\"\n        }\n      ]\n    }\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f7a1d679-5ca4-48b5-bd92-4e96a6b8c7b2",
-          "name": "Delete user group",
-          "request": {
-            "name": "Delete user group",
-            "description": {
-              "content": "Deletes the specified user group.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "scim",
-                "v2",
-                "groups",
-                ":userGroupId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the group to be deleted"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "3d688c04-fcad-4e40-8313-beeefd1de399",
-              "name": "Group deleted successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be deleted"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "6c227570-6787-44e4-969c-83a398557321",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "scim",
-                    "v2",
-                    "groups",
-                    ":userGroupId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the group to be deleted"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "ef18e54e-3f58-44b8-9ff6-4fa1b118796f",
+          "createdAt": "2026-10-21T20:44:02.000Z",
+          "updatedAt": "2026-10-21T20:44:02.000Z",
+          "uid": "35240-ef18e54e-3f58-44b8-9ff6-4fa1b118796f"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "9e350d15-fec4-484e-b3d1-9c1c976bb71f",
+      "createdAt": "2026-10-21T20:44:02.000Z",
+      "updatedAt": "2026-10-21T20:44:02.000Z",
+      "uid": "35240-9e350d15-fec4-484e-b3d1-9c1c976bb71f"
     }
   ],
   "auth": {
@@ -1308,17 +1185,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "26355171-64a0-4601-b4c2-727ef26e3973",
-    "name": "Omni AI User groups API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

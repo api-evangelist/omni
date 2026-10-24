@@ -1,1709 +1,1516 @@
 {
+  "info": {
+    "_postman_id": "206bf3d2-bf2c-4410-99fc-af9f20bf0f64",
+    "name": "Omni Dashboard downloads API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:41:39.000Z",
+    "updatedAt": "2026-10-21T20:41:39.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-206bf3d2-bf2c-4410-99fc-af9f20bf0f64"
+  },
   "item": [
     {
-      "id": "b371526b-16e8-4bb6-9afe-86848176eb1e",
-      "name": "Dashboard downloads",
-      "description": {
-        "content": "Download dashboards and tiles as PDF, PNG, XLSX, CSV, or JSON files",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "4bf0bb22-14a5-4ad2-90f5-8b4f40ea0a51",
-          "name": "Initiate download",
-          "request": {
-            "name": "Initiate download",
-            "description": {},
-            "url": {
-              "path": [
-                "v1",
-                "dashboards",
-                ":dashboardId",
-                "download"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "userId",
-                  "value": "<string>",
-                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "dashboardId",
-                  "description": "(Required) The dashboard identifier (ID or document UUID)"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"format\": \"<string>\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": \"<object>\",\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"<string>\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "dashboards",
+          "item": [
             {
-              "id": "57007278-ab23-400f-8ae4-6c39e2d66b24",
-              "name": "Download initiated successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{dashboardId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "download",
+                  "item": [
+                    {
+                      "name": "{jobId}",
+                      "item": [
+                        {
+                          "name": "status",
+                          "item": [
+                            {
+                              "name": "Check download status",
+                              "id": "07840d27-f766-40ef-89f0-663dc210ee43",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "auth": {
+                                  "type": "bearer",
+                                  "bearer": [
+                                    {
+                                      "key": "token",
+                                      "value": "{{bearerToken}}",
+                                      "type": "string"
+                                    }
+                                  ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId",
+                                    "status"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "d143ae09-ede7-4c50-bee1-ce317fd87e6e",
+                                      "key": "dashboardId",
+                                      "value": "<string>",
+                                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
+                                    },
+                                    {
+                                      "id": "4a1d4c51-24a6-4a1f-ae52-c8a880adbc47",
+                                      "key": "jobId",
+                                      "value": "<uuid>",
+                                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
+                                    }
+                                  ]
+                                }
+                              },
+                              "response": [
+                                {
+                                  "id": "f1382fc2-c9f8-4397-9edf-1ca242f72cd2",
+                                  "name": "Job status retrieved successfully",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"job_id\": \"<uuid>\",\n  \"status\": \"in_progress\",\n  \"format\": \"xlsx\",\n  \"created_at\": \"<dateTime>\",\n  \"error\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-f1382fc2-c9f8-4397-9edf-1ca242f72cd2"
+                                },
+                                {
+                                  "id": "44176c86-bdae-411d-9e31-6dbc62638b46",
+                                  "name": "Invalid job ID format",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Bad Request",
+                                  "code": 400,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-44176c86-bdae-411d-9e31-6dbc62638b46"
+                                },
+                                {
+                                  "id": "ffb45bb7-4a6f-4617-a727-1e312d0c6bb3",
+                                  "name": "Insufficient permissions",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Forbidden",
+                                  "code": 403,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-ffb45bb7-4a6f-4617-a727-1e312d0c6bb3"
+                                },
+                                {
+                                  "id": "66c86bd4-daa4-4a99-a02a-876038a46f02",
+                                  "name": "Job not found or does not belong to the specified dashboard",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-66c86bd4-daa4-4a99-a02a-876038a46f02"
+                                },
+                                {
+                                  "id": "8d6ba918-e969-456b-b2aa-d6393ddb5199",
+                                  "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Method Not Allowed",
+                                  "code": 405,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-8d6ba918-e969-456b-b2aa-d6393ddb5199"
+                                },
+                                {
+                                  "id": "c9e51188-02b8-435f-b37a-7815f526caac",
+                                  "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId/status",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "v1",
+                                        "dashboards",
+                                        ":dashboardId",
+                                        "download",
+                                        ":jobId",
+                                        "status"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "dashboardId"
+                                        },
+                                        {
+                                          "key": "jobId"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Too Many Requests",
+                                  "code": 429,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                                  "createdAt": "2026-10-21T20:41:39.000Z",
+                                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                                  "uid": "35240-c9e51188-02b8-435f-b37a-7815f526caac"
+                                }
+                              ],
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-07840d27-f766-40ef-89f0-663dc210ee43"
+                            }
+                          ],
+                          "id": "2d17d19d-22a7-46a6-a011-d60aabb76635",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-2d17d19d-22a7-46a6-a011-d60aabb76635"
+                        },
+                        {
+                          "name": "Download file",
+                          "id": "206ee583-6f8f-4480-a64c-ff1b8723c954",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/pdf"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download",
+                                ":jobId"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "8956e50d-f14b-4b9a-a32e-3c690401644b",
+                                  "key": "dashboardId",
+                                  "value": "<string>",
+                                  "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
+                                },
+                                {
+                                  "id": "41b45039-6e27-46a7-b26e-d9d65bd6d0c6",
+                                  "key": "jobId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "e0fbbaba-ed74-4f8e-9df7-49d7c7ae8fb7",
+                              "name": "File download successful",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/pdf"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-e0fbbaba-ed74-4f8e-9df7-49d7c7ae8fb7"
+                            },
+                            {
+                              "id": "ba5ca847-4719-4c57-87e6-13b246b7b9ef",
+                              "name": "Job still in progress. Poll the [Check download status endpoint](/api/dashboard-downloads/check-download-status) first.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Accepted",
+                              "code": 202,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-ba5ca847-4719-4c57-87e6-13b246b7b9ef"
+                            },
+                            {
+                              "id": "aac6419f-8503-4846-8bf6-8afee75fd9a8",
+                              "name": "Invalid job ID format",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-aac6419f-8503-4846-8bf6-8afee75fd9a8"
+                            },
+                            {
+                              "id": "9561f941-1bd0-48dd-8def-516b9cbeb059",
+                              "name": "Insufficient permissions",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-9561f941-1bd0-48dd-8def-516b9cbeb059"
+                            },
+                            {
+                              "id": "043546a2-91f8-4e68-b5cb-ad99323d85ee",
+                              "name": "Job not found or does not belong to the specified dashboard",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-043546a2-91f8-4e68-b5cb-ad99323d85ee"
+                            },
+                            {
+                              "id": "94fa2251-c126-49ef-92a8-b4c023bf219d",
+                              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Method Not Allowed",
+                              "code": 405,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-94fa2251-c126-49ef-92a8-b4c023bf219d"
+                            },
+                            {
+                              "id": "55ed9949-2b00-49d3-afe5-2e0479b4540d",
+                              "name": "Job failed. Call the [Check download status endpoint](/api/dashboard-downloads/check-download-status) for error details.",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Gone",
+                              "code": 410,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-55ed9949-2b00-49d3-afe5-2e0479b4540d"
+                            },
+                            {
+                              "id": "11129207-91f0-4d1a-8b4e-d8ad019b7da8",
+                              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download/:jobId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "dashboards",
+                                    ":dashboardId",
+                                    "download",
+                                    ":jobId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "dashboardId"
+                                    },
+                                    {
+                                      "key": "jobId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:41:39.000Z",
+                              "updatedAt": "2026-10-21T20:41:39.000Z",
+                              "uid": "35240-11129207-91f0-4d1a-8b4e-d8ad019b7da8"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-206ee583-6f8f-4480-a64c-ff1b8723c954"
+                        }
+                      ],
+                      "id": "405ab5fc-16a9-463f-a349-e89911556a38",
+                      "createdAt": "2026-10-21T20:41:39.000Z",
+                      "updatedAt": "2026-10-21T20:41:39.000Z",
+                      "uid": "35240-405ab5fc-16a9-463f-a349-e89911556a38"
+                    },
+                    {
+                      "name": "Initiate download",
+                      "id": "d94a06c3-7123-4567-9eb9-47c75de71f23",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dashboards",
+                            ":dashboardId",
+                            "download"
+                          ],
+                          "query": [
+                            {
+                              "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                              "key": "userId",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "8134f52f-db00-46bb-a72d-e2d7371450b6",
+                              "key": "dashboardId",
+                              "value": "<string>",
+                              "description": "(Required) The dashboard identifier (ID or document UUID)"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "7770f569-e54e-4652-a5d1-04e656717798",
+                          "name": "Download initiated successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"job_id\": \"<uuid>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-7770f569-e54e-4652-a5d1-04e656717798"
+                        },
+                        {
+                          "id": "bcd7a305-963d-4a7c-8c5a-646457e42090",
+                          "name": "Bad Request. Possible causes:\n\n- Missing required `format` field\n- Invalid format value\n- Invalid options for the specified format\n- Malformed JSON body\n- Invalid UUID format\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-bcd7a305-963d-4a7c-8c5a-646457e42090"
+                        },
+                        {
+                          "id": "2b1b4949-16c0-4871-8193-49ba767de05c",
+                          "name": "Insufficient permissions to download the specified dashboard",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-2b1b4949-16c0-4871-8193-49ba767de05c"
+                        },
+                        {
+                          "id": "66ef3d84-bf63-4419-a3fd-2f2b72893358",
+                          "name": "Dashboard not found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-66ef3d84-bf63-4419-a3fd-2f2b72893358"
+                        },
+                        {
+                          "id": "02cc015f-dfba-45ad-8d7a-4f1ebf8367d4",
+                          "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Method Not Allowed",
+                          "code": 405,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-02cc015f-dfba-45ad-8d7a-4f1ebf8367d4"
+                        },
+                        {
+                          "id": "871451ec-7aeb-45d1-b5ca-186c36de4dd1",
+                          "name": "A download is already in progress for the specified dashboard",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"existing_job_id\": \"<uuid>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-871451ec-7aeb-45d1-b5ca-186c36de4dd1"
+                        },
+                        {
+                          "id": "f2d7b7f5-9953-4e0e-912d-a81659d5f53a",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"format\": \"pdf\",\n  \"filename\": \"<string>\",\n  \"queryIdentifierMapKey\": \"<string>\",\n  \"filterConfig\": {},\n  \"paperFormat\": \"fit_page\",\n  \"paperOrientation\": \"landscape\",\n  \"hideTitle\": false,\n  \"showFilters\": true,\n  \"expandTablesToShowAllRows\": \"<boolean>\",\n  \"singleColumnLayout\": \"<boolean>\",\n  \"enableFormatting\": false,\n  \"hideHiddenFields\": false,\n  \"overrideRowLimit\": false,\n  \"maxRowLimit\": \"<integer>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/dashboards/:dashboardId/download?userId=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "dashboards",
+                                ":dashboardId",
+                                "download"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The user ID to run the download as. Only valid when authenticating with an organization API key. Use the [List users](/api/users/list-users) or [List embed users](/api/users/list-embed-users) endpoints to retrieve user IDs.\n",
+                                  "key": "userId",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dashboardId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:41:39.000Z",
+                          "updatedAt": "2026-10-21T20:41:39.000Z",
+                          "uid": "35240-f2d7b7f5-9953-4e0e-912d-a81659d5f53a"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:41:39.000Z",
+                      "updatedAt": "2026-10-21T20:41:39.000Z",
+                      "uid": "35240-d94a06c3-7123-4567-9eb9-47c75de71f23"
+                    }
+                  ],
+                  "id": "99f4a318-f093-45b5-8dd6-12e3f802ff70",
+                  "createdAt": "2026-10-21T20:41:39.000Z",
+                  "updatedAt": "2026-10-21T20:41:39.000Z",
+                  "uid": "35240-99f4a318-f093-45b5-8dd6-12e3f802ff70"
                 }
               ],
-              "body": "{\n  \"job_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"message\": \"Download initiated successfully\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "08e5f727-b5e0-436f-9ff9-f565913e4e44",
-              "name": "Bad Request. Possible causes:\n\n- Missing required `format` field\n- Invalid format value\n- Invalid options for the specified format\n- Malformed JSON body\n- Invalid UUID format\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4ce4d3c4-3f7a-43b0-a869-4925cf593463",
-              "name": "Insufficient permissions to download the specified dashboard",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f12e7880-0490-420f-88bd-37815e3a8998",
-              "name": "Dashboard not found",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f4e75b0f-2677-433e-b398-750b8bd403dc",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4c9798c0-a360-4789-af18-5145148747e1",
-              "name": "A download is already in progress for the specified dashboard",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"A download is already in progress for this dashboard. Please wait for it to complete or check its status.\",\n  \"existing_job_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"status\": \"EXECUTING\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6c9f86a2-6c45-47a9-943f-61b780232433",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "userId",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier (ID or document UUID)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"format\": \"pdf\",\n  \"paperFormat\": \"letter\",\n  \"paperOrientation\": \"landscape\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "e8df5b7d-7461-44e6-9689-ab915d1b12e9",
-          "name": "Check download status",
-          "request": {
-            "name": "Check download status",
-            "description": {},
-            "url": {
-              "path": [
-                "v1",
-                "dashboards",
-                ":dashboardId",
-                "download",
-                ":jobId",
-                "status"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "dashboardId",
-                  "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "jobId",
-                  "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "eec2e8a0-3542-4a80-8b85-960d349c3644",
-              "name": "Job status retrieved successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"job_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"status\": \"in_progress\",\n  \"format\": \"pdf\",\n  \"created_at\": \"2024-01-15T10:30:00Z\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "93279244-a200-4335-8f18-41ce92803530",
-              "name": "Invalid job ID format",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b927776f-a7e2-4b2e-96b5-20810442a056",
-              "name": "Insufficient permissions",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4602c14e-4c4a-4c50-89da-22f6d8340cac",
-              "name": "Job not found or does not belong to the specified dashboard",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "123e228c-5819-4a15-8edb-c703a0cd2a14",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fbb3c944-c32b-460c-967d-3ef7d680c4a4",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "59e96c93-add7-4b8d-a31b-aabdf3d0b21f",
-          "name": "Download file",
-          "request": {
-            "name": "Download file",
-            "description": {},
-            "url": {
-              "path": [
-                "v1",
-                "dashboards",
-                ":dashboardId",
-                "download",
-                ":jobId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "dashboardId",
-                  "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "jobId",
-                  "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/pdf"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "7e67d3ec-01d0-486c-a04c-f8abb88c9c8e",
-              "name": "File download successful",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/pdf"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c9c889c6-7d6f-43ea-b55d-fea33d2b5c6b",
-              "name": "Job still in progress. Poll the [Check download status endpoint](/api/dashboard-downloads/check-download-status) first.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Accepted",
-              "code": 202,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4ecb404a-bad9-4cb2-b092-e9834a7eb71d",
-              "name": "Invalid job ID format",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c6f988b0-a05b-49c7-aa32-6e571a9304a1",
-              "name": "Insufficient permissions",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "46d26134-8eb2-4f96-86d3-c81ee6f05ea7",
-              "name": "Job not found or does not belong to the specified dashboard",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "cc2c8146-e44b-4694-96d0-92c25af36a0d",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4daade8c-1cae-41c8-8a85-597347ac8bfb",
-              "name": "Job failed. Call the [Check download status endpoint](/api/dashboard-downloads/check-download-status) for error details.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Gone",
-              "code": 410,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2a927ee0-1582-41d2-98c0-4ed9a36f4585",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "dashboards",
-                    ":dashboardId",
-                    "download",
-                    ":jobId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "dashboardId",
-                      "description": "(Required) The dashboard identifier. This must match the ID of the original download request."
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "jobId",
-                      "description": "(Required) The job ID returned from the [Initiate dashboard download endpoint](/api/dashboard-downloads/initiate-download)"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "8a2f6dbe-e646-4296-a7fc-451b5a53d5e4",
+              "createdAt": "2026-10-21T20:41:39.000Z",
+              "updatedAt": "2026-10-21T20:41:39.000Z",
+              "uid": "35240-8a2f6dbe-e646-4296-a7fc-451b5a53d5e4"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "96287b64-4e0b-4ac1-9e0f-60f1a2842753",
+          "createdAt": "2026-10-21T20:41:39.000Z",
+          "updatedAt": "2026-10-21T20:41:39.000Z",
+          "uid": "35240-96287b64-4e0b-4ac1-9e0f-60f1a2842753"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "fd6f3ee9-9c71-4ba8-857a-3d2b56b94fda",
+      "createdAt": "2026-10-21T20:41:39.000Z",
+      "updatedAt": "2026-10-21T20:41:39.000Z",
+      "uid": "35240-fd6f3ee9-9c71-4ba8-857a-3d2b56b94fda"
     }
   ],
   "auth": {
@@ -1711,17 +1518,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "8e783051-2077-4169-b487-018c9ea61a47",
-    "name": "Omni AI Dashboard downloads API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

@@ -1,725 +1,686 @@
 {
+  "info": {
+    "_postman_id": "52bc6f37-0e28-41f4-a946-88778bec6966",
+    "name": "Omni User group model roles API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:43:56.000Z",
+    "updatedAt": "2026-10-21T20:43:56.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-52bc6f37-0e28-41f4-a946-88778bec6966"
+  },
   "item": [
     {
-      "id": "fe77a2af-4bbc-43f7-b592-d3a0004dc0cf",
-      "name": "User group model roles",
-      "description": {
-        "content": "Manage model and connection role assignments for user groups",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "c649071d-fbf5-4878-91e0-0ee35eebe1cf",
-          "name": "Assign or update user group model role",
-          "request": {
-            "name": "Assign or update user group model role",
-            "description": {
-              "content": "Assigns or updates a model role for a user group. If the user group already has a role for the specified model, this endpoint will update it to the new role. All members of the user group will inherit this role.\n\nModel roles control what actions user group members can perform on models and connections. To manage user groups, see the [User group APIs](/api/user-groups).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "user-groups",
-                ":userGroupId",
-                "model-roles"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the user group to assign or update a model role for."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "user-groups",
+          "item": [
             {
-              "id": "fe43f8e3-d999-4141-bcce-339b1cbfd4f4",
-              "name": "Model role assigned or updated successfully.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to assign or update a model role for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{userGroupId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "model-roles",
+                  "item": [
+                    {
+                      "name": "Assign or update user group model role",
+                      "id": "3a22b377-8bb3-4112-b8f1-47d46174dba2",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "user-groups",
+                            ":userGroupId",
+                            "model-roles"
+                          ],
+                          "variable": [
+                            {
+                              "id": "2f93afe5-40dc-4c7f-9102-44adcb00e1d8",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the user group to assign or update a model role for."
+                            }
+                          ]
+                        },
+                        "description": "Assigns or updates a model role for a user group. If the user group already has a role for the specified model, this endpoint will update it to the new role. All members of the user group will inherit this role.\n\nModel roles control what actions user group members can perform on models and connections. To manage user groups, see the User group APIs."
+                      },
+                      "response": [
+                        {
+                          "id": "e6bf3489-ee35-4cac-86e7-761b69071e7d",
+                          "name": "Model role assigned or updated successfully.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"userGroupId\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\",\n  \"roleName\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-e6bf3489-ee35-4cac-86e7-761b69071e7d"
+                        },
+                        {
+                          "id": "752669c8-3fd2-41c0-a4e6-98334b971a72",
+                          "name": "Bad Request. Possible error messages include:\n\n- `Invalid JSON`\n- `Invalid model ID`\n- `Invalid connection ID`\n- `Method not allowed`\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-752669c8-3fd2-41c0-a4e6-98334b971a72"
+                        },
+                        {
+                          "id": "1ab5e37d-1b29-40d9-909b-37b1be64dab5",
+                          "name": "Not Found. Possible error messages include:\n\n- `User group not found in organization`\n- `Model does not exist`\n- `Connection does not exist`\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-1ab5e37d-1b29-40d9-909b-37b1be64dab5"
+                        },
+                        {
+                          "id": "a258dcc1-2dd5-4bc0-ae45-c36254c36bf4",
+                          "name": "Unprocessable Entity. Possible error messages include:\n\n- `Invalid role`\n- `Model does not belong to connection`\n- `Only shared and shared_extension models can be assigned model roles`\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                          "code": 422,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-a258dcc1-2dd5-4bc0-ae45-c36254c36bf4"
+                        },
+                        {
+                          "id": "de0bab61-d2b5-45d6-849f-7a0d3936fd89",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"roleName\": \"<string>\",\n  \"connectionId\": \"<uuid>\",\n  \"modelId\": \"<uuid>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-de0bab61-d2b5-45d6-849f-7a0d3936fd89"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:43:56.000Z",
+                      "updatedAt": "2026-10-21T20:43:56.000Z",
+                      "uid": "35240-3a22b377-8bb3-4112-b8f1-47d46174dba2"
+                    },
+                    {
+                      "name": "Retrieve user group model roles",
+                      "id": "31421bbf-9fca-4eb4-bb84-60ac21c2a87b",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles?modelId=<uuid>&connectionId=<uuid>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "user-groups",
+                            ":userGroupId",
+                            "model-roles"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to.",
+                              "key": "modelId",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections.",
+                              "key": "connectionId",
+                              "value": "<uuid>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "106ddebc-1a1d-46b8-a5f0-4e1f1e45357f",
+                              "key": "userGroupId",
+                              "value": "<string>",
+                              "description": "(Required) The ID of the user group to retrieve model roles for."
+                            }
+                          ]
+                        },
+                        "description": "Retrieves the model role assignments for a user group."
+                      },
+                      "response": [
+                        {
+                          "id": "ef229a28-6da4-43a8-964f-0981ee92b490",
+                          "name": "User group model roles retrieved successfully.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles?modelId=<uuid>&connectionId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to.",
+                                  "key": "modelId",
+                                  "value": "<uuid>"
+                                },
+                                {
+                                  "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections.",
+                                  "key": "connectionId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"userGroupId\": \"<string>\",\n  \"results\": [\n    {\n      \"modelId\": \"<uuid>\",\n      \"connectionId\": \"<uuid>\",\n      \"roleName\": \"<string>\",\n      \"baseRole\": \"<string>\"\n    },\n    {\n      \"modelId\": \"<uuid>\",\n      \"connectionId\": \"<uuid>\",\n      \"roleName\": \"<string>\",\n      \"baseRole\": \"<string>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-ef229a28-6da4-43a8-964f-0981ee92b490"
+                        },
+                        {
+                          "id": "9a908bc6-d1f9-4ab2-b27b-6ab544d84b56",
+                          "name": "User group not found in organization.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles?modelId=<uuid>&connectionId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to.",
+                                  "key": "modelId",
+                                  "value": "<uuid>"
+                                },
+                                {
+                                  "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections.",
+                                  "key": "connectionId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-9a908bc6-d1f9-4ab2-b27b-6ab544d84b56"
+                        },
+                        {
+                          "id": "56b2c5d6-41a7-4d9a-bbd1-28ecfaeb370f",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/user-groups/:userGroupId/model-roles?modelId=<uuid>&connectionId=<uuid>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "user-groups",
+                                ":userGroupId",
+                                "model-roles"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to.",
+                                  "key": "modelId",
+                                  "value": "<uuid>"
+                                },
+                                {
+                                  "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections.",
+                                  "key": "connectionId",
+                                  "value": "<uuid>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "userGroupId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:56.000Z",
+                          "updatedAt": "2026-10-21T20:43:56.000Z",
+                          "uid": "35240-56b2c5d6-41a7-4d9a-bbd1-28ecfaeb370f"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:43:56.000Z",
+                      "updatedAt": "2026-10-21T20:43:56.000Z",
+                      "uid": "35240-31421bbf-9fca-4eb4-bb84-60ac21c2a87b"
+                    }
+                  ],
+                  "id": "1877573f-3395-4ac7-bd04-c446a6455025",
+                  "createdAt": "2026-10-21T20:43:56.000Z",
+                  "updatedAt": "2026-10-21T20:43:56.000Z",
+                  "uid": "35240-1877573f-3395-4ac7-bd04-c446a6455025"
                 }
               ],
-              "body": "{\n  \"userGroupId\": \"mEhXj6ZI\",\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "96437624-8bb8-49a3-8758-12c95e45b954",
-              "name": "Bad Request. Possible error messages include:\n\n- `Invalid JSON`\n- `Invalid model ID`\n- `Invalid connection ID`\n- `Method not allowed`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to assign or update a model role for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "14e884e3-c44f-417c-87e5-a89ade0f3f44",
-              "name": "Not Found. Possible error messages include:\n\n- `User group not found in organization`\n- `Model does not exist`\n- `Connection does not exist`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to assign or update a model role for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5dc17150-d01f-4687-84ca-98fca65aedb9",
-              "name": "Unprocessable Entity. Possible error messages include:\n\n- `Invalid role`\n- `Model does not belong to connection`\n- `Only shared and shared_extension models can be assigned model roles`\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to assign or update a model role for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
-              "code": 422,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3a4b9588-d797-4380-9938-3abe2d47aadd",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to assign or update a model role for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n  \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\",\n  \"roleName\": \"QUERIER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "31f58b5d-25bb-4be3-a4d8-d5b2dc380de7",
-          "name": "Retrieve user group model roles",
-          "request": {
-            "name": "Retrieve user group model roles",
-            "description": {
-              "content": "Retrieves the model role assignments for a user group.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "user-groups",
-                ":userGroupId",
-                "model-roles"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "modelId",
-                  "value": "<uuid>",
-                  "description": "Filter results to a specific model ID. If not provided, returns roles for all models the user group has access to."
-                },
-                {
-                  "disabled": false,
-                  "key": "connectionId",
-                  "value": "<uuid>",
-                  "description": "Filter results to models from a specific connection. If not provided, returns roles for all connections."
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "userGroupId",
-                  "description": "(Required) The ID of the user group to retrieve model roles for."
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "649ad45c-0e01-41f9-a5d6-69a0932ebae5",
-              "name": "User group model roles retrieved successfully.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "modelId",
-                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
-                    },
-                    {
-                      "key": "connectionId",
-                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to retrieve model roles for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"userGroupId\": \"mEhXj6ZI\",\n  \"results\": [\n    {\n      \"baseRole\": \"QUERIER\",\n      \"roleName\": \"QUERIER\",\n      \"connectionId\": \"bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed\",\n      \"modelId\": \"7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "92f25588-5ea6-4047-9a97-e0c5422d348f",
-              "name": "User group not found in organization.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "modelId",
-                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
-                    },
-                    {
-                      "key": "connectionId",
-                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to retrieve model roles for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"detail\": \"User group not found in organization\",\n  \"status\": 404\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "842c6f3e-eb49-4cfc-838d-afc03a7efa84",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-groups",
-                    ":userGroupId",
-                    "model-roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "modelId",
-                      "value": "7d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a"
-                    },
-                    {
-                      "key": "connectionId",
-                      "value": "bc1f9c9f-208d-48a2-9ae3-ff80f2c79fed"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "userGroupId",
-                      "description": "(Required) The ID of the user group to retrieve model roles for."
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "e75ebc77-c840-4531-bd3b-6bf81104c78e",
+              "createdAt": "2026-10-21T20:43:56.000Z",
+              "updatedAt": "2026-10-21T20:43:56.000Z",
+              "uid": "35240-e75ebc77-c840-4531-bd3b-6bf81104c78e"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "8e43d863-c29a-4f25-85dd-2ce2f4d77f9b",
+          "createdAt": "2026-10-21T20:43:56.000Z",
+          "updatedAt": "2026-10-21T20:43:56.000Z",
+          "uid": "35240-8e43d863-c29a-4f25-85dd-2ce2f4d77f9b"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "0e8a459a-1477-454d-a3ef-175440dad8e0",
+      "createdAt": "2026-10-21T20:43:56.000Z",
+      "updatedAt": "2026-10-21T20:43:56.000Z",
+      "uid": "35240-0e8a459a-1477-454d-a3ef-175440dad8e0"
     }
   ],
   "auth": {
@@ -727,17 +688,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "4c27adb2-bf02-49a5-91c4-3f3e692c95ea",
-    "name": "Omni AI User group model roles API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

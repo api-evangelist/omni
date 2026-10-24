@@ -1,2226 +1,1950 @@
 {
+  "info": {
+    "_postman_id": "a1e60850-4c5b-4a59-a228-3c3cb4200eb5",
+    "name": "Omni Schema refresh schedules API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:43:32.000Z",
+    "updatedAt": "2026-10-21T20:43:32.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a1e60850-4c5b-4a59-a228-3c3cb4200eb5"
+  },
   "item": [
     {
-      "id": "c54e514e-772b-4670-8ad4-5e551701e0f0",
-      "name": "Schema refresh schedules",
-      "description": {
-        "content": "Manage automated schema refresh schedules for connections",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "d7032eeb-fede-4278-9993-a82866019735",
-          "name": "List schema refresh schedules",
-          "request": {
-            "name": "List schema refresh schedules",
-            "description": {
-              "content": "Retrieves all schema refresh schedules configured for the specified connection. Each schedule uses a cron expression and timezone to define when the schema should be refreshed.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "connections",
-                ":connectionId",
-                "schedules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "connectionId",
-                  "description": "(Required) The unique identifier of the connection"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "connections",
+          "item": [
             {
-              "id": "1568050d-7ff9-4d0a-a3f9-3b02f88129b0",
-              "name": "Successfully retrieved schema refresh schedules",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "{connectionId}",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "schedules",
+                  "item": [
+                    {
+                      "name": "{scheduleId}",
+                      "item": [
+                        {
+                          "name": "Get schema refresh schedule",
+                          "id": "cc3b02f9-5624-4faa-94fb-8d05fcec127e",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules",
+                                ":scheduleId"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "b6ca4333-2cd7-49fc-a471-c2661ce329b4",
+                                  "key": "connectionId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the connection"
+                                },
+                                {
+                                  "id": "f2f334a9-fef5-4b0a-882a-11724a68a632",
+                                  "key": "scheduleId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the schema refresh schedule"
+                                }
+                              ]
+                            },
+                            "description": "Retrieves the details of a connection's specific schema refresh schedule.\n\nThis endpoint requires Connection Admin permissions for the connection."
+                          },
+                          "response": [
+                            {
+                              "id": "d39ceee2-f3ee-42aa-9e7f-a26b9a479dbc",
+                              "name": "Successfully retrieved schema refresh schedule",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"scheduleId\": \"<uuid>\",\n  \"connectionId\": \"<uuid>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"description\": \"<string>\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"disabledAt\": \"<dateTime>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-d39ceee2-f3ee-42aa-9e7f-a26b9a479dbc"
+                            },
+                            {
+                              "id": "16e62fc4-810f-4502-9b8f-03b6240b34ec",
+                              "name": "Missing or invalid authentication",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-16e62fc4-810f-4502-9b8f-03b6240b34ec"
+                            },
+                            {
+                              "id": "7383b54f-ab8d-413b-a1fa-04eb128ace54",
+                              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-7383b54f-ab8d-413b-a1fa-04eb128ace54"
+                            },
+                            {
+                              "id": "ea0bd7c4-e3e8-464d-984a-194bd8518b92",
+                              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Schedule belongs to a different connection\n",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-ea0bd7c4-e3e8-464d-984a-194bd8518b92"
+                            },
+                            {
+                              "id": "68ab75ba-f6b5-4a9d-b08f-6c836d970707",
+                              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-68ab75ba-f6b5-4a9d-b08f-6c836d970707"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-cc3b02f9-5624-4faa-94fb-8d05fcec127e"
+                        },
+                        {
+                          "name": "Update schema refresh schedule",
+                          "id": "f1ffd579-93ff-4ee3-b004-07bac9e7eb75",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules",
+                                ":scheduleId"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "60eeba15-cd2e-4a16-a909-51595eb49e15",
+                                  "key": "connectionId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the connection"
+                                },
+                                {
+                                  "id": "0533893a-fbb3-4d51-9d7f-7ba6d37400e7",
+                                  "key": "scheduleId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the schema refresh schedule"
+                                }
+                              ]
+                            },
+                            "description": "Updates the schedule and/or timezone for an existing schema refresh schedule.\n\nThis endpoint requires Connection Admin permissions for the connection."
+                          },
+                          "response": [
+                            {
+                              "id": "4bfa50be-dcfe-48e3-90d1-237682032b47",
+                              "name": "Schema refresh schedule updated successfully",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"scheduleId\": \"<uuid>\",\n  \"connectionId\": \"<uuid>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"description\": \"<string>\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"disabledAt\": \"<dateTime>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-4bfa50be-dcfe-48e3-90d1-237682032b47"
+                            },
+                            {
+                              "id": "e04e3752-94e4-45b3-b92e-07872bb34369",
+                              "name": "Bad Request\n\nPossible error messages:\n- Invalid cron expression\n- Invalid timezone\n",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-e04e3752-94e4-45b3-b92e-07872bb34369"
+                            },
+                            {
+                              "id": "f39f3798-45dc-4e4e-bc38-0fb1d96c5565",
+                              "name": "Missing or invalid authentication",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-f39f3798-45dc-4e4e-bc38-0fb1d96c5565"
+                            },
+                            {
+                              "id": "655dfc6c-1c6a-47cf-9866-f32986811b02",
+                              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-655dfc6c-1c6a-47cf-9866-f32986811b02"
+                            },
+                            {
+                              "id": "d343fe19-b098-4069-b6cf-3812cf8cf609",
+                              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Connection not found\n",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-d343fe19-b098-4069-b6cf-3812cf8cf609"
+                            },
+                            {
+                              "id": "3b8789e7-7576-4b04-8c56-265274c2d4ea",
+                              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-3b8789e7-7576-4b04-8c56-265274c2d4ea"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-f1ffd579-93ff-4ee3-b004-07bac9e7eb75"
+                        },
+                        {
+                          "name": "Delete schema refresh schedule",
+                          "id": "17a134f2-7d67-4236-8a5a-c42df55a1117",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules",
+                                ":scheduleId"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "c810af14-a520-4789-8a76-9c80db976752",
+                                  "key": "connectionId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the connection"
+                                },
+                                {
+                                  "id": "64c0555f-e679-4594-8e8e-c2d5baca9ce2",
+                                  "key": "scheduleId",
+                                  "value": "<uuid>",
+                                  "description": "(Required) The unique identifier of the schema refresh schedule"
+                                }
+                              ]
+                            },
+                            "description": "Deletes a schema refresh schedule. This does not affect other schedules for the same connection.\n\nThis endpoint requires Connection Admin permissions for the connection."
+                          },
+                          "response": [
+                            {
+                              "id": "f2dc2322-cb22-4066-9d9c-0805783423b5",
+                              "name": "Schema refresh schedule deleted successfully",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"success\": \"<boolean>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-f2dc2322-cb22-4066-9d9c-0805783423b5"
+                            },
+                            {
+                              "id": "30cd02ea-97b8-449b-a97b-c4d380346fbb",
+                              "name": "Missing or invalid authentication",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-30cd02ea-97b8-449b-a97b-c4d380346fbb"
+                            },
+                            {
+                              "id": "bfc2edd8-3fe7-472c-b714-f849e1dfdac8",
+                              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-bfc2edd8-3fe7-472c-b714-f849e1dfdac8"
+                            },
+                            {
+                              "id": "86f280be-d19f-4b69-b12d-059e8fa3ec41",
+                              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Connection not found\n",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-86f280be-d19f-4b69-b12d-059e8fa3ec41"
+                            },
+                            {
+                              "id": "0ee5b798-ce27-4aaa-8674-cdf49447197c",
+                              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules/:scheduleId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "connections",
+                                    ":connectionId",
+                                    "schedules",
+                                    ":scheduleId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectionId"
+                                    },
+                                    {
+                                      "key": "scheduleId"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T20:43:33.000Z",
+                              "updatedAt": "2026-10-21T20:43:33.000Z",
+                              "uid": "35240-0ee5b798-ce27-4aaa-8674-cdf49447197c"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-17a134f2-7d67-4236-8a5a-c42df55a1117"
+                        }
+                      ],
+                      "id": "62a98a49-71b7-429f-af7f-be003bea3e25",
+                      "createdAt": "2026-10-21T20:43:33.000Z",
+                      "updatedAt": "2026-10-21T20:43:33.000Z",
+                      "uid": "35240-62a98a49-71b7-429f-af7f-be003bea3e25"
+                    },
+                    {
+                      "name": "List schema refresh schedules",
+                      "id": "d2686afb-7a0c-4edd-ae3e-904a9167c154",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "connections",
+                            ":connectionId",
+                            "schedules"
+                          ],
+                          "variable": [
+                            {
+                              "id": "df98b626-283c-422c-bce2-98c0231ec5c7",
+                              "key": "connectionId",
+                              "value": "<uuid>",
+                              "description": "(Required) The unique identifier of the connection"
+                            }
+                          ]
+                        },
+                        "description": "Retrieves all schema refresh schedules configured for the specified connection. Each schedule uses a cron expression and timezone to define when the schema should be refreshed.\n\nThis endpoint requires Connection Admin permissions for the connection."
+                      },
+                      "response": [
+                        {
+                          "id": "586eb8b8-76e8-426b-8554-bb5c943002dd",
+                          "name": "Successfully retrieved schema refresh schedules",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"schedules\": [\n    {\n      \"scheduleId\": \"<uuid>\",\n      \"connectionId\": \"<uuid>\",\n      \"schedule\": \"<string>\",\n      \"timezone\": \"<string>\",\n      \"description\": \"<string>\",\n      \"hardRefresh\": false,\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"disabledAt\": \"<dateTime>\"\n    },\n    {\n      \"scheduleId\": \"<uuid>\",\n      \"connectionId\": \"<uuid>\",\n      \"schedule\": \"<string>\",\n      \"timezone\": \"<string>\",\n      \"description\": \"<string>\",\n      \"hardRefresh\": false,\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"disabledAt\": \"<dateTime>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-586eb8b8-76e8-426b-8554-bb5c943002dd"
+                        },
+                        {
+                          "id": "17db3aa2-37ab-445f-a972-b581671a3c05",
+                          "name": "Missing or invalid authentication",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-17db3aa2-37ab-445f-a972-b581671a3c05"
+                        },
+                        {
+                          "id": "ab7bac81-ec83-4043-b399-56f0cbb71834",
+                          "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-ab7bac81-ec83-4043-b399-56f0cbb71834"
+                        },
+                        {
+                          "id": "b7b42edd-4b32-449b-a838-723cc922fc54",
+                          "name": "Not Found - Resource does not exist",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-b7b42edd-4b32-449b-a838-723cc922fc54"
+                        },
+                        {
+                          "id": "cdab4297-da6b-495c-a463-64919aa238b0",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-cdab4297-da6b-495c-a463-64919aa238b0"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:43:33.000Z",
+                      "updatedAt": "2026-10-21T20:43:33.000Z",
+                      "uid": "35240-d2686afb-7a0c-4edd-ae3e-904a9167c154"
+                    },
+                    {
+                      "name": "Create schema refresh schedule",
+                      "id": "d8498d62-cba2-438b-a5c3-459a75745dae",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "connections",
+                            ":connectionId",
+                            "schedules"
+                          ],
+                          "variable": [
+                            {
+                              "id": "5cef5116-04f2-4a50-91fe-9a12685c15a6",
+                              "key": "connectionId",
+                              "value": "<uuid>",
+                              "description": "(Required) The unique identifier of the connection"
+                            }
+                          ]
+                        },
+                        "description": "Creates a new schema refresh schedule for the specified connection. Multiple schedules can be created for the same connection.\n\nThis endpoint requires Connection Admin permissions for the connection."
+                      },
+                      "response": [
+                        {
+                          "id": "b023a5ba-33d9-48e4-aaae-ee5546888ee6",
+                          "name": "Schema refresh schedule created successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"scheduleId\": \"<uuid>\",\n  \"connectionId\": \"<uuid>\",\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"description\": \"<string>\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"disabledAt\": \"<dateTime>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-b023a5ba-33d9-48e4-aaae-ee5546888ee6"
+                        },
+                        {
+                          "id": "44982cf7-4c94-4a73-8039-8a1b9e987343",
+                          "name": "Bad Request\n\nPossible error messages:\n- Invalid cron expression\n- Invalid timezone\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-44982cf7-4c94-4a73-8039-8a1b9e987343"
+                        },
+                        {
+                          "id": "c57d97ba-7eb7-43fc-9fa9-b787e28326a5",
+                          "name": "Missing or invalid authentication",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-c57d97ba-7eb7-43fc-9fa9-b787e28326a5"
+                        },
+                        {
+                          "id": "78f79c6c-df33-4353-9054-8c47873bdced",
+                          "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-78f79c6c-df33-4353-9054-8c47873bdced"
+                        },
+                        {
+                          "id": "2f22cf89-55e6-4d67-a6fc-62fd1c150afa",
+                          "name": "Not Found - Resource does not exist",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-2f22cf89-55e6-4d67-a6fc-62fd1c150afa"
+                        },
+                        {
+                          "id": "8c3e2e66-46c4-4839-a1dc-bfc3bac07a27",
+                          "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/connections/:connectionId/schedules",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "connections",
+                                ":connectionId",
+                                "schedules"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectionId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T20:43:33.000Z",
+                          "updatedAt": "2026-10-21T20:43:33.000Z",
+                          "uid": "35240-8c3e2e66-46c4-4839-a1dc-bfc3bac07a27"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T20:43:33.000Z",
+                      "updatedAt": "2026-10-21T20:43:33.000Z",
+                      "uid": "35240-d8498d62-cba2-438b-a5c3-459a75745dae"
+                    }
+                  ],
+                  "id": "944c59c6-eb8d-4a8c-b79c-8d8e764d292d",
+                  "createdAt": "2026-10-21T20:43:33.000Z",
+                  "updatedAt": "2026-10-21T20:43:33.000Z",
+                  "uid": "35240-944c59c6-eb8d-4a8c-b79c-8d8e764d292d"
                 }
               ],
-              "body": "{\n  \"schedules\": [\n    {\n      \"scheduleId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"connectionId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n      \"schedule\": \"00 09 * * ? *\",\n      \"timezone\": \"America/New_York\",\n      \"description\": \"At 09:00 AM EDT\",\n      \"hardRefresh\": false,\n      \"createdAt\": \"2025-01-15T10:30:00.000Z\",\n      \"updatedAt\": \"2025-01-15T10:30:00.000Z\",\n      \"disabledAt\": null\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "300ad7eb-54d3-472d-86da-fd0241ae7e52",
-              "name": "Missing or invalid authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "605f1cde-5203-4bf2-95ab-83ffe111c539",
-              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "940f8a4f-9450-4646-be7d-7cef45528408",
-              "name": "Not Found - Resource does not exist",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "de384595-a9db-48e7-84da-c5a8c2957e01",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "38321c93-1f5d-4821-ae25-5ca880b86ea4",
-          "name": "Create schema refresh schedule",
-          "request": {
-            "name": "Create schema refresh schedule",
-            "description": {
-              "content": "Creates a new schema refresh schedule for the specified connection. Multiple schedules can be created for the same connection.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "connections",
-                ":connectionId",
-                "schedules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "connectionId",
-                  "description": "(Required) The unique identifier of the connection"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "ce526741-074b-4439-b8be-787a337d77e0",
-              "name": "Schema refresh schedule created successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"scheduleId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"connectionId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"description\": \"At 09:00 AM EDT\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"2025-01-15T10:30:00.000Z\",\n  \"updatedAt\": \"2025-01-15T10:30:00.000Z\",\n  \"disabledAt\": null\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a87d4cf2-a3d9-4712-9187-0061e7f89335",
-              "name": "Bad Request\n\nPossible error messages:\n- Invalid cron expression\n- Invalid timezone\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8d23b1b2-92c4-46a4-bf31-0398991af1ed",
-              "name": "Missing or invalid authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6a9270b7-563c-487f-bf4f-ae66fc25e211",
-              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "ff0534a7-b6be-4164-bcce-d25eb31abfd3",
-              "name": "Not Found - Resource does not exist",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "9f47957a-8dfc-4a95-bdce-613468fb25c6",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "a47e819e-f793-4dfa-a461-f399064fbf6c",
-          "name": "Get schema refresh schedule",
-          "request": {
-            "name": "Get schema refresh schedule",
-            "description": {
-              "content": "Retrieves the details of a connection's specific schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "connections",
-                ":connectionId",
-                "schedules",
-                ":scheduleId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "connectionId",
-                  "description": "(Required) The unique identifier of the connection"
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "scheduleId",
-                  "description": "(Required) The unique identifier of the schema refresh schedule"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "9bcfbc9f-d037-4160-89c7-c0658d836b20",
-              "name": "Successfully retrieved schema refresh schedule",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"scheduleId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"connectionId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"schedule\": \"00 09 * * ? *\",\n  \"timezone\": \"America/New_York\",\n  \"description\": \"At 09:00 AM EDT\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"2025-01-15T10:30:00.000Z\",\n  \"updatedAt\": \"2025-01-15T10:30:00.000Z\",\n  \"disabledAt\": null\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fb00b1d4-b524-43bb-94ca-491be3e3036e",
-              "name": "Missing or invalid authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5c59ff30-d728-4b6a-b562-7ee62af6e6a0",
-              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "931ae408-b226-4fbd-81de-19ebdac0d743",
-              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Schedule belongs to a different connection\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0e0876bb-bf9e-40f3-91b1-cfd02c1162bd",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "b65740ad-2718-48c8-9b0c-a4deecda6fe9",
-          "name": "Update schema refresh schedule",
-          "request": {
-            "name": "Update schema refresh schedule",
-            "description": {
-              "content": "Updates the schedule and/or timezone for an existing schema refresh schedule.\n\n<Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "connections",
-                ":connectionId",
-                "schedules",
-                ":scheduleId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "connectionId",
-                  "description": "(Required) The unique identifier of the connection"
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "scheduleId",
-                  "description": "(Required) The unique identifier of the schema refresh schedule"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"schedule\": \"<string>\",\n  \"timezone\": \"<string>\",\n  \"hardRefresh\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "d9987671-85be-408e-abfd-02b3019646d2",
-              "name": "Schema refresh schedule updated successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"scheduleId\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n  \"connectionId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"description\": \"At 06:00 PM GMT\",\n  \"hardRefresh\": false,\n  \"createdAt\": \"2025-01-15T10:30:00.000Z\",\n  \"updatedAt\": \"2025-01-15T11:00:00.000Z\",\n  \"disabledAt\": null\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d4ca21a4-9791-4d9f-af50-50e47e24c36d",
-              "name": "Bad Request\n\nPossible error messages:\n- Invalid cron expression\n- Invalid timezone\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b71dd002-8b8d-4f7b-8f5d-6c035baa21d6",
-              "name": "Missing or invalid authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2133aae4-723d-4575-9ca4-4b6dc09b2376",
-              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "75e6713d-2dd6-4fd6-9c4e-a1db0932be0b",
-              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Connection not found\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3dafe156-0fa4-42cd-9f6c-f714d0ffb533",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"schedule\": \"00 18 ? * * *\",\n  \"timezone\": \"Europe/London\",\n  \"hardRefresh\": false\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "9f4c70bc-ede0-4f4a-a651-d10dde76c3d6",
-          "name": "Delete schema refresh schedule",
-          "request": {
-            "name": "Delete schema refresh schedule",
-            "description": {
-              "content": "Deletes a schema refresh schedule. This does not affect other schedules for the same connection.\n\n <Note>\n  This endpoint requires Connection Admin permissions for the connection.\n</Note>\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "connections",
-                ":connectionId",
-                "schedules",
-                ":scheduleId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "connectionId",
-                  "description": "(Required) The unique identifier of the connection"
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<uuid>",
-                  "key": "scheduleId",
-                  "description": "(Required) The unique identifier of the schema refresh schedule"
-                },
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "08a3fcb7-a948-47d6-a65a-bb2757db1017",
-              "name": "Schema refresh schedule deleted successfully",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"success\": true\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5cae3798-06a8-4668-bc85-65c4c286f336",
-              "name": "Missing or invalid authentication",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a512f7ac-710e-4a1c-bedc-6a3bcbbaa347",
-              "name": "Insufficient permissions. **Connection Admin** permissions for the connection are required.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e9d306a2-06f1-4f89-8fd0-ccdd9c265065",
-              "name": "Not Found\n\nPossible error messages:\n- Schedule not found\n- Connection not found\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "82e63123-5539-45b9-a28e-e2bb40d380dc",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "connections",
-                    ":connectionId",
-                    "schedules",
-                    ":scheduleId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "connectionId",
-                      "description": "(Required) The unique identifier of the connection"
-                    },
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<uuid>",
-                      "key": "scheduleId",
-                      "description": "(Required) The unique identifier of the schema refresh schedule"
-                    },
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "1b11be16-c1cd-48c4-8fcc-6c0154111ecc",
+              "createdAt": "2026-10-21T20:43:33.000Z",
+              "updatedAt": "2026-10-21T20:43:33.000Z",
+              "uid": "35240-1b11be16-c1cd-48c4-8fcc-6c0154111ecc"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "44e6ba0a-e1bb-44cf-ad66-a98b246a131b",
+          "createdAt": "2026-10-21T20:43:33.000Z",
+          "updatedAt": "2026-10-21T20:43:33.000Z",
+          "uid": "35240-44e6ba0a-e1bb-44cf-ad66-a98b246a131b"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "c84f4775-1a81-4ef7-a5e6-7dd228178b56",
+      "createdAt": "2026-10-21T20:43:33.000Z",
+      "updatedAt": "2026-10-21T20:43:33.000Z",
+      "uid": "35240-c84f4775-1a81-4ef7-a5e6-7dd228178b56"
     }
   ],
   "auth": {
@@ -2228,17 +1952,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "75b7f148-6621-4818-811b-f175759b1334",
-    "name": "Omni AI Schema refresh schedules API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }

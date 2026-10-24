@@ -1,386 +1,331 @@
 {
+  "info": {
+    "_postman_id": "b37575f2-87ae-4924-a6e5-4f4f0c207373",
+    "name": "Omni User attributes API",
+    "description": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.\n\nContact Support:\n Name: Omni Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T20:43:49.000Z",
+    "updatedAt": "2026-10-21T20:43:50.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b37575f2-87ae-4924-a6e5-4f4f0c207373"
+  },
   "item": [
     {
-      "id": "6e0e6f45-32a0-48d0-b0b1-7eb1574f063c",
-      "name": "User attributes",
-      "description": {
-        "content": "Manage user attribute definitions",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "ce0c9325-bb37-4dd6-bd73-00b9a682530c",
-          "name": "List user attributes",
-          "request": {
-            "name": "List user attributes",
-            "description": {},
-            "url": {
-              "path": [
-                "v1",
-                "user-attributes"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "description": "Your production Omni instance subdomain",
-                  "type": "any",
-                  "value": "{{instance}}",
-                  "key": "instance"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
+          "name": "user-attributes",
+          "item": [
             {
-              "id": "5a66b17a-45a1-4e3d-960a-007cf7647b40",
-              "name": "List of user attribute definitions",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-attributes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "List user attributes",
+              "id": "637f80b4-0317-45b0-9b1d-a3d40edceb7c",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
                     {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
                     }
                   ]
                 },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"records\": [\n    {\n      \"id\": \"\",\n      \"name\": \"omni_user_id\",\n      \"label\": \"Omni User ID\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": null,\n      \"description\": null,\n      \"system\": true\n    },\n    {\n      \"id\": \"\",\n      \"name\": \"omni_user_email\",\n      \"label\": \"Omni User Email\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": null,\n      \"description\": null,\n      \"system\": true\n    },\n    {\n      \"id\": \"\",\n      \"name\": \"omni_user_name\",\n      \"label\": \"Omni User Name\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": null,\n      \"description\": null,\n      \"system\": true\n    },\n    {\n      \"id\": \"\",\n      \"name\": \"omni_user_timezone\",\n      \"label\": \"Omni User Timezone\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": null,\n      \"description\": null,\n      \"system\": true\n    },\n    {\n      \"id\": \"\",\n      \"name\": \"omni_is_org_admin\",\n      \"label\": \"Omni Is Org Admin\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": null,\n      \"description\": null,\n      \"system\": true\n    },\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"name\": \"region\",\n      \"label\": \"Region\",\n      \"type\": \"String\",\n      \"multiple_values\": false,\n      \"default_value\": \"us-east\",\n      \"description\": \"User region for RLS\",\n      \"system\": false\n    },\n    {\n      \"id\": \"b2c3d4e5-f6a7-8901-bcde-f23456789012\",\n      \"name\": \"access_level\",\n      \"label\": \"Access Level\",\n      \"type\": \"Number\",\n      \"multiple_values\": false,\n      \"default_value\": \"1\",\n      \"description\": \"Numeric access level for user permissions\",\n      \"system\": false\n    },\n    {\n      \"id\": \"c3d4e5f6-a7b8-9012-cdef-234567890123\",\n      \"name\": \"departments\",\n      \"label\": \"Departments\",\n      \"type\": \"String\",\n      \"multiple_values\": true,\n      \"default_value\": null,\n      \"description\": \"User departments for data filtering\",\n      \"system\": false\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "08271f05-da44-4051-ac78-1c15d2e72202",
-              "name": "Unauthorized - Invalid or missing API key",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "v1",
-                    "user-attributes"
-                  ],
+                  "raw": "{{baseUrl}}/v1/user-attributes",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"Unauthorized\",\n  \"message\": \"Invalid or missing API key\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "67e20448-7eba-475d-864a-ba0b7314aa6f",
-              "name": "Forbidden - User does not have required admin permissions",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "v1",
                     "user-attributes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
                   ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                }
               },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "6e293577-7d38-42f3-8da7-e2734e2e0a99",
+                  "name": "List of user attribute definitions",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"records\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"label\": \"<string>\",\n      \"type\": \"String\",\n      \"multiple_values\": \"<boolean>\",\n      \"default_value\": \"<string>\",\n      \"description\": \"<string>\",\n      \"system\": \"<boolean>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"label\": \"<string>\",\n      \"type\": \"String\",\n      \"multiple_values\": \"<boolean>\",\n      \"default_value\": \"<string>\",\n      \"description\": \"<string>\",\n      \"system\": \"<boolean>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-6e293577-7d38-42f3-8da7-e2734e2e0a99"
+                },
+                {
+                  "id": "472ba001-ad2c-4958-98f0-b3e856553dad",
+                  "name": "Unauthorized - Invalid or missing API key",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-472ba001-ad2c-4958-98f0-b3e856553dad"
+                },
+                {
+                  "id": "9de34a90-75ff-4e6f-a8cf-74ab7515b197",
+                  "name": "Forbidden - User does not have required admin permissions",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-9de34a90-75ff-4e6f-a8cf-74ab7515b197"
+                },
+                {
+                  "id": "19d114c0-f792-48ac-9be3-b5cc361edaed",
+                  "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "Method Not Allowed",
+                  "code": 405,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-19d114c0-f792-48ac-9be3-b5cc361edaed"
+                },
+                {
+                  "id": "29226a38-71fc-4a38-b079-e5059fdf6912",
+                  "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-29226a38-71fc-4a38-b079-e5059fdf6912"
+                },
+                {
+                  "id": "f7f2af81-a4b8-46d6-9e18-e8c8b33cb467",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/user-attributes",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "user-attributes"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T20:43:50.000Z",
+                  "updatedAt": "2026-10-21T20:43:50.000Z",
+                  "uid": "35240-f7f2af81-a4b8-46d6-9e18-e8c8b33cb467"
                 }
               ],
-              "body": "{\n  \"error\": \"Forbidden\",\n  \"message\": \"User does not have permission to manage user attributes\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5dc6b973-4ced-4faf-904c-7731f4e637d7",
-              "name": "Method Not Allowed - Invalid HTTP method for this endpoint",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-attributes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Method Not Allowed",
-              "code": 405,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2edd62b6-1519-429d-97ff-81b9e0b1ab55",
-              "name": "Too Many Requests - Rate limit exceeded (60 requests/minute)",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-attributes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "98582447-ed88-4b68-9b7c-1c68b11f074d",
-              "name": "Internal Server Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "user-attributes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "description": "Your production Omni instance subdomain",
-                      "type": "any",
-                      "value": "{{instance}}",
-                      "key": "instance"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"<response_code>\",\n  \"message\": \"<error_reason>\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T20:43:50.000Z",
+              "updatedAt": "2026-10-21T20:43:50.000Z",
+              "uid": "35240-637f80b4-0317-45b0-9b1d-a3d40edceb7c"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "a89a69d7-cc01-4416-9ef2-5dc600326b2a",
+          "createdAt": "2026-10-21T20:43:50.000Z",
+          "updatedAt": "2026-10-21T20:43:50.000Z",
+          "uid": "35240-a89a69d7-cc01-4416-9ef2-5dc600326b2a"
         }
       ],
-      "event": []
-    }
-  ],
-  "event": [],
-  "variable": [
-    {
-      "description": {
-        "content": "Your production Omni instance subdomain",
-        "type": "text/plain"
-      },
-      "type": "any",
-      "value": "blobsrus",
-      "key": "instance"
-    },
-    {
-      "type": "string",
-      "value": "https://{{instance}}.omniapp.co/api",
-      "key": "baseUrl"
+      "id": "2d25265d-f95b-4a01-957e-9073eb83df0f",
+      "createdAt": "2026-10-21T20:43:50.000Z",
+      "updatedAt": "2026-10-21T20:43:50.000Z",
+      "uid": "35240-2d25265d-f95b-4a01-957e-9073eb83df0f"
     }
   ],
   "auth": {
@@ -388,17 +333,19 @@
     "bearer": [
       {
         "key": "token",
-        "value": "{{bearerToken}}"
+        "value": "{{bearerToken}}",
+        "type": "string"
       }
     ]
   },
-  "info": {
-    "_postman_id": "e594ea15-7843-4d5e-9b48-97bad32f753a",
-    "name": "Omni AI User attributes API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "The Omni REST API provides programmatic access to your Omni instance for managing users, documents, queries, schedules, and more.  \n\n\nContact Support:\n Name: Omni Support",
-      "type": "text/plain"
+  "variable": [
+    {
+      "key": "instance",
+      "value": "blobsrus"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{instance}}.omniapp.co/api"
     }
-  }
+  ]
 }
